@@ -1,0 +1,31 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Jul 27 13:53:28 2023
+# Process ID: 17332
+# Current directory: E:/RFSoC/GIT/Vivado_prj_manager
+# Command line: vivado.exe -mode batch -source E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/RFDC_Controller.tcl
+# Log file: E:/RFSoC/GIT/Vivado_prj_manager/vivado.log
+# Journal file: E:/RFSoC/GIT/Vivado_prj_manager\vivado.jou
+#-----------------------------------------------------------
+source E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/RFDC_Controller.tcl
+# set project_name "RFDC_Controller"
+# set project_dir "E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller"
+# create_project ${project_name} ${project_dir}/${project_name} -part xczu28dr-ffvg1517-2-e
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/AXI2FIFO.sv}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/DAC_Controller.sv}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/GPO_Core.sv}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/RFDC_Controller.sv}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/RTO_Core.sv}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/fifo_generator_0/fifo_generator_0.xci}
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'E:/Xilinx/Vivado/2020.2/data/ip'.
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/fifo_generator_1/fifo_generator_1.xci}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/fifo_generator_2/fifo_generator_2.xci}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/RFDC_Controller/fifo_generator_3/fifo_generator_3.xci}
+# set boardpath {E:/Xilinx/Vivado/2020.2/data/boards/board_files}
+# set_param board.repoPaths [list $boardpath]
+# set_property BOARD_PART xilinx.com:zcu111:part0:1.4 [current_project]
+INFO: [Common 17-206] Exiting Vivado at Thu Jul 27 13:53:40 2023...

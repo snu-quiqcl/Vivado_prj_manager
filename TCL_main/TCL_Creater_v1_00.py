@@ -101,6 +101,10 @@ def set_board(board_path, board_name):
     
     return tcl_code
 
+def run(folder_directory,prj_name,part_name,board_path,board_name,file_type,vivado_path, file_path):
+    make_tcl(folder_directory,prj_name,part_name,board_path,board_name,file_type)
+    run_vivado_tcl(vivado_path, file_path)
+
 if __name__ == "__main__":
     # Replace "your_tcl_file.tcl" with the path to your actual TCL file
     prj_name = "TimeController"

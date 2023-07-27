@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>350</height>
+    <width>750</width>
+    <height>220</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
-    <height>350</height>
+    <width>750</width>
+    <height>220</height>
    </size>
   </property>
   <property name="baseSize">
@@ -26,199 +26,306 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>10</y>
-      <width>591</width>
-      <height>191</height>
+      <x>10</x>
+      <y>0</y>
+      <width>731</width>
+      <height>151</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton">
-       <property name="minimumSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>SetVivadoPath</string>
-       </property>
-      </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="SetProjectDir">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>12</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SetProjectDir</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="SetPartName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>12</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SetPartName</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>12</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SetVivadoPath</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>12</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SetBoardPath</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>12</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>9</width>
+           <height>2</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SetBoardName</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="minimumSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>SetBoardPath</string>
-       </property>
-      </widget>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QTextBrowser" name="ProjectDir">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>30</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>30</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>30</width>
+           <height>1</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="PartName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>30</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="VivadoPath">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>30</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="BoardPath">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>30</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="BoardName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>30</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>15</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="SetProjectDir">
-       <property name="minimumSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>SetProjectDir</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QTextBrowser" name="VivadoPath">
-       <property name="minimumSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="SetPartName">
-       <property name="minimumSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>9</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>SetPartName</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QTextBrowser" name="PartName">
-       <property name="minimumSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="readOnly">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QTextBrowser" name="BoardPath">
-       <property name="minimumSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QTextBrowser" name="ProjectDir">
-       <property name="minimumSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>SetBoardName</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QTextBrowser" name="BoardName">
-       <property name="minimumSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>15</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="readOnly">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>731</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
       <widget class="QPushButton" name="MakeProject">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>12</horstretch>
+         <verstretch>2</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>9</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>9</width>
+         <height>2</height>
+        </size>
+       </property>
        <property name="text">
         <string>MakeProject</string>
        </property>
@@ -232,7 +339,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>750</width>
      <height>21</height>
     </rect>
    </property>

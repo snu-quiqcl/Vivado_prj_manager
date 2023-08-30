@@ -10,6 +10,8 @@ import os
 class TCL_maker:
     def __init__(self):
         self.total_dds_num = 0
+        self.total_fifo_num = 0
+        self.total_rfdc_num= 0
         self.vivado_executable = ''
         self.tcl_commands = ''
 
@@ -67,7 +69,52 @@ class TCL_maker:
         tcl_code += f' {{Not_Required}} CONFIG.M_DATA_Has_TUSER {{Not_Required}} CONFIG.Output_Frequency1 {{0}} CONFIG.PINC1'
         tcl_code += f' {{0}}] [get_ips dds_compiler_{self.total_dds_num}]\n'
         
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
         self.total_dds_num += 1;
+        
+        return tcl_code
+    
+    def generate_xilinx_fifo_generator(self, folder_directory, total_fifo_num):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name fifo_generator_{total_fifo_num}\n'
+        tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
+        tcl_code += f' CONFIG.Input_Data_Width {{128}} CONFIG.Input_Depth {{8192}}'
+        tcl_code += f' CONFIG.Output_Data_Width {{128}} CONFIG.Output_Depth {{8192}}'
+        tcl_code += f' CONFIG.Underflow_Flag {{true}} CONFIG.Overflow_Flag {{true}}'
+        tcl_code += f' CONFIG.Data_Count_Width {{13}} CONFIG.Write_Data_Count_Width {{13}}'
+        tcl_code += f' CONFIG.Read_Data_Count_Width {{13}} CONFIG.Programmable_Full_Type'
+        tcl_code += f' {{Single_Programmable_Full_Threshold_Constant}}'
+        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{8100}}'
+        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{8099}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Assert_Value {{4}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Negate_Value {{5}}]'
+        tcl_code += f' [get_ips fifo_generator_{total_fifo_num}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
+    def generate_xilinx_RF_converter(self, folder_directory, total_rfdc_num):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name usp_rf_data_converter -vendor xilinx.com -library ip -version 2.4 -module_name usp_rf_data_converter_{total_rfdc_num}\n'
+        tcl_code += f'set_property -dict [list CONFIG.Analog_Detection {{0}} CONFIG.ADC0_Enable {{0}}'
+        tcl_code += f' CONFIG.ADC0_Fabric_Freq {{0.0}} CONFIG.ADC_Slice00_Enable {{false}}'
+        tcl_code += f' CONFIG.ADC_Decimation_Mode00 {{0}} CONFIG.ADC_Mixer_Type00 {{3}}'
+        tcl_code += f' CONFIG.ADC_RESERVED_1_00 {{0}} CONFIG.ADC_Slice01_Enable {{false}}'
+        tcl_code += f' CONFIG.ADC_Decimation_Mode01 {{0}} CONFIG.ADC_Mixer_Type01 {{3}}'
+        tcl_code += f' CONFIG.ADC_RESERVED_1_02 {{0}} CONFIG.ADC_OBS02 {{0}} CONFIG.DAC0_Enable {{1}}'
+        tcl_code += f' CONFIG.DAC0_Sampling_Rate {{1.6}} CONFIG.DAC0_Refclk_Freq {{1600.000}}'
+        tcl_code += f' CONFIG.DAC0_Outclk_Freq {{100.000}} CONFIG.DAC0_Fabric_Freq {{100.000}}'
+        tcl_code += f' CONFIG.DAC_Slice00_Enable {{true}} CONFIG.DAC_Interpolation_Mode00 {{1}}'
+        tcl_code += f' CONFIG.DAC_Mixer_Type00 {{0}} CONFIG.DAC_RESERVED_1_00 {{0}} CONFIG.DAC_RESERVED_1_01 {{0}}'
+        tcl_code += f' CONFIG.DAC_RESERVED_1_02 {{0}} CONFIG.DAC_RESERVED_1_03 {{0}}] [get_ips usp_rf_data_converter_{total_rfdc_num}]\n'
+        
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
         
         return tcl_code
     
@@ -124,6 +171,7 @@ class TCL_maker:
         tcl_code += '\n'
         
         self.tcl_commands += tcl_code
+        
     
     def run(self, folder_directory,prj_name,part_name,board_path,board_name,file_type,vivado_path, file_path):
         self.make_tcl(folder_directory,prj_name,part_name,board_path,board_name,file_type)

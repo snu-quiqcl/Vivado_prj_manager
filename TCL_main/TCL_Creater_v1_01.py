@@ -118,6 +118,27 @@ class TCL_maker:
         
         return tcl_code
     
+    def generate_xilinx_fifo_generator(self, folder_directory, total_fifo_num):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name fifo_generator_{total_fifo_num}\n'
+        tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
+        tcl_code += f' CONFIG.Input_Data_Width {{128}} CONFIG.Input_Depth {{8192}}'
+        tcl_code += f' CONFIG.Output_Data_Width {{128}} CONFIG.Output_Depth {{8192}}'
+        tcl_code += f' CONFIG.Underflow_Flag {{true}} CONFIG.Overflow_Flag {{true}}'
+        tcl_code += f' CONFIG.Data_Count_Width {{13}} CONFIG.Write_Data_Count_Width {{13}}'
+        tcl_code += f' CONFIG.Read_Data_Count_Width {{13}} CONFIG.Programmable_Full_Type'
+        tcl_code += f' {{Single_Programmable_Full_Threshold_Constant}}'
+        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{8100}}'
+        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{8099}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Assert_Value {{4}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Negate_Value {{5}}]'
+        tcl_code += f' [get_ips fifo_generator_{total_fifo_num}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
     def make_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,file_type):
         file_name = prj_name+".tcl"
         print(file_name)
@@ -169,6 +190,16 @@ class TCL_maker:
         tcl_code += self.generate_set_board(board_path, board_name)
         tcl_code = tcl_code.replace("\\","/")
         tcl_code += '\n'
+        
+        self.tcl_commands += tcl_code
+        
+    def open_vivado(self, folder_directory,prj_name):
+        tcl_code = ''
+        tcl_code += 'close_project\n'
+        tcl_code += 'start_gui\n'
+        tcl_code += f'open_project {folder_directory}/{prj_name}/{prj_name}.xpr\n'
+        
+        tcl_code = tcl_code.replace("\\","/")
         
         self.tcl_commands += tcl_code
         

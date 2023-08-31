@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Wed Aug 30 19:51:53 2023
-# Process ID: 3184
+# Start of session at: Thu Aug 31 15:21:09 2023
+# Process ID: 22684
 # Current directory: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main
 # Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\TimeController_test\TimeController_test.tcl
 # Log file: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main/vivado.log

@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Thu Aug 31 15:59:23 2023
-# Process ID: 4680
+# Start of session at: Fri Sep  1 15:31:15 2023
+# Process ID: 43160
 # Current directory: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main
 # Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\DAC_Controller_test\DAC_Controller_test.tcl
 # Log file: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main/vivado.log
@@ -18,6 +18,7 @@ Current project path is 'C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC
 # add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/AXI2FIFO.sv}
 # add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DAC_Controller.sv}
 # add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DDS_Controller.sv}
+# add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DDS_Controller_TB00.sv}
 # add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/GPO_Core.sv}
 # add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/RFDC_DDS.sv}
 # add_files -norecurse {C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/RTO_Core.sv}
@@ -98,12 +99,14 @@ WARNING: [IP_Flow 19-4963] dds_compiler_15 has board value specified. The packag
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/AXI2FIFO.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DAC_Controller.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DDS_Controller.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
+CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DDS_Controller_TB00.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/GPO_Core.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/RFDC_DDS.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/RTO_Core.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/AXI2FIFO.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DAC_Controller.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DDS_Controller.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
+CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/DDS_Controller_TB00.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/GPO_Core.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/RFDC_DDS.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller/RTO_Core.sv' appears to be outside of the project area 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
@@ -130,6 +133,8 @@ WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP def
 WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
 WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
 WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
+WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
+WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
 INFO: [IP_Flow 19-2181] Payment Required is not set for this core.
 INFO: [IP_Flow 19-2187] The Product Guide file is missing.
 # ipx::save_core [ipx::current_core]
@@ -138,4 +143,4 @@ INFO: [IP_Flow 19-2187] The Product Guide file is missing.
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test'.
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/DAC_Controller_test/DAC_Controller_test'.)
-INFO: [Common 17-206] Exiting Vivado at Thu Aug 31 15:59:36 2023...
+INFO: [Common 17-206] Exiting Vivado at Fri Sep  1 15:31:28 2023...

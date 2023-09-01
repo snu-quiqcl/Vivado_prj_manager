@@ -1671,8 +1671,9 @@ connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins DAC_Control
  [get_bd_pins usp_rf_data_converter_0/s_axi_aresetn]
 connect_bd_net -net usp_rf_data_converter_0_vout00_n [get_bd_ports RFMC_DAC_00_N] [get_bd_pins usp_rf_data_converter_0/vout00_n]
 connect_bd_net -net usp_rf_data_converter_0_vout00_p [get_bd_ports RFMC_DAC_00_P] [get_bd_pins usp_rf_data_converter_0/vout00_p]
-connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins DAC_Controller_0/s_axi_aclk] [get_bd_pins TimeController_0/s_axi_aclk]\
- [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK]\
+connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins DAC_Controller_0/m00_axis_aclk] [get_bd_pins DAC_Controller_0/s_axi_aclk]\
+ [get_bd_pins TimeController_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK]\
+ [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK]\
  [get_bd_pins axi_interconnect_0/M02_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins proc_sys_reset_0/slowest_sync_clk]\
  [get_bd_pins usp_rf_data_converter_0/s0_axis_aclk] [get_bd_pins usp_rf_data_converter_0/s_axi_aclk]\
  [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
@@ -1692,6 +1693,8 @@ assign_bd_address -offset 0xA0000000 -range 0x00001000 -target_address_space [ge
 assign_bd_address -offset 0xA0010000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
 assign_bd_address -offset 0xA0040000 -range 0x00008000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
         """
+        
+        tcl_code += '\n'
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")
@@ -1781,6 +1784,10 @@ assign_bd_address -offset 0xA0040000 -range 0x00008000 -target_address_space [ge
         # Save the TCL code to the .tcl file
         
         self.tcl_commands += self.generate_customized_ip(folder_directory)
+        # self.open_vivado(folder_directory,prj_name)
+        
+        self.tcl_commands += f'set_property top DAC_Controller [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/DAC_Controller.sv }} [current_fileset]\n'.replace("\\","/")
         with open(file_path, 'w') as tcl_file:
             tcl_file.write(self.tcl_commands)
             
@@ -1804,6 +1811,9 @@ assign_bd_address -offset 0xA0040000 -range 0x00008000 -target_address_space [ge
         # Save the TCL code to the .tcl file
         
         self.tcl_commands += self.generate_customized_ip(folder_directory)
+        
+        self.tcl_commands += f'set_property top TimeController [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TimeController.sv }} [current_fileset]\n'.replace("\\","/")
         with open(file_path, 'w') as tcl_file:
             tcl_file.write(self.tcl_commands)
             
@@ -1856,6 +1866,8 @@ assign_bd_address -offset 0xA0040000 -range 0x00008000 -target_address_space [ge
             self.tcl_commands += self.generate_custom_dac_controller(folder_directory)
             self.tcl_commands += self.generate_custom_time_controller(folder_directory)
             self.tcl_commands += self.generate_xilinx_Zynq(folder_directory)
+            # set simulation length
+            self.tcl_commands += 'set_property -name {xsim.simulate.runtime} -value {1ms} -objects [get_filesets sim_1]\n'
             self.open_vivado(folder_directory,prj_name)
             with open(file_path, 'w') as tcl_file:
                 tcl_file.write(self.tcl_commands)

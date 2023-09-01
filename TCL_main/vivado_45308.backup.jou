@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Thu Aug 31 15:53:16 2023
-# Process ID: 17820
+# Start of session at: Fri Sep  1 15:38:05 2023
+# Process ID: 45308
 # Current directory: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main
 # Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\DAC_Controller_test\DAC_Controller_test.tcl
 # Log file: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main/vivado.log

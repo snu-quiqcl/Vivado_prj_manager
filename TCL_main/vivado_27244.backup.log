@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Thu Aug 31 15:53:30 2023
-# Process ID: 14768
+# Start of session at: Fri Sep  1 15:31:28 2023
+# Process ID: 27244
 # Current directory: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main
 # Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\TimeController_test\TimeController_test.tcl
 # Log file: C:/Jeonghyun/GIT/Vivado_prj_manager/TCL_main/vivado.log
@@ -53,4 +53,4 @@ INFO: [IP_Flow 19-2187] The Product Guide file is missing.
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/TimeController_test'.
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/TimeController_test' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_00/TimeController_test/TimeController_test'.)
-INFO: [Common 17-206] Exiting Vivado at Thu Aug 31 15:53:37 2023...
+INFO: [Common 17-206] Exiting Vivado at Fri Sep  1 15:31:35 2023...

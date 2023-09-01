@@ -1952,7 +1952,16 @@ if __name__ == "__main__":
     ###########################################################################
     make_dac = True
     make_TimeController = True
-    vivado_path = r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat"  
+    # vivado_path = r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat"  
+    # board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
+    # git_dir = 'C:\Jeonghyun\GIT'
+    
+    vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
+    board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
+    git_dir = 'E:/RFSoC/GIT'
+    
+    part_name = "xczu28dr-ffvg1517-2-e"
+    board_name = "xilinx.com:zcu111:part0:1.4"
     
     tcl = TCL_maker()
     
@@ -1961,11 +1970,8 @@ if __name__ == "__main__":
     ###########################################################################
     if make_dac == True:        
         prj_name = "DAC_Controller_test"
-        folder_directory = "C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\DAC_Controller_test"
-        src_folder_directory = "C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\DAC_Controller"
-        part_name = "xczu28dr-ffvg1517-2-e"
-        board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
-        board_name = "xilinx.com:zcu111:part0:1.4"
+        folder_directory = f"{git_dir}\RFSoC\RFSoC_Design_V1_1\IP_File_00\DAC_Controller_test"
+        src_folder_directory = f"{git_dir}\RFSoC\RFSoC_Design_V1_1\IP_File_00\DAC_Controller"
         file_type = [".v", ".sv", ".xci"]
         tcl.make_dac_controller_tcl(folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory, file_type)
         
@@ -1978,11 +1984,8 @@ if __name__ == "__main__":
     ###########################################################################
     if make_TimeController == True:
         prj_name = "TimeController_test"
-        folder_directory = "C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\TimeController_test"
-        src_folder_directory = "C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\TimeController"
-        part_name = "xczu28dr-ffvg1517-2-e"
-        board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
-        board_name = "xilinx.com:zcu111:part0:1.4"
+        folder_directory = f"{git_dir}\RFSoC\RFSoC_Design_V1_1\IP_File_00\TimeController_test"
+        src_folder_directory = f"{git_dir}\RFSoC\RFSoC_Design_V1_1\IP_File_00\TimeController"
         file_type = [".v", ".sv", ".xci"]
         tcl.make_time_controller_tcl(folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory, file_type)
         
@@ -1995,11 +1998,8 @@ if __name__ == "__main__":
     ###########################################################################
     version = 'block'
     prj_name = "RFSoC_Main_test"
-    folder_directory = "C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\RFSoC_Main_test"
-    src_folder_directory = "C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_00\RFSoC_Main"
-    part_name = "xczu28dr-ffvg1517-2-e"
-    board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
-    board_name = "xilinx.com:zcu111:part0:1.4"
+    folder_directory = f"{git_dir}\RFSoC\RFSoC_Design_V1_1\IP_File_00\RFSoC_Main_test"
+    src_folder_directory = f"{git_dir}\RFSoC\RFSoC_Design_V1_1\IP_File_00\RFSoC_Main"
     file_type = [".v", ".sv", ".xci", ".xdc"]
     tcl.make_RFSoC_main_tcl(folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory, file_type, version)
     

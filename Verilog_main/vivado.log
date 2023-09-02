@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sat Sep  2 20:28:43 2023
-# Process ID: 7336
+# Start of session at: Sat Sep  2 21:50:19 2023
+# Process ID: 14060
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -37,8 +37,10 @@ Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSo
 # set parentObj [get_bd_cells ""]
 # set parentType [get_property TYPE $parentObj]
 # current_bd_instance $parentObj
-# set RF3_CLKO_A_C_N [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_N ]
-# set RF3_CLKO_A_C_P [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P ]
+# set RF3_CLKO_A_C_N_228 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_N_228 ]
+# set RF3_CLKO_A_C_P_228 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P_228 ]
+# set RF3_CLKO_A_C_N_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_N_229 ]
+# set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P_229 ]
 # set RFMC_DAC_00_N [ create_bd_port -dir O RFMC_DAC_00_N ]
 # set RFMC_DAC_00_P [ create_bd_port -dir O RFMC_DAC_00_P ]
 # set RFMC_DAC_01_N [ create_bd_port -dir O RFMC_DAC_01_N ]
@@ -95,12 +97,14 @@ INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other periphera
 # connect_bd_intf_net -intf_net axi_interconnect_0_M07_AXI [get_bd_intf_pins DAC_Controller_5/s_axi] [get_bd_intf_pins axi_interconnect_0/M07_AXI]
 # connect_bd_intf_net -intf_net axi_interconnect_0_M08_AXI [get_bd_intf_pins DAC_Controller_6/s_axi] [get_bd_intf_pins axi_interconnect_0/M08_AXI]
 # connect_bd_intf_net -intf_net axi_interconnect_0_M09_AXI [get_bd_intf_pins DAC_Controller_7/s_axi] [get_bd_intf_pins axi_interconnect_0/M09_AXI]
-# connect_bd_net -net RF3_CLKO_A_C_N_1 [get_bd_ports RF3_CLKO_A_C_N] [get_bd_pins usp_rf_data_converter_0/dac0_clk_n] [get_bd_pins usp_rf_data_converter_0/dac1_clk_n]
+# connect_bd_net -net RF3_CLKO_A_C_N_1 [get_bd_ports RF3_CLKO_A_C_N_228] [get_bd_pins usp_rf_data_converter_0/dac0_clk_n]
 WARNING: [BD 41-1306] The connection to interface pin </usp_rf_data_converter_0/dac0_clk_n> is being overridden by the user with net <RF3_CLKO_A_C_N_1>. This pin will not be connected as a part of interface connection <dac0_clk>.
-WARNING: [BD 41-1306] The connection to interface pin </usp_rf_data_converter_0/dac1_clk_n> is being overridden by the user with net <RF3_CLKO_A_C_N_1>. This pin will not be connected as a part of interface connection <dac1_clk>.
-# connect_bd_net -net RF3_CLKO_A_C_P_1 [get_bd_ports RF3_CLKO_A_C_P] [get_bd_pins usp_rf_data_converter_0/dac0_clk_p] [get_bd_pins usp_rf_data_converter_0/dac1_clk_p]
+# connect_bd_net -net RF3_CLKO_A_C_N_2 [get_bd_ports RF3_CLKO_A_C_N_229] [get_bd_pins usp_rf_data_converter_0/dac1_clk_n]
+WARNING: [BD 41-1306] The connection to interface pin </usp_rf_data_converter_0/dac1_clk_n> is being overridden by the user with net <RF3_CLKO_A_C_N_2>. This pin will not be connected as a part of interface connection <dac1_clk>.
+# connect_bd_net -net RF3_CLKO_A_C_P_1 [get_bd_ports RF3_CLKO_A_C_P_228] [get_bd_pins usp_rf_data_converter_0/dac0_clk_p]
 WARNING: [BD 41-1306] The connection to interface pin </usp_rf_data_converter_0/dac0_clk_p> is being overridden by the user with net <RF3_CLKO_A_C_P_1>. This pin will not be connected as a part of interface connection <dac0_clk>.
-WARNING: [BD 41-1306] The connection to interface pin </usp_rf_data_converter_0/dac1_clk_p> is being overridden by the user with net <RF3_CLKO_A_C_P_1>. This pin will not be connected as a part of interface connection <dac1_clk>.
+# connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_pins usp_rf_data_converter_0/dac1_clk_p]
+WARNING: [BD 41-1306] The connection to interface pin </usp_rf_data_converter_0/dac1_clk_p> is being overridden by the user with net <RF3_CLKO_A_C_P_2>. This pin will not be connected as a part of interface connection <dac1_clk>.
 # connect_bd_net -net TimeController_0_auto_start [get_bd_pins DAC_Controller_0/auto_start] [get_bd_pins DAC_Controller_1/auto_start] [get_bd_pins DAC_Controller_2/auto_start] [get_bd_pins DAC_Controller_3/auto_start] [get_bd_pins DAC_Controller_4/auto_start] [get_bd_pins DAC_Controller_5/auto_start] [get_bd_pins DAC_Controller_6/auto_start] [get_bd_pins DAC_Controller_7/auto_start] [get_bd_pins TimeController_0/auto_start]
 # connect_bd_net -net TimeController_0_counter [get_bd_pins DAC_Controller_0/counter] [get_bd_pins DAC_Controller_1/counter] [get_bd_pins DAC_Controller_2/counter] [get_bd_pins DAC_Controller_3/counter] [get_bd_pins DAC_Controller_4/counter] [get_bd_pins DAC_Controller_5/counter] [get_bd_pins DAC_Controller_6/counter] [get_bd_pins DAC_Controller_7/counter] [get_bd_pins TimeController_0/counter]
 # connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins DAC_Controller_0/s_axi_aresetn] [get_bd_pins DAC_Controller_1/s_axi_aresetn] [get_bd_pins DAC_Controller_2/s_axi_aresetn] [get_bd_pins DAC_Controller_3/s_axi_aresetn] [get_bd_pins DAC_Controller_4/s_axi_aresetn] [get_bd_pins DAC_Controller_5/s_axi_aresetn] [get_bd_pins DAC_Controller_6/s_axi_aresetn] [get_bd_pins DAC_Controller_7/s_axi_aresetn] [get_bd_pins TimeController_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_interconnect_0/M02_ARESETN] [get_bd_pins axi_interconnect_0/M03_ARESETN] [get_bd_pins axi_interconnect_0/M04_ARESETN] [get_bd_pins axi_interconnect_0/M05_ARESETN] [get_bd_pins axi_interconnect_0/M06_ARESETN] [get_bd_pins axi_interconnect_0/M07_ARESETN] [get_bd_pins axi_interconnect_0/M08_ARESETN] [get_bd_pins axi_interconnect_0/M09_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins usp_rf_data_converter_0/s0_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s1_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s_axi_aresetn] 
@@ -161,7 +165,8 @@ Slave segment '/usp_rf_data_converter_0/s_axi/Reg' is being assigned into addres
 # start_gui
 update_compile_order -fileset sources_1
 open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
-validate_bd_design
+make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
+INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
 WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
@@ -216,18 +221,17 @@ Please resolve any mismatches by directly setting properties on BD cell </DAC_Co
 WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
 	FREQ_HZ = 99999001 
 Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
-INFO: [BD 41-1662] The design 'RFSoC_Main_blk.bd' is already validated. Therefore parameter propagation will not be re-run.
 Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
 Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui> 
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
-make_wrapper: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1888.340 ; gain = 154.250
+make_wrapper: Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1848.363 ; gain = 200.102
 add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
-launch_runs synth_1 -jobs 3
+launch_runs impl_1 -to_step write_bitstream -jobs 3
 INFO: [BD 41-1662] The design 'RFSoC_Main_blk.bd' is already validated. Therefore parameter propagation will not be re-run.
 Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
+Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui> 
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
@@ -276,35 +280,30 @@ INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_proc_sys_re
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_usp_rf_data_converter_0_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_xbar_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_zynq_ultra_ps_e_0_0
-[Sat Sep  2 20:33:54 2023] Launched RFSoC_Main_blk_xbar_0_synth_1, RFSoC_Main_blk_TimeController_0_0_synth_1, RFSoC_Main_blk_auto_ds_0_synth_1, RFSoC_Main_blk_auto_pc_0_synth_1, RFSoC_Main_blk_DAC_Controller_1_0_synth_1, RFSoC_Main_blk_DAC_Controller_2_0_synth_1, RFSoC_Main_blk_DAC_Controller_4_0_synth_1, RFSoC_Main_blk_DAC_Controller_5_0_synth_1, RFSoC_Main_blk_DAC_Controller_6_0_synth_1, RFSoC_Main_blk_proc_sys_reset_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_0_0_synth_1, RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1, RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_3_0_synth_1, RFSoC_Main_blk_DAC_Controller_7_0_synth_1...
+[Sat Sep  2 21:54:50 2023] Launched RFSoC_Main_blk_DAC_Controller_5_0_synth_1, RFSoC_Main_blk_DAC_Controller_6_0_synth_1, RFSoC_Main_blk_DAC_Controller_2_0_synth_1, RFSoC_Main_blk_DAC_Controller_7_0_synth_1, RFSoC_Main_blk_proc_sys_reset_0_0_synth_1, RFSoC_Main_blk_auto_ds_0_synth_1, RFSoC_Main_blk_DAC_Controller_0_0_synth_1, RFSoC_Main_blk_TimeController_0_0_synth_1, RFSoC_Main_blk_xbar_0_synth_1, RFSoC_Main_blk_DAC_Controller_3_0_synth_1, RFSoC_Main_blk_auto_pc_0_synth_1, RFSoC_Main_blk_DAC_Controller_4_0_synth_1, RFSoC_Main_blk_DAC_Controller_1_0_synth_1, RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1, RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1, synth_1...
 Run output will be captured here:
-RFSoC_Main_blk_xbar_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_xbar_0_synth_1/runme.log
-RFSoC_Main_blk_TimeController_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TimeController_0_0_synth_1/runme.log
-RFSoC_Main_blk_auto_ds_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_ds_0_synth_1/runme.log
-RFSoC_Main_blk_auto_pc_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_pc_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_1_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_2_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_2_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_4_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_4_0_synth_1/runme.log
 RFSoC_Main_blk_DAC_Controller_5_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_5_0_synth_1/runme.log
 RFSoC_Main_blk_DAC_Controller_6_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_6_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_2_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_2_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_7_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_7_0_synth_1/runme.log
 RFSoC_Main_blk_proc_sys_reset_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_proc_sys_reset_0_0_synth_1/runme.log
+RFSoC_Main_blk_auto_ds_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_ds_0_synth_1/runme.log
 RFSoC_Main_blk_DAC_Controller_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_0_0_synth_1/runme.log
+RFSoC_Main_blk_TimeController_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TimeController_0_0_synth_1/runme.log
+RFSoC_Main_blk_xbar_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_xbar_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_3_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_3_0_synth_1/runme.log
+RFSoC_Main_blk_auto_pc_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_pc_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_4_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_4_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_1_0_synth_1/runme.log
 RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1/runme.log
 RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_3_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_3_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_7_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_7_0_synth_1/runme.log
-[Sat Sep  2 20:33:54 2023] Launched synth_1...
-Run output will be captured here: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/synth_1/runme.log
-launch_runs: Time (s): cpu = 00:01:54 ; elapsed = 00:02:13 . Memory (MB): peak = 2974.883 ; gain = 1086.543
-launch_runs impl_1 -jobs 3
-[Sat Sep  2 20:49:18 2023] Launched impl_1...
+synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/synth_1/runme.log
+[Sat Sep  2 21:54:51 2023] Launched impl_1...
 Run output will be captured here: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/impl_1/runme.log
-launch_runs impl_1 -to_step write_bitstream -jobs 3
-[Sat Sep  2 21:31:17 2023] Launched impl_1...
-Run output will be captured here: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:01:56 ; elapsed = 00:02:15 . Memory (MB): peak = 2924.172 ; gain = 1069.895
 open_run impl_1
 INFO: [Device 21-403] Loading part xczu28dr-ffvg1517-2-e
-Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 4007.539 ; gain = 1.547
+Netlist sorting complete. Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 3967.672 ; gain = 0.238
 INFO: [Netlist 29-17] Analyzing 1827 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 25 CPU seconds
 INFO: [Project 1-479] Netlist was created with Vivado 2020.2
@@ -316,18 +315,18 @@ INFO: [Project 1-853] Binary constraint restore complete.
 Reading XDEF placement.
 Reading placer database...
 Reading XDEF routing.
-Read XDEF File: Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 6116.992 ; gain = 234.797
-Restored from archive | CPU: 21.000000 secs | Memory: 0.000000 MB |
-Finished XDEF File Restore: Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 6116.992 ; gain = 234.797
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.035 . Memory (MB): peak = 6256.723 ; gain = 0.000
+Read XDEF File: Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 6080.023 ; gain = 231.766
+Restored from archive | CPU: 19.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:19 ; elapsed = 00:00:19 . Memory (MB): peak = 6080.023 ; gain = 231.766
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 6222.793 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 1419 instances were transformed.
   DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 1408 instances
   RAM32M16 => RAM32M16 (RAMD32(x14), RAMS32(x2)): 7 instances
   SRLC32E => SRL16E: 4 instances
 
-open_run: Time (s): cpu = 00:02:15 ; elapsed = 00:02:07 . Memory (MB): peak = 6731.641 ; gain = 3694.469
-open_report: Time (s): cpu = 00:00:37 ; elapsed = 00:00:12 . Memory (MB): peak = 8049.750 ; gain = 794.461
+open_run: Time (s): cpu = 00:02:12 ; elapsed = 00:01:58 . Memory (MB): peak = 6734.820 ; gain = 3746.258
+open_report: Time (s): cpu = 00:00:38 ; elapsed = 00:00:11 . Memory (MB): peak = 8061.191 ; gain = 787.391
 CRITICAL WARNING: [Timing 38-282] The design failed to meet the timing requirements. Please see the timing summary report for details on the timing violations.
 exit
-INFO: [Common 17-206] Exiting Vivado at Sat Sep  2 21:35:13 2023...
+INFO: [Common 17-206] Exiting Vivado at Sun Sep  3 00:18:41 2023...

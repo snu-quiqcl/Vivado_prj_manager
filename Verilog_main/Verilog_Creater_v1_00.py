@@ -21,9 +21,11 @@ class Verilog_maker:
         
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core']
-        self.total_dac_num = 8
+        self.total_dac_num = 8 #Number of total dac controller number
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
+        
+        self.time_controller_buffer_dir = os.path.join(self.target_dir, 'TimeControllerBuffer')
         
         self.RFSoC_Main_dir = os.path.join(self.target_dir,'RFSoC_Main')
         
@@ -305,6 +307,67 @@ class Verilog_maker:
         
         self.run_vivado_tcl(self.vivado_path, tcl_path)
         
+    ##buffer
+    def generate_time_controller_buffer(self, current_dir = None):
+        if current_dir == None:
+            source_dir = './TimeControllerBuffer'
+        else:
+            source_dir = f'{current_dir}/TimeControllerBuffer'
+        
+        full_dir = os.path.join(self.git_dir, self.time_controller_buffer_dir)
+        base_dir = os.path.dirname(full_dir)
+        base_name = os.path.basename(full_dir)
+        new_full_dir = os.path.join(base_dir,base_name)
+        new_output_full_dir =os.path.join(base_dir,base_name + '_output')
+        self.ensure_directory_exists(new_full_dir)
+            
+        for filename in os.listdir(source_dir):
+            source_path = os.path.join(source_dir, filename)
+            file_root, file_extension = os.path.splitext(filename)
+            new_filename = file_root + file_extension
+            destination_path = os.path.join(new_full_dir, new_filename)
+        
+            # Open the source file and read its contents
+            verilog_code = ''
+            with open(source_path, 'r') as source_file:
+                verilog_code = source_file.read()
+                
+            # Write the modified content to the destination file
+            with open(destination_path, 'w') as destination_file:
+                destination_file.write(verilog_code)
+
+        self.make_time_controller_buffer_tcl(new_output_full_dir, 'TimeControllerBuffer', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
+        
+    def make_time_controller_buffer_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
+        file_name = prj_name+".tcl"
+        print(file_name)
+        # Combine the file name and folder directory to create the full file path
+        file_path = folder_directory + '\\' + file_name
+        print(file_path)
+        
+        self.ensure_directory_exists(folder_directory)
+        self.ensure_directory_exists(src_folder_directory)
+        #add src files
+        self.set_project(folder_directory, prj_name)
+        self.create_project(part_name)
+        self.add_src(src_folder_directory,file_type)
+        self.set_board(board_path, board_name)
+        
+        # Save the TCL code to the .tcl file
+        
+        self.tcl_commands += self.generate_customized_ip(folder_directory)
+        
+        self.tcl_commands += f'set_property top TimeControllerBuffer [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TimeControllerBuffer.sv }} [current_fileset]\n'.replace("\\","/")
+        with open(file_path, 'w') as tcl_file:
+            tcl_file.write(self.tcl_commands)
+            
+        self.tcl_commands = ''
+        
+        tcl_path = folder_directory + '\\' + prj_name + '.tcl'
+        
+        self.run_vivado_tcl(self.vivado_path, tcl_path)
+        
     def generate_RFSoC_main(self, current_dir = None):
         if current_dir == None:
             source_dir = './RFSoC_Main'
@@ -435,6 +498,9 @@ set RFMC_DAC_1{i-4}_P [ create_bd_port -dir O RFMC_DAC_0{i}_P ]
             
         tcl_code += 'set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset proc_sys_reset_0 ]\n'
         tcl_code += 'set TimeController_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeController TimeController_0 ]\n'
+        tcl_code += 'set TimeControllerBuffer_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeControllerBuffer TimeControllerBuffer_0 ]\n'
+        tcl_code += 'set TimeControllerBuffer_1 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeControllerBuffer TimeControllerBuffer_1 ]\n'
+        tcl_code += 'set TimeControllerBuffer_2 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeControllerBuffer TimeControllerBuffer_2 ]\n'
         tcl_code += f"""
 set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect axi_interconnect_0 ]
 set_property -dict [ list \
@@ -1245,21 +1311,34 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         """
         tcl_code += '\n'
         
-        tcl_code += 'connect_bd_net -net TimeController_0_auto_start'
-        for i in range(self.total_dac_num):
-            tcl_code += f' [get_bd_pins DAC_Controller_{i}/auto_start]'
-        tcl_code += ' [get_bd_pins TimeController_0/auto_start]\n'
+        tcl_code += """
+connect_bd_net -net TimeControllerBuffer_0_auto_start0_O [get_bd_pins TimeControllerBuffer_0/auto_start0_O] [get_bd_pins TimeControllerBuffer_1/auto_start_I]
+connect_bd_net -net TimeControllerBuffer_0_auto_start1_O [get_bd_pins TimeControllerBuffer_0/auto_start1_O] [get_bd_pins TimeControllerBuffer_2/auto_start_I]
+connect_bd_net -net TimeControllerBuffer_0_counter0_O [get_bd_pins TimeControllerBuffer_0/counter0_O] [get_bd_pins TimeControllerBuffer_1/counter_I]
+connect_bd_net -net TimeControllerBuffer_0_counter1_O [get_bd_pins TimeControllerBuffer_0/counter1_O] [get_bd_pins TimeControllerBuffer_2/counter_I]
+connect_bd_net -net TimeController_0_auto_start [get_bd_pins TimeControllerBuffer_0/auto_start_I] [get_bd_pins TimeController_0/auto_start]
+connect_bd_net -net TimeController_0_counter [get_bd_pins TimeControllerBuffer_0/counter_I] [get_bd_pins TimeController_0/counter]
+        """
         
-        tcl_code += 'connect_bd_net -net TimeController_0_counter'
         for i in range(self.total_dac_num):
-            tcl_code += f' [get_bd_pins DAC_Controller_{i}/counter]'
-        tcl_code += ' [get_bd_pins TimeController_0/counter]\n'
+            if i < 4:
+                tcl_code += f'connect_bd_net -net TimeControllerBuffer_1_auto_start{i}_O [get_bd_pins DAC_Controller_{i}/auto_start] [get_bd_pins TimeControllerBuffer_1/auto_start{i}_O]\n'
+            else:
+                tcl_code += f'connect_bd_net -net TimeControllerBuffer_2_auto_start{i-4}_O [get_bd_pins DAC_Controller_{i}/auto_start] [get_bd_pins TimeControllerBuffer_2/auto_start{i-4}_O]\n'
+        
+        for i in range(self.total_dac_num):
+            if i < 4:
+                tcl_code += f'connect_bd_net -net TimeControllerBuffer_1_counter{i}_O [get_bd_pins DAC_Controller_{i}/counter] [get_bd_pins TimeControllerBuffer_1/counter{i}_O]\n'
+            else:
+                tcl_code += f'connect_bd_net -net TimeControllerBuffer_2_counter{i-4}_O [get_bd_pins DAC_Controller_{i}/counter] [get_bd_pins TimeControllerBuffer_2/counter{i-4}_O]\n'
         
         tcl_code += 'connect_bd_net -net proc_sys_reset_0_peripheral_aresetn'
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins DAC_Controller_{i}/s_axi_aresetn]'
         tcl_code += ' [get_bd_pins TimeController_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] \
-[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN]'
+[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] \
+[get_bd_pins TimeControllerBuffer_0/s_axi_aresetn] [get_bd_pins TimeControllerBuffer_1/s_axi_aresetn] \
+[get_bd_pins TimeControllerBuffer_2/s_axi_aresetn]'
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins axi_interconnect_0/M0{i+2}_ARESETN]'
         tcl_code += ' [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins usp_rf_data_converter_0/s0_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s1_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s_axi_aresetn] '
@@ -1279,7 +1358,8 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         tcl_code += """ [get_bd_pins TimeController_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK]\
  [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK]\
  [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins usp_rf_data_converter_0/s0_axis_aclk] [get_bd_pins usp_rf_data_converter_0/s1_axis_aclk]\
- [get_bd_pins usp_rf_data_converter_0/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+ [get_bd_pins usp_rf_data_converter_0/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]\
+ [get_bd_pins TimeControllerBuffer_0/s_axi_aclk] [get_bd_pins TimeControllerBuffer_1/s_axi_aclk] [get_bd_pins TimeControllerBuffer_2/s_axi_aclk]
         """
         
         tcl_code += '\n'
@@ -1372,6 +1452,7 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         for i in range(self.total_dac_num):
             self.generate_indexed_dac_controller(i)
         self.generate_time_controller()
+        self.generate_time_controller_buffer()
         self.generate_RFSoC_main()
         
     

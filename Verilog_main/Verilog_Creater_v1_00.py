@@ -498,9 +498,6 @@ set RFMC_DAC_1{i-4}_P [ create_bd_port -dir O RFMC_DAC_0{i}_P ]
             
         tcl_code += 'set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset proc_sys_reset_0 ]\n'
         tcl_code += 'set TimeController_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeController TimeController_0 ]\n'
-        tcl_code += 'set TimeControllerBuffer_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeControllerBuffer TimeControllerBuffer_0 ]\n'
-        tcl_code += 'set TimeControllerBuffer_1 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeControllerBuffer TimeControllerBuffer_1 ]\n'
-        tcl_code += 'set TimeControllerBuffer_2 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeControllerBuffer TimeControllerBuffer_2 ]\n'
         tcl_code += f"""
 set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect axi_interconnect_0 ]
 set_property -dict [ list \
@@ -1297,11 +1294,7 @@ connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins
         for i in range(self.total_dac_num):
             tcl_code += f'connect_bd_intf_net -intf_net axi_interconnect_0_M0{i+2}_AXI [get_bd_intf_pins DAC_Controller_{i}/s_axi] [get_bd_intf_pins axi_interconnect_0/M0{i+2}_AXI]\n'
         
-#         tcl_code += """
-# # Create port connections
-# connect_bd_net -net RF3_CLKO_A_C_N_1 [get_bd_ports RF3_CLKO_A_C_N] [get_bd_pins usp_rf_data_converter_0/dac0_clk_n] [get_bd_pins usp_rf_data_converter_0/dac1_clk_n]
-# connect_bd_net -net RF3_CLKO_A_C_P_1 [get_bd_ports RF3_CLKO_A_C_P] [get_bd_pins usp_rf_data_converter_0/dac0_clk_p] [get_bd_pins usp_rf_data_converter_0/dac1_clk_p]
-#         """
+
         tcl_code += """
 # Create port connections
 connect_bd_net -net RF3_CLKO_A_C_N_1 [get_bd_ports RF3_CLKO_A_C_N_228] [get_bd_pins usp_rf_data_converter_0/dac0_clk_n]
@@ -1309,36 +1302,24 @@ connect_bd_net -net RF3_CLKO_A_C_N_2 [get_bd_ports RF3_CLKO_A_C_N_229] [get_bd_p
 connect_bd_net -net RF3_CLKO_A_C_P_1 [get_bd_ports RF3_CLKO_A_C_P_228] [get_bd_pins usp_rf_data_converter_0/dac0_clk_p]
 connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_pins usp_rf_data_converter_0/dac1_clk_p]
         """
+        
+        #Vivado makes replica of register to resolve high fan problem. So you don't have to consider high fan problem in auto_start, and coutner.
         tcl_code += '\n'
-        
-        tcl_code += """
-connect_bd_net -net TimeControllerBuffer_0_auto_start0_O [get_bd_pins TimeControllerBuffer_0/auto_start0_O] [get_bd_pins TimeControllerBuffer_1/auto_start_I]
-connect_bd_net -net TimeControllerBuffer_0_auto_start1_O [get_bd_pins TimeControllerBuffer_0/auto_start1_O] [get_bd_pins TimeControllerBuffer_2/auto_start_I]
-connect_bd_net -net TimeControllerBuffer_0_counter0_O [get_bd_pins TimeControllerBuffer_0/counter0_O] [get_bd_pins TimeControllerBuffer_1/counter_I]
-connect_bd_net -net TimeControllerBuffer_0_counter1_O [get_bd_pins TimeControllerBuffer_0/counter1_O] [get_bd_pins TimeControllerBuffer_2/counter_I]
-connect_bd_net -net TimeController_0_auto_start [get_bd_pins TimeControllerBuffer_0/auto_start_I] [get_bd_pins TimeController_0/auto_start]
-connect_bd_net -net TimeController_0_counter [get_bd_pins TimeControllerBuffer_0/counter_I] [get_bd_pins TimeController_0/counter]
-        """
-        
+        tcl_code += 'connect_bd_net -net TimeController_0_auto_start'
         for i in range(self.total_dac_num):
-            if i < 4:
-                tcl_code += f'connect_bd_net -net TimeControllerBuffer_1_auto_start{i}_O [get_bd_pins DAC_Controller_{i}/auto_start] [get_bd_pins TimeControllerBuffer_1/auto_start{i}_O]\n'
-            else:
-                tcl_code += f'connect_bd_net -net TimeControllerBuffer_2_auto_start{i-4}_O [get_bd_pins DAC_Controller_{i}/auto_start] [get_bd_pins TimeControllerBuffer_2/auto_start{i-4}_O]\n'
+            tcl_code += f' [get_bd_pins DAC_Controller_{i}/auto_start]'
+        tcl_code += ' [get_bd_pins TimeController_0/auto_start]\n'
         
+        tcl_code += 'connect_bd_net -net TimeController_0_counter'
         for i in range(self.total_dac_num):
-            if i < 4:
-                tcl_code += f'connect_bd_net -net TimeControllerBuffer_1_counter{i}_O [get_bd_pins DAC_Controller_{i}/counter] [get_bd_pins TimeControllerBuffer_1/counter{i}_O]\n'
-            else:
-                tcl_code += f'connect_bd_net -net TimeControllerBuffer_2_counter{i-4}_O [get_bd_pins DAC_Controller_{i}/counter] [get_bd_pins TimeControllerBuffer_2/counter{i-4}_O]\n'
+            tcl_code += f' [get_bd_pins DAC_Controller_{i}/counter]'
+        tcl_code += ' [get_bd_pins TimeController_0/counter]\n'
         
         tcl_code += 'connect_bd_net -net proc_sys_reset_0_peripheral_aresetn'
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins DAC_Controller_{i}/s_axi_aresetn]'
         tcl_code += ' [get_bd_pins TimeController_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] \
-[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] \
-[get_bd_pins TimeControllerBuffer_0/s_axi_aresetn] [get_bd_pins TimeControllerBuffer_1/s_axi_aresetn] \
-[get_bd_pins TimeControllerBuffer_2/s_axi_aresetn]'
+[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN]'
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins axi_interconnect_0/M0{i+2}_ARESETN]'
         tcl_code += ' [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins usp_rf_data_converter_0/s0_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s1_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s_axi_aresetn] '
@@ -1358,8 +1339,7 @@ connect_bd_net -net TimeController_0_counter [get_bd_pins TimeControllerBuffer_0
         tcl_code += """ [get_bd_pins TimeController_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK]\
  [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK]\
  [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins usp_rf_data_converter_0/s0_axis_aclk] [get_bd_pins usp_rf_data_converter_0/s1_axis_aclk]\
- [get_bd_pins usp_rf_data_converter_0/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]\
- [get_bd_pins TimeControllerBuffer_0/s_axi_aclk] [get_bd_pins TimeControllerBuffer_1/s_axi_aclk] [get_bd_pins TimeControllerBuffer_2/s_axi_aclk]
+ [get_bd_pins usp_rf_data_converter_0/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
         """
         
         tcl_code += '\n'
@@ -1452,7 +1432,6 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         for i in range(self.total_dac_num):
             self.generate_indexed_dac_controller(i)
         self.generate_time_controller()
-        self.generate_time_controller_buffer()
         self.generate_RFSoC_main()
         
     

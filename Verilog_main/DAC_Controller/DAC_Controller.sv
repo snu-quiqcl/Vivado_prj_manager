@@ -302,7 +302,8 @@ dds_controller_0
     .amp(amp),
     .phase(phase),
     .amp_offset(amp_offset),
-    .time_offset(time_offset)
+    .time_offset(time_offset),
+    .timestamp(timestamp)
 );
 
 RFDC_DDS rfdc_dds(

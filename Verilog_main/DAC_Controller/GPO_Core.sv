@@ -38,7 +38,7 @@ module GPO_Core
     output wire [127:0] error_data,
     output wire overrided,
     output wire busy_error,
-    output wire[63:0] gpo_out
+    output wire[127:0] gpo_out
     );
 
 reg override_en_state;
@@ -55,7 +55,7 @@ wire dest_check;
 assign dest_check = counter_matched; // ( gpo_in[32 + CHANNEL_LENGTH - 1:32] == DEST_VAL ) & counter_matched. Channel was deleted, Distribution will be made by AXI interface module.
 assign selected_wire = ( dest_check & ~override_en ); // selected_wire = selected_en | ( dest_check & ~override_en ); // selected_en was eliminated
 assign selected = selected_state;
-assign gpo_out[63:0] = (override_en_state == 1'b1)? override_value_reg[63:0] : {gpo_out_buffer[63:32],gpo_out_buffer[31:0]};
+assign gpo_out[127:0] = (override_en_state == 1'b1)? {64'h0, override_value_reg[63:0]} : gpo_out_buffer[127:0];
 assign error_data[127:0] = error_data_buffer[127:0];
 //assign overrided = dest_check & override_en;
 //assign busy_error = busy & selected_wire;

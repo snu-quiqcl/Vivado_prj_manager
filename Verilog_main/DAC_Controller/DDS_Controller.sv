@@ -49,7 +49,8 @@ module DDS_Controller
     output reg  [13:0] amp,              // unsigned value
     output reg [13:0] phase,
     output reg [13:0] amp_offset,
-    output reg [63:0] time_offset
+    output reg [63:0] time_offset,
+    output reg [63:0] timestamp
     );
     
 //////////////////////////////////////////////////////////////////////////////////  
@@ -99,7 +100,7 @@ module DDS_Controller
 //////////////////////////////////////////////////////////////////////////////////
 
 wire selected;
-wire[63:0] gpo_out;
+wire[127:0] gpo_out;
 
 //////////////////////////////////////////////////////////////////////////////////  
 // GPO_Core
@@ -132,10 +133,12 @@ always @( posedge CLK100MHZ ) begin
         phase <= 14'h0;
         amp_offset <= 14'h0;
         time_offset <= 64'h0;
+        timestamp <= 64'h0;
     end
     
     else begin
         if( selected == 1'b1 ) begin
+            timestamp <= gpo_out[127:64];
             case( gpo_out[63:60] )
                 4'b0000: begin
                     freq[47:16] <= gpo_out[31:0];

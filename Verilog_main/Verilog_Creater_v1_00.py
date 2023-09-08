@@ -3,6 +3,12 @@
 Created on Fri Aug 25 15:46:38 2023
 
 @author: QC109_4
+
+get delay
+report_timing -from [get_ports {DT_I2S_LRCK_in}] -delay_type min_max -max_paths 200 -sort_by group -path_type full -input_pins -name timing_DT_TO_TDC_OUT
+set fanout [ get_property FLAT_PIN_COUNT [ get_nets tmp3 ] ]
+set net_delays [ get_net_delays -of _objects [ get_nets tmp3 ] ]
+report_property [ lindex $net_delays 0 ]
 """
 import os
 import re

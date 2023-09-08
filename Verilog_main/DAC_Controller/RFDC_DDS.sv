@@ -6,7 +6,7 @@
 // Create Date: 2023/08/24 16:55:51
 // Design Name: 
 // Module Name: RFDC_DDS
-// Project Name: 
+// Project Name: :
 // Target Devices: 
 // Tool Versions: 
 // Description: 
@@ -61,6 +61,10 @@ wire [15:0] phase_input_wire[16];
 wire [255:0] m_axis_data_tdata_wire;
 wire m_axis_data_tvalid_wire;
 reg [15:0] phase_input[16];
+reg [13:0] amp_buffer1;
+reg [13:0] amp_buffer2;
+reg [13:0] amp_offset_buffer1;
+reg [13:0] amp_offset_buffer2;
 
 assign dds_output_valid_chain[0] = dds_output_valid[0] & dds_output_valid[1] & dds_output_valid[2] & dds_output_valid[3];
 assign dds_output_valid_chain[1] = dds_output_valid[4] & dds_output_valid[5] & dds_output_valid[6] & dds_output_valid[7];
@@ -76,8 +80,8 @@ end
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign amp_full_product[i] = {{16{dds_output_wire[i][15]}},dds_output_wire[i]} * {18'h0,amp};
-        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset[13:0]};
+        assign amp_full_product[i] = {{16{dds_output_wire[i][15]}},dds_output_wire[i]} * {18'h0,amp_buffer2};
+        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset_buffer2[13:0]};
         assign phase_full_product[i] = (freq * ( {timestamp-time_offset,4'b0000} + i ));
         assign phase_input_wire[i] = {2'h0, phase_full_product[i][47:34] + phase};
     end
@@ -101,6 +105,10 @@ always@(posedge CLK100MHz) begin
     phase_input[13] <= phase_input_wire[13];
     phase_input[14] <= phase_input_wire[14];
     phase_input[15] <= phase_input_wire[15];
+    amp_buffer1[13:0] <= amp[13:0];
+    amp_buffer2[13:0] <= amp_buffer1[13:0];
+    amp_offset_buffer1[13:0] <= amp_offset[13:0];
+    amp_offset_buffer2[13:0] <= amp_offset_buffer1[13:0];
 end
 
 dds_compiler_0 dds_0(

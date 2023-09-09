@@ -21,7 +21,7 @@
 
 
 (* use_dsp = "yes" *) module RFDC_DDS(
-    input wire CLK100MHz,
+    input wire clk,
     input wire [47:0] freq,
     input wire [13:0] amp,              // unsigned value
     input wire [13:0] phase,
@@ -72,7 +72,7 @@ assign dds_output_valid_chain[2] = dds_output_valid[8] & dds_output_valid[9] & d
 assign dds_output_valid_chain[3] = dds_output_valid[12] & dds_output_valid[13] & dds_output_valid[14] & dds_output_valid[15];
 assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_chain[1] & dds_output_valid_chain[2] & dds_output_valid_chain[3];
 
-always @(posedge CLK100MHz) begin
+always @(posedge clk) begin
     
 end
 
@@ -87,7 +87,7 @@ generate
     end
 endgenerate
 
-always@(posedge CLK100MHz) begin
+always@(posedge clk) begin
     m_axis_data_tdata[255:0] <= m_axis_data_tdata_wire[255:0];
     phase_input[0] <= phase_input_wire[0];
     phase_input[1] <= phase_input_wire[1];
@@ -116,7 +116,7 @@ dds_compiler_0 dds_0(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[0]),
     .m_axis_data_tvalid(dds_output_valid[0]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -125,7 +125,7 @@ dds_compiler_1 dds_1(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[1]),
     .m_axis_data_tvalid(dds_output_valid[1]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -134,7 +134,7 @@ dds_compiler_2 dds_2(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[2]),
     .m_axis_data_tvalid(dds_output_valid[2]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -143,7 +143,7 @@ dds_compiler_3 dds_3(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[3]),
     .m_axis_data_tvalid(dds_output_valid[3]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -152,7 +152,7 @@ dds_compiler_4 dds_4(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[4]),
     .m_axis_data_tvalid(dds_output_valid[4]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -161,7 +161,7 @@ dds_compiler_5 dds_5(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[5]),
     .m_axis_data_tvalid(dds_output_valid[5]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -170,7 +170,7 @@ dds_compiler_6 dds_6(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[6]),
     .m_axis_data_tvalid(dds_output_valid[6]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -179,7 +179,7 @@ dds_compiler_7 dds_7(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[7]),
     .m_axis_data_tvalid(dds_output_valid[7]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -188,7 +188,7 @@ dds_compiler_8 dds_8(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[8]),
     .m_axis_data_tvalid(dds_output_valid[8]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -197,7 +197,7 @@ dds_compiler_9 dds_9(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[9]),
     .m_axis_data_tvalid(dds_output_valid[9]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -206,7 +206,7 @@ dds_compiler_10 dds_10(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[10]),
     .m_axis_data_tvalid(dds_output_valid[10]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -215,7 +215,7 @@ dds_compiler_11 dds_11(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[11]),
     .m_axis_data_tvalid(dds_output_valid[11]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -224,7 +224,7 @@ dds_compiler_12 dds_12(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[12]),
     .m_axis_data_tvalid(dds_output_valid[12]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -233,7 +233,7 @@ dds_compiler_13 dds_13(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[13]),
     .m_axis_data_tvalid(dds_output_valid[13]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -242,7 +242,7 @@ dds_compiler_14 dds_14(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[14]),
     .m_axis_data_tvalid(dds_output_valid[14]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 
 
@@ -251,6 +251,6 @@ dds_compiler_15 dds_15(
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[15]),
     .m_axis_data_tvalid(dds_output_valid[15]),
-    .aclk(CLK100MHz)
+    .aclk(clk)
 );
 endmodule

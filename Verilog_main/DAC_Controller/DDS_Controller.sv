@@ -29,7 +29,7 @@ module DDS_Controller
     //////////////////////////////////////////////////////////////////////////////////  
     // IO declaration for GPO_Core
     //////////////////////////////////////////////////////////////////////////////////
-    input wire CLK100MHZ,
+    input wire clk,
     input wire m00_axis_aclk,
     input wire reset,
     input wire override_en,
@@ -111,7 +111,7 @@ GPO_Core #(
     .CHANNEL_LENGTH(CHANNEL_LENGTH)
 )
 GPO_Core0(
-    .CLK100MHZ(CLK100MHZ),
+    .clk(clk),
     .reset(reset),
     .override_en(override_en),
     .selected_en(selected_en),
@@ -126,7 +126,7 @@ GPO_Core0(
     .gpo_out(gpo_out)
 );
 
-always @( posedge CLK100MHZ ) begin
+always @( posedge clk ) begin
     if( reset == 1'b1 ) begin
         freq <= 48'h0;
         amp <= 14'h0;

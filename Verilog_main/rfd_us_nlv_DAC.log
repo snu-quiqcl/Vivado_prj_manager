@@ -194,47 +194,47 @@ attribute {inst DAC.Tile_229.DAC0} -attr @fillcolor #e2e0de
 attribute {inst DAC.Tile_229.DAC0} -attr @name {}
 attribute {pin DAC.Tile_229.DAC0 TX } -attr @name {}
 show
-# Starting Split Pages                                                   91.22
-# NoSplit 26 Comps, 0 Nets 0 NetBundles                                  91.22
-# End of Split Pages                                                     91.22
-# Generating Regions for Page 1:   26 Comps,    0 Nets                   91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# End of Generating Regions for Page 1                                   91.22
+# Starting Split Pages                                                   97.31
+# NoSplit 26 Comps, 0 Nets 0 NetBundles                                  97.31
+# End of Split Pages                                                     97.31
+# Generating Regions for Page 1:   26 Comps,    0 Nets                   97.31
+# Analyze                                                                97.31
+# Levelize                                                               97.31
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             97.31
+# Nets                                                                   97.31
+# Place                                                                  97.31
+# PlaceNets                                                              97.31
+# SpaceY                                                                 97.31
+# Track                                                                  97.31
+# SpaceX                                                                 97.31
+# Wire                                                                   97.31
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.31
+# End of doGenerate                                                      97.31
+# Analyze                                                                97.31
+# Levelize                                                               97.31
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             97.31
+# Nets                                                                   97.31
+# Place                                                                  97.31
+# PlaceNets                                                              97.31
+# SpaceY                                                                 97.31
+# Track                                                                  97.31
+# SpaceX                                                                 97.31
+# Wire                                                                   97.31
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.31
+# End of doGenerate                                                      97.31
+# Analyze                                                                97.31
+# Levelize                                                               97.31
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              97.31
+# Nets                                                                   97.31
+# Place                                                                  97.31
+# PlaceNets                                                              97.31
+# SpaceY                                                                 97.31
+# Track                                                                  97.31
+# SpaceX                                                                 97.31
+# Wire                                                                   97.31
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.31
+# End of doGenerate                                                      97.31
+# End of Generating Regions for Page 1                                   97.31
 scrollpos 108 344
 zoom -x 0 -y 0 0.5
 scrollpos 68 215
@@ -412,47 +412,47 @@ attribute {inst DAC.Tile_229.DAC0} -attr @fillcolor #e2e0de
 attribute {inst DAC.Tile_229.DAC0} -attr @name {}
 attribute {pin DAC.Tile_229.DAC0 TX } -attr @name {}
 show
-# Starting Split Pages                                                   91.22
-# NoSplit 26 Comps, 0 Nets 0 NetBundles                                  91.22
-# End of Split Pages                                                     91.22
-# Generating Regions for Page 1:   26 Comps,    0 Nets                   91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# End of Generating Regions for Page 1                                   91.22
+# Starting Split Pages                                                   97.36
+# NoSplit 26 Comps, 0 Nets 0 NetBundles                                  97.36
+# End of Split Pages                                                     97.36
+# Generating Regions for Page 1:   26 Comps,    0 Nets                   97.36
+# Analyze                                                                97.36
+# Levelize                                                               97.36
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             97.36
+# Nets                                                                   97.36
+# Place                                                                  97.36
+# PlaceNets                                                              97.36
+# SpaceY                                                                 97.36
+# Track                                                                  97.36
+# SpaceX                                                                 97.36
+# Wire                                                                   97.36
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.36
+# End of doGenerate                                                      97.36
+# Analyze                                                                97.36
+# Levelize                                                               97.36
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             97.36
+# Nets                                                                   97.36
+# Place                                                                  97.36
+# PlaceNets                                                              97.36
+# SpaceY                                                                 97.36
+# Track                                                                  97.36
+# SpaceX                                                                 97.36
+# Wire                                                                   97.36
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.36
+# End of doGenerate                                                      97.36
+# Analyze                                                                97.36
+# Levelize                                                               97.36
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              97.36
+# Nets                                                                   97.36
+# Place                                                                  97.36
+# PlaceNets                                                              97.36
+# SpaceY                                                                 97.36
+# Track                                                                  97.36
+# SpaceX                                                                 97.36
+# Wire                                                                   97.36
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.36
+# End of doGenerate                                                      97.36
+# End of Generating Regions for Page 1                                   97.36
 scrollpos 108 344
 zoom -x 0 -y 0 0.5
 scrollpos 68 215
@@ -532,57 +532,57 @@ increment -const
 load net net.DAC.Tile_229.DAC3.mixer.Tile_229.DAC3.s03 -pin DAC.Tile_229.DAC3.s03 TX -pin DAC.Tile_229.DAC3.mixer LEFT_I
 attribute {inst DAC.Tile_229.DAC3.s03} -attr @name Real
 show
-# Starting Split Pages                                                   91.22
-# NoSplit 26 Comps, 16 Nets 0 NetBundles                                 91.22
-# End of Split Pages                                                     91.22
-# Generating Regions for Page 1:   26 Comps,   16 Nets                   91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)                91.22
-# End of doGenerate                                                      91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)                91.22
-# End of doGenerate                                                      91.22
-# Analyze                                                                91.22
-# Levelize                                                               91.22
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              91.22
-# Nets                                                                   91.22
-# Place                                                                  91.22
-# PlaceNets                                                              91.22
-# SpaceY                                                                 91.22
-# Track                                                                  91.22
-# SpaceX                                                                 91.22
-# Wire                                                                   91.22
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  91.22
-# End of doGenerate                                                      91.22
-# End of Generating Regions for Page 1                                   91.22
+# Starting Split Pages                                                   97.36
+# NoSplit 26 Comps, 16 Nets 0 NetBundles                                 97.36
+# End of Split Pages                                                     97.36
+# Generating Regions for Page 1:   26 Comps,   16 Nets                   97.36
+# Analyze                                                                97.36
+# Levelize                                                               97.36
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             97.36
+# Nets                                                                   97.36
+# Place                                                                  97.36
+# PlaceNets                                                              97.36
+# SpaceY                                                                 97.36
+# Track                                                                  97.36
+# SpaceX                                                                 97.36
+# Wire                                                                   97.36
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)                97.36
+# End of doGenerate                                                      97.36
+# Analyze                                                                97.36
+# Levelize                                                               97.36
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             97.36
+# Nets                                                                   97.36
+# Place                                                                  97.36
+# PlaceNets                                                              97.36
+# SpaceY                                                                 97.36
+# Track                                                                  97.36
+# SpaceX                                                                 97.36
+# Wire                                                                   97.36
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)                97.36
+# End of doGenerate                                                      97.36
+# Analyze                                                                97.36
+# Levelize                                                               97.36
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              97.36
+# Nets                                                                   97.36
+# Place                                                                  97.36
+# PlaceNets                                                              97.36
+# SpaceY                                                                 97.36
+# Track                                                                  97.36
+# SpaceX                                                                 97.36
+# Wire                                                                   97.36
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  97.36
+# End of doGenerate                                                      97.36
+# End of Generating Regions for Page 1                                   97.36
 #CMD scrollpos -100 -30
 scrollpos -100 -30
 fullfit
-scrollpos -250 -328
+scrollpos -250 -265
 fullfit
-scrollpos -139 -43
-scrollpos -139 -43
-scrollpos -144 -44
+scrollpos -161 -35
+scrollpos -161 -35
+scrollpos -165 -36
 #CMD scrollpos
-#R -144 -44
+#R -165 -36
 increment -const
 unload net net.DAC.Tile_229.DAC1.mixer.Tile_229.DAC1
 increment -const
@@ -786,50 +786,50 @@ attribute {inst DAC.Tile_229.DAC0} -attr @fillcolor #e2e0de
 attribute {inst DAC.Tile_229.DAC0} -attr @name {}
 attribute {pin DAC.Tile_229.DAC0 TX } -attr @name {}
 show
-# Starting Split Pages                                                   99.81
-# NoSplit 26 Comps, 0 Nets 0 NetBundles                                  99.81
-# End of Split Pages                                                     99.81
-# Generating Regions for Page 1:   26 Comps,    0 Nets                   99.81
-# Analyze                                                                99.81
-# Levelize                                                               99.81
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             99.81
-# Nets                                                                   99.81
-# Place                                                                  99.81
-# PlaceNets                                                              99.81
-# SpaceY                                                                 99.81
-# Track                                                                  99.81
-# SpaceX                                                                 99.81
-# Wire                                                                   99.81
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  99.81
-# End of doGenerate                                                      99.81
-# Analyze                                                                99.81
-# Levelize                                                               99.81
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             99.81
-# Nets                                                                   99.81
-# Place                                                                  99.81
-# PlaceNets                                                              99.81
-# SpaceY                                                                 99.81
-# Track                                                                  99.81
-# SpaceX                                                                 99.81
-# Wire                                                                   99.81
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  99.81
-# End of doGenerate                                                      99.81
-# Analyze                                                                99.81
-# Levelize                                                               99.81
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              99.81
-# Nets                                                                   99.81
-# Place                                                                  99.81
-# PlaceNets                                                              99.81
-# SpaceY                                                                 99.81
-# Track                                                                  99.81
-# SpaceX                                                                 99.81
-# Wire                                                                   99.81
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  99.81
-# End of doGenerate                                                      99.81
-# End of Generating Regions for Page 1                                   99.81
-scrollpos -150 5
+# Starting Split Pages                                                  105.69
+# NoSplit 26 Comps, 0 Nets 0 NetBundles                                 105.69
+# End of Split Pages                                                    105.69
+# Generating Regions for Page 1:   26 Comps,    0 Nets                  105.69
+# Analyze                                                               105.69
+# Levelize                                                              105.69
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            105.69
+# Nets                                                                  105.69
+# Place                                                                 105.69
+# PlaceNets                                                             105.69
+# SpaceY                                                                105.69
+# Track                                                                 105.69
+# SpaceX                                                                105.69
+# Wire                                                                  105.69
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 105.69
+# End of doGenerate                                                     105.69
+# Analyze                                                               105.69
+# Levelize                                                              105.69
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            105.69
+# Nets                                                                  105.69
+# Place                                                                 105.69
+# PlaceNets                                                             105.69
+# SpaceY                                                                105.69
+# Track                                                                 105.69
+# SpaceX                                                                105.69
+# Wire                                                                  105.69
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 105.69
+# End of doGenerate                                                     105.69
+# Analyze                                                               105.69
+# Levelize                                                              105.69
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             105.69
+# Nets                                                                  105.69
+# Place                                                                 105.69
+# PlaceNets                                                             105.69
+# SpaceY                                                                105.69
+# Track                                                                 105.69
+# SpaceX                                                                105.69
+# Wire                                                                  105.69
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 105.69
+# End of doGenerate                                                     105.69
+# End of Generating Regions for Page 1                                  105.69
+scrollpos -150 68
 zoom -x 0 -y 0 0.5
-scrollpos -93 3
+scrollpos -93 43
 #R 0.5
 #CMD scrollpos 0 0
 scrollpos 0 0
@@ -906,55 +906,55 @@ increment -const
 load net net.DAC.Tile_229.DAC3.mixer.Tile_229.DAC3.s03 -pin DAC.Tile_229.DAC3.s03 TX -pin DAC.Tile_229.DAC3.mixer LEFT_I
 attribute {inst DAC.Tile_229.DAC3.s03} -attr @name Real
 show
-# Starting Split Pages                                                   99.81
-# NoSplit 26 Comps, 16 Nets 0 NetBundles                                 99.81
-# End of Split Pages                                                     99.81
-# Generating Regions for Page 1:   26 Comps,   16 Nets                   99.81
-# Analyze                                                                99.81
-# Levelize                                                               99.81
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             99.81
-# Nets                                                                   99.81
-# Place                                                                  99.81
-# PlaceNets                                                              99.81
-# SpaceY                                                                 99.81
-# Track                                                                  99.81
-# SpaceX                                                                 99.81
-# Wire                                                                   99.81
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)                99.81
-# End of doGenerate                                                      99.81
-# Analyze                                                                99.81
-# Levelize                                                               99.81
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000             99.81
-# Nets                                                                   99.81
-# Place                                                                  99.81
-# PlaceNets                                                              99.81
-# SpaceY                                                                 99.81
-# Track                                                                  99.81
-# SpaceX                                                                 99.81
-# Wire                                                                   99.81
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)                99.81
-# End of doGenerate                                                      99.81
-# Analyze                                                                99.81
-# Levelize                                                               99.81
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000              99.81
-# Nets                                                                   99.81
-# Place                                                                  99.81
-# PlaceNets                                                              99.81
-# SpaceY                                                                 99.81
-# Track                                                                  99.81
-# SpaceX                                                                 99.81
-# Wire                                                                   99.81
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                  99.81
-# End of doGenerate                                                      99.81
-# End of Generating Regions for Page 1                                   99.81
+# Starting Split Pages                                                  105.69
+# NoSplit 26 Comps, 16 Nets 0 NetBundles                                105.69
+# End of Split Pages                                                    105.69
+# Generating Regions for Page 1:   26 Comps,   16 Nets                  105.69
+# Analyze                                                               105.69
+# Levelize                                                              105.69
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            105.69
+# Nets                                                                  105.69
+# Place                                                                 105.69
+# PlaceNets                                                             105.69
+# SpaceY                                                                105.69
+# Track                                                                 105.69
+# SpaceX                                                                105.69
+# Wire                                                                  105.69
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               105.69
+# End of doGenerate                                                     105.69
+# Analyze                                                               105.69
+# Levelize                                                              105.69
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            105.69
+# Nets                                                                  105.69
+# Place                                                                 105.69
+# PlaceNets                                                             105.69
+# SpaceY                                                                105.69
+# Track                                                                 105.69
+# SpaceX                                                                105.69
+# Wire                                                                  105.69
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               105.69
+# End of doGenerate                                                     105.69
+# Analyze                                                               105.69
+# Levelize                                                              105.69
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             105.69
+# Nets                                                                  105.69
+# Place                                                                 105.69
+# PlaceNets                                                             105.69
+# SpaceY                                                                105.69
+# Track                                                                 105.69
+# SpaceX                                                                105.69
+# Wire                                                                  105.69
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 105.69
+# End of doGenerate                                                     105.69
+# End of Generating Regions for Page 1                                  105.69
 #CMD scrollpos -100 -30
 scrollpos -100 -30
-#CMD scrollpos -144 -30
-scrollpos -144 -30
+#CMD scrollpos -165 -30
+scrollpos -165 -30
 fullfit
-scrollpos -144 -44
+scrollpos -165 -36
 #CMD scrollpos
-#R -144 -44
+#R -165 -36
 increment -const
 unload net net.DAC.Tile_229.DAC1.mixer.Tile_229.DAC1
 increment -const
@@ -1158,50 +1158,50 @@ attribute {inst DAC.Tile_229.DAC0} -attr @fillcolor #e2e0de
 attribute {inst DAC.Tile_229.DAC0} -attr @name {}
 attribute {pin DAC.Tile_229.DAC0 TX } -attr @name {}
 show
-# Starting Split Pages                                                  102.51
-# NoSplit 26 Comps, 0 Nets 0 NetBundles                                 102.51
-# End of Split Pages                                                    102.51
-# Generating Regions for Page 1:   26 Comps,    0 Nets                  102.51
-# Analyze                                                               102.51
-# Levelize                                                              102.51
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            102.51
-# Nets                                                                  102.51
-# Place                                                                 102.51
-# PlaceNets                                                             102.51
-# SpaceY                                                                102.51
-# Track                                                                 102.51
-# SpaceX                                                                102.51
-# Wire                                                                  102.51
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 102.51
-# End of doGenerate                                                     102.51
-# Analyze                                                               102.51
-# Levelize                                                              102.51
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            102.51
-# Nets                                                                  102.51
-# Place                                                                 102.51
-# PlaceNets                                                             102.51
-# SpaceY                                                                102.51
-# Track                                                                 102.51
-# SpaceX                                                                102.51
-# Wire                                                                  102.51
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 102.51
-# End of doGenerate                                                     102.51
-# Analyze                                                               102.51
-# Levelize                                                              102.51
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             102.51
-# Nets                                                                  102.51
-# Place                                                                 102.51
-# PlaceNets                                                             102.51
-# SpaceY                                                                102.51
-# Track                                                                 102.51
-# SpaceX                                                                102.51
-# Wire                                                                  102.51
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 102.51
-# End of doGenerate                                                     102.51
-# End of Generating Regions for Page 1                                  102.51
-scrollpos -150 5
+# Starting Split Pages                                                  107.47
+# NoSplit 26 Comps, 0 Nets 0 NetBundles                                 107.47
+# End of Split Pages                                                    107.47
+# Generating Regions for Page 1:   26 Comps,    0 Nets                  107.47
+# Analyze                                                               107.47
+# Levelize                                                              107.47
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            107.47
+# Nets                                                                  107.47
+# Place                                                                 107.47
+# PlaceNets                                                             107.47
+# SpaceY                                                                107.47
+# Track                                                                 107.47
+# SpaceX                                                                107.47
+# Wire                                                                  107.47
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 107.47
+# End of doGenerate                                                     107.47
+# Analyze                                                               107.47
+# Levelize                                                              107.47
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            107.47
+# Nets                                                                  107.47
+# Place                                                                 107.47
+# PlaceNets                                                             107.47
+# SpaceY                                                                107.47
+# Track                                                                 107.47
+# SpaceX                                                                107.47
+# Wire                                                                  107.47
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 107.47
+# End of doGenerate                                                     107.47
+# Analyze                                                               107.47
+# Levelize                                                              107.47
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             107.47
+# Nets                                                                  107.47
+# Place                                                                 107.47
+# PlaceNets                                                             107.47
+# SpaceY                                                                107.47
+# Track                                                                 107.47
+# SpaceX                                                                107.47
+# Wire                                                                  107.47
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 107.47
+# End of doGenerate                                                     107.47
+# End of Generating Regions for Page 1                                  107.47
+scrollpos -150 68
 zoom -x 0 -y 0 0.5
-scrollpos -93 3
+scrollpos -93 43
 #R 0.5
 #CMD scrollpos 0 0
 scrollpos 0 0
@@ -1278,55 +1278,55 @@ increment -const
 load net net.DAC.Tile_229.DAC3.mixer.Tile_229.DAC3.s03 -pin DAC.Tile_229.DAC3.s03 TX -pin DAC.Tile_229.DAC3.mixer LEFT_I
 attribute {inst DAC.Tile_229.DAC3.s03} -attr @name Real
 show
-# Starting Split Pages                                                  102.51
-# NoSplit 26 Comps, 16 Nets 0 NetBundles                                102.51
-# End of Split Pages                                                    102.51
-# Generating Regions for Page 1:   26 Comps,   16 Nets                  102.51
-# Analyze                                                               102.51
-# Levelize                                                              102.51
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            102.51
-# Nets                                                                  102.51
-# Place                                                                 102.51
-# PlaceNets                                                             102.51
-# SpaceY                                                                102.51
-# Track                                                                 102.51
-# SpaceX                                                                102.51
-# Wire                                                                  102.51
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               102.51
-# End of doGenerate                                                     102.51
-# Analyze                                                               102.51
-# Levelize                                                              102.51
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            102.51
-# Nets                                                                  102.51
-# Place                                                                 102.51
-# PlaceNets                                                             102.51
-# SpaceY                                                                102.51
-# Track                                                                 102.51
-# SpaceX                                                                102.51
-# Wire                                                                  102.51
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               102.51
-# End of doGenerate                                                     102.51
-# Analyze                                                               102.51
-# Levelize                                                              102.51
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             102.51
-# Nets                                                                  102.51
-# Place                                                                 102.51
-# PlaceNets                                                             102.51
-# SpaceY                                                                102.51
-# Track                                                                 102.51
-# SpaceX                                                                102.51
-# Wire                                                                  102.51
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 102.51
-# End of doGenerate                                                     102.51
-# End of Generating Regions for Page 1                                  102.51
+# Starting Split Pages                                                  107.47
+# NoSplit 26 Comps, 16 Nets 0 NetBundles                                107.47
+# End of Split Pages                                                    107.47
+# Generating Regions for Page 1:   26 Comps,   16 Nets                  107.47
+# Analyze                                                               107.47
+# Levelize                                                              107.47
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            107.47
+# Nets                                                                  107.47
+# Place                                                                 107.47
+# PlaceNets                                                             107.47
+# SpaceY                                                                107.47
+# Track                                                                 107.47
+# SpaceX                                                                107.47
+# Wire                                                                  107.47
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               107.47
+# End of doGenerate                                                     107.47
+# Analyze                                                               107.47
+# Levelize                                                              107.47
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            107.47
+# Nets                                                                  107.47
+# Place                                                                 107.47
+# PlaceNets                                                             107.47
+# SpaceY                                                                107.47
+# Track                                                                 107.47
+# SpaceX                                                                107.47
+# Wire                                                                  107.47
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               107.47
+# End of doGenerate                                                     107.47
+# Analyze                                                               107.47
+# Levelize                                                              107.47
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             107.47
+# Nets                                                                  107.47
+# Place                                                                 107.47
+# PlaceNets                                                             107.47
+# SpaceY                                                                107.47
+# Track                                                                 107.47
+# SpaceX                                                                107.47
+# Wire                                                                  107.47
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 107.47
+# End of doGenerate                                                     107.47
+# End of Generating Regions for Page 1                                  107.47
 #CMD scrollpos -100 -30
 scrollpos -100 -30
-#CMD scrollpos -144 -30
-scrollpos -144 -30
+#CMD scrollpos -165 -30
+scrollpos -165 -30
 fullfit
-scrollpos -144 -44
+scrollpos -165 -36
 #CMD scrollpos
-#R -144 -44
+#R -165 -36
 increment -const
 unload net net.DAC.Tile_229.DAC1.mixer.Tile_229.DAC1
 increment -const
@@ -1530,50 +1530,50 @@ attribute {inst DAC.Tile_229.DAC0} -attr @fillcolor #e2e0de
 attribute {inst DAC.Tile_229.DAC0} -attr @name {}
 attribute {pin DAC.Tile_229.DAC0 TX } -attr @name {}
 show
-# Starting Split Pages                                                  103.92
-# NoSplit 26 Comps, 0 Nets 0 NetBundles                                 103.92
-# End of Split Pages                                                    103.92
-# Generating Regions for Page 1:   26 Comps,    0 Nets                  103.92
-# Analyze                                                               103.92
-# Levelize                                                              103.92
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            103.92
-# Nets                                                                  103.92
-# Place                                                                 103.92
-# PlaceNets                                                             103.92
-# SpaceY                                                                103.92
-# Track                                                                 103.92
-# SpaceX                                                                103.92
-# Wire                                                                  103.92
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 103.92
-# End of doGenerate                                                     103.92
-# Analyze                                                               103.92
-# Levelize                                                              103.92
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            103.92
-# Nets                                                                  103.92
-# Place                                                                 103.92
-# PlaceNets                                                             103.92
-# SpaceY                                                                103.92
-# Track                                                                 103.92
-# SpaceX                                                                103.92
-# Wire                                                                  103.92
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 103.92
-# End of doGenerate                                                     103.92
-# Analyze                                                               103.92
-# Levelize                                                              103.92
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             103.92
-# Nets                                                                  103.92
-# Place                                                                 103.92
-# PlaceNets                                                             103.92
-# SpaceY                                                                103.92
-# Track                                                                 103.92
-# SpaceX                                                                103.92
-# Wire                                                                  103.92
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 103.92
-# End of doGenerate                                                     103.92
-# End of Generating Regions for Page 1                                  103.92
-scrollpos -150 5
+# Starting Split Pages                                                  109.80
+# NoSplit 26 Comps, 0 Nets 0 NetBundles                                 109.80
+# End of Split Pages                                                    109.80
+# Generating Regions for Page 1:   26 Comps,    0 Nets                  109.80
+# Analyze                                                               109.80
+# Levelize                                                              109.80
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            109.80
+# Nets                                                                  109.80
+# Place                                                                 109.80
+# PlaceNets                                                             109.80
+# SpaceY                                                                109.80
+# Track                                                                 109.80
+# SpaceX                                                                109.80
+# Wire                                                                  109.80
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 109.80
+# End of doGenerate                                                     109.80
+# Analyze                                                               109.80
+# Levelize                                                              109.80
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            109.80
+# Nets                                                                  109.80
+# Place                                                                 109.80
+# PlaceNets                                                             109.80
+# SpaceY                                                                109.80
+# Track                                                                 109.80
+# SpaceX                                                                109.80
+# Wire                                                                  109.80
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 109.80
+# End of doGenerate                                                     109.80
+# Analyze                                                               109.80
+# Levelize                                                              109.80
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             109.80
+# Nets                                                                  109.80
+# Place                                                                 109.80
+# PlaceNets                                                             109.80
+# SpaceY                                                                109.80
+# Track                                                                 109.80
+# SpaceX                                                                109.80
+# Wire                                                                  109.80
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 109.80
+# End of doGenerate                                                     109.80
+# End of Generating Regions for Page 1                                  109.80
+scrollpos -150 68
 zoom -x 0 -y 0 0.5
-scrollpos -93 3
+scrollpos -93 43
 #R 0.5
 #CMD scrollpos 0 0
 scrollpos 0 0
@@ -1650,50 +1650,50 @@ increment -const
 load net net.DAC.Tile_229.DAC3.mixer.Tile_229.DAC3.s03 -pin DAC.Tile_229.DAC3.s03 TX -pin DAC.Tile_229.DAC3.mixer LEFT_I
 attribute {inst DAC.Tile_229.DAC3.s03} -attr @name Real
 show
-# Starting Split Pages                                                  103.95
-# NoSplit 26 Comps, 16 Nets 0 NetBundles                                103.95
-# End of Split Pages                                                    103.95
-# Generating Regions for Page 1:   26 Comps,   16 Nets                  103.95
-# Analyze                                                               103.95
-# Levelize                                                              103.95
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            103.95
-# Nets                                                                  103.95
-# Place                                                                 103.95
-# PlaceNets                                                             103.95
-# SpaceY                                                                103.95
-# Track                                                                 103.95
-# SpaceX                                                                103.95
-# Wire                                                                  103.95
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               103.95
-# End of doGenerate                                                     103.95
-# Analyze                                                               103.95
-# Levelize                                                              103.95
-# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            103.95
-# Nets                                                                  103.95
-# Place                                                                 103.95
-# PlaceNets                                                             103.95
-# SpaceY                                                                103.95
-# Track                                                                 103.95
-# SpaceX                                                                103.95
-# Wire                                                                  103.95
-# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               103.95
-# End of doGenerate                                                     103.95
-# Analyze                                                               103.95
-# Levelize                                                              103.95
-# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             103.95
-# Nets                                                                  103.95
-# Place                                                                 103.95
-# PlaceNets                                                             103.95
-# SpaceY                                                                103.95
-# Track                                                                 103.95
-# SpaceX                                                                103.95
-# Wire                                                                  103.95
-# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 103.95
-# End of doGenerate                                                     103.95
-# End of Generating Regions for Page 1                                  103.95
+# Starting Split Pages                                                  109.80
+# NoSplit 26 Comps, 16 Nets 0 NetBundles                                109.80
+# End of Split Pages                                                    109.80
+# Generating Regions for Page 1:   26 Comps,   16 Nets                  109.80
+# Analyze                                                               109.80
+# Levelize                                                              109.80
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            109.80
+# Nets                                                                  109.80
+# Place                                                                 109.80
+# PlaceNets                                                             109.80
+# SpaceY                                                                109.80
+# Track                                                                 109.80
+# SpaceX                                                                109.80
+# Wire                                                                  109.80
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               109.80
+# End of doGenerate                                                     109.80
+# Analyze                                                               109.80
+# Levelize                                                              109.80
+# End of LevelAssign mode=I, 4 Levels, 12 Comps, limit=30000            109.80
+# Nets                                                                  109.80
+# Place                                                                 109.80
+# PlaceNets                                                             109.80
+# SpaceY                                                                109.80
+# Track                                                                 109.80
+# SpaceX                                                                109.80
+# Wire                                                                  109.80
+# End of Wire: 8 nets, 8 ch, wire: 32-->32 (0 with wbits)               109.80
+# End of doGenerate                                                     109.80
+# Analyze                                                               109.80
+# Levelize                                                              109.80
+# End of LevelAssign mode=I, 2 Levels, 2 Comps, limit=30000             109.80
+# Nets                                                                  109.80
+# Place                                                                 109.80
+# PlaceNets                                                             109.80
+# SpaceY                                                                109.80
+# Track                                                                 109.80
+# SpaceX                                                                109.80
+# Wire                                                                  109.80
+# End of Wire: 0 nets, 0 ch, wire: 0-->0 (0 with wbits)                 109.80
+# End of doGenerate                                                     109.80
+# End of Generating Regions for Page 1                                  109.80
 #CMD scrollpos -100 -30
 scrollpos -100 -30
-#CMD scrollpos -144 -30
-scrollpos -144 -30
+#CMD scrollpos -165 -30
+scrollpos -165 -30
 fullfit
-scrollpos -144 -44
+scrollpos -165 -36

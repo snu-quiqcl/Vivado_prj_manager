@@ -52,6 +52,7 @@ Unsigned 72 *  Unsigned 48 bit -> 120 bit
 
 */
 
+
 wire [15:0] dds_output_wire[16];
 wire [15:0] dds_output_valid; 
 wire [3:0] dds_output_valid_chain;
@@ -86,7 +87,7 @@ end
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign amp_full_product[i] = {{16{dds_output_buffer3[i][15]}},dds_output_buffer3[i]} * {18'h0,amp_buffer3};
+        assign amp_full_product[i] = {{16{dds_output_wire[i][15]}},dds_output_wire[i]} * {18'h0,amp_buffer3};
         assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset_buffer3[13:0]};
     end
 endgenerate
@@ -110,23 +111,6 @@ always@(posedge clk) begin
     phase_input[14] <= phase_input_wire[14];
     phase_input[15] <= phase_input_wire[15];
 
-    dds_output_buffer3[0] <= dds_output_wire[0];
-    dds_output_buffer3[1] <= dds_output_wire[1];
-    dds_output_buffer3[2] <= dds_output_wire[2];
-    dds_output_buffer3[3] <= dds_output_wire[3];
-    dds_output_buffer3[4] <= dds_output_wire[4];
-    dds_output_buffer3[5] <= dds_output_wire[5];
-    dds_output_buffer3[6] <= dds_output_wire[6];
-    dds_output_buffer3[7] <= dds_output_wire[7];
-    dds_output_buffer3[8] <= dds_output_wire[8];
-    dds_output_buffer3[9] <= dds_output_wire[9];
-    dds_output_buffer3[10] <= dds_output_wire[10];
-    dds_output_buffer3[11] <= dds_output_wire[11];
-    dds_output_buffer3[12] <= dds_output_wire[12];
-    dds_output_buffer3[13] <= dds_output_wire[13];
-    dds_output_buffer3[14] <= dds_output_wire[14];
-    dds_output_buffer3[15] <= dds_output_wire[15];
-
     amp_buffer1[13:0] <= amp[13:0];
     amp_buffer2[13:0] <= amp_buffer1[13:0];
     amp_buffer3[13:0] <= amp_buffer2[13:0];
@@ -135,14 +119,6 @@ always@(posedge clk) begin
     amp_offset_buffer2[13:0] <= amp_offset_buffer1[13:0];
     amp_offset_buffer3[13:0] <= amp_offset_buffer2[13:0];
 end
-
-dds_compiler_0 dds_0(
-    .s_axis_phase_tdata(phase_input[0]),
-    .s_axis_phase_tvalid(1'b1),
-    .m_axis_data_tdata(dds_output_wire[0]),
-    .m_axis_data_tvalid(dds_output_valid[0]),
-    .aclk(clk)
-);
 
 MAC mac_0(
     .clk(clk),
@@ -302,6 +278,15 @@ MAC mac_15(
     .C(phase),
     .D({time_offset[43:4],4'b0000}),
     .mul_result(phase_input_wire[15])
+);
+
+
+dds_compiler_0 dds_0(
+    .s_axis_phase_tdata(phase_input[0]),
+    .s_axis_phase_tvalid(1'b1),
+    .m_axis_data_tdata(dds_output_wire[0]),
+    .m_axis_data_tvalid(dds_output_valid[0]),
+    .aclk(clk)
 );
 
 

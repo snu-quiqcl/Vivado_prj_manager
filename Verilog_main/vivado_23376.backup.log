@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sun Sep 10 22:21:21 2023
-# Process ID: 29068
+# Start of session at: Mon Sep 11 15:56:41 2023
+# Process ID: 23376
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\TimeController_output\TimeController.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -15,7 +15,6 @@ source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\TimeController_output\Ti
 # create_project ${project_name} ${project_dir}/${project_name} -part xczu28dr-ffvg1517-2-e
 INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
 Current project path is 'E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController_output/TimeController'
-create_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 1162.723 ; gain = 0.000
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController/AXI2COM.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController/TimeController.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController/Timestamp_Counter.sv}
@@ -56,4 +55,4 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Desi
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController_output' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController_output/TimeController'.)
 # set_property top TimeController [current_fileset]
 # set_property top_file { E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TimeController/TimeController.sv } [current_fileset]
-INFO: [Common 17-206] Exiting Vivado at Sun Sep 10 22:21:37 2023...
+INFO: [Common 17-206] Exiting Vivado at Mon Sep 11 15:56:51 2023...

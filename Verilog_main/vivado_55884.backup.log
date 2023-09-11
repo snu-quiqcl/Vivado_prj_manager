@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sat Sep  9 19:42:47 2023
-# Process ID: 56276
+# Start of session at: Sun Sep 10 22:20:57 2023
+# Process ID: 55884
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output_7\DAC_Controller_7.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -19,6 +19,7 @@ Current project path is 'E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Con
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DAC_Controller_7.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DDS_Controller_7.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/GPO_Core_7.sv}
+# add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/MAC_7.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/RFDC_DDS_7.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/RTO_Core_7.sv}
 # set boardpath {E:/Xilinx/Vivado/2020.2/data/boards/board_files}
@@ -116,12 +117,14 @@ CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DAC_Controller_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DDS_Controller_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/GPO_Core_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
+CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/MAC_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/RFDC_DDS_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/RTO_Core_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/AXI2FIFO_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DAC_Controller_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DDS_Controller_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/GPO_Core_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
+CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/MAC_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/RFDC_DDS_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 CRITICAL WARNING: [IP_Flow 19-459] IP file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/RTO_Core_7.sv' appears to be outside of the project area 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7'. You can use the ipx::package_project -import_files option to copy remote files into the IP directory.
 WARNING: [IP_Flow 19-5101] Packaging a component with a SystemVerilog top file is not fully supported. Please refer to UG1118 'Creating and Packaging Custom IP'.
@@ -147,6 +150,8 @@ WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP def
 WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
 WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
 WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
+WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
+WARNING: [IP_Flow 19-5905] All packaged files should be located below the IP definition file (xml)
 INFO: [IP_Flow 19-2181] Payment Required is not set for this core.
 INFO: [IP_Flow 19-2187] The Product Guide file is missing.
 # ipx::save_core [ipx::current_core]
@@ -157,4 +162,4 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Desi
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output_7/DAC_Controller_7'.)
 # set_property top DAC_Controller_7 [current_fileset]
 # set_property top_file { E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_7/DAC_Controller_7.sv } [current_fileset]
-INFO: [Common 17-206] Exiting Vivado at Sat Sep  9 19:43:08 2023...
+INFO: [Common 17-206] Exiting Vivado at Sun Sep 10 22:21:19 2023...

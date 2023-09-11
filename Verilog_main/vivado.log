@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sat Sep  9 19:43:21 2023
-# Process ID: 12624
+# Start of session at: Sun Sep 10 22:21:40 2023
+# Process ID: 53100
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -165,25 +165,15 @@ Slave segment '/usp_rf_data_converter_0/s_axi/Reg' is being assigned into addres
 # start_gui
 update_compile_order -fileset sources_1
 open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-WARNING: [IP_Flow 19-474] Invalid Parameter 'Component_Name'
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 startgroup
-set_property -dict [list CONFIG.PSU__CRL_APB__PL0_REF_CTRL__SRCSEL {IOPLL} CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ {125}] [get_bd_cells zynq_ultra_ps_e_0]
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
+set_property -dict [list CONFIG.Axiclk_Freq {250} CONFIG.DAC0_Sampling_Rate {4} CONFIG.DAC0_Refclk_Freq {4000.000} CONFIG.DAC0_Outclk_Freq {250.000} CONFIG.DAC0_Fabric_Freq {250.000} CONFIG.DAC1_Sampling_Rate {4} CONFIG.DAC1_Refclk_Freq {4000.000} CONFIG.DAC1_Outclk_Freq {250.000} CONFIG.DAC1_Fabric_Freq {250.000}] [get_bd_cells usp_rf_data_converter_0]
+INFO: Ultrascale+ RF Data Converter instance: Clock port 'dac0_clk' frequency is set to 250000000
+INFO: Ultrascale+ RF Data Converter instance: Clock port 'dac1_clk' frequency is set to 250000000
 endgroup
-startgroup
-set_property -dict [list CONFIG.Axiclk_Freq {250} CONFIG.DAC0_PLL_Enable {false} CONFIG.DAC0_Sampling_Rate {4} CONFIG.DAC0_Refclk_Freq {4000.000} CONFIG.DAC0_Outclk_Freq {125.000} CONFIG.DAC0_Fabric_Freq {250.000} CONFIG.DAC1_PLL_Enable {false} CONFIG.DAC1_Sampling_Rate {4} CONFIG.DAC1_Refclk_Freq {4000.000} CONFIG.DAC1_Outclk_Freq {125.000} CONFIG.DAC1_Fabric_Freq {250.000}] [get_bd_cells usp_rf_data_converter_0]
-INFO: Ultrascale+ RF Data Converter instance: Clock port 'dac0_clk' frequency is set to 125000000
-INFO: Ultrascale+ RF Data Converter instance: Clock port 'dac1_clk' frequency is set to 125000000
-endgroup
+set_property CONFIG.FREQ_HZ 4000000000 [get_bd_ports RF3_CLKO_A_C_N_228]
+set_property CONFIG.FREQ_HZ 4000000000 [get_bd_ports RF3_CLKO_A_C_N_229]
+set_property CONFIG.FREQ_HZ 4000000000 [get_bd_ports RF3_CLKO_A_C_P_228]
+set_property CONFIG.FREQ_HZ 4000000000 [get_bd_ports RF3_CLKO_A_C_P_229]
 INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 WARNING: [IP_Flow 19-474] Invalid Parameter 'Component_Name'
 INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
@@ -191,100 +181,8 @@ startgroup
 set_property -dict [list CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ {250}] [get_bd_cells zynq_ultra_ps_e_0]
 INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 endgroup
-startgroup
-create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0
-create_bd_cell: Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 2815.953 ; gain = 973.836
-endgroup
-connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins clk_wiz_0/clk_in1]
-connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_reset] [get_bd_pins clk_wiz_0/reset]
-create_project TTLx8_output E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TTLx8_output -part xczu28dr-ffvg1517-2-e
-INFO: [IP_Flow 19-234] Refreshing IP repositories
-INFO: [IP_Flow 19-1704] No user IP repositories specified
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'E:/Xilinx/Vivado/2020.2/data/ip'.
-create_project: Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 3389.727 ; gain = 220.270
-set_property board_part xilinx.com:zcu111:part0:1.4 [current_project]
-current_project RFSoC_Main
-startgroup
-set_property -dict [list CONFIG.PRIM_IN_FREQ.VALUE_SRC USER] [get_bd_cells clk_wiz_0]
-set_property -dict [list CONFIG.PRIMITIVE {PLL} CONFIG.CLKOUT1_USED {true} CONFIG.ENABLE_CLOCK_MONITOR {false} CONFIG.PRIM_IN_FREQ {250} CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {500} CONFIG.RESET_TYPE {ACTIVE_LOW} CONFIG.CLKIN1_JITTER_PS {40.0} CONFIG.CLKOUT1_DRIVES {Buffer} CONFIG.CLKOUT2_DRIVES {Buffer} CONFIG.CLKOUT3_DRIVES {Buffer} CONFIG.CLKOUT4_DRIVES {Buffer} CONFIG.CLKOUT5_DRIVES {Buffer} CONFIG.CLKOUT6_DRIVES {Buffer} CONFIG.CLKOUT7_DRIVES {Buffer} CONFIG.FEEDBACK_SOURCE {FDBK_AUTO} CONFIG.USE_LOCKED {true} CONFIG.USE_RESET {true} CONFIG.OVERRIDE_MMCM {false} CONFIG.MMCM_BANDWIDTH {OPTIMIZED} CONFIG.MMCM_CLKFBOUT_MULT_F {4} CONFIG.MMCM_CLKIN1_PERIOD {4.000} CONFIG.MMCM_CLKIN2_PERIOD {10.0} CONFIG.MMCM_COMPENSATION {AUTO} CONFIG.MMCM_CLKOUT0_DIVIDE_F {2} CONFIG.PLL_CLKIN_PERIOD {4.000} CONFIG.RESET_PORT {resetn} CONFIG.CLKOUT1_JITTER {78.198} CONFIG.CLKOUT1_PHASE_ERROR {85.928} CONFIG.AUTO_PRIMITIVE {BUFGCE_DIV}] [get_bd_cells clk_wiz_0]
-WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'AUTO_PRIMITIVE' from 'MMCM' to 'BUFGCE_DIV' has been ignored for IP 'clk_wiz_0'
-WARNING: [BD 41-1684] Pin /clk_wiz_0/reset is now disabled. All connections to this pin have been removed. 
-delete_bd_objs [get_bd_nets proc_sys_reset_0_peripheral_reset]
-endgroup
-connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins clk_wiz_0/resetn]
-save_bd_design
-Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
-Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui> 
 validate_bd_design
 INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
-WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-ERROR: [BD 41-238] Port/Pin property FREQ_HZ does not match between /clk_wiz_0/clk_in1(250000000) and /zynq_ultra_ps_e_0/pl_clk0(249997498)
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 249997498 
-Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-validate_bd_design: Time (s): cpu = 00:00:37 ; elapsed = 00:00:32 . Memory (MB): peak = 3555.363 ; gain = 142.535
-ERROR: [Common 17-39] 'validate_bd_design' failed due to earlier errors.
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-WARNING: [IP_Flow 19-474] Invalid Parameter 'Component_Name'
-startgroup
-set_property -dict [list CONFIG.PRIM_IN_FREQ.VALUE_SRC PROPAGATED] [get_bd_cells clk_wiz_0]
-set_property -dict [list CONFIG.CLKIN1_JITTER_PS {100.0} CONFIG.MMCM_CLKFBOUT_MULT_F {10} CONFIG.MMCM_CLKIN1_PERIOD {10.000} CONFIG.MMCM_CLKIN2_PERIOD {10.000} CONFIG.PLL_CLKIN_PERIOD {10.000} CONFIG.CLKOUT1_JITTER {97.082} CONFIG.CLKOUT1_PHASE_ERROR {98.575}] [get_bd_cells clk_wiz_0]
-WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'MMCM_CLKFBOUT_MULT_F' from '4' to '10' has been ignored for IP 'clk_wiz_0'
-WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'MMCM_CLKIN1_PERIOD' from '4.000' to '10.000' has been ignored for IP 'clk_wiz_0'
-WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'MMCM_CLKIN2_PERIOD' from '10.0' to '10.000' has been ignored for IP 'clk_wiz_0'
-endgroup
-validate_bd_design
-INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
 WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
 WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
 WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
@@ -338,9 +236,7 @@ Please resolve any mismatches by directly setting properties on BD cell </DAC_Co
 WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
 	FREQ_HZ = 249997498 
 Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-validate_bd_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 3581.016 ; gain = 0.141
-INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
-WARNING: [IP_Flow 19-474] Invalid Parameter 'Component_Name'
+validate_bd_design: Time (s): cpu = 00:00:13 ; elapsed = 00:00:12 . Memory (MB): peak = 1828.227 ; gain = 17.027
 make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
 INFO: [BD 41-1662] The design 'RFSoC_Main_blk.bd' is already validated. Therefore parameter propagation will not be re-run.
 Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
@@ -348,14 +244,8 @@ Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSo
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v
 VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
-make_wrapper: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 3734.016 ; gain = 64.930
+make_wrapper: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1979.555 ; gain = 151.328
 add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
-file mkdir E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TTLx8_output/TTLx8_output.srcs/sources_1/new
-current_project TTLx8_output
-close [ open E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TTLx8_output/TTLx8_output.srcs/sources_1/new/TTLx8_output.sv w ]
-add_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TTLx8_output/TTLx8_output.srcs/sources_1/new/TTLx8_output.sv
-update_compile_order -fileset sources_1
-current_project RFSoC_Main
 launch_runs impl_1 -to_step write_bitstream -jobs 3
 INFO: [BD 41-1662] The design 'RFSoC_Main_blk.bd' is already validated. Therefore parameter propagation will not be re-run.
 Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
@@ -373,6 +263,12 @@ INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controll
 INFO: [BD 41-1029] Generation completed for the IP Integrator block proc_sys_reset_0 .
 INFO: [BD 41-1029] Generation completed for the IP Integrator block TimeController_0 .
 INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/xbar .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/ip/RFSoC_Main_blk_auto_ds_0/RFSoC_Main_blk_auto_ds_0_ooc.xdc'
+WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI'. A default connection has been created.
+WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_ds .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/ip/RFSoC_Main_blk_auto_pc_0/RFSoC_Main_blk_auto_pc_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_pc .
 INFO: [BD 41-1029] Generation completed for the IP Integrator block usp_rf_data_converter_0 .
 INFO: [xilinx.com:ip:zynq_ultra_ps_e:3.3-0] RFSoC_Main_blk_zynq_ultra_ps_e_0_0: 
 Changes in your design (including the PCW configuration settings) are not automatically exported from Vivado to Xilinx's SDK, Petalinux or Yocto.
@@ -383,13 +279,6 @@ For more information, please consult PG201, section: Exporting PCW Settings to E
 INFO: [PSU-0] Address Range of DDR (0x7ff00000 to 0x7fffffff) is reserved by PMU for internal purpose.
 WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI_HPM0_FPD'. A default connection has been created.
 INFO: [BD 41-1029] Generation completed for the IP Integrator block zynq_ultra_ps_e_0 .
-INFO: [BD 41-1029] Generation completed for the IP Integrator block clk_wiz_0 .
-WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/ip/RFSoC_Main_blk_auto_ds_0/RFSoC_Main_blk_auto_ds_0_ooc.xdc'
-WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI'. A default connection has been created.
-WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI'. A default connection has been created.
-INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_ds .
-WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/ip/RFSoC_Main_blk_auto_pc_0/RFSoC_Main_blk_auto_pc_0_ooc.xdc'
-INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_pc .
 Exporting to file E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hw_handoff/RFSoC_Main_blk.hwh
 Generated Block Design Tcl file E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hw_handoff/RFSoC_Main_blk_bd.tcl
 Generated Hardware Definition File E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.hwdef
@@ -404,42 +293,36 @@ INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Control
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_TimeController_0_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_auto_ds_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_auto_pc_0
-INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_clk_wiz_0_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_proc_sys_reset_0_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_usp_rf_data_converter_0_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_xbar_0
 INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_zynq_ultra_ps_e_0_0
-[Sat Sep  9 20:03:14 2023] Launched RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_3_0_synth_1, RFSoC_Main_blk_DAC_Controller_5_0_synth_1, RFSoC_Main_blk_DAC_Controller_1_0_synth_1, RFSoC_Main_blk_DAC_Controller_2_0_synth_1, RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1, RFSoC_Main_blk_xbar_0_synth_1, RFSoC_Main_blk_DAC_Controller_4_0_synth_1, RFSoC_Main_blk_DAC_Controller_7_0_synth_1, RFSoC_Main_blk_auto_pc_0_synth_1, RFSoC_Main_blk_clk_wiz_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_6_0_synth_1, RFSoC_Main_blk_proc_sys_reset_0_0_synth_1, RFSoC_Main_blk_TimeController_0_0_synth_1, RFSoC_Main_blk_auto_ds_0_synth_1, synth_1...
+[Sun Sep 10 22:28:33 2023] Launched RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1, RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_1_0_synth_1, RFSoC_Main_blk_auto_pc_0_synth_1, RFSoC_Main_blk_DAC_Controller_2_0_synth_1, RFSoC_Main_blk_DAC_Controller_3_0_synth_1, RFSoC_Main_blk_DAC_Controller_6_0_synth_1, RFSoC_Main_blk_DAC_Controller_4_0_synth_1, RFSoC_Main_blk_proc_sys_reset_0_0_synth_1, RFSoC_Main_blk_TimeController_0_0_synth_1, RFSoC_Main_blk_xbar_0_synth_1, RFSoC_Main_blk_auto_ds_0_synth_1, RFSoC_Main_blk_DAC_Controller_7_0_synth_1, RFSoC_Main_blk_DAC_Controller_5_0_synth_1, synth_1...
 Run output will be captured here:
 RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_3_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_3_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_5_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_5_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_1_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_2_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_2_0_synth_1/runme.log
 RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1/runme.log
-RFSoC_Main_blk_xbar_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_xbar_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_4_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_4_0_synth_1/runme.log
-RFSoC_Main_blk_DAC_Controller_7_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_7_0_synth_1/runme.log
-RFSoC_Main_blk_auto_pc_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_pc_0_synth_1/runme.log
-RFSoC_Main_blk_clk_wiz_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_clk_wiz_0_0_synth_1/runme.log
 RFSoC_Main_blk_DAC_Controller_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_0_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_1_0_synth_1/runme.log
+RFSoC_Main_blk_auto_pc_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_pc_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_2_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_2_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_3_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_3_0_synth_1/runme.log
 RFSoC_Main_blk_DAC_Controller_6_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_6_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_4_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_4_0_synth_1/runme.log
 RFSoC_Main_blk_proc_sys_reset_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_proc_sys_reset_0_0_synth_1/runme.log
 RFSoC_Main_blk_TimeController_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TimeController_0_0_synth_1/runme.log
+RFSoC_Main_blk_xbar_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_xbar_0_synth_1/runme.log
 RFSoC_Main_blk_auto_ds_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_ds_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_7_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_7_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_5_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_5_0_synth_1/runme.log
 synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/synth_1/runme.log
-[Sat Sep  9 20:03:14 2023] Launched impl_1...
+[Sun Sep 10 22:28:34 2023] Launched impl_1...
 Run output will be captured here: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/impl_1/runme.log
-launch_runs: Time (s): cpu = 00:02:08 ; elapsed = 00:02:28 . Memory (MB): peak = 4885.734 ; gain = 1149.398
-current_project TTLx8_output
-current_project RFSoC_Main
-current_project TTLx8_output
-close_project
+launch_runs: Time (s): cpu = 00:02:18 ; elapsed = 00:02:41 . Memory (MB): peak = 3064.188 ; gain = 1084.633
 open_run impl_1
 INFO: [Device 21-403] Loading part xczu28dr-ffvg1517-2-e
-Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 5047.312 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 1824 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 23 CPU seconds
+Netlist sorting complete. Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 4246.918 ; gain = 2.383
+INFO: [Netlist 29-17] Analyzing 2968 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 50 CPU seconds
 INFO: [Project 1-479] Netlist was created with Vivado 2020.2
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Timing 38-478] Restoring timing data from binary archive.
@@ -449,17 +332,18 @@ INFO: [Project 1-853] Binary constraint restore complete.
 Reading XDEF placement.
 Reading placer database...
 Reading XDEF routing.
-Read XDEF File: Time (s): cpu = 00:00:20 ; elapsed = 00:00:19 . Memory (MB): peak = 7149.293 ; gain = 183.941
-Restored from archive | CPU: 20.000000 secs | Memory: 0.000000 MB |
-Finished XDEF File Restore: Time (s): cpu = 00:00:20 ; elapsed = 00:00:19 . Memory (MB): peak = 7149.293 ; gain = 183.941
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 7149.293 ; gain = 0.000
+Read XDEF File: Time (s): cpu = 00:00:33 ; elapsed = 00:00:32 . Memory (MB): peak = 7747.402 ; gain = 430.766
+Restored from archive | CPU: 34.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:33 ; elapsed = 00:00:32 . Memory (MB): peak = 7747.402 ; gain = 430.766
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.042 . Memory (MB): peak = 7747.402 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 1415 instances were transformed.
-  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 1408 instances
+  A total of 2819 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 2808 instances
   RAM32M16 => RAM32M16 (RAMD32(x14), RAMS32(x2)): 7 instances
+  SRLC32E => SRL16E: 4 instances
 
-open_run: Time (s): cpu = 00:02:04 ; elapsed = 00:01:55 . Memory (MB): peak = 7550.473 ; gain = 2618.809
-open_report: Time (s): cpu = 00:00:42 ; elapsed = 00:00:12 . Memory (MB): peak = 8912.633 ; gain = 800.391
+open_run: Time (s): cpu = 00:03:11 ; elapsed = 00:03:00 . Memory (MB): peak = 8964.258 ; gain = 5838.238
+open_report: Time (s): cpu = 00:00:34 ; elapsed = 00:00:11 . Memory (MB): peak = 10137.637 ; gain = 505.012
 CRITICAL WARNING: [Timing 38-282] The design failed to meet the timing requirements. Please see the timing summary report for details on the timing violations.
 exit
-INFO: [Common 17-206] Exiting Vivado at Sat Sep  9 21:19:47 2023...
+INFO: [Common 17-206] Exiting Vivado at Sun Sep 10 23:48:25 2023...

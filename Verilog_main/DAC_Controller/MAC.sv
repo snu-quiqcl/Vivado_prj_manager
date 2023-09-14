@@ -119,7 +119,7 @@ xbip_dsp48_mul_macro_5 dsp_stage_1_5(
 xbip_dsp48_sum_macro_0 dsp_stage_2_0(
     .CLK(clk),
     .A(mul_stage1_31_0_0[31:16]),
-    .B(mul_stage1_47_16_0[15:0]),
+    .C(mul_stage1_47_16_0[15:0]),
     .D(mul_stage1_47_16_1[15:0]),
     .CARRYIN(1'b0),
     .P(),
@@ -129,7 +129,7 @@ xbip_dsp48_sum_macro_0 dsp_stage_2_0(
 xbip_dsp48_sum_macro_1 dsp_stage_2_1(
     .CLK(clk),
     .A(mul_stage1_63_32_0[15:0]),
-    .B(mul_stage1_63_32_1[15:0]),
+    .C(mul_stage1_63_32_1[15:0]),
     .D(mul_stage1_63_32_2[15:0]),
     .CARRYIN(1'b0),
     .P(sum_stage2_47_32_0_wire),
@@ -139,7 +139,7 @@ xbip_dsp48_sum_macro_1 dsp_stage_2_1(
 xbip_dsp48_sum_macro_2 dsp_stage_2_2(
     .CLK(clk),
     .A(mul_stage1_47_16_0[15:0]),
-    .B(mul_stage1_47_16_1[15:0]),
+    .C(mul_stage1_47_16_1[15:0]),
     .D(stage1_C_buffer[15:0]),
     .CARRYIN(1'b0),
     .P(sum_stage2_47_32_1_wire),
@@ -153,7 +153,7 @@ xbip_dsp48_sum_macro_2 dsp_stage_2_2(
 xbip_dsp48_sum_macro_3 dsp_stage_3_0(
     .CLK(clk),
     .A(sum_stage2_47_32_0[15:0]),
-    .B(sum_stage2_47_32_1[15:0]),
+    .C(sum_stage2_47_32_1[15:0]),
     .D(16'h0),
     .CARRYIN(sum_stage2_carryout),
     .P(full_mul_result),
@@ -169,9 +169,9 @@ always@(posedge clk) begin
         mul_stage1_63_32_0          <= 32'h0;
         mul_stage1_63_32_1          <= 32'h0;
         mul_stage1_63_32_2          <= 32'h0;
-        sum_stage2_47_32_0          <= 16'h0;
-        sum_stage2_47_32_1          <= 16'h0;
-        sum_stage2_47_32_2          <= 16'h0;
+        sum_stage2_47_32_0          <= 17'h0;
+        sum_stage2_47_32_1          <= 17'h0;
+        sum_stage2_47_32_2          <= 17'h0;
         stage1_C_buffer             <= 16'h0;
         sum_stage2_carryout         <= 1'b0;
     end

@@ -600,12 +600,12 @@ set_property -dict [ list \
    CONFIG.DAC0_Fabric_Freq {250.000} \
    CONFIG.DAC0_Outclk_Freq {250.000} \
    CONFIG.DAC0_Refclk_Freq {4000.000} \
-   CONFIG.DAC0_Sampling_Rate {1.6} \
+   CONFIG.DAC0_Sampling_Rate {4} \
    CONFIG.DAC1_Enable {1} \
    CONFIG.DAC1_Fabric_Freq {250.000} \
    CONFIG.DAC1_Outclk_Freq {250.000} \
    CONFIG.DAC1_Refclk_Freq {4000.000} \
-   CONFIG.DAC1_Sampling_Rate {1.6} """
+   CONFIG.DAC1_Sampling_Rate {4} """
             for j in range(self.total_dac_num):
                 if j < 4:
                     tcl_code += f' CONFIG.DAC_Interpolation_Mode0{j} {{1}} '
@@ -637,13 +637,14 @@ set_property -dict [ list \
                     tcl_code += f' CONFIG.DAC_Slice0{j}_Enable {{true}} '
                 else:
                     tcl_code += f' CONFIG.DAC_Slice1{j-4}_Enable {{true}} '
+            tcl_code += ' CONFIG.Axiclk_Freq {250} '
             tcl_code += '\n'
             tcl_code += f'] $usp_rf_data_converter_{i}\n'
             
+        # Setting Zynq
         tcl_code += """
 set zynq_ultra_ps_e_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e zynq_ultra_ps_e_0 ]
 set_property -dict [ list \
-
    CONFIG.PSU_BANK_0_IO_STANDARD {LVCMOS18} \
    CONFIG.PSU_BANK_1_IO_STANDARD {LVCMOS18} \
    CONFIG.PSU_BANK_2_IO_STANDARD {LVCMOS18} \
@@ -1292,6 +1293,7 @@ set_property -dict [ list \
    CONFIG.SUBPRESET1 {Custom} \
  ] $zynq_ultra_ps_e_0
         """
+        
         tcl_code += """
 connect_bd_intf_net -intf_net AXI_Buffer_0_m_axi [get_bd_intf_pins AXI_Buffer_0/m_axi] [get_bd_intf_pins axi_interconnect_0/S00_AXI]
 connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_interconnect_0/M00_AXI] [get_bd_intf_pins usp_rf_data_converter_0/s_axi]
@@ -1336,7 +1338,8 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins DAC_Controller_{i}/s_axi_aresetn]'
         tcl_code += ' [get_bd_pins TimeController_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] \
-[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN]'
+[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] \
+[get_bd_pins AXI_Buffer_0/m_axi_aresetn] [get_bd_pins AXI_Buffer_0/s_axi_aresetn] '
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins axi_interconnect_0/M0{i+2}_ARESETN]'
         tcl_code += ' [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins usp_rf_data_converter_0/s0_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s1_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s_axi_aresetn] '
@@ -1353,7 +1356,8 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         tcl_code += 'connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 '
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins DAC_Controller_{i}/m00_axis_aclk] [get_bd_pins DAC_Controller_{i}/s_axi_aclk] [get_bd_pins axi_interconnect_0/M0{i+2}_ACLK]'
-        tcl_code += """ [get_bd_pins TimeController_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK]\
+        tcl_code += """ [get_bd_pins AXI_Buffer_0/m_axi_aclk] [get_bd_pins AXI_Buffer_0/s_axi_aclk] [get_bd_pins TimeController_0/s_axi_aclk]\
+ [get_bd_pins axi_interconnect_0/ACLK]\
  [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK]\
  [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins usp_rf_data_converter_0/s0_axis_aclk] [get_bd_pins usp_rf_data_converter_0/s1_axis_aclk]\
  [get_bd_pins usp_rf_data_converter_0/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
@@ -1369,6 +1373,13 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
 # assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
 # assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
 #         """
+        for i in range(self.total_dac_num):
+            tcl_code += f'assign_bd_address -offset 0x44A{i}0000 -range 0x00010000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
+        tcl_code += """
+assign_bd_address -offset 0x44A80000 -range 0x00010000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
+assign_bd_address -offset 0x44AC0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
+assign_bd_address -offset 0x002000000000 -range 0x002000000000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs AXI_Buffer_0/s_axi/reg0] -force
+        """
         
         tcl_code += '\n'
         

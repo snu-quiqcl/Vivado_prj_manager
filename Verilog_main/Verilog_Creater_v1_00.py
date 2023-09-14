@@ -35,6 +35,8 @@ class Verilog_maker:
         
         self.RFSoC_Main_dir = os.path.join(self.target_dir,'RFSoC_Main')
         
+        self.AXI_Buffer_dir = os.path.join(self.target_dir,'AXI_Buffer')
+        
         self.total_rfdc_num = 1
         
         self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
@@ -314,13 +316,13 @@ class Verilog_maker:
         self.run_vivado_tcl(self.vivado_path, tcl_path)
         
     ##buffer
-    def generate_time_controller_buffer(self, current_dir = None):
+    def generate_axi_buffer(self, current_dir = None):
         if current_dir == None:
-            source_dir = './TimeControllerBuffer'
+            source_dir = './AXI_Buffer'
         else:
-            source_dir = f'{current_dir}/TimeControllerBuffer'
+            source_dir = f'{current_dir}/AXI_Buffer'
         
-        full_dir = os.path.join(self.git_dir, self.time_controller_buffer_dir)
+        full_dir = os.path.join(self.git_dir, self.AXI_Buffer_dir)
         base_dir = os.path.dirname(full_dir)
         base_name = os.path.basename(full_dir)
         new_full_dir = os.path.join(base_dir,base_name)
@@ -342,9 +344,9 @@ class Verilog_maker:
             with open(destination_path, 'w') as destination_file:
                 destination_file.write(verilog_code)
 
-        self.make_time_controller_buffer_tcl(new_output_full_dir, 'TimeControllerBuffer', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
+        self.make_axi_buffer_tcl(new_output_full_dir, 'AXI_Buffer', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
         
-    def make_time_controller_buffer_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
+    def make_axi_buffer_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
         file_name = prj_name+".tcl"
         print(file_name)
         # Combine the file name and folder directory to create the full file path
@@ -363,8 +365,8 @@ class Verilog_maker:
         
         self.tcl_commands += self.generate_customized_ip(folder_directory)
         
-        self.tcl_commands += f'set_property top TimeControllerBuffer [current_fileset]\n'.replace("\\","/")
-        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TimeControllerBuffer.sv }} [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top AXI_Buffer [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/AXI_Buffer.sv }} [current_fileset]\n'.replace("\\","/")
         with open(file_path, 'w') as tcl_file:
             tcl_file.write(self.tcl_commands)
             
@@ -1438,6 +1440,7 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         for i in range(self.total_dac_num):
             self.generate_indexed_dac_controller(i)
         self.generate_time_controller()
+        self.generate_axi_buffer()
         self.generate_RFSoC_main()
         
     

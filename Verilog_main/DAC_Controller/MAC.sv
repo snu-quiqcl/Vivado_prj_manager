@@ -169,10 +169,11 @@ always@(posedge clk) begin
         mul_stage1_63_32_0          <= 32'h0;
         mul_stage1_63_32_1          <= 32'h0;
         mul_stage1_63_32_2          <= 32'h0;
-        mul_stage2_47_32_0          <= 16'h0;
-        mul_stage2_47_32_1          <= 16'h0;
-        mul_stage2_47_32_2          <= 16'h0;
+        sum_stage2_47_32_0          <= 16'h0;
+        sum_stage2_47_32_1          <= 16'h0;
+        sum_stage2_47_32_2          <= 16'h0;
         stage1_C_buffer             <= 16'h0;
+        sum_stage2_carryout         <= 1'b0;
     end
     else begin
         //////////////////////////////////////////////////////////

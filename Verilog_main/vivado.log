@@ -716,3 +716,33 @@ INFO: [Project 1-111] Unisim Transformation Summary:
   RAM32M16 => RAM32M16 (RAMD32(x14), RAMS32(x2)): 7 instances
 
 open_run: Time (s): cpu = 00:05:35 ; elapsed = 00:03:53 . Memory (MB): peak = 6842.008 ; gain = 3712.211
+close_design
+close_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:15 . Memory (MB): peak = 7839.387 ; gain = 36.223
+open_run impl_1
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:02 . Memory (MB): peak = 7839.387 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 2968 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 42 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2020.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:31 ; elapsed = 00:00:32 . Memory (MB): peak = 9122.594 ; gain = 421.246
+Restored from archive | CPU: 33.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:31 ; elapsed = 00:00:32 . Memory (MB): peak = 9122.594 ; gain = 421.246
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.042 . Memory (MB): peak = 9122.594 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 2819 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 2808 instances
+  RAM32M16 => RAM32M16 (RAMD32(x14), RAMS32(x2)): 7 instances
+  SRLC32E => SRL16E: 4 instances
+
+open_run: Time (s): cpu = 00:02:24 ; elapsed = 00:02:10 . Memory (MB): peak = 9207.875 ; gain = 1368.488
+open_report: Time (s): cpu = 00:00:21 ; elapsed = 00:00:10 . Memory (MB): peak = 9497.949 ; gain = 86.699
+CRITICAL WARNING: [Timing 38-282] The design failed to meet the timing requirements. Please see the timing summary report for details on the timing violations.
+exit
+INFO: [Common 17-206] Exiting Vivado at Thu Sep 14 16:31:06 2023...

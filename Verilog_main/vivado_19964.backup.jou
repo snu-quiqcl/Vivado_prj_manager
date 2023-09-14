@@ -2,11 +2,11 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Thu Sep 14 13:42:11 2023
-# Process ID: 19336
+# Start of session at: Thu Sep 14 14:29:00 2023
+# Process ID: 19964
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
-# Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output_5\DAC_Controller_5.tcl
+# Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output_7\DAC_Controller_7.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
 # Journal file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main\vivado.jou
 #-----------------------------------------------------------
-source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output_5\DAC_Controller_5.tcl}
+source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output_7\DAC_Controller_7.tcl}

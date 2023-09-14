@@ -1354,12 +1354,12 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         tcl_code += 'connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]\n'
         
         
-        for i in range(self.total_dac_num):
-            tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
-        tcl_code += """
-assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
-assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
-        """
+#         for i in range(self.total_dac_num):
+#             tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
+#         tcl_code += """
+# assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
+# assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
+#         """
         
         tcl_code += '\n'
         
@@ -1380,6 +1380,15 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
     def generate_custom_time_controller(self,folder_directory):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name TimeController -vendor xilinx.com -library user -version 1.0 -module_name TimeController\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
+    def generate_custom_axi_buffer(self,folder_directory):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name AxiBuffer -vendor xilinx.com -library user -version 1.0 -module_name AxiBuffer\n'
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")

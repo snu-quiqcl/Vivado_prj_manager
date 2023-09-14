@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-(* use_dsp = "yes" *) module RFDC_DDS(
+module RFDC_DDS(
     input wire clk,
     input wire [47:0] freq,
     input wire [13:0] amp,              // unsigned value

@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-(* use_dsp = "yes" *) module MAC(
+module MAC(
     input wire clk,
     input wire resetn,
     input wire [47:0] A,        //timestamp

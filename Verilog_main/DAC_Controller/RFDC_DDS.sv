@@ -60,7 +60,10 @@ wire [120:0] phase_full_product[16];
 wire [31:0] amp_full_product[16];
 wire [15:0] phase_input_wire[16];
 wire [255:0] m_axis_data_tdata_wire;
+
 wire m_axis_data_tvalid_wire;
+reg m_axis_data_tvalid_buffer3;
+
 reg [15:0] phase_input[16];
 
 reg [13:0] amp_buffer1;
@@ -79,15 +82,12 @@ assign dds_output_valid_chain[2] = dds_output_valid[8] & dds_output_valid[9] & d
 assign dds_output_valid_chain[3] = dds_output_valid[12] & dds_output_valid[13] & dds_output_valid[14] & dds_output_valid[15];
 assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_chain[1] & dds_output_valid_chain[2] & dds_output_valid_chain[3];
 
-always @(posedge clk) begin
-    
-end
 
 // Generate loop to assign dds_output_wire slices to m_axis_data_tdata
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign amp_full_product[i] = {{16{dds_output_wire[i][15]}},dds_output_wire[i]} * {18'h0,amp_buffer3};
+        assign amp_full_product[i] = {{2{dds_output_buffer3[i][15]}},dds_output_buffer3[i]} * {2'b00,amp_buffer3};
         assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset_buffer3[13:0]};
     end
 endgenerate
@@ -118,6 +118,25 @@ always@(posedge clk) begin
     amp_offset_buffer1[13:0] <= amp_offset[13:0];
     amp_offset_buffer2[13:0] <= amp_offset_buffer1[13:0];
     amp_offset_buffer3[13:0] <= amp_offset_buffer2[13:0];
+
+    dds_output_buffer3[0][15:0] <= dds_output_wire[0][15:0];
+    dds_output_buffer3[1][15:0] <= dds_output_wire[1][15:0];
+    dds_output_buffer3[2][15:0] <= dds_output_wire[2][15:0];
+    dds_output_buffer3[3][15:0] <= dds_output_wire[3][15:0];
+    dds_output_buffer3[4][15:0] <= dds_output_wire[4][15:0];
+    dds_output_buffer3[5][15:0] <= dds_output_wire[5][15:0];
+    dds_output_buffer3[6][15:0] <= dds_output_wire[6][15:0];
+    dds_output_buffer3[7][15:0] <= dds_output_wire[7][15:0];
+    dds_output_buffer3[8][15:0] <= dds_output_wire[8][15:0];
+    dds_output_buffer3[9][15:0] <= dds_output_wire[9][15:0];
+    dds_output_buffer3[10][15:0] <= dds_output_wire[10][15:0];
+    dds_output_buffer3[11][15:0] <= dds_output_wire[11][15:0];
+    dds_output_buffer3[12][15:0] <= dds_output_wire[12][15:0];
+    dds_output_buffer3[13][15:0] <= dds_output_wire[13][15:0];
+    dds_output_buffer3[14][15:0] <= dds_output_wire[14][15:0];
+    dds_output_buffer3[15][15:0] <= dds_output_wire[15][15:0];
+    m_axis_data_tvalid_buffer3 <= m_axis_data_tvalid_wire;
+    m_axis_data_tvalid <= m_axis_data_tvalid_buffer3;
 end
 
 MAC mac_0(

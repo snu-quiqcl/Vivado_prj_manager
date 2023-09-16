@@ -108,6 +108,26 @@ wire start;
 wire [63:0] counter_offset;
 wire offset_en;
 
+wire auto_start_wire;
+wire [63:0] counter_wire;
+
+reg auto_start_buffer;
+reg [63:0] counter_buffer;
+
+always@(posedge s_axi_aclk) begin
+    if( s_axi_aresetn == 1'b0 ) begin
+        auto_start_buffer       <= 1'b0;
+        counter_buffer          <= 64'h0;
+    end
+    else begin
+        auto_start_buffer       <= auto_start_wire;
+        counter_buffer[63:0]    <= counter_wire[63:0];
+    end
+end
+
+assign auto_start = auto_start_buffer;
+assign counter[63:0] = counter_buffer[63:0];
+
 //////////////////////////////////////////////////////////////////////////////////
 // AXI2COM
 //////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +211,7 @@ axi2com_0(
     .start(start),
     .counter_offset(counter_offset),
     .offset_en(offset_en),
-    .auto_start(auto_start)
+    .auto_start(auto_start_wire)
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +224,7 @@ Timestamp_Counter timestamp_counter_0(
     .start(start),
     .counter_offset(counter_offset),
     .offset_en(offset_en),
-    .counter(counter)
+    .counter(counter_wire)
 );
 
 endmodule

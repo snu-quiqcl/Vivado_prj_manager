@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sat Sep 16 21:18:10 2023
-# Process ID: 19100
+# Start of session at: Sun Sep 17 15:43:38 2023
+# Process ID: 24324
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\AXI_Buffer_output\AXI_Buffer.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -48,4 +48,4 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Desi
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/AXI_Buffer_output' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/AXI_Buffer_output/AXI_Buffer'.)
 # set_property top AXI_Buffer [current_fileset]
 # set_property top_file { E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/AXI_Buffer/AXI_Buffer.sv } [current_fileset]
-INFO: [Common 17-206] Exiting Vivado at Sat Sep 16 21:18:20 2023...
+INFO: [Common 17-206] Exiting Vivado at Sun Sep 17 15:43:48 2023...

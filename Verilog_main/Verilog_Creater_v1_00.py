@@ -46,6 +46,7 @@ class Verilog_maker:
         self.board_name = "xilinx.com:zcu111:part0:1.4"
         self.tcl_commands = ''
         self.customized_ip_list = []
+        self.do_sim = True
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
@@ -1375,14 +1376,24 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
 # assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
 #         """
         for i in range(self.total_dac_num):
-            tcl_code += f'assign_bd_address -offset 0x44A{i}0000 -range 0x00010000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
+            tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
         tcl_code += """
-assign_bd_address -offset 0x44A80000 -range 0x00010000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
-assign_bd_address -offset 0x44AC0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
-assign_bd_address -offset 0x002000000000 -range 0x002000000000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs AXI_Buffer_0/s_axi/reg0] -force
+assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
+assign_bd_address -offset 0xA0000000 -range 0x10000000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs AXI_Buffer_0/s_axi/reg0] -force
         """
         
         tcl_code += '\n'
+        
+        if self.do_sim == True:
+            for i in range(self.total_dac_num):
+                tcl_code += f"""
+set m00_axis_0{i} [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m00_axis_0{i} ]
+set_property -dict [ list \
+ CONFIG.FREQ_HZ {{249997498}} \
+ ] $m00_axis_0{i}
+    
+connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis_ [get_bd_intf_ports m00_axis_00] [get_bd_intf_pins DAC_Controller_{i}/m00_axis]
+                """
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")

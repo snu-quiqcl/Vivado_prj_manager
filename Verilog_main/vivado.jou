@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sat Sep 16 21:18:21 2023
-# Process ID: 10148
+# Start of session at: Sun Sep 17 15:43:50 2023
+# Process ID: 23608
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -12,36 +12,53 @@
 source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl}
 update_compile_order -fileset sources_1
 open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
-write_bd_layout -format pdf -orientation portrait E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.xpr/RFSoC_Main_blk.pdf
-write_bd_layout -format pdf -orientation portrait -force E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/RFSoC_Main_blk.pdf
-write_bd_layout -format pdf -orientation portrait E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/RFSoC_Main_blk.png.pdf
-delete_bd_objs [get_bd_nets RF3_CLKO_A_C_N_1] [get_bd_nets usp_rf_data_converter_0_vout00_p] [get_bd_nets usp_rf_data_converter_0_vout02_n] [get_bd_nets usp_rf_data_converter_0_vout10_p] [get_bd_nets usp_rf_data_converter_0_vout12_n] [get_bd_intf_nets DAC_Controller_0_m00_axis] [get_bd_intf_nets DAC_Controller_1_m00_axis] [get_bd_intf_nets DAC_Controller_2_m00_axis] [get_bd_intf_nets DAC_Controller_3_m00_axis] [get_bd_intf_nets DAC_Controller_6_m00_axis] [get_bd_intf_nets DAC_Controller_7_m00_axis] [get_bd_nets RF3_CLKO_A_C_N_2] [get_bd_nets usp_rf_data_converter_0_vout01_n] [get_bd_nets usp_rf_data_converter_0_vout03_n] [get_bd_nets usp_rf_data_converter_0_vout12_p] [get_bd_nets RF3_CLKO_A_C_P_1] [get_bd_nets usp_rf_data_converter_0_vout00_n] [get_bd_nets usp_rf_data_converter_0_vout03_p] [get_bd_nets usp_rf_data_converter_0_vout11_n] [get_bd_nets usp_rf_data_converter_0_vout13_p] [get_bd_nets usp_rf_data_converter_0_vout13_n] [get_bd_intf_nets axi_interconnect_0_M00_AXI] [get_bd_intf_nets DAC_Controller_4_m00_axis] [get_bd_intf_nets DAC_Controller_5_m00_axis] [get_bd_nets RF3_CLKO_A_C_P_2] [get_bd_nets usp_rf_data_converter_0_vout01_p] [get_bd_nets usp_rf_data_converter_0_vout02_p] [get_bd_nets usp_rf_data_converter_0_vout10_n] [get_bd_nets usp_rf_data_converter_0_vout11_p] [get_bd_cells usp_rf_data_converter_0]
-delete_bd_objs [get_bd_ports RFMC_DAC_06_P] [get_bd_ports RFMC_DAC_03_N] [get_bd_ports RFMC_DAC_04_P] [get_bd_ports RFMC_DAC_06_N] [get_bd_ports RFMC_DAC_04_N] [get_bd_ports RFMC_DAC_02_P] [get_bd_ports RFMC_DAC_05_P] [get_bd_ports RFMC_DAC_01_P] [get_bd_ports RFMC_DAC_05_N] [get_bd_ports RFMC_DAC_02_N] [get_bd_ports RFMC_DAC_01_N] [get_bd_ports RFMC_DAC_00_P] [get_bd_ports RFMC_DAC_00_N] [get_bd_ports RFMC_DAC_07_N] [get_bd_ports RFMC_DAC_03_P] [get_bd_ports RFMC_DAC_07_P]
+delete_bd_objs [get_bd_nets RF3_CLKO_A_C_P_1] [get_bd_nets usp_rf_data_converter_0_vout00_n] [get_bd_nets usp_rf_data_converter_0_vout10_p] [get_bd_nets usp_rf_data_converter_0_vout11_p] [get_bd_intf_nets axi_interconnect_0_M00_AXI] [get_bd_intf_nets DAC_Controller_1_m00_axis] [get_bd_intf_nets DAC_Controller_3_m00_axis] [get_bd_intf_nets DAC_Controller_6_m00_axis] [get_bd_nets RF3_CLKO_A_C_N_2] [get_bd_nets usp_rf_data_converter_0_vout00_p] [get_bd_nets usp_rf_data_converter_0_vout02_p] [get_bd_nets usp_rf_data_converter_0_vout03_n] [get_bd_nets usp_rf_data_converter_0_vout13_p] [get_bd_nets RF3_CLKO_A_C_N_1] [get_bd_nets usp_rf_data_converter_0_vout01_n] [get_bd_nets usp_rf_data_converter_0_vout03_p] [get_bd_nets usp_rf_data_converter_0_vout11_n] [get_bd_nets usp_rf_data_converter_0_vout12_n] [get_bd_intf_nets DAC_Controller_0_m00_axis] [get_bd_intf_nets DAC_Controller_2_m00_axis] [get_bd_intf_nets DAC_Controller_4_m00_axis] [get_bd_intf_nets DAC_Controller_5_m00_axis] [get_bd_intf_nets DAC_Controller_7_m00_axis] [get_bd_nets RF3_CLKO_A_C_P_2] [get_bd_nets usp_rf_data_converter_0_vout01_p] [get_bd_nets usp_rf_data_converter_0_vout02_n] [get_bd_nets usp_rf_data_converter_0_vout10_n] [get_bd_nets usp_rf_data_converter_0_vout12_p] [get_bd_nets usp_rf_data_converter_0_vout13_n] [get_bd_cells usp_rf_data_converter_0]
 startgroup
-make_bd_intf_pins_external  [get_bd_intf_pins DAC_Controller_7/m00_axis] [get_bd_intf_pins DAC_Controller_5/m00_axis] [get_bd_intf_pins DAC_Controller_4/m00_axis] [get_bd_intf_pins DAC_Controller_3/m00_axis] [get_bd_intf_pins DAC_Controller_2/m00_axis] [get_bd_intf_pins DAC_Controller_1/m00_axis] [get_bd_intf_pins DAC_Controller_0/m00_axis] [get_bd_intf_pins DAC_Controller_6/m00_axis]
+copy_bd_objs /  [get_bd_ports {RFMC_DAC_07_N}]
+copy_bd_objs /  [get_bd_ports {RFMC_DAC_06_P RFMC_DAC_04_P RFMC_DAC_03_N RFMC_DAC_06_N RFMC_DAC_05_P RFMC_DAC_02_P RFMC_DAC_04_N RFMC_DAC_01_P RFMC_DAC_02_N RFMC_DAC_05_N RFMC_DAC_01_N RFMC_DAC_00_P RFMC_DAC_00_N RFMC_DAC_03_P}]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_07_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_00_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_00_P1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_01_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_01_P1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_02_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_02_P1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_03_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_03_P1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_04_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_04_P1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_05_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_05_P1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_06_N1]
+set_property location {1852 1223} [get_bd_ports RFMC_DAC_06_P1]
 endgroup
-set_property SOURCE_SET sources_1 [get_filesets sim_1]
-add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_Sim/RFSoC_Main_TB02.sv
-delete_bd_objs [get_bd_addr_segs] [get_bd_addr_segs -excluded]
-assign_bd_address
-delete_bd_objs [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_0_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_1_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_2_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_3_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_4_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_5_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_6_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_DAC_Controller_7_reg0] [get_bd_addr_segs AXI_Buffer_0/m_axi/SEG_TimeController_0_reg0]
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_0/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_1/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_2/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_3/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_4/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_5/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_6/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs DAC_Controller_7/s_axi/reg0] -force
-assign_bd_address -target_address_space /AXI_Buffer_0/m_axi [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
+undo
+delete_bd_objs [get_bd_ports RFMC_DAC_06_P] [get_bd_ports RFMC_DAC_03_N] [get_bd_ports RFMC_DAC_04_P] [get_bd_ports RFMC_DAC_06_N] [get_bd_ports RFMC_DAC_04_N] [get_bd_ports RFMC_DAC_02_P] [get_bd_ports RFMC_DAC_05_P] [get_bd_ports RFMC_DAC_01_P] [get_bd_ports RFMC_DAC_05_N] [get_bd_ports RFMC_DAC_02_N] [get_bd_ports RFMC_DAC_01_N] [get_bd_ports RFMC_DAC_00_P] [get_bd_ports RFMC_DAC_00_N] [get_bd_ports RFMC_DAC_07_N] [get_bd_ports RFMC_DAC_03_P] [get_bd_ports RFMC_DAC_07_P]
+delete_bd_objs [get_bd_ports RF3_CLKO_A_C_P_228] [get_bd_ports RF3_CLKO_A_C_N_229] [get_bd_ports RF3_CLKO_A_C_N_228] [get_bd_ports RF3_CLKO_A_C_P_229]
+startgroup
+make_bd_intf_pins_external  [get_bd_intf_pins DAC_Controller_7/m00_axis] [get_bd_intf_pins DAC_Controller_6/m00_axis] [get_bd_intf_pins DAC_Controller_5/m00_axis] [get_bd_intf_pins DAC_Controller_4/m00_axis] [get_bd_intf_pins DAC_Controller_3/m00_axis] [get_bd_intf_pins DAC_Controller_2/m00_axis] [get_bd_intf_pins DAC_Controller_1/m00_axis] [get_bd_intf_pins DAC_Controller_0/m00_axis]
+endgroup
+set_property name m00_axis_00 [get_bd_intf_ports m00_axis_7]
+set_property name m00_axis_01 [get_bd_intf_ports m00_axis_6]
+set_property name m00_axis_02 [get_bd_intf_ports m00_axis_5]
+set_property name m00_axis_03 [get_bd_intf_ports m00_axis_4]
+set_property name m00_axis_04 [get_bd_intf_ports m00_axis_3]
+set_property name m00_axis_05 [get_bd_intf_ports m00_axis_2]
+set_property name m00_axis_07 [get_bd_intf_ports m00_axis_0]
+set_property name m00_axis_06 [get_bd_intf_ports m00_axis_1]
+validate_bd_design
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_00]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_01]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_02]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_03]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_04]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_05]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_06]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_07]
+set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_08]
+save_bd_design
 set_property range 256M [get_bd_addr_segs {zynq_ultra_ps_e_0/Data/SEG_AXI_Buffer_0_reg0}]
 set_property offset 0x00A0000000 [get_bd_addr_segs {zynq_ultra_ps_e_0/Data/SEG_AXI_Buffer_0_reg0}]
-set_property SOURCE_SET sources_1 [get_filesets sim_1]
-close [ open E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_Sim/RFSoC_Main_TB03.sv w ]
-add_files -fileset sim_1 E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_Sim/RFSoC_Main_TB03.sv
-export_ip_user_files -of_objects  [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_Sim/RFSoC_Main_TB02.sv] -no_script -reset -force -quiet
-remove_files  -fileset sim_1 E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_Sim/RFSoC_Main_TB02.sv
-save_bd_design
 set_property offset 0x00A0000000 [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_DAC_Controller_0_reg0}]
 set_property range 4K [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_DAC_Controller_0_reg0}]
 set_property range 4K [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_DAC_Controller_1_reg0}]
@@ -60,26 +77,13 @@ set_property offset 0x00A0005000 [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_DAC_C
 set_property offset 0x00A0006000 [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_DAC_Controller_6_reg0}]
 set_property offset 0x00A0007000 [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_DAC_Controller_7_reg0}]
 set_property offset 0x00A0008000 [get_bd_addr_segs {AXI_Buffer_0/m_axi/SEG_TimeController_0_reg0}]
-set_property name m00_axis_00 [get_bd_intf_ports m00_axis_6]
-set_property name m00_axis_01 [get_bd_intf_ports m00_axis_5]
-set_property name m00_axis_02 [get_bd_intf_ports m00_axis_4]
-set_property name m00_axis_03 [get_bd_intf_ports m00_axis_3]
-set_property name m00_axis_04 [get_bd_intf_ports m00_axis_2]
-set_property name m00_axis_05 [get_bd_intf_ports m00_axis_1]
-set_property name m00_axis_07 [get_bd_intf_ports m00_axis_0]
-set_property name m00_axis_06 [get_bd_intf_ports m00_axis_7]
-make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_00]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_01]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_02]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_03]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_04]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_05]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_06]
-set_property -dict [list CONFIG.FREQ_HZ {249997498}] [get_bd_intf_ports m00_axis_07]
-validate_bd_design
+save_bd_design
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_Sim/RFSoC_Main_TB03.sv
 make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
 add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
+write_bd_tcl -force E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/RFSoC_Main_blk_250_EXP.tcl
 set_property -name {xsim.simulate.runtime} -value {1ms} -objects [get_filesets sim_1]
 generate_target Simulation [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd]
 export_ip_user_files -of_objects [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -no_script -sync -force -quiet
@@ -88,4 +92,6 @@ launch_simulation
 source RFSoC_Main_TB00.tcl
 relaunch_sim
 open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
+open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
+relaunch_sim
 close_sim

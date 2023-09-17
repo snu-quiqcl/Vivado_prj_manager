@@ -77,7 +77,6 @@ module DAC_Controller#(
     input wire [15:0] s_axi_arid, // added to resolve wrapping error
     input wire [15:0] s_axi_aruser, // added to resolve wrapping error
     output wire s_axi_arready,
-    output wire [15:0] s_axi_rid, // added to resolve wrapping error
     
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Data Read
@@ -87,6 +86,7 @@ module DAC_Controller#(
     output wire [1:0] s_axi_rresp,
     output wire s_axi_rvalid,
     output wire s_axi_rlast,
+    output wire [15:0] s_axi_rid, // added to resolve wrapping error
     
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Clock
@@ -150,6 +150,201 @@ wire [63:0] timestamp;
 wire [13:0] amp_offset;
 wire [63:0] time_offset;
 //////////////////////////////////////////////////////////////////////////////////
+// AXI Buffer Declaration
+//////////////////////////////////////////////////////////////////////////////////
+
+/*
+def convert_to_dot_notation(code):
+    # Convert ports (input, output, reg, etc.)
+    port_pattern = r"(input|output)\s+(reg|wire)\s+(?:\[[^\]]+\]\s+)?(\w+)\,"
+    port_replacement = r".\3(\3),"
+    return re.sub(port_pattern, port_replacement, code)
+
+
+for line in a.split('\n'):
+    print(convert_to_dot_notation(line))
+*/
+
+//////////////////////////////////////////////////////////////////////////////////
+// AXI4 Address Write
+//////////////////////////////////////////////////////////////////////////////////
+wire [AXI_ADDR_WIDTH - 1:0] m_axi_awaddr_buffer_wire;
+wire [15:0] m_axi_awid_buffer_wire;
+wire [1:0] m_axi_awburst_buffer_wire;
+wire [2:0] m_axi_awsize_buffer_wire;
+wire [7:0] m_axi_awlen_buffer_wire;
+wire m_axi_awvalid_buffer_wire;
+wire [15:0] m_axi_awuser_buffer_wire; // added to resolve wrapping error
+wire m_axi_awready_buffer_wire;                                                        //Note that ready signal is wire
+
+//////////////////////////////////////////////////////////////////////////////////
+// AXI4 Write Response
+//////////////////////////////////////////////////////////////////////////////////
+wire m_axi_bready_buffer_wire;
+wire [1:0] m_axi_bresp_buffer_wire;
+wire m_axi_bvalid_buffer_wire;
+wire [15:0] m_axi_bid_buffer_wire; // added to resolve wrapping error
+
+//////////////////////////////////////////////////////////////////////////////////
+// AXI4 Data Write
+//////////////////////////////////////////////////////////////////////////////////
+wire [AXI_DATA_WIDTH - 1:0] m_axi_wdata_buffer_wire;
+wire [AXI_STROBE_WIDTH - 1:0] m_axi_wstrb_buffer_wire;
+wire m_axi_wvalid_buffer_wire;
+wire m_axi_wlast_buffer_wire;
+wire m_axi_wready_buffer_wire;                                                        //Note that ready signal is wire
+
+//////////////////////////////////////////////////////////////////////////////////
+// AXI4 Address Read
+//////////////////////////////////////////////////////////////////////////////////
+wire [1:0] m_axi_arburst_buffer_wire;
+wire [7:0] m_axi_arlen_buffer_wire;
+wire [AXI_ADDR_WIDTH - 1:0] m_axi_araddr_buffer_wire;
+wire [2:0] m_axi_arsize_buffer_wire;
+wire m_axi_arvalid_buffer_wire;
+wire [15:0] m_axi_arid_buffer_wire; // added to resolve wrapping error
+wire [15:0] m_axi_aruser_buffer_wire; // added to resolve wrapping error
+wire m_axi_arready_buffer_wire;
+
+//////////////////////////////////////////////////////////////////////////////////
+// AXI4 Data Read
+//////////////////////////////////////////////////////////////////////////////////
+wire m_axi_rready_buffer_wire;
+wire [AXI_DATA_WIDTH - 1:0] m_axi_rdata_buffer_wire;
+wire [1:0] m_axi_rresp_buffer_wire;
+wire m_axi_rvalid_buffer_wire;
+wire m_axi_rlast_buffer_wire;
+wire [15:0] m_axi_rid_buffer_wire; // added to resolve wrapping error
+
+AXI_Buffer axi_buffer_0
+(
+    .s_axi_aclk(s_axi_aclk),    // Clock
+    .m_axi_aclk(s_axi_aclk),    // Dummy
+    .s_axi_aresetn(s_axi_aresetn), // Active low reset
+    .m_axi_aresetn(s_axi_aresetn), // Dummy
+
+    ////////////////////////////////////////////////////////////
+    // Slave Write Adress
+    ////////////////////////////////////////////////////////////
+    .s_axi_awaddr(s_axi_awaddr), // Write address
+    .s_axi_awid(s_axi_awid),   // Write ID
+    .s_axi_awlen(s_axi_awlen),  // Burst length
+    .s_axi_awvalid(s_axi_awvalid), // Write address valid
+    .s_axi_awready(s_axi_awready), // Write address ready
+    .s_axi_awsize(s_axi_awsize), // Burst size
+    .s_axi_awburst(s_axi_awburst), // Burst type
+    .s_axi_awlock(), // Lock signal
+    .s_axi_awcache(), // Cache type
+    .s_axi_awprot(), // Protection type
+    .s_axi_awqos(),  // Quality of service
+    .s_axi_awuser(s_axi_awuser),
+
+    /////////////////////////////////////////////////////////////
+    // Slave Write Data
+    /////////////////////////////////////////////////////////////
+    .s_axi_wdata(s_axi_wdata),   // Write data
+    .s_axi_wstrb(s_axi_wstrb),   // Write strobes
+    .s_axi_wvalid(s_axi_wvalid),  // Write valid
+    .s_axi_wready(s_axi_wready),  // Write ready
+    .s_axi_wid(),    // Write ID (if used)
+    .s_axi_wlast(s_axi_wlast),
+
+    /////////////////////////////////////////////////////////////
+    // Slave Write Response
+    /////////////////////////////////////////////////////////////
+    .s_axi_bresp(s_axi_bresp),   // Write response
+    .s_axi_bid(s_axi_bid),     // Response ID (if used)
+    .s_axi_bvalid(s_axi_bvalid),  // Response valid
+    .s_axi_bready(s_axi_bready),  // Response ready
+
+    /////////////////////////////////////////////////////////////
+    // Slave Read Adress
+    /////////////////////////////////////////////////////////////
+    .s_axi_araddr(s_axi_araddr),  // Read address
+    .s_axi_arid(s_axi_arid),    // Read ID
+    .s_axi_arlen(s_axi_arlen),   // Burst length
+    .s_axi_arvalid(s_axi_arvalid), // Read address valid
+    .s_axi_arready(s_axi_arready), // Read address ready
+    .s_axi_arsize(s_axi_arsize),  // Burst size
+    .s_axi_arburst(s_axi_arburst), // Burst type
+    .s_axi_arlock(),  // Lock signal
+    .s_axi_arcache(), // Cache type
+    .s_axi_arprot(),  // Protection type
+    .s_axi_arqos(),   // Quality of service
+    .s_axi_aruser(s_axi_aruser),
+
+    /////////////////////////////////////////////////////////////
+    // Slave Read Data
+    /////////////////////////////////////////////////////////////
+    .s_axi_rdata(s_axi_rdata),   // Read data
+    .s_axi_rresp(s_axi_rresp),   // Read response
+    .s_axi_rid(s_axi_rid),     // Read ID (if used)
+    .s_axi_rvalid(s_axi_rvalid),  // Read valid
+    .s_axi_rready(s_axi_rready),  // Read ready
+    .s_axi_rlast(s_axi_rlast),
+
+    ////////////////////////////////////////////////////////////
+    // Master Write Adress
+    ////////////////////////////////////////////////////////////
+    .m_axi_awaddr(m_axi_awaddr_buffer_wire), // Write address
+    .m_axi_awid(m_axi_awid_buffer_wire),   // Write ID
+    .m_axi_awlen(m_axi_awlen_buffer_wire),  // Burst length
+    .m_axi_awvalid(m_axi_awvalid_buffer_wire), // Write address valid
+    .m_axi_awready(m_axi_awready_buffer_wire), // Write address ready
+    .m_axi_awsize(m_axi_awsize_buffer_wire), // Burst size
+    .m_axi_awburst(m_axi_awburst_buffer_wire), // Burst type
+    .m_axi_awlock(), // Lock signal
+    .m_axi_awcache(), // Cache type
+    .m_axi_awprot(), // Protection type
+    .m_axi_awqos(),  // Quality of service
+    .m_axi_awuser(m_axi_awuser_buffer_wire),
+
+    /////////////////////////////////////////////////////////////
+    // Master Write Data
+    /////////////////////////////////////////////////////////////
+    .m_axi_wdata(m_axi_wdata_buffer_wire),   // Write data
+    .m_axi_wstrb(m_axi_wstrb_buffer_wire),   // Write strobes
+    .m_axi_wvalid(m_axi_wvalid_buffer_wire),  // Write valid
+    .m_axi_wready(m_axi_wready_buffer_wire),  // Write ready
+    .m_axi_wid(),    // Write ID (if used)
+    .m_axi_wlast(m_axi_wlast_buffer_wire),
+
+    /////////////////////////////////////////////////////////////
+    // Master Write Response
+    /////////////////////////////////////////////////////////////
+    .m_axi_bresp(m_axi_bresp_buffer_wire),   // Write response
+    .m_axi_bid(m_axi_bid_buffer_wire),     // Response ID (if used)
+    .m_axi_bvalid(m_axi_bvalid_buffer_wire),  // Response valid
+    .m_axi_bready(m_axi_bready_buffer_wire),  // Response ready
+
+    /////////////////////////////////////////////////////////////
+    // Master Read Adress
+    /////////////////////////////////////////////////////////////
+    .m_axi_araddr(m_axi_araddr_buffer_wire),  // Read address
+    .m_axi_arid(m_axi_arid_buffer_wire),    // Read ID
+    .m_axi_arlen(m_axi_arlen_buffer_wire),   // Burst length
+    .m_axi_arvalid(m_axi_arvalid_buffer_wire), // Read address valid
+    .m_axi_arready(m_axi_arready_buffer_wire), // Read address ready
+    .m_axi_arsize(m_axi_arsize_buffer_wire),  // Burst size
+    .m_axi_arburst(m_axi_arburst_buffer_wire), // Burst type
+    .m_axi_arlock(),  // Lock signal
+    .m_axi_arcache(), // Cache type
+    .m_axi_arprot(),  // Protection type
+    .m_axi_arqos(),   // Quality of service
+    .m_axi_aruser(m_axi_aruser_buffer_wire),
+
+    /////////////////////////////////////////////////////////////
+    // Master Read Data
+    /////////////////////////////////////////////////////////////
+    .m_axi_rdata(m_axi_rdata_buffer_wire),   // Read data
+    .m_axi_rresp(m_axi_rresp_buffer_wire),   // Read response
+    .m_axi_rid(m_axi_rid_buffer_wire),     // Read ID (if used)
+    .m_axi_rvalid(m_axi_rvalid_buffer_wire),  // Read valid
+    .m_axi_rready(m_axi_rready_buffer_wire),  // Read ready
+    .m_axi_rlast(m_axi_rlast_buffer_wire)
+);
+
+//////////////////////////////////////////////////////////////////////////////////
 // AXI2FIFO Declaration
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -168,54 +363,54 @@ axi2fifo_0
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Address Write
     //////////////////////////////////////////////////////////////////////////////////
-    .s_axi_awaddr(s_axi_awaddr),
-    .s_axi_awid(s_axi_awid),
-    .s_axi_awburst(s_axi_awburst),
-    .s_axi_awsize(s_axi_awsize),
-    .s_axi_awlen(s_axi_awlen),
-    .s_axi_awvalid(s_axi_awvalid),
-    .s_axi_awuser(s_axi_awuser), // added to resolve wrapping error
-    .s_axi_awready(s_axi_awready),                                                        //Note that ready signal is wire
-    
+    .s_axi_awaddr(m_axi_awaddr_buffer_wire),
+    .s_axi_awid(m_axi_awid_buffer_wire),
+    .s_axi_awburst(m_axi_awburst_buffer_wire),
+    .s_axi_awsize(m_axi_awsize_buffer_wire),
+    .s_axi_awlen(m_axi_awlen_buffer_wire),
+    .s_axi_awvalid(m_axi_awvalid_buffer_wire),
+    .s_axi_awuser(m_axi_awuser_buffer_wire), // added to resolve wrapping error
+    .s_axi_awready(m_axi_awready_buffer_wire),                                                        //Note that ready signal is wire
+
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Write Response
     //////////////////////////////////////////////////////////////////////////////////
-    .s_axi_bready(s_axi_bready),
-    .s_axi_bresp(s_axi_bresp),
-    .s_axi_bvalid(s_axi_bvalid),
-    .s_axi_bid(s_axi_bid), // added to resolve wrapping error
-    
+    .s_axi_bready(m_axi_bready_buffer_wire),
+    .s_axi_bresp(m_axi_bresp_buffer_wire),
+    .s_axi_bvalid(m_axi_bvalid_buffer_wire),
+    .s_axi_bid(m_axi_bid_buffer_wire), // added to resolve wrapping error
+
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Data Write
     //////////////////////////////////////////////////////////////////////////////////
-    .s_axi_wdata(s_axi_wdata),
-    .s_axi_wstrb(s_axi_wstrb),
-    .s_axi_wvalid(s_axi_wvalid),
-    .s_axi_wlast(s_axi_wlast),
-    .s_axi_wready(s_axi_wready),                                                        //Note that ready signal is wire
-    
+    .s_axi_wdata(m_axi_wdata_buffer_wire),
+    .s_axi_wstrb(m_axi_wstrb_buffer_wire),
+    .s_axi_wvalid(m_axi_wvalid_buffer_wire),
+    .s_axi_wlast(m_axi_wlast_buffer_wire),
+    .s_axi_wready(m_axi_wready_buffer_wire),                                                        //Note that ready signal is wire
+
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Address Read
     //////////////////////////////////////////////////////////////////////////////////
-    .s_axi_arburst(s_axi_arburst),
-    .s_axi_arlen(s_axi_arlen),
-    .s_axi_araddr(s_axi_araddr),
-    .s_axi_arsize(s_axi_arsize),
-    .s_axi_arvalid(s_axi_arvalid),
-    .s_axi_arid(s_axi_arid), // added to resolve wrapping error
-    .s_axi_aruser(s_axi_aruser), // added to resolve wrapping error
-    .s_axi_arready(s_axi_arready),
-    .s_axi_rid(s_axi_rid), // added to resolve wrapping error
-    
+    .s_axi_arburst(m_axi_arburst_buffer_wire),
+    .s_axi_arlen(m_axi_arlen_buffer_wire),
+    .s_axi_araddr(m_axi_araddr_buffer_wire),
+    .s_axi_arsize(m_axi_arsize_buffer_wire),
+    .s_axi_arvalid(m_axi_arvalid_buffer_wire),
+    .s_axi_arid(m_axi_arid_buffer_wire), // added to resolve wrapping error
+    .s_axi_aruser(m_axi_aruser_buffer_wire), // added to resolve wrapping error
+    .s_axi_arready(m_axi_arready_buffer_wire),
+    .s_axi_rid(m_axi_rid_buffer_wire), // added to resolve wrapping error
+
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Data Read
     //////////////////////////////////////////////////////////////////////////////////
-    .s_axi_rready(s_axi_rready),
-    .s_axi_rdata(s_axi_rdata),
-    .s_axi_rresp(s_axi_rresp),
-    .s_axi_rvalid(s_axi_rvalid),
-    .s_axi_rlast(s_axi_rlast),
-    
+    .s_axi_rready(m_axi_rready_buffer_wire),
+    .s_axi_rdata(m_axi_rdata_buffer_wire),
+    .s_axi_rresp(m_axi_rresp_buffer_wire),
+    .s_axi_rvalid(m_axi_rvalid_buffer_wire),
+    .s_axi_rlast(m_axi_rlast_buffer_wire),
+        
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Clock
     //////////////////////////////////////////////////////////////////////////////////

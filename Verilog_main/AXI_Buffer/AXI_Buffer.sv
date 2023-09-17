@@ -87,6 +87,7 @@ module AXI_Buffer
     input wire                      s_axi_wvalid,  // Write valid
     output reg                      s_axi_wready,  // Write ready
     input wire [S_AXI_WID-1:0]      s_axi_wid,    // Write ID (if used)
+    input wire                      s_axi_wlast,
 
     /////////////////////////////////////////////////////////////
     // Slave Write Response
@@ -120,6 +121,7 @@ module AXI_Buffer
     output reg [S_AXI_RID-1:0]      s_axi_rid,     // Read ID (if used)
     output reg                      s_axi_rvalid,  // Read valid
     input wire                      s_axi_rready,  // Read ready
+    output reg                      s_axi_rlast,
 
     ////////////////////////////////////////////////////////////
     // Master Write Adress
@@ -145,6 +147,7 @@ module AXI_Buffer
     output reg                      m_axi_wvalid,  // Write valid
     input wire                      m_axi_wready,  // Write ready
     output reg [M_AXI_WID-1:0]      m_axi_wid,    // Write ID (if used)
+    output reg                      m_axi_wlast,
 
     /////////////////////////////////////////////////////////////
     // Master Write Response
@@ -177,7 +180,8 @@ module AXI_Buffer
     input wire [M_AXI_RRESP-1:0]    m_axi_rresp,   // Read response
     input wire [M_AXI_RID-1:0]      m_axi_rid,     // Read ID (if used)
     input wire                      m_axi_rvalid,  // Read valid
-    output reg                      m_axi_rready  // Read ready
+    output reg                      m_axi_rready,  // Read ready
+    input wire                      m_axi_rlast
 );
 
 always@(posedge s_axi_aclk) begin
@@ -192,6 +196,7 @@ always@(posedge s_axi_aclk) begin
         s_axi_rresp       <= {S_AXI_RRESP{1'b0}};
         s_axi_rid         <= {S_AXI_RID{1'b0}};
         s_axi_rvalid      <= 1'b0;
+        s_axi_rlast       <= 1'b0;
         m_axi_awaddr      <= {M_AXI_AWADDR{1'b0}};
         m_axi_awid        <= {M_AXI_AWID{1'b0}};
         m_axi_awlen       <= {M_AXI_AWLEN{1'b0}};
@@ -220,9 +225,12 @@ always@(posedge s_axi_aclk) begin
         m_axi_rready      <= 1'b0;
         m_axi_awuser      <= {M_AXI_AWUSER{1'b0}};
         m_axi_aruser      <= {M_AXI_ARUSER{1'b0}};
+        m_axi_wlast       <= 1'b0;
     end
 
     else begin
+        s_axi_rlast       <= m_axi_rlast;
+        m_axi_wlast       <= s_axi_wlast;
         s_axi_awready     <= m_axi_awready;
         s_axi_wready      <= m_axi_wready;
         s_axi_bresp       <= m_axi_bresp;

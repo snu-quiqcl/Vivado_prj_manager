@@ -122,7 +122,7 @@ always @(posedge clk) begin
         overflow_error_state                    <= overflow_error_wire;
         timestamp_error_state                   <= timestamp_error_wire;
         if( fifo_output_en ) begin
-            fifo_output[127:0]                  <= fifo_dout;
+            fifo_output[127:0]                  <= fifo_dout[127:0];
             counter_match                       <= 1'b1;
         end
         

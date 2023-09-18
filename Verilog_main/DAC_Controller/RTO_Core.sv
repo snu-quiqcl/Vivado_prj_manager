@@ -45,10 +45,7 @@ reg [127:0] overflow_error_data_buffer;
 reg [127:0] timestamp_error_data_buffer;
 reg overflow_error_state;
 reg timestamp_error_state;
-
-reg timestamp_match_buffer;
-reg timestamp_match_not_empty_buffer;
-reg timestamp_error_wire_buffer;
+reg [63:0] counter_buffer;
 
 wire flush_fifo;
 wire wr_en;
@@ -65,23 +62,23 @@ wire underflow_dummy_wire;
 wire timestamp_match_not_empty;
 wire fifo_output_en;
 
-assign flush_fifo                               = flush || reset;
-assign write_en                                 = write;
-assign timestamp_match                          = timestamp_match_buffer;
-assign timestamp_match_not_empty                = timestamp_match_not_empty_buffer;
-assign timestamp_error_wire                     = timestamp_error_wire_buffer;
-assign rd_en                                    = timestamp_error_wire || timestamp_match_not_empty;
-assign wr_en                                    = write_en && ~full_wire;
-assign overflow_error_wire                      = full_wire && write_en;
-assign fifo_output_en                           = ~timestamp_error_wire && timestamp_match_not_empty;
-assign rto_out[127:0]                           = fifo_output[127:0];
-assign overflow_error                           = overflow_error_state;
-assign timestamp_error                          = timestamp_error_state;
-assign empty                                    = empty_wire;
-assign full                                     = full_wire;
-assign overflow_error_data[127:0]               = overflow_error_data_buffer[127:0];
-assign timestamp_error_data[127:0]              = timestamp_error_data_buffer[127:0];
-assign counter_matched                          = counter_match;
+assign flush_fifo = flush || reset;
+assign write_en = write;
+assign timestamp_match = ( fifo_dout[127:64] == counter_buffer[63:0] );
+assign timestamp_match_not_empty = ( ~empty_wire && timestamp_match && auto_start );
+assign timestamp_error_wire = (counter_buffer[63:0] > fifo_dout[127:64]) && auto_start && ~empty_wire;
+assign rd_en = timestamp_error_wire || timestamp_match_not_empty;
+assign wr_en = write_en && ~full_wire;
+assign overflow_error_wire = full_wire && write_en;
+assign fifo_output_en = ~timestamp_error_wire && timestamp_match_not_empty;
+assign rto_out[127:0] = fifo_output[127:0];
+assign overflow_error = overflow_error_state;
+assign timestamp_error = timestamp_error_state;
+assign empty = empty_wire;
+assign full = full_wire;
+assign overflow_error_data[127:0] = overflow_error_data_buffer[127:0];
+assign timestamp_error_data[127:0] = timestamp_error_data_buffer[127:0];
+assign counter_matched = counter_match;
 
 //////////////////////////////////////////////////////////////////////////////////
 // Depth 8192, full threshold 8100 FIFO.
@@ -103,39 +100,35 @@ fifo_generator_0 RTO_Core_FIFO0(
 
 always @(posedge clk) begin
     if( reset ) begin
-        counter_match                           <= 1'b0;
-        overflow_error_state                    <= 1'b0;
-        timestamp_error_state                   <= 1'b0;
-        fifo_output[127:0]                      <= 128'h0;
-        overflow_error_data_buffer[127:0]       <= 128'h0;
-        timestamp_error_data_buffer[127:0]      <= 128'h0;
-        counter_match                           <= 1'b0;
-        timestamp_match_buffer                  <= 1'b0;
-        timestamp_match_not_empty_buffer        <= 1'b0;
-        timestamp_error_wire_buffer             <= 1'b0;
+        counter_match <= 1'b0;
+        overflow_error_state <= 1'b0;
+        timestamp_error_state <= 1'b0;
+        fifo_output[127:0] <= 128'h0;
+        overflow_error_data_buffer[127:0] <= 128'h0;
+        timestamp_error_data_buffer[127:0] <= 128'h0;
+        counter_match <= 1'b0;
+        counter_buffer <= 64'h0;
     end
     else begin
-        timestamp_match_buffer                  <= ( fifo_dout[127:64] == counter[63:0] );
-        timestamp_match_not_empty_buffer        <= ( ~empty_wire && timestamp_match && auto_start );
-        timestamp_error_wire_buffer             <= (counter[63:0] > fifo_dout[127:64]) && auto_start && ~empty_wire;
-        counter_match                           <= timestamp_match_not_empty;
-        overflow_error_state                    <= overflow_error_wire;
-        timestamp_error_state                   <= timestamp_error_wire;
+        counter_buffer[63:0] <= counter[63:0];
+        counter_match <= timestamp_match_not_empty;
+        overflow_error_state <= overflow_error_wire;
+        timestamp_error_state <= timestamp_error_wire;
         if( fifo_output_en ) begin
-            fifo_output[127:0]                  <= fifo_dout[127:0];
-            counter_match                       <= 1'b1;
+            fifo_output[127:0] <= fifo_dout[127:0];
+            counter_match <= 1'b1;
         end
         
         else begin
-            counter_match                       <= 1'b0;
+            counter_match <= 1'b0;
         end
         
         if( overflow_error_wire ) begin
-            overflow_error_data_buffer[127:0]   <= fifo_din[127:0];
+            overflow_error_data_buffer[127:0] <= fifo_din[127:0];
         end
         
         if( timestamp_error_wire ) begin
-            timestamp_error_data_buffer[127:0]  <= fifo_dout[127:0];
+            timestamp_error_data_buffer[127:0] <= fifo_dout[127:0];
         end
     end
 end

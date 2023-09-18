@@ -30,85 +30,79 @@ module MAC(
     output reg [15:0] mul_result
 );
 
-wire [31:0] mul_stage1_31_0_0_wire;
-wire [31:0] mul_stage1_47_16_0_wire;
-wire [31:0] mul_stage1_47_16_1_wire;
-wire [31:0] mul_stage1_63_32_0_wire;
-wire [31:0] mul_stage1_63_32_1_wire;
-wire [31:0] mul_stage1_63_32_2_wire;
-wire [15:0] stage1_C_buffer_wire;
+wire [33:0] mul_stage1_31_0_0_wire;
+wire [33:0] mul_stage1_47_16_0_wire;
+wire [33:0] mul_stage1_47_16_1_wire;
+wire [33:0] mul_stage1_63_32_0_wire;
+wire [33:0] mul_stage1_63_32_1_wire;
+wire [33:0] mul_stage1_63_32_2_wire;
+wire [16:0] stage1_C_buffer_wire;
 
-reg [31:0] mul_stage1_31_0_0;
-reg [31:0] mul_stage1_47_16_0;
-reg [31:0] mul_stage1_47_16_1;
-reg [31:0] mul_stage1_63_32_0;
-reg [31:0] mul_stage1_63_32_1;
-reg [31:0] mul_stage1_63_32_2;
-reg [15:0] stage1_C_buffer;
+reg [33:0] mul_stage1_31_0_0;
+reg [33:0] mul_stage1_47_16_0;
+reg [33:0] mul_stage1_47_16_1;
+reg [33:0] mul_stage1_63_32_0;
+reg [33:0] mul_stage1_63_32_1;
+reg [33:0] mul_stage1_63_32_2;
+reg [16:0] stage1_C_buffer;
 
 wire sum_stage2_carryout_wire;
 
 reg sum_stage2_carryout;
 
-wire [16:0] sum_stage2_47_32_0_wire;
-wire [16:0] sum_stage2_47_32_1_wire;
-wire [16:0] sum_stage2_47_32_2_wire;
+wire [17:0] sum_stage2_47_32_0_wire;
+wire [17:0] sum_stage2_47_32_1_wire;
+wire [17:0] sum_stage2_47_32_2_wire;
 
-reg [16:0] sum_stage2_47_32_0;
-reg [16:0] sum_stage2_47_32_1;
-reg [16:0] sum_stage2_47_32_2;
+reg [17:0] sum_stage2_47_32_0;
+reg [17:0] sum_stage2_47_32_1;
+reg [17:0] sum_stage2_47_32_2;
 
-wire [16:0] full_mul_result;
+wire [17:0] full_mul_result;
 
 //////////////////////////////////////////////////////////
 // Pipeline 1
 //////////////////////////////////////////////////////////
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_0(
-    .CLK(clk),
-    .A(A[15:0]),
-    .B(B[15:0]),
-    .D(D[15:0]),
+    .A({1'b0,A[15:0]}),
+    .B({1'b0,B[15:0]}),
+    .D({1'b0,D[15:0]}),
     .P(mul_stage1_31_0_0_wire)
 );
 
 xbip_dsp48_mul_macro_1 dsp_stage_1_1(
-    .CLK(clk),
-    .A(A[31:16]),
-    .B(B[15:0]),
-    .D(D[31:16]),
+    .A({1'b0,A[31:16]}),
+    .B({1'b0,B[15:0]}),
+    .D({1'b0,D[31:16]}),
     .P(mul_stage1_47_16_0_wire)
 );
 
 xbip_dsp48_mul_macro_2 dsp_stage_1_2(
-    .CLK(clk),
-    .A(A[15:0]),
-    .B(B[31:16]),
-    .D(D[15:0]),
+    .A({1'b0,A[15:0]}),
+    .B({1'b0,B[31:16]}),
+    .D({1'b0,D[15:0]}),
     .P(mul_stage1_47_16_1_wire)
 );
 
 xbip_dsp48_mul_macro_3 dsp_stage_1_3(
-    .CLK(clk),
-    .A(A[31:16]),
-    .B(B[31:16]),
-    .D(D[31:16]),
+    .A({1'b0,A[31:16]}),
+    .B({1'b0,B[31:16]}),
+    .D({1'b0,D[31:16]}),
     .P(mul_stage1_63_32_0_wire)
 );
 
 xbip_dsp48_mul_macro_4 dsp_stage_1_4(
-    .CLK(clk),
-    .A(A[47:32]),
-    .B(B[15:0]),
-    .D(D[47:32]),
+    .A({1'b0,A[47:32]}),
+    .B({1'b0,B[15:0]}),
+    .D({1'b0,D[47:32]}),
     .P(mul_stage1_63_32_1_wire)
 );
 
 xbip_dsp48_mul_macro_5 dsp_stage_1_5(
-    .CLK(clk),
-    .A(A[15:0]),
-    .B(B[47:32]),
-    .D(D[15:0]),
+    .A({1'b0,A[15:0]}),
+    .B({1'b0,B[47:32]}),
+    .D({1'b0,D[15:0]}),
     .P(mul_stage1_63_32_2_wire)
 );
 
@@ -117,33 +111,24 @@ xbip_dsp48_mul_macro_5 dsp_stage_1_5(
 //////////////////////////////////////////////////////////
 
 xbip_dsp48_sum_macro_0 dsp_stage_2_0(
-    .CLK(clk),
-    .A(mul_stage1_31_0_0[31:16]),
-    .C(mul_stage1_47_16_0[15:0]),
-    .D(mul_stage1_47_16_1[15:0]),
-    .CARRYIN(1'b0),
-    .P(),
-    .CARRYOUT(sum_stage2_carryout_wire)
+    .A({1'b0,mul_stage1_31_0_0[31:16]}),
+    .C({1'b0,mul_stage1_47_16_0[15:0]}),
+    .D({1'b0,mul_stage1_47_16_1[15:0]}),
+    .P(sum_stage2_47_32_2_wire)
 );
 
 xbip_dsp48_sum_macro_1 dsp_stage_2_1(
-    .CLK(clk),
-    .A(mul_stage1_63_32_0[15:0]),
-    .C(mul_stage1_63_32_1[15:0]),
-    .D(mul_stage1_63_32_2[15:0]),
-    .CARRYIN(1'b0),
-    .P(sum_stage2_47_32_0_wire),
-    .CARRYOUT()
+    .A({1'b0,mul_stage1_63_32_0[15:0]}),
+    .C({1'b0,mul_stage1_63_32_1[15:0]}),
+    .D({1'b0,mul_stage1_63_32_2[15:0]}),
+    .P(sum_stage2_47_32_0_wire)
 );
 
 xbip_dsp48_sum_macro_2 dsp_stage_2_2(
-    .CLK(clk),
-    .A(mul_stage1_47_16_0[15:0]),
-    .C(mul_stage1_47_16_1[15:0]),
-    .D(stage1_C_buffer[15:0]),
-    .CARRYIN(1'b0),
-    .P(sum_stage2_47_32_1_wire),
-    .CARRYOUT()
+    .A({1'b0,mul_stage1_47_16_0[31:16]}),
+    .C({1'b0,mul_stage1_47_16_1[31:16]}),
+    .D({1'b0,stage1_C_buffer[15:0]}),
+    .P(sum_stage2_47_32_1_wire)
 );
 
 //////////////////////////////////////////////////////////
@@ -151,47 +136,43 @@ xbip_dsp48_sum_macro_2 dsp_stage_2_2(
 //////////////////////////////////////////////////////////
 
 xbip_dsp48_sum_macro_3 dsp_stage_3_0(
-    .CLK(clk),
-    .A(sum_stage2_47_32_0[15:0]),
-    .C(sum_stage2_47_32_1[15:0]),
-    .D(16'h0),
-    .CARRYIN(sum_stage2_carryout),
-    .P(full_mul_result),
-    .CARRYOUT()
+    .A({1'b0,sum_stage2_47_32_0[15:0]}),
+    .C({1'b0,sum_stage2_47_32_1[15:0]}),
+    .D({16'b000000000000000,sum_stage2_carryout}),
+    .P(full_mul_result)
 );
 
 
 always@(posedge clk) begin
     if( resetn == 1'b0 ) begin
-        mul_stage1_31_0_0           <= 32'h0;
-        mul_stage1_47_16_0          <= 32'h0;
-        mul_stage1_47_16_1          <= 32'h0;
-        mul_stage1_63_32_0          <= 32'h0;
-        mul_stage1_63_32_1          <= 32'h0;
-        mul_stage1_63_32_2          <= 32'h0;
-        sum_stage2_47_32_0          <= 17'h0;
-        sum_stage2_47_32_1          <= 17'h0;
-        sum_stage2_47_32_2          <= 17'h0;
-        stage1_C_buffer             <= 16'h0;
+        mul_stage1_31_0_0           <= 34'h0;
+        mul_stage1_47_16_0          <= 34'h0;
+        mul_stage1_47_16_1          <= 34'h0;
+        mul_stage1_63_32_0          <= 34'h0;
+        mul_stage1_63_32_1          <= 34'h0;
+        mul_stage1_63_32_2          <= 34'h0;
+        sum_stage2_47_32_0          <= 18'h0;
+        sum_stage2_47_32_1          <= 18'h0;
+        sum_stage2_47_32_2          <= 18'h0;
+        stage1_C_buffer             <= 17'h0;
         sum_stage2_carryout         <= 1'b0;
     end
     else begin
         //////////////////////////////////////////////////////////
         // Pipeline 1
         //////////////////////////////////////////////////////////
-        mul_stage1_31_0_0[31:0]     <= mul_stage1_31_0_0_wire;
-        mul_stage1_47_16_0[31:0]    <= mul_stage1_47_16_0_wire;
-        mul_stage1_47_16_1[31:0]    <= mul_stage1_47_16_1_wire;
-        mul_stage1_63_32_0[31:0]    <= mul_stage1_63_32_0_wire;
-        mul_stage1_63_32_1[31:0]    <= mul_stage1_63_32_1_wire;
-        mul_stage1_63_32_2[31:0]    <= mul_stage1_63_32_2_wire;
-        stage1_C_buffer             <= {C[13:0],2'b00};
+        mul_stage1_31_0_0[33:0]     <= mul_stage1_31_0_0_wire;
+        mul_stage1_47_16_0[33:0]    <= mul_stage1_47_16_0_wire;
+        mul_stage1_47_16_1[33:0]    <= mul_stage1_47_16_1_wire;
+        mul_stage1_63_32_0[33:0]    <= mul_stage1_63_32_0_wire;
+        mul_stage1_63_32_1[33:0]    <= mul_stage1_63_32_1_wire;
+        mul_stage1_63_32_2[33:0]    <= mul_stage1_63_32_2_wire;
+        stage1_C_buffer             <= {1'b0,C[13:0],2'b00};
 
         //////////////////////////////////////////////////////////
         // Pipeline 2
         //////////////////////////////////////////////////////////
-        sum_stage2_carryout         <= sum_stage2_carryout_wire;
-
+        sum_stage2_carryout         <= sum_stage2_47_32_2_wire[16];
         sum_stage2_47_32_0          <= sum_stage2_47_32_0_wire;
         sum_stage2_47_32_1          <= sum_stage2_47_32_1_wire;
 

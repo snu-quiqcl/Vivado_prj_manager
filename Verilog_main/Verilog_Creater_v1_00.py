@@ -28,7 +28,7 @@ class Verilog_maker:
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core', 'MAC']
         #Number of total dac controller number
-        self.total_dac_num = 8 
+        self.total_dac_num = 1 
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -136,14 +136,16 @@ class Verilog_maker:
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.instruction1 {{(D-A)*B}}'
-        tcl_code += f' CONFIG.has_carryout {{false}} CONFIG.dreg_3 {{true}}'
-        tcl_code += f' CONFIG.areg_3 {{true}} CONFIG.areg_4 {{true}} CONFIG.breg_3 {{true}}'
-        tcl_code += f' CONFIG.breg_4 {{true}} CONFIG.cinreg_3 {{false}} CONFIG.cinreg_4 {{false}}'
-        tcl_code += f' CONFIG.cinreg_5 {{false}} CONFIG.mreg_5 {{true}} CONFIG.preg_6 {{true}}'
-        tcl_code += f' CONFIG.d_width {{16}} CONFIG.d_binarywidth {{0}} CONFIG.a_width {{16}}'
-        tcl_code += f' CONFIG.a_binarywidth {{0}} CONFIG.b_width {{16}} CONFIG.b_binarywidth {{0}}'
+        tcl_code += f' CONFIG.pipeline_options {{Expert}} CONFIG.dreg_3 {{false}}'
+        tcl_code += f' CONFIG.areg_3 {{false}} CONFIG.areg_4 {{false}}'
+        tcl_code += f' CONFIG.breg_3 {{false}} CONFIG.breg_4 {{false}}'
+        tcl_code += f' CONFIG.mreg_5 {{false}} CONFIG.preg_6 {{false}}'
+        tcl_code += f' CONFIG.d_width {{17}} CONFIG.a_width {{17}} CONFIG.b_width {{17}}'
+        tcl_code += f' CONFIG.creg_3 {{false}} CONFIG.creg_4 {{false}} CONFIG.creg_5 {{false}}'
+        tcl_code += f' CONFIG.d_binarywidth {{0}} CONFIG.a_binarywidth {{0}} CONFIG.b_binarywidth {{0}}'
         tcl_code += f' CONFIG.concat_width {{48}} CONFIG.concat_binarywidth {{0}} CONFIG.c_binarywidth {{0}}'
-        tcl_code += f' CONFIG.pcin_binarywidth {{0}}]'
+        tcl_code += f' CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{34}}'
+        tcl_code += f' CONFIG.p_width {{34}} CONFIG.p_binarywidth {{0}}]'
         tcl_code += f' [get_ips {dsp_name}]\n'
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
@@ -154,19 +156,18 @@ class Verilog_maker:
     def generate_xilinx_dsp_sum(self, folder_directory, dsp_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
-        tcl_code += f'set_property -dict [list CONFIG.instruction1 {{(D+A)+C+CARRYIN}}'
-        tcl_code += f' CONFIG.has_carryout {{true}} CONFIG.dreg_1 {{true}} CONFIG.dreg_2 {{true}}'
-        tcl_code += f' CONFIG.dreg_3 {{true}} CONFIG.areg_1 {{true}} CONFIG.areg_2 {{true}}'
-        tcl_code += f' CONFIG.areg_3 {{true}} CONFIG.areg_4 {{true}} CONFIG.breg_3 {{false}}'
-        tcl_code += f' CONFIG.breg_4 {{false}} CONFIG.creg_1 {{true}} CONFIG.creg_2 {{true}}'
-        tcl_code += f' CONFIG.creg_3 {{true}} CONFIG.creg_4 {{true}} CONFIG.creg_5 {{true}}'
-        tcl_code += f' CONFIG.cinreg_1 {{true}} CONFIG.cinreg_2 {{true}} CONFIG.cinreg_3 {{true}}'
-        tcl_code += f' CONFIG.cinreg_4 {{true}} CONFIG.cinreg_5 {{true}} CONFIG.mreg_5 {{true}}'
-        tcl_code += f' CONFIG.preg_6 {{true}} CONFIG.d_width {{16}} CONFIG.d_binarywidth {{0}}'
-        tcl_code += f' CONFIG.a_width {{16}} CONFIG.a_binarywidth {{0}} CONFIG.b_width {{16}}'
+        tcl_code += f'set_property -dict [list CONFIG.instruction1 {{(A+D)+C}}'
+        tcl_code += f' CONFIG.pipeline_options {{Expert}} CONFIG.dreg_1 {{false}}'
+        tcl_code += f' CONFIG.dreg_2 {{false}} CONFIG.dreg_3 {{false}} CONFIG.areg_1 {{false}}'
+        tcl_code += f' CONFIG.areg_2 {{false}} CONFIG.areg_3 {{false}} CONFIG.areg_4 {{false}}'
+        tcl_code += f' CONFIG.creg_1 {{false}} CONFIG.creg_2 {{false}} CONFIG.creg_3 {{false}}'
+        tcl_code += f' CONFIG.creg_4 {{false}} CONFIG.creg_5 {{false}} CONFIG.mreg_5 {{false}}'
+        tcl_code += f' CONFIG.preg_6 {{false}} CONFIG.d_width {{17}} CONFIG.a_width {{17}}'
+        tcl_code += f' CONFIG.c_width {{17}} CONFIG.breg_3 {{false}} CONFIG.breg_4 {{false}}'
+        tcl_code += f' CONFIG.d_binarywidth {{0}} CONFIG.a_binarywidth {{0}} CONFIG.b_width {{18}}'
         tcl_code += f' CONFIG.b_binarywidth {{0}} CONFIG.concat_width {{48}} CONFIG.concat_binarywidth {{0}}'
-        tcl_code += f' CONFIG.c_width {{16}} CONFIG.c_binarywidth {{0}} CONFIG.pcin_binarywidth {{0}}'
-        tcl_code += f' CONFIG.p_full_width {{17}} CONFIG.p_width {{17}} CONFIG.p_binarywidth {{0}}]'
+        tcl_code += f' CONFIG.c_binarywidth {{0}} CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{18}}'
+        tcl_code += f' CONFIG.p_width {{18}} CONFIG.p_binarywidth {{0}}]'
         tcl_code += f' [get_ips {dsp_name}]\n'
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
@@ -574,7 +575,6 @@ set RFMC_DAC_1{i-4}_P [ create_bd_port -dir O RFMC_DAC_0{i}_P ]
             
         tcl_code += 'set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset proc_sys_reset_0 ]\n'
         tcl_code += 'set TimeController_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeController TimeController_0 ]\n'
-        tcl_code += 'set AXI_Buffer_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:AXI_Buffer AXI_Buffer_0 ]'
         tcl_code += f"""
 set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect axi_interconnect_0 ]
 set_property -dict [ list \
@@ -1297,19 +1297,29 @@ set_property -dict [ list \
         """
         
         tcl_code += """
-connect_bd_intf_net -intf_net AXI_Buffer_0_m_axi [get_bd_intf_pins AXI_Buffer_0/m_axi] [get_bd_intf_pins axi_interconnect_0/S00_AXI]
 connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_interconnect_0/M00_AXI] [get_bd_intf_pins usp_rf_data_converter_0/s_axi]
 connect_bd_intf_net -intf_net axi_interconnect_0_M01_AXI [get_bd_intf_pins TimeController_0/s_axi] [get_bd_intf_pins axi_interconnect_0/M01_AXI]
-connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins AXI_Buffer_0/s_axi] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD]
+connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/M_AXI_HPM0_FPD]
         """
         
         tcl_code += '\n'
         
         for i in range(self.total_dac_num):
-            if i < 4:
-                tcl_code += f'connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_pins DAC_Controller_{i}/m00_axis] [get_bd_intf_pins usp_rf_data_converter_0/s0{i}_axis]\n'
+            if self.do_sim == True:
+                tcl_code += f"""
+set m00_axis_0{i} [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m00_axis_0{i} ]
+set_property -dict [ list \
+ CONFIG.FREQ_HZ {{249997498}} \
+ ] $m00_axis_0{i}
+    
+connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_ports m00_axis_0{i}] [get_bd_intf_pins DAC_Controller_{i}/m00_axis]
+                """
             else:
-                tcl_code += f'connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_pins DAC_Controller_{i}/m00_axis] [get_bd_intf_pins usp_rf_data_converter_0/s1{i-4}_axis]\n'
+                if i < 4:
+                    tcl_code += f'connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_pins DAC_Controller_{i}/m00_axis] [get_bd_intf_pins usp_rf_data_converter_0/s0{i}_axis]\n'
+                    
+                else:
+                    tcl_code += f'connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_pins DAC_Controller_{i}/m00_axis] [get_bd_intf_pins usp_rf_data_converter_0/s1{i-4}_axis]\n'
         
         tcl_code += '\n'
         for i in range(self.total_dac_num):
@@ -1340,8 +1350,7 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins DAC_Controller_{i}/s_axi_aresetn]'
         tcl_code += ' [get_bd_pins TimeController_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] \
-[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] \
-[get_bd_pins AXI_Buffer_0/m_axi_aresetn] [get_bd_pins AXI_Buffer_0/s_axi_aresetn] '
+[get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] '
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins axi_interconnect_0/M0{i+2}_ARESETN]'
         tcl_code += ' [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins usp_rf_data_converter_0/s0_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s1_axis_aresetn] [get_bd_pins usp_rf_data_converter_0/s_axi_aresetn] '
@@ -1358,7 +1367,7 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         tcl_code += 'connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 '
         for i in range(self.total_dac_num):
             tcl_code += f' [get_bd_pins DAC_Controller_{i}/m00_axis_aclk] [get_bd_pins DAC_Controller_{i}/s_axi_aclk] [get_bd_pins axi_interconnect_0/M0{i+2}_ACLK]'
-        tcl_code += """ [get_bd_pins AXI_Buffer_0/m_axi_aclk] [get_bd_pins AXI_Buffer_0/s_axi_aclk] [get_bd_pins TimeController_0/s_axi_aclk]\
+        tcl_code += """ [get_bd_pins TimeController_0/s_axi_aclk]\
  [get_bd_pins axi_interconnect_0/ACLK]\
  [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK]\
  [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins usp_rf_data_converter_0/s0_axis_aclk] [get_bd_pins usp_rf_data_converter_0/s1_axis_aclk]\
@@ -1376,24 +1385,14 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
 # assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
 #         """
         for i in range(self.total_dac_num):
-            tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
+            tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
         tcl_code += """
-assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces AXI_Buffer_0/m_axi] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
-assign_bd_address -offset 0xA0000000 -range 0x10000000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs AXI_Buffer_0/s_axi/reg0] -force
+assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
+assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
         """
         
         tcl_code += '\n'
         
-        if self.do_sim == True:
-            for i in range(self.total_dac_num):
-                tcl_code += f"""
-set m00_axis_0{i} [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m00_axis_0{i} ]
-set_property -dict [ list \
- CONFIG.FREQ_HZ {{249997498}} \
- ] $m00_axis_0{i}
-    
-connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis_ [get_bd_intf_ports m00_axis_00] [get_bd_intf_pins DAC_Controller_{i}/m00_axis]
-                """
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")
@@ -1481,7 +1480,6 @@ connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis_ [get_bd_intf_ports m0
         for i in range(self.total_dac_num):
             self.generate_indexed_dac_controller(i)
         self.generate_time_controller()
-        self.generate_axi_buffer()
         self.generate_RFSoC_main()
         
     

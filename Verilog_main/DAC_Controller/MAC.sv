@@ -30,6 +30,12 @@ module MAC(
     output reg [15:0] mul_result
 );
 
+reg [47:0] A_buffer;
+reg [47:0] B_buffer;
+reg [13:0] C_buffer;
+
+wire [47:0] sub_stage0_47_0_wire;
+
 wire [33:0] mul_stage1_31_0_0_wire;
 wire [33:0] mul_stage1_47_16_0_wire;
 wire [33:0] mul_stage1_47_16_1_wire;
@@ -61,48 +67,53 @@ reg [17:0] sum_stage2_47_32_2;
 wire [17:0] full_mul_result;
 
 //////////////////////////////////////////////////////////
+// Pipeline 0
+//////////////////////////////////////////////////////////
+
+xbip_dsp48_sub_macro_0 dsp_stage_0_0(
+    .CONCAT(D),
+    .C(A),
+    .P(mul_stage1_31_0_0_wire)
+);
+
+
+//////////////////////////////////////////////////////////
 // Pipeline 1
 //////////////////////////////////////////////////////////
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_0(
-    .A({1'b0,A[15:0]}),
-    .B({1'b0,B[15:0]}),
-    .D({1'b0,D[15:0]}),
+    .A({1'b0,D_buffer[15:0]}),
+    .B({1'b0,B_buffer[15:0]}),
     .P(mul_stage1_31_0_0_wire)
 );
 
-xbip_dsp48_mul_macro_1 dsp_stage_1_1(
-    .A({1'b0,A[31:16]}),
-    .B({1'b0,B[15:0]}),
-    .D({1'b0,D[31:16]}),
+xbip_dsp48_mul_macro_0 dsp_stage_1_1(
+    .A({1'b0,D_buffer[31:16]}),
+    .B({1'b0,B_buffer[15:0]}),
     .P(mul_stage1_47_16_0_wire)
 );
 
-xbip_dsp48_mul_macro_2 dsp_stage_1_2(
-    .A({1'b0,A[15:0]}),
-    .B({1'b0,B[31:16]}),
-    .D({1'b0,D[15:0]}),
+xbip_dsp48_mul_macro_0 dsp_stage_1_2(
+    .A({1'b0,D_buffer[15:0]}),
+    .B({1'b0,B_buffer[31:16]}),
     .P(mul_stage1_47_16_1_wire)
 );
 
-xbip_dsp48_mul_macro_3 dsp_stage_1_3(
-    .A({1'b0,A[31:16]}),
-    .B({1'b0,B[31:16]}),
-    .D({1'b0,D[31:16]}),
+xbip_dsp48_mul_macro_0 dsp_stage_1_3(
+    .A({1'b0,D_buffer[31:16]}),
+    .B({1'b0,B_buffer[31:16]}),
     .P(mul_stage1_63_32_0_wire)
 );
 
-xbip_dsp48_mul_macro_4 dsp_stage_1_4(
-    .A({1'b0,A[47:32]}),
-    .B({1'b0,B[15:0]}),
-    .D({1'b0,D[47:32]}),
+xbip_dsp48_mul_macro_0 dsp_stage_1_4(
+    .A({1'b0,D_buffer[47:32]}),
+    .B({1'b0,B_buffer[15:0]}),
     .P(mul_stage1_63_32_1_wire)
 );
 
-xbip_dsp48_mul_macro_5 dsp_stage_1_5(
-    .A({1'b0,A[15:0]}),
-    .B({1'b0,B[47:32]}),
-    .D({1'b0,D[15:0]}),
+xbip_dsp48_mul_macro_0 dsp_stage_1_5(
+    .A({1'b0,D_buffer[15:0]}),
+    .B({1'b0,B_buffer[47:32]}),
     .P(mul_stage1_63_32_2_wire)
 );
 
@@ -117,14 +128,14 @@ xbip_dsp48_sum_macro_0 dsp_stage_2_0(
     .P(sum_stage2_47_32_2_wire)
 );
 
-xbip_dsp48_sum_macro_1 dsp_stage_2_1(
+xbip_dsp48_sum_macro_0 dsp_stage_2_1(
     .A({1'b0,mul_stage1_63_32_0[15:0]}),
     .C({1'b0,mul_stage1_63_32_1[15:0]}),
     .D({1'b0,mul_stage1_63_32_2[15:0]}),
     .P(sum_stage2_47_32_0_wire)
 );
 
-xbip_dsp48_sum_macro_2 dsp_stage_2_2(
+xbip_dsp48_sum_macro_0 dsp_stage_2_2(
     .A({1'b0,mul_stage1_47_16_0[31:16]}),
     .C({1'b0,mul_stage1_47_16_1[31:16]}),
     .D({1'b0,stage1_C_buffer[15:0]}),
@@ -135,7 +146,7 @@ xbip_dsp48_sum_macro_2 dsp_stage_2_2(
 // Pipeline 3
 //////////////////////////////////////////////////////////
 
-xbip_dsp48_sum_macro_3 dsp_stage_3_0(
+xbip_dsp48_sum_macro_0 dsp_stage_3_0(
     .A({1'b0,sum_stage2_47_32_0[15:0]}),
     .C({1'b0,sum_stage2_47_32_1[15:0]}),
     .D({16'b000000000000000,sum_stage2_carryout}),
@@ -156,8 +167,18 @@ always@(posedge clk) begin
         sum_stage2_47_32_2          <= 18'h0;
         stage1_C_buffer             <= 17'h0;
         sum_stage2_carryout         <= 1'b0;
+        A_buffer                    <= 48'h0;
+        B_buffer                    <= 48'h0;
+        C_buffer                    <= 14'h0;
     end
     else begin
+        //////////////////////////////////////////////////////////
+        // Pipeline 1
+        //////////////////////////////////////////////////////////
+        A_buffer                    <= sub_stage0_47_0_wire;
+        B_buffer                    <= B;
+        C_buffer                    <= C;
+
         //////////////////////////////////////////////////////////
         // Pipeline 1
         //////////////////////////////////////////////////////////
@@ -167,7 +188,7 @@ always@(posedge clk) begin
         mul_stage1_63_32_0[33:0]    <= mul_stage1_63_32_0_wire;
         mul_stage1_63_32_1[33:0]    <= mul_stage1_63_32_1_wire;
         mul_stage1_63_32_2[33:0]    <= mul_stage1_63_32_2_wire;
-        stage1_C_buffer             <= {1'b0,C[13:0],2'b00};
+        stage1_C_buffer             <= {1'b0,C_buffer[13:0],2'b00};
 
         //////////////////////////////////////////////////////////
         // Pipeline 2

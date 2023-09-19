@@ -100,7 +100,7 @@ xbip_dsp48_mul_macro_48 dsp_amp_mul_0(
 );
 
 
-xbip_dsp48_mul_macro_49 dsp_amp_mul_1(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_1(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[1][15]},dds_output_buffer3[1]}),
@@ -108,7 +108,7 @@ xbip_dsp48_mul_macro_49 dsp_amp_mul_1(
 );
 
 
-xbip_dsp48_mul_macro_50 dsp_amp_mul_2(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_2(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[2][15]},dds_output_buffer3[2]}),
@@ -116,7 +116,7 @@ xbip_dsp48_mul_macro_50 dsp_amp_mul_2(
 );
 
 
-xbip_dsp48_mul_macro_51 dsp_amp_mul_3(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_3(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[3][15]},dds_output_buffer3[3]}),
@@ -124,7 +124,7 @@ xbip_dsp48_mul_macro_51 dsp_amp_mul_3(
 );
 
 
-xbip_dsp48_mul_macro_52 dsp_amp_mul_4(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_4(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[4][15]},dds_output_buffer3[4]}),
@@ -132,7 +132,7 @@ xbip_dsp48_mul_macro_52 dsp_amp_mul_4(
 );
 
 
-xbip_dsp48_mul_macro_53 dsp_amp_mul_5(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_5(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[5][15]},dds_output_buffer3[5]}),
@@ -140,7 +140,7 @@ xbip_dsp48_mul_macro_53 dsp_amp_mul_5(
 );
 
 
-xbip_dsp48_mul_macro_54 dsp_amp_mul_6(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_6(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[6][15]},dds_output_buffer3[6]}),
@@ -148,7 +148,7 @@ xbip_dsp48_mul_macro_54 dsp_amp_mul_6(
 );
 
 
-xbip_dsp48_mul_macro_55 dsp_amp_mul_7(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_7(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[7][15]},dds_output_buffer3[7]}),
@@ -156,7 +156,7 @@ xbip_dsp48_mul_macro_55 dsp_amp_mul_7(
 );
 
 
-xbip_dsp48_mul_macro_56 dsp_amp_mul_8(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_8(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[8][15]},dds_output_buffer3[8]}),
@@ -164,7 +164,7 @@ xbip_dsp48_mul_macro_56 dsp_amp_mul_8(
 );
 
 
-xbip_dsp48_mul_macro_57 dsp_amp_mul_9(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_9(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[9][15]},dds_output_buffer3[9]}),
@@ -172,7 +172,7 @@ xbip_dsp48_mul_macro_57 dsp_amp_mul_9(
 );
 
 
-xbip_dsp48_mul_macro_58 dsp_amp_mul_10(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_10(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[10][15]},dds_output_buffer3[10]}),
@@ -180,7 +180,7 @@ xbip_dsp48_mul_macro_58 dsp_amp_mul_10(
 );
 
 
-xbip_dsp48_mul_macro_59 dsp_amp_mul_11(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_11(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[11][15]},dds_output_buffer3[11]}),
@@ -188,7 +188,7 @@ xbip_dsp48_mul_macro_59 dsp_amp_mul_11(
 );
 
 
-xbip_dsp48_mul_macro_60 dsp_amp_mul_12(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_12(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[12][15]},dds_output_buffer3[12]}),
@@ -196,7 +196,7 @@ xbip_dsp48_mul_macro_60 dsp_amp_mul_12(
 );
 
 
-xbip_dsp48_mul_macro_61 dsp_amp_mul_13(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_13(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[13][15]},dds_output_buffer3[13]}),
@@ -204,7 +204,7 @@ xbip_dsp48_mul_macro_61 dsp_amp_mul_13(
 );
 
 
-xbip_dsp48_mul_macro_62 dsp_amp_mul_14(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_14(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[14][15]},dds_output_buffer3[14]}),
@@ -212,7 +212,7 @@ xbip_dsp48_mul_macro_62 dsp_amp_mul_14(
 );
 
 
-xbip_dsp48_mul_macro_63 dsp_amp_mul_15(
+xbip_dsp48_mul_macro_48 dsp_amp_mul_15(
     .A(17'h0),
     .B({1'b0, amp_buffer3}),
     .D({{dds_output_buffer3[15][15]},dds_output_buffer3[15]}),
@@ -437,7 +437,7 @@ dds_compiler_0 dds_0(
 );
 
 
-dds_compiler_1 dds_1(
+dds_compiler_0 dds_1(
     .s_axis_phase_tdata(phase_input[1]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[1]),
@@ -446,7 +446,7 @@ dds_compiler_1 dds_1(
 );
 
 
-dds_compiler_2 dds_2(
+dds_compiler_0 dds_2(
     .s_axis_phase_tdata(phase_input[2]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[2]),
@@ -455,7 +455,7 @@ dds_compiler_2 dds_2(
 );
 
 
-dds_compiler_3 dds_3(
+dds_compiler_0 dds_3(
     .s_axis_phase_tdata(phase_input[3]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[3]),
@@ -464,7 +464,7 @@ dds_compiler_3 dds_3(
 );
 
 
-dds_compiler_4 dds_4(
+dds_compiler_0 dds_4(
     .s_axis_phase_tdata(phase_input[4]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[4]),
@@ -473,7 +473,7 @@ dds_compiler_4 dds_4(
 );
 
 
-dds_compiler_5 dds_5(
+dds_compiler_0 dds_5(
     .s_axis_phase_tdata(phase_input[5]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[5]),
@@ -482,7 +482,7 @@ dds_compiler_5 dds_5(
 );
 
 
-dds_compiler_6 dds_6(
+dds_compiler_0 dds_6(
     .s_axis_phase_tdata(phase_input[6]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[6]),
@@ -491,7 +491,7 @@ dds_compiler_6 dds_6(
 );
 
 
-dds_compiler_7 dds_7(
+dds_compiler_0 dds_7(
     .s_axis_phase_tdata(phase_input[7]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[7]),
@@ -500,7 +500,7 @@ dds_compiler_7 dds_7(
 );
 
 
-dds_compiler_8 dds_8(
+dds_compiler_0 dds_8(
     .s_axis_phase_tdata(phase_input[8]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[8]),
@@ -509,7 +509,7 @@ dds_compiler_8 dds_8(
 );
 
 
-dds_compiler_9 dds_9(
+dds_compiler_0 dds_9(
     .s_axis_phase_tdata(phase_input[9]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[9]),
@@ -518,7 +518,7 @@ dds_compiler_9 dds_9(
 );
 
 
-dds_compiler_10 dds_10(
+dds_compiler_0 dds_10(
     .s_axis_phase_tdata(phase_input[10]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[10]),
@@ -527,7 +527,7 @@ dds_compiler_10 dds_10(
 );
 
 
-dds_compiler_11 dds_11(
+dds_compiler_0 dds_11(
     .s_axis_phase_tdata(phase_input[11]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[11]),
@@ -536,7 +536,7 @@ dds_compiler_11 dds_11(
 );
 
 
-dds_compiler_12 dds_12(
+dds_compiler_0 dds_12(
     .s_axis_phase_tdata(phase_input[12]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[12]),
@@ -545,7 +545,7 @@ dds_compiler_12 dds_12(
 );
 
 
-dds_compiler_13 dds_13(
+dds_compiler_0 dds_13(
     .s_axis_phase_tdata(phase_input[13]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[13]),
@@ -554,7 +554,7 @@ dds_compiler_13 dds_13(
 );
 
 
-dds_compiler_14 dds_14(
+dds_compiler_0 dds_14(
     .s_axis_phase_tdata(phase_input[14]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[14]),
@@ -563,7 +563,7 @@ dds_compiler_14 dds_14(
 );
 
 
-dds_compiler_15 dds_15(
+dds_compiler_0 dds_15(
     .s_axis_phase_tdata(phase_input[15]),
     .s_axis_phase_tvalid(1'b1),
     .m_axis_data_tdata(dds_output_wire[15]),

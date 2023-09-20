@@ -93,129 +93,113 @@ generate
 endgenerate
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_0(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[0][15]},dds_output_buffer3[0]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[0][15]},dds_output_buffer3[0]}),
     .P(amp_full_product[0])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_1(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[1][15]},dds_output_buffer3[1]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[1][15]},dds_output_buffer3[1]}),
     .P(amp_full_product[1])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_2(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[2][15]},dds_output_buffer3[2]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[2][15]},dds_output_buffer3[2]}),
     .P(amp_full_product[2])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_3(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[3][15]},dds_output_buffer3[3]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[3][15]},dds_output_buffer3[3]}),
     .P(amp_full_product[3])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_4(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[4][15]},dds_output_buffer3[4]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[4][15]},dds_output_buffer3[4]}),
     .P(amp_full_product[4])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_5(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[5][15]},dds_output_buffer3[5]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[5][15]},dds_output_buffer3[5]}),
     .P(amp_full_product[5])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_6(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[6][15]},dds_output_buffer3[6]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[6][15]},dds_output_buffer3[6]}),
     .P(amp_full_product[6])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_7(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[7][15]},dds_output_buffer3[7]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[7][15]},dds_output_buffer3[7]}),
     .P(amp_full_product[7])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_8(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[8][15]},dds_output_buffer3[8]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[8][15]},dds_output_buffer3[8]}),
     .P(amp_full_product[8])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_9(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[9][15]},dds_output_buffer3[9]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[9][15]},dds_output_buffer3[9]}),
     .P(amp_full_product[9])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_10(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[10][15]},dds_output_buffer3[10]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[10][15]},dds_output_buffer3[10]}),
     .P(amp_full_product[10])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_11(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[11][15]},dds_output_buffer3[11]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[11][15]},dds_output_buffer3[11]}),
     .P(amp_full_product[11])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_12(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[12][15]},dds_output_buffer3[12]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[12][15]},dds_output_buffer3[12]}),
     .P(amp_full_product[12])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_13(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[13][15]},dds_output_buffer3[13]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[13][15]},dds_output_buffer3[13]}),
     .P(amp_full_product[13])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_14(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[14][15]},dds_output_buffer3[14]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[14][15]},dds_output_buffer3[14]}),
     .P(amp_full_product[14])
 );
 
 
 xbip_dsp48_mul_macro_48 dsp_amp_mul_15(
-    .A(17'h0),
-    .B({1'b0, amp_buffer3}),
-    .D({{dds_output_buffer3[15][15]},dds_output_buffer3[15]}),
+    .B({3'b000, amp_buffer3}),
+    .A({{dds_output_buffer3[15][15]},dds_output_buffer3[15]}),
     .P(amp_full_product[15])
 );
 

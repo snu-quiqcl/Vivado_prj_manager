@@ -73,7 +73,7 @@ wire [17:0] full_mul_result;
 xbip_dsp48_sub_macro_0 dsp_stage_0_0(
     .CONCAT(D),
     .C(A),
-    .P(mul_stage1_31_0_0_wire)
+    .P(sub_stage0_47_0_wire)
 );
 
 
@@ -82,37 +82,37 @@ xbip_dsp48_sub_macro_0 dsp_stage_0_0(
 //////////////////////////////////////////////////////////
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_0(
-    .A({1'b0,D_buffer[15:0]}),
+    .A({1'b0,A_buffer[15:0]}),
     .B({1'b0,B_buffer[15:0]}),
     .P(mul_stage1_31_0_0_wire)
 );
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_1(
-    .A({1'b0,D_buffer[31:16]}),
+    .A({1'b0,A_buffer[31:16]}),
     .B({1'b0,B_buffer[15:0]}),
     .P(mul_stage1_47_16_0_wire)
 );
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_2(
-    .A({1'b0,D_buffer[15:0]}),
+    .A({1'b0,A_buffer[15:0]}),
     .B({1'b0,B_buffer[31:16]}),
     .P(mul_stage1_47_16_1_wire)
 );
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_3(
-    .A({1'b0,D_buffer[31:16]}),
+    .A({1'b0,A_buffer[31:16]}),
     .B({1'b0,B_buffer[31:16]}),
     .P(mul_stage1_63_32_0_wire)
 );
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_4(
-    .A({1'b0,D_buffer[47:32]}),
+    .A({1'b0,A_buffer[47:32]}),
     .B({1'b0,B_buffer[15:0]}),
     .P(mul_stage1_63_32_1_wire)
 );
 
 xbip_dsp48_mul_macro_0 dsp_stage_1_5(
-    .A({1'b0,D_buffer[15:0]}),
+    .A({1'b0,A_buffer[15:0]}),
     .B({1'b0,B_buffer[47:32]}),
     .P(mul_stage1_63_32_2_wire)
 );

@@ -28,7 +28,7 @@ class Verilog_maker:
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core', 'MAC']
         #Number of total dac controller number
-        self.total_dac_num = 1 
+        self.total_dac_num = 8
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -46,7 +46,7 @@ class Verilog_maker:
         self.board_name = "xilinx.com:zcu111:part0:1.4"
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = True
+        self.do_sim = False
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
@@ -135,16 +135,14 @@ class Verilog_maker:
     def generate_xilinx_dsp_mul(self, folder_directory, dsp_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
-        tcl_code += f'set_property -dict [list CONFIG.instruction1 {{(D-A)*B}}'
-        tcl_code += f' CONFIG.pipeline_options {{Expert}} CONFIG.dreg_3 {{false}}'
-        tcl_code += f' CONFIG.areg_3 {{false}} CONFIG.areg_4 {{false}}'
-        tcl_code += f' CONFIG.breg_3 {{false}} CONFIG.breg_4 {{false}}'
-        tcl_code += f' CONFIG.mreg_5 {{false}} CONFIG.preg_6 {{false}}'
-        tcl_code += f' CONFIG.d_width {{17}} CONFIG.a_width {{17}} CONFIG.b_width {{17}}'
-        tcl_code += f' CONFIG.creg_3 {{false}} CONFIG.creg_4 {{false}} CONFIG.creg_5 {{false}}'
-        tcl_code += f' CONFIG.d_binarywidth {{0}} CONFIG.a_binarywidth {{0}} CONFIG.b_binarywidth {{0}}'
-        tcl_code += f' CONFIG.concat_width {{48}} CONFIG.concat_binarywidth {{0}} CONFIG.c_binarywidth {{0}}'
-        tcl_code += f' CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{34}}'
+        tcl_code += f'set_property -dict [list CONFIG.instruction1 {{A*B}}'
+        tcl_code += f' CONFIG.pipeline_options {{Expert}} CONFIG.areg_3 {{false}}'
+        tcl_code += f' CONFIG.areg_4 {{false}} CONFIG.breg_3 {{false}} CONFIG.breg_4 {{false}}'
+        tcl_code += f' CONFIG.mreg_5 {{false}} CONFIG.preg_6 {{false}} CONFIG.a_width {{17}}'
+        tcl_code += f' CONFIG.b_width {{17}} CONFIG.creg_3 {{false}} CONFIG.creg_4 {{false}}'
+        tcl_code += f' CONFIG.creg_5 {{false}} CONFIG.d_width {{18}} CONFIG.a_binarywidth {{0}}'
+        tcl_code += f' CONFIG.b_binarywidth {{0}} CONFIG.concat_width {{48}} CONFIG.concat_binarywidth {{0}}'
+        tcl_code += f' CONFIG.c_binarywidth {{0}} CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{34}}'
         tcl_code += f' CONFIG.p_width {{34}} CONFIG.p_binarywidth {{0}}]'
         tcl_code += f' [get_ips {dsp_name}]\n'
         
@@ -168,6 +166,28 @@ class Verilog_maker:
         tcl_code += f' CONFIG.b_binarywidth {{0}} CONFIG.concat_width {{48}} CONFIG.concat_binarywidth {{0}}'
         tcl_code += f' CONFIG.c_binarywidth {{0}} CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{18}}'
         tcl_code += f' CONFIG.p_width {{18}} CONFIG.p_binarywidth {{0}}]'
+        tcl_code += f' [get_ips {dsp_name}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
+    def generate_xilinx_dsp_sub(self, folder_directory, dsp_name):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
+        tcl_code += f'set_property -dict [list CONFIG.instruction1 {{CONCAT-C}}'
+        tcl_code += f' CONFIG.pipeline_options {{Expert}} CONFIG.creg_3 {{false}}'
+        tcl_code += f' CONFIG.creg_4 {{false}} CONFIG.creg_5 {{false}} CONFIG.concatreg_3 {{false}}'
+        tcl_code += f' CONFIG.concatreg_4 {{false}} CONFIG.concatreg_5 {{false}} CONFIG.preg_6 {{false}}'
+        tcl_code += f' CONFIG.dreg_1 {{false}} CONFIG.dreg_2 {{false}} CONFIG.dreg_3 {{false}} CONFIG.areg_1 {{false}}'
+        tcl_code += f' CONFIG.areg_2 {{false}} CONFIG.areg_3 {{false}} CONFIG.areg_4 {{false}} CONFIG.breg_3 {{false}}'
+        tcl_code += f' CONFIG.breg_4 {{false}} CONFIG.creg_1 {{false}} CONFIG.creg_2 {{false}} CONFIG.mreg_5 {{false}}'
+        tcl_code += f' CONFIG.d_width {{18}} CONFIG.d_binarywidth {{0}} CONFIG.a_width {{27}} CONFIG.a_binarywidth {{0}}'
+        tcl_code += f' CONFIG.b_width {{18}} CONFIG.b_binarywidth {{0}} CONFIG.concat_width {{48}}'
+        tcl_code += f' CONFIG.concat_binarywidth {{0}} CONFIG.c_width {{48}} CONFIG.c_binarywidth {{0}}'
+        tcl_code += f' CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{48}}'
+        tcl_code += f' CONFIG.p_width {{48}} CONFIG.p_binarywidth {{0}}]'
         tcl_code += f' [get_ips {dsp_name}]\n'
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
@@ -219,11 +239,12 @@ class Verilog_maker:
     def remove_duplicates_set(self, lst):
         return list(set(lst))
         
-    def generate_indexed_dac_controller(self, index, current_dir = None):
+    def generate_dac_controller(self, current_dir = None):
         fifo_list = []
         dds_list = []
         dsp_mul_list = []
         dsp_sum_list = []
+        dsp_sub_list = []
         if current_dir == None:
             source_dir = './DAC_Controller'
         else:
@@ -232,14 +253,14 @@ class Verilog_maker:
         full_dir = os.path.join(self.git_dir, self.dac_controller_dir)
         base_dir = os.path.dirname(full_dir)
         base_name = os.path.basename(full_dir)
-        new_full_dir = os.path.join(base_dir,base_name + f'_{index}')
-        new_output_full_dir =os.path.join(base_dir,base_name + f'_output_{index}')
+        new_full_dir = os.path.join(base_dir,base_name)
+        new_output_full_dir =os.path.join(base_dir,base_name + f'_output')
         self.ensure_directory_exists(new_full_dir)
             
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
             file_root, file_extension = os.path.splitext(filename)
-            new_filename = file_root + f'_{index}' + file_extension
+            new_filename = file_root + file_extension
             destination_path = os.path.join(new_full_dir, new_filename)
         
             # Open the source file and read its contents
@@ -248,42 +269,47 @@ class Verilog_maker:
                 verilog_code = source_file.read()
                 
             for module_ in self.dac_controller_modules:
-                verilog_code = verilog_code.replace(module_,module_ +  f'_{index}')
+                verilog_code = verilog_code.replace(module_,module_)
                 
-            verilog_code = re.sub(r'fifo_generator_(\d+)', f'dac_controller_fifo_{index}_generator' + r'_\1',verilog_code)
-            matches = re.findall(f'dac_controller_fifo_{index}_generator'+r'_(\d+)',verilog_code)
-            full_strings = [f'dac_controller_fifo_{index}_generator_{match}' for match in matches]
+            verilog_code = re.sub(r'fifo_generator_(\d+)', f'dac_controller_fifo_generator' + r'_\1',verilog_code)
+            matches = re.findall(f'dac_controller_fifo_generator'+r'_(\d+)',verilog_code)
+            full_strings = [f'dac_controller_fifo_generator_{match}' for match in matches]
             fifo_list += full_strings
             
-            verilog_code = re.sub(r'dds_compiler_(\d+)', f'dac_controller_dds_{index}_compiler' + r'_\1',verilog_code)
-            matches = re.findall(f'dac_controller_dds_{index}_compiler'+r'_(\d+)',verilog_code)
-            full_strings = [f'dac_controller_dds_{index}_compiler_{match}' for match in matches]
+            verilog_code = re.sub(r'dds_compiler_(\d+)', f'dac_controller_dds_compiler' + r'_\1',verilog_code)
+            matches = re.findall(f'dac_controller_dds_compiler'+r'_(\d+)',verilog_code)
+            full_strings = [f'dac_controller_dds_compiler_{match}' for match in matches]
             dds_list += full_strings
             
-            verilog_code = re.sub(r'xbip_dsp48_mul_macro_(\d+)', f'dac_controller_xbip_dsp48_{index}_mul_macro' + r'_\1',verilog_code)
-            matches = re.findall(f'dac_controller_xbip_dsp48_{index}_mul_macro' + r'_(\d+)',verilog_code)
-            full_strings = [f'dac_controller_xbip_dsp48_{index}_mul_macro_{match}' for match in matches]
+            verilog_code = re.sub(r'xbip_dsp48_mul_macro_(\d+)', f'dac_controller_xbip_dsp48_mul_macro' + r'_\1',verilog_code)
+            matches = re.findall(f'dac_controller_xbip_dsp48_mul_macro' + r'_(\d+)',verilog_code)
+            full_strings = [f'dac_controller_xbip_dsp48_mul_macro_{match}' for match in matches]
             dsp_mul_list += full_strings
             
-            verilog_code = re.sub(r'xbip_dsp48_sum_macro_(\d+)', f'dac_controller_xbip_dsp48_{index}_sum_macro' + r'_\1',verilog_code)
-            matches = re.findall(f'dac_controller_xbip_dsp48_{index}_sum_macro' + r'_(\d+)',verilog_code)
-            full_strings = [f'dac_controller_xbip_dsp48_{index}_sum_macro_{match}' for match in matches]
+            verilog_code = re.sub(r'xbip_dsp48_sum_macro_(\d+)', f'dac_controller_xbip_dsp48_sum_macro' + r'_\1',verilog_code)
+            matches = re.findall(f'dac_controller_xbip_dsp48_sum_macro' + r'_(\d+)',verilog_code)
+            full_strings = [f'dac_controller_xbip_dsp48_sum_macro_{match}' for match in matches]
             dsp_sum_list += full_strings
+            
+            verilog_code = re.sub(r'xbip_dsp48_sub_macro_(\d+)', f'dac_controller_xbip_dsp48_sub_macro' + r'_\1',verilog_code)
+            matches = re.findall(f'dac_controller_xbip_dsp48_sub_macro' + r'_(\d+)',verilog_code)
+            full_strings = [f'dac_controller_xbip_dsp48_sub_macro_{match}' for match in matches]
+            dsp_sub_list += full_strings
         
             # Write the modified content to the destination file
             with open(destination_path, 'w') as destination_file:
                 destination_file.write(verilog_code)
                 
             
-        self.remove_duplicates_set(fifo_list)
-        self.remove_duplicates_set(dds_list)
-        self.remove_duplicates_set(dsp_mul_list)
-        self.remove_duplicates_set(dsp_sum_list)
-        self.make_dac_controller_tcl(new_output_full_dir, f'DAC_Controller_{index}',self.part_name,\
+        fifo_list = self.remove_duplicates_set(fifo_list)
+        dds_list = self.remove_duplicates_set(dds_list)
+        dsp_mul_list = self.remove_duplicates_set(dsp_mul_list)
+        dsp_sum_list = self.remove_duplicates_set(dsp_sum_list)
+        self.make_dac_controller_tcl(new_output_full_dir, f'DAC_Controller',self.part_name,\
                                     self.board_path,self.board_name,new_full_dir, ['.sv', '.v','.xic'], \
-                                    dds_list, fifo_list, dsp_mul_list, dsp_sum_list)
+                                    dds_list, fifo_list, dsp_mul_list, dsp_sum_list, dsp_sub_list)
         
-    def make_dac_controller_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type, dds_list, fifo_list, dsp_mul_list, dsp_sum_list):
+    def make_dac_controller_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type, dds_list, fifo_list, dsp_mul_list, dsp_sum_list, dsp_sub_list):
         file_name = prj_name+".tcl"
         print(file_name)
         # Combine the file name and folder directory to create the full file path
@@ -308,6 +334,9 @@ class Verilog_maker:
             
         for dsp_ in dsp_sum_list:
             self.tcl_commands += self.generate_xilinx_dsp_sum(folder_directory, dsp_)
+            
+        for dsp_ in dsp_sub_list:
+            self.tcl_commands += self.generate_xilinx_dsp_sub(folder_directory, dsp_)
         
         # Save the TCL code to the .tcl file
         
@@ -571,7 +600,7 @@ set RFMC_DAC_1{i-4}_P [ create_bd_port -dir O RFMC_DAC_0{i}_P ]
             
         tcl_code += '\n'
         for i in range(self.total_dac_num):
-            tcl_code += f'set DAC_Controller_{i} [ create_bd_cell -type ip -vlnv xilinx.com:user:DAC_Controller_{i} DAC_Controller_{i} ]\n'
+            tcl_code += f'set DAC_Controller_{i} [ create_bd_cell -type ip -vlnv xilinx.com:user:DAC_Controller DAC_Controller_{i} ]\n'
             
         tcl_code += 'set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset proc_sys_reset_0 ]\n'
         tcl_code += 'set TimeController_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:TimeController TimeController_0 ]\n'
@@ -1477,8 +1506,7 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         self.tcl_commands += tcl_code
             
     def run(self):
-        for i in range(self.total_dac_num):
-            self.generate_indexed_dac_controller(i)
+        self.generate_dac_controller()
         self.generate_time_controller()
         self.generate_RFSoC_main()
         

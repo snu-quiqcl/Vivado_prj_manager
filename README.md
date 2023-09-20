@@ -7,3 +7,7 @@ Make TCL files in DAC_Controller and TimeController which creates .xpr file auto
 
 ## Verilog_Creater_v1_00
 Open DAC_Controller files and index modules and xilins ips to prevent duplication error. After this creates TCL file and make xpr file and customized ip file automatically.
+
+250MHz -> Reaaching to 250MHz is challenging, so we have to return to 100MHz, nad use 1.25ns resolution of TTL signal.
+
+A fully completed device development is required.

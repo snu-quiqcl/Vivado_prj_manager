@@ -311,7 +311,7 @@ RFDC_DDS rfdc_dds(
     .freq(freq),
     .amp(amp),              // unsigned value
     .phase(phase),
-    .timestamp(timestamp),
+    .timestamp(counter),
     .amp_offset(amp_offset),
     .time_offset(time_offset),
     .m_axis_data_tdata(m00_axis_tdata_dds),

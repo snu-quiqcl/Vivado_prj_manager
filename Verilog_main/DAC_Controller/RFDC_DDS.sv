@@ -6,7 +6,7 @@
 // Create Date: 2023/08/24 16:55:51
 // Design Name: 
 // Module Name: RFDC_DDS
-// Project Name: :
+// Project Name: 
 // Target Devices: 
 // Tool Versions: 
 // Description: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module RFDC_DDS(
+(* use_dsp = "yes" *) module RFDC_DDS(
     input wire clk,
     input wire [47:0] freq,
     input wire [13:0] amp,              // unsigned value
@@ -52,30 +52,15 @@ Unsigned 72 *  Unsigned 48 bit -> 120 bit
 
 */
 
-reg [63:0]timestamp_buffer;
-
 wire [15:0] dds_output_wire[16];
 wire [15:0] dds_output_valid; 
 wire [3:0] dds_output_valid_chain;
 wire [120:0] phase_full_product[16];
-wire [33:0] amp_full_product[16];
+wire [31:0] amp_full_product[16];
 wire [15:0] phase_input_wire[16];
 wire [255:0] m_axis_data_tdata_wire;
-
 wire m_axis_data_tvalid_wire;
-reg m_axis_data_tvalid_buffer3;
-
 reg [15:0] phase_input[16];
-
-reg [13:0] amp_buffer1;
-reg [13:0] amp_buffer2;
-reg [13:0] amp_buffer3;
-
-reg [13:0] amp_offset_buffer1;
-reg [13:0] amp_offset_buffer2;
-reg [13:0] amp_offset_buffer3;
-
-reg [15:0] dds_output_wire[16];
 
 assign dds_output_valid_chain[0] = dds_output_valid[0] & dds_output_valid[1] & dds_output_valid[2] & dds_output_valid[3];
 assign dds_output_valid_chain[1] = dds_output_valid[4] & dds_output_valid[5] & dds_output_valid[6] & dds_output_valid[7];
@@ -83,128 +68,22 @@ assign dds_output_valid_chain[2] = dds_output_valid[8] & dds_output_valid[9] & d
 assign dds_output_valid_chain[3] = dds_output_valid[12] & dds_output_valid[13] & dds_output_valid[14] & dds_output_valid[15];
 assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_chain[1] & dds_output_valid_chain[2] & dds_output_valid_chain[3];
 
+always @(posedge clk) begin
+    
+end
 
 // Generate loop to assign dds_output_wire slices to m_axis_data_tdata
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset_buffer3[13:0]};
+        assign amp_full_product[i] = {{16{dds_output_wire[i][15]}},dds_output_wire[i]} * {18'h0,amp};
+        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset[13:0]};
+        assign phase_full_product[i] = (freq * ( {timestamp-time_offset,4'b0000} + i ));
+        assign phase_input_wire[i] = {2'h0, phase_full_product[i][47:34] + phase};
     end
 endgenerate
 
-xbip_dsp48_mul_macro_48 dsp_amp_mul_0(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[0][15]},dds_output_wire[0]}),
-    .P(amp_full_product[0])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_1(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[1][15]},dds_output_wire[1]}),
-    .P(amp_full_product[1])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_2(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[2][15]},dds_output_wire[2]}),
-    .P(amp_full_product[2])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_3(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[3][15]},dds_output_wire[3]}),
-    .P(amp_full_product[3])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_4(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[4][15]},dds_output_wire[4]}),
-    .P(amp_full_product[4])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_5(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[5][15]},dds_output_wire[5]}),
-    .P(amp_full_product[5])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_6(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[6][15]},dds_output_wire[6]}),
-    .P(amp_full_product[6])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_7(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[7][15]},dds_output_wire[7]}),
-    .P(amp_full_product[7])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_8(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[8][15]},dds_output_wire[8]}),
-    .P(amp_full_product[8])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_9(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[9][15]},dds_output_wire[9]}),
-    .P(amp_full_product[9])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_10(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[10][15]},dds_output_wire[10]}),
-    .P(amp_full_product[10])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_11(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[11][15]},dds_output_wire[11]}),
-    .P(amp_full_product[11])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_12(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[12][15]},dds_output_wire[12]}),
-    .P(amp_full_product[12])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_13(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[13][15]},dds_output_wire[13]}),
-    .P(amp_full_product[13])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_14(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[14][15]},dds_output_wire[14]}),
-    .P(amp_full_product[14])
-);
-
-
-xbip_dsp48_mul_macro_48 dsp_amp_mul_15(
-    .B({3'b000, amp_buffer3}),
-    .A({{dds_output_wire[15][15]},dds_output_wire[15]}),
-    .P(amp_full_product[15])
-);
-
 always@(posedge clk) begin
-    timestamp_buffer[63:0] <= timestamp[63:0];
     m_axis_data_tdata[255:0] <= m_axis_data_tdata_wire[255:0];
     phase_input[0] <= phase_input_wire[0];
     phase_input[1] <= phase_input_wire[1];
@@ -222,179 +101,7 @@ always@(posedge clk) begin
     phase_input[13] <= phase_input_wire[13];
     phase_input[14] <= phase_input_wire[14];
     phase_input[15] <= phase_input_wire[15];
-
-    amp_buffer1[13:0] <= amp[13:0];
-    amp_buffer2[13:0] <= amp_buffer1[13:0];
-    amp_buffer3[13:0] <= amp_buffer2[13:0];
-
-    amp_offset_buffer1[13:0] <= amp_offset[13:0];
-    amp_offset_buffer2[13:0] <= amp_offset_buffer1[13:0];
-    amp_offset_buffer3[13:0] <= amp_offset_buffer2[13:0];
-
-    m_axis_data_tvalid_buffer3 <= m_axis_data_tvalid_wire;
-    m_axis_data_tvalid <= m_axis_data_tvalid_buffer3;
 end
-
-MAC mac_0(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 0),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[0])
-);
-
-MAC mac_1(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 1),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[1])
-);
-
-MAC mac_2(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 2),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[2])
-);
-
-MAC mac_3(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 3),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[3])
-);
-
-MAC mac_4(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 4),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[4])
-);
-
-MAC mac_5(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 5),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[5])
-);
-
-MAC mac_6(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 6),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[6])
-);
-
-MAC mac_7(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 7),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[7])
-);
-
-MAC mac_8(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 8),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[8])
-);
-
-MAC mac_9(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 9),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[9])
-);
-
-MAC mac_10(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 10),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[10])
-);
-
-MAC mac_11(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 11),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[11])
-);
-
-MAC mac_12(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 12),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[12])
-);
-
-MAC mac_13(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 13),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[13])
-);
-
-MAC mac_14(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 14),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[14])
-);
-
-MAC mac_15(
-    .clk(clk),
-    .resetn(1'b1),
-    .D({timestamp_buffer[43:0],4'b0000} + 15),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[15])
-);
-
 
 dds_compiler_0 dds_0(
     .s_axis_phase_tdata(phase_input[0]),

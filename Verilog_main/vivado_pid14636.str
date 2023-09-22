@@ -1,0 +1,412 @@
+/*
+
+Xilinx Vivado v2020.2 (64-bit) [Major: 2020, Minor: 2]
+SW Build: 3064766 on Wed Nov 18 09:12:45 MST 2020
+IP Build: 3064653 on Wed Nov 18 14:17:31 MST 2020
+
+Process ID (PID): 14636
+License: Customer
+Mode: GUI Mode
+
+Current time: 	Fri Sep 22 16:45:15 KST 2023
+Time zone: 	Korean Standard Time (Asia/Seoul)
+
+OS: Windows 10
+OS Version: 10.0
+OS Architecture: amd64
+Available processors (cores): 6
+
+Screen size: 1920x1080
+Screen resolution (DPI): 100
+Available screens: 1
+Default font: family=Dialog,name=Dialog,style=plain,size=12
+Scale size: 12
+
+Java version: 	11.0.2 64-bit
+Java home: 	E:/Xilinx/Vivado/2020.2/tps/win64/jre11.0.2
+Java executable location: 	E:/Xilinx/Vivado/2020.2/tps/win64/jre11.0.2/bin/java.exe
+Java initial memory (-Xms): 	128 MB
+Java maximum memory (-Xmx):	 3 GB
+
+
+User name: 	QC109_4
+User home directory: C:/Users/QC109_4
+User working directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
+User country: 	KR
+User language: 	ko
+User locale: 	ko_KR
+
+RDI_BASEROOT: E:/Xilinx/Vivado
+HDI_APPROOT: E:/Xilinx/Vivado/2020.2
+RDI_DATADIR: E:/Xilinx/Vivado/2020.2/data
+RDI_BINDIR: E:/Xilinx/Vivado/2020.2/bin
+
+Vivado preferences file location: C:/Users/QC109_4/AppData/Roaming/Xilinx/Vivado/2020.2/vivado.xml
+Vivado preferences directory: C:/Users/QC109_4/AppData/Roaming/Xilinx/Vivado/2020.2/
+Vivado layouts directory: C:/Users/QC109_4/AppData/Roaming/Xilinx/Vivado/2020.2/data/layouts
+PlanAhead jar file location: 	E:/Xilinx/Vivado/2020.2/lib/classes/planAhead.jar
+Vivado log file location: 	E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
+Vivado journal file location: 	E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.jou
+Engine tmp dir: 	E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/.Xil/Vivado-14636-DESKTOP-MCBJ7EB
+
+Xilinx Environment Variables
+----------------------------
+XILINX: E:/Xilinx/Vivado/2020.2/ids_lite/ISE
+XILINX_DSP: E:/Xilinx/Vivado/2020.2/ids_lite/ISE
+XILINX_HLS: E:/Xilinx/Vitis_HLS/2020.2
+XILINX_PLANAHEAD: E:/Xilinx/Vivado/2020.2
+XILINX_SDK: E:/Xilinx/Vitis/2020.2
+XILINX_VITIS: E:/Xilinx/Vitis/2020.2
+XILINX_VIVADO: E:/Xilinx/Vivado/2020.2
+XILINX_VIVADO_HLS: E:/Xilinx/Vivado/2020.2
+
+
+GUI allocated memory:	236 MB
+GUI max memory:		3,072 MB
+Engine allocated memory: 1,488 MB
+
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+*/
+
+// TclEventType: START_GUI
+// [GUI Memory]: 37 MB (+36675kb) [00:00:03]
+// [Engine Memory]: 1,198 MB (+1105107kb) [00:00:03]
+// [GUI Memory]: 195 MB (+163713kb) [00:00:12]
+// [Engine Memory]: 1,406 MB (+154408kb) [00:00:12]
+// TclEventType: START_PROGRESS_DIALOG
+// TclEventType: STOP_PROGRESS_DIALOG
+// bz (cr):  Sourcing Tcl script 'E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl' : addNotify
+// TclEventType: STOP_PROGRESS_DIALOG
+dismissDialog("Sourcing Tcl script 'E:\\RFSoC\\GIT\\RFSoC\\RFSoC_Design_V1_1\\IP_File_01\\RFSoC_Main_output\\RFSoC_Main.tcl'"); // bz
+// [Engine Memory]: 1,500 MB (+25449kb) [00:00:19]
+// Tcl Message: update_compile_order -fileset sources_1 
+// HMemoryUtils.trashcanNow. Engine heap size: 1,500 MB. GUI used memory: 166 MB. Current time: 9/22/23, 4:45:16 PM KST
+// Elapsed time: 15 seconds
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, RFSoC_Main_blk (RFSoC_Main_blk.bd)]", 1, false); // D
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, RFSoC_Main_blk (RFSoC_Main_blk.bd)]", 1, false, false, false, false, false, true); // D - Double Click
+// bz (cr):  Open Block Design : addNotify
+// [GUI Memory]: 210 MB (+4995kb) [00:00:32]
+// TclEventType: RSB_OPEN_DIAGRAM
+// [GUI Memory]: 223 MB (+2893kb) [00:00:34]
+// WARNING: HEventQueue.dispatchEvent() is taking  2136 ms.
+// [Engine Memory]: 1,584 MB (+8977kb) [00:00:35]
+// Tcl Message: open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd} 
+closeView(PAResourceOtoP.PAViews_PROJECT_SUMMARY, "Project Summary"); // v
+// HMemoryUtils.trashcanNow. Engine heap size: 1,599 MB. GUI used memory: 215 MB. Current time: 9/22/23, 4:45:31 PM KST
+dismissDialog("Open Block Design"); // bz
+// Run Command: PAResourceCommand.PACommandNames_CUSTOMIZE_RSB_BLOC
+// [GUI Memory]: 235 MB (+300kb) [00:00:39]
+// [Engine Memory]: 1,676 MB (+13179kb) [00:00:39]
+// r (cr): Re-customize IP: addNotify
+// WARNING: HEventQueue.dispatchEvent() is taking  2778 ms.
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "ADC Physical Resources", 1); // bi
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "IP Symbol", 0); // bi
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "System Clocking", 1); // bi
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "System Clocking", 1); // bi
+dismissDialog("Re-customize IP"); // r
+// [GUI Memory]: 254 MB (+8240kb) [00:00:48]
+// [GUI Memory]: 269 MB (+1903kb) [00:00:50]
+selectTab((HResource) null, (HResource) null, "Sources", 0); // aK
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, RFSoC_Main_blk (RFSoC_Main_blk.bd)]", 1, false, false, false, false, true, false); // D - Popup Trigger
+selectMenuItem(PAResourceCommand.PACommandNames_CREATE_TOP_HDL, "Create HDL Wrapper..."); // ak
+// Run Command: PAResourceCommand.PACommandNames_CREATE_TOP_HDL
+// a (cr): Create HDL Wrapper: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a
+// TclEventType: RSB_SCRIPT_TASK
+dismissDialog("Create HDL Wrapper"); // a
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// bz (cr):  Create HDL Wrapper : addNotify
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: RSB_SCRIPT_TASK
+// Tcl Message: make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top 
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: REPORT_IP_STATUS_STALE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: REPORT_IP_STATUS_STALE
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_REMOVE_OBJECT
+// TclEventType: REPORT_IP_STATUS_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: REPORT_IP_STATUS_STALE
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_SAVE_DIAGRAM
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change  INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change  
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RSB_SAVE_DIAGRAM
+// Tcl Message: Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd>  Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui>  
+// HMemoryUtils.trashcanNow. Engine heap size: 1,718 MB. GUI used memory: 204 MB. Current time: 9/22/23, 4:45:56 PM KST
+// Tcl Message: VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v 
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RSB_SAVE_DIAGRAM
+// TclEventType: RSB_SCRIPT_TASK
+// [Engine Memory]: 1,835 MB (+79413kb) [00:01:04]
+// Tcl Message: VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v 
+// Tcl Message: make_wrapper: Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1877.574 ; gain = 228.441 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v 
+// Elapsed time: 12 seconds
+dismissDialog("Create HDL Wrapper"); // bz
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, RFSoC_Main_blk_wrapper (RFSoC_Main_blk_wrapper.v)]", 1, true); // D - Node
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 20, false); // u
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// A (cr): No Implementation Results Available: addNotify
+selectButton(RDIResource.BaseDialog_YES, "Yes"); // a
+// bz (cr):  Resetting Runs : addNotify
+// cD (cr): Launch Runs: addNotify
+dismissDialog("No Implementation Results Available"); // A
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a
+// 'cA' command handler elapsed time: 3 seconds
+// TclEventType: RSB_SCRIPT_TASK
+dismissDialog("Launch Runs"); // cD
+// TclEventType: RSB_SAVE_DIAGRAM
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RSB_SAVE_DIAGRAM
+// bz (cr):  Generate Bitstream : addNotify
+// TclEventType: RSB_SAVE_DIAGRAM
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 3 
+// Tcl Message: Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd>  Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui>  
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RSB_SAVE_DIAGRAM
+// TclEventType: RSB_SCRIPT_TASK
+// Tcl Message: VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_0 . 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_1 . INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_2 . 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_3 . 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_4 . INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_5 . 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_6 . 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_7 . INFO: [BD 41-1029] Generation completed for the IP Integrator block proc_sys_reset_0 . INFO: [BD 41-1029] Generation completed for the IP Integrator block TimeController_0 . 
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/xbar . 
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_ds . 
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_pc . 
+// HMemoryUtils.trashcanNow. Engine heap size: 1,922 MB. GUI used memory: 204 MB. Current time: 9/22/23, 4:46:31 PM KST
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block usp_rf_data_converter_0 . 
+// [Engine Memory]: 1,934 MB (+7220kb) [00:01:47]
+// HMemoryUtils.trashcanNow. Engine heap size: 1,943 MB. GUI used memory: 204 MB. Current time: 9/22/23, 4:46:56 PM KST
+// Tcl Message: INFO: [PSU-0] Address Range of DDR (0x7ff00000 to 0x7fffffff) is reserved by PMU for internal purpose. 
+// HMemoryUtils.trashcanNow. Engine heap size: 2,000 MB. GUI used memory: 204 MB. Current time: 9/22/23, 4:47:16 PM KST
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: INFO: [BD 41-1029] Generation completed for the IP Integrator block zynq_ultra_ps_e_0 . 
+// Tcl Message: Exporting to file E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hw_handoff/RFSoC_Main_blk.hwh Generated Block Design Tcl file E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hw_handoff/RFSoC_Main_blk_bd.tcl Generated Hardware Definition File E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.hwdef 
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: [Fri Sep 22 16:47:26 2023] Launched impl_1... Run output will be captured here: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/impl_1/runme.log 
+// Tcl Message: launch_runs: Time (s): cpu = 00:01:03 ; elapsed = 00:01:08 . Memory (MB): peak = 1973.617 ; gain = 94.191 
+// Elapsed time: 68 seconds
+dismissDialog("Generate Bitstream"); // bz
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// [GUI Memory]: 283 MB (+595kb) [00:06:13]
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// HMemoryUtils.trashcanNow. Engine heap size: 2,000 MB. GUI used memory: 223 MB. Current time: 9/22/23, 5:17:16 PM KST
+// Elapsed time: 2129 seconds
+selectTab((HResource) null, (HResource) null, "Reports", 3); // aK
+selectTab((HResource) null, (HResource) null, "Log", 2); // aK
+selectTab((HResource) null, (HResource) null, "Messages", 1); // aK
+selectTab((HResource) null, (HResource) null, "Design Runs", 4); // aK
+// TclEventType: RUN_STEP_COMPLETED
+// Elapsed time: 471 seconds
+selectTab((HResource) null, (HResource) null, "Reports", 3); // aK
+// Elapsed time: 10 seconds
+selectTab((HResource) null, (HResource) null, "Design Runs", 4); // aK
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// ag (cr): Bitstream Generation Completed: addNotify
+// Elapsed time: 533 seconds
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a
+// Run Command: PAResourceCommand.PACommandNames_GOTO_IMPLEMENTED_DESIGN
+// bz (cr):  Open Implemented Design : addNotify
+// Tcl Message: open_run impl_1 
+// HMemoryUtils.trashcanNow. Engine heap size: 2,601 MB. GUI used memory: 122 MB. Current time: 9/22/23, 5:40:03 PM KST
+// WARNING: HEventQueue.dispatchEvent() is taking  1414 ms.

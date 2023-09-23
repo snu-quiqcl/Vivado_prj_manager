@@ -49,10 +49,6 @@ reg [127:0] timestamp_error_data_buffer;
 reg overflow_error_state;
 reg timestamp_error_state;
 
-reg timestamp_match_buffer;
-reg timestamp_match_not_empty_buffer;
-reg timestamp_error_wire_buffer;
-
 wire flush_fifo;
 wire wr_en;
 wire write_en;;
@@ -71,9 +67,9 @@ wire new_bram_comp;
 
 assign flush_fifo                               = flush || reset;
 assign write_en                                 = write;
-assign timestamp_match                          = timestamp_match_buffer;
-assign timestamp_match_not_empty                = timestamp_match_not_empty_buffer;
-assign timestamp_error_wire                     = timestamp_error_wire_buffer;
+assign timestamp_match                          = ( fifo_dout[71:8] == counter[63:0] );
+assign timestamp_match_not_empty                = ( ~empty_wire && timestamp_match && auto_start );
+assign timestamp_error_wire                     = (counter[63:0] > fifo_dout[71:8]) && auto_start && ~empty_wire;
 assign rd_en                                    = timestamp_error_wire || timestamp_match_not_empty;
 assign wr_en                                    = write_en && ~full_wire;
 assign overflow_error_wire                      = full_wire && write_en;
@@ -88,7 +84,7 @@ assign timestamp_error_data[127:0]              = timestamp_error_data_buffer[12
 assign counter_matched                          = counter_match;
 assign full_wire                                = total_num > THRESHOLD;
 assign empty_wire                               = (total_num == 10'h0);
-assign new_bram_comp                            = (last_input_timetstamp < fifo_din[127:64]) && wr_en;
+assign new_bram_comp                            = (last_input_timestamp < fifo_din[127:64]) && wr_en;
 
 //////////////////////////////////////////////////////////////////////////////////
 // Depth 8192, full threshold 8100 FIFO.
@@ -108,7 +104,7 @@ blk_mem_gen_0 RTOB_Core_FIFO0(
     .addra(input_top),
     .addrb(output_top),
     .dina({fifo_din[127:64],fifo_din[7:0]}),
-    .dout(),
+    .douta(),
     .dinb(),
     .doutb(fifo_dout)
 );
@@ -122,18 +118,12 @@ always @(posedge clk) begin
         overflow_error_data_buffer[127:0]       <= 128'h0;
         timestamp_error_data_buffer[127:0]      <= 128'h0;
         counter_match                           <= 1'b0;
-        timestamp_match_buffer                  <= 1'b0;
-        timestamp_match_not_empty_buffer        <= 1'b0;
-        timestamp_error_wire_buffer             <= 1'b0;
         input_top                               <= 10'h0;
         output_top                              <= 10'h0;
         last_input_timestamp                    <= 64'h0;
         total_num                               <= 10'h0;
     end
     else begin
-        timestamp_match_buffer                  <= ( fifo_dout[71:8] == counter[63:0] );
-        timestamp_match_not_empty_buffer        <= ( ~empty_wire && timestamp_match && auto_start );
-        timestamp_error_wire_buffer             <= (counter[63:0] > fifo_dout[71:8]) && auto_start && ~empty_wire;
         counter_match                           <= timestamp_match_not_empty;
         overflow_error_state                    <= overflow_error_wire;
         timestamp_error_state                   <= timestamp_error_wire;
@@ -160,10 +150,10 @@ always @(posedge clk) begin
         end
         
         if( timestamp_error_wire ) begin
-            timestamp_error_data_buffer[127:0]  <= {fifo_dout[71:8],56'h0.fifo_dout[7:0]};
+            timestamp_error_data_buffer[127:0]  <= {fifo_dout[71:8],56'h0,fifo_dout[7:0]};
         end
 
-        case( {new_bram_comp, fifo_output_en} ) begin
+        case( {new_bram_comp, fifo_output_en} )
             2'b00: begin
                 total_num                       <= total_num;
             end

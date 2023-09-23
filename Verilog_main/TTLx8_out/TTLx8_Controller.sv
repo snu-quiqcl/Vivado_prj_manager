@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module TTLx8_output
+module TTLx8_Controller
 #(
     parameter DEST_VAL = 16'h0,
     parameter CHANNEL_LENGTH = 12
@@ -74,7 +74,7 @@ GPO_Core0(
     .gpo_out(gpo_out)
 );
 
-OSERDESE3_0 #(
+OSERDESE3 #(
     .DATA_WIDTH(8),
     .INIT(1'b0),
     .IS_CLKDIV_INVERTED(1'b0),
@@ -105,7 +105,7 @@ always @(posedge clk) begin
     else begin
         if( selected == 1'b1 ) begin
             input_pulse_buffer[7:0] <= gpo_out[7:0];
-            last_input_pulse <= input_pulse[7];
+            last_input_pulse <= gpo_out[7];
         end
         else begin
             input_pulse_buffer[7:0] <= {8{last_input_pulse}};

@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Fri Sep 22 16:41:58 2023
-# Process ID: 21824
+# Start of session at: Sat Sep 23 16:30:39 2023
+# Process ID: 33460
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output\DAC_Controller.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -82,4 +82,4 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Desi
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output/DAC_Controller'.)
 # set_property top DAC_Controller [current_fileset]
 # set_property top_file { E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller/DAC_Controller.sv } [current_fileset]
-INFO: [Common 17-206] Exiting Vivado at Fri Sep 22 16:42:09 2023...
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 23 16:30:56 2023...

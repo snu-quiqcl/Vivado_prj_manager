@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module RTO_Core
+module RTOB_Core
 (
     input wire clk,
     input wire auto_start,
@@ -87,6 +87,20 @@ assign counter_matched                          = counter_match;
 // Depth 8192, full threshold 8100 FIFO.
 //////////////////////////////////////////////////////////////////////////////////
 
+blk_mem_gen_0 RTOB_Core_FIFO0(
+    .clka(clk),
+    .clkb(clk),
+    .rsta(flush_fifo),
+    .rstb(1'b0),
+    .wea(wr_en),
+    .web(1'b0),
+    .addra(input_top),
+    .addrb(output_top),
+    .dina({fifo_din[127:64],fifo_din[7:0]}),
+    .dout(),
+    .dinb(),
+    .doutb(fifo_dout)
+);
 
 fifo_generator_0 RTO_Core_FIFO0(
     .clk(clk),

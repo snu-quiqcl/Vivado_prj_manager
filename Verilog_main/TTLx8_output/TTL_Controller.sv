@@ -103,7 +103,7 @@ module TTL_Controller#(
     //////////////////////////////////////////////////////////////////////////////////
     output wire output_pulse,
     
-    input wire clk_x4,
+    input wire clk_x2,
     
     //////////////////////////////////////////////////////////////////////////////////  
     // TimeController interface
@@ -215,295 +215,31 @@ axi2fifo_0
 //////////////////////////////////////////////////////////////////////////////////
 // RTO Core Declaration
 //////////////////////////////////////////////////////////////////////////////////
-reg rto_core_write_0;
-wire rto_core_full_0;
-wire rto_core_empty_0;
-reg [127:0] rto_core_fifo_din_0;
-
-reg rto_core_write_1;
-wire rto_core_full_1;
-wire rto_core_empty_1;
-reg [127:0] rto_core_fifo_din_1;
-
-reg rto_core_write_2;
-wire rto_core_full_2;
-wire rto_core_empty_2;
-reg [127:0] rto_core_fifo_din_2;
-
-reg rto_core_write_3;
-wire rto_core_full_3;
-wire rto_core_empty_3;
-reg [127:0] rto_core_fifo_din_3;
-
-reg rto_core_write_4;
-wire rto_core_full_4;
-wire rto_core_empty_4;
-reg [127:0] rto_core_fifo_din_4;
-
-reg rto_core_write_5;
-wire rto_core_full_5;
-wire rto_core_empty_5;
-reg [127:0] rto_core_fifo_din_5;
-
-reg rto_core_write_6;
-wire rto_core_full_6;
-wire rto_core_empty_6;
-reg [127:0] rto_core_fifo_din_6;
-
-reg rto_core_write_7;
-wire rto_core_full_7;
-wire rto_core_empty_7;
-reg [127:0] rto_core_fifo_din_7;
-
-
-assign rto_core_full = rto_core_full_0 & rto_core_full_1 & rto_core_full_2 & rto_core_full_3 & rto_core_full_4 & rto_core_full_5 & rto_core_full_6 & rto_core_full_7;
-assign rto_core_empty = rto_core_empty_0 | rto_core_empty_1 | rto_core_empty_2 | rto_core_empty_3 | rto_core_empty_4 | rto_core_empty_5 | rto_core_empty_6 | rto_core_empty_7;
-
-wire counter_matched_0;
-wire [127:0] rto_out_0;
-
-always@(posedge s_axi_aclk) begin
-    if( s_axi_aresetn == 1'b0 ) begin
-        rto_core_write_0 <= 1'b0;
-        rto_core_fifo_din_0 <= 128'h0;
-
-        rto_core_write_1 <= 1'b0;
-        rto_core_fifo_din_1 <= 128'h0;
-
-        rto_core_write_2 <= 1'b0;
-        rto_core_fifo_din_2 <= 128'h0;
-
-        rto_core_write_3 <= 1'b0;
-        rto_core_fifo_din_3 <= 128'h0;
-
-        rto_core_write_4 <= 1'b0;
-        rto_core_fifo_din_4 <= 128'h0;
-
-        rto_core_write_5 <= 1'b0;
-        rto_core_fifo_din_5 <= 128'h0;
-
-        rto_core_write_6 <= 1'b0;
-        rto_core_fifo_din_6 <= 128'h0;
-
-        rto_core_write_7 <= 1'b0;
-        rto_core_fifo_din_7 <= 128'h0;
-    end
-
-    else begin
-        rto_core_write_0 <= 1'b0;
-        rto_core_write_1 <= 1'b0;
-        rto_core_write_2 <= 1'b0;
-        rto_core_write_3 <= 1'b0;
-        rto_core_write_4 <= 1'b0;
-        rto_core_write_5 <= 1'b0;
-        rto_core_write_6 <= 1'b0;
-        rto_core_write_7 <= 1'b0;
-
-        case(rto_core_fifo_din[66:64]):
-            3'h0:begin
-                rto_core_write_0 <= 1'b1;
-                rto_core_fifo_din_0 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h1:begin
-                rto_core_write_1 <= 1'b1;
-                rto_core_fifo_din_1 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h2:begin
-                rto_core_write_2 <= 1'b1;
-                rto_core_fifo_din_2 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h3:begin
-                rto_core_write_3 <= 1'b1;
-                rto_core_fifo_din_3 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h4:begin
-                rto_core_write_4 <= 1'b1;
-                rto_core_fifo_din_4 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h5:begin
-                rto_core_write_5 <= 1'b1;
-                rto_core_fifo_din_5 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h6:begin
-                rto_core_write_6 <= 1'b1;
-                rto_core_fifo_din_6 <= rto_core_fifo_din[127:0];
-            end
-
-            3'h7:begin
-                rto_core_write_7 <= 1'b1;
-                rto_core_fifo_din_7 <= rto_core_fifo_din[127:0];
-            end
-        endcase
-    end
-end
+wire counter_matched;
+wire [127:0] rto_out;
 
 RTO_Core rto_core_0(
     .clk(s_axi_aclk),
     .auto_start(auto_start),// need to be connected
     .reset(rto_core_reset),
     .flush(rto_core_flush),
-    .write(rto_core_write_0),
-    .fifo_din(rto_core_fifo_din_0),
+    .write(rto_core_write),
+    .fifo_din(rto_core_fifo_din),
     .counter(counter), // need to be connected
-    .counter_matched(counter_matched_0),
-    .rto_out(rto_out_0), 
+    .counter_matched(counter_matched),
+    .rto_out(rto_out), 
     .timestamp_error_data(),
     .overflow_error_data(),
     .timestamp_error(),
     .overflow_error(),
-    .full(rto_core_full_0),
-    .empty(rto_core_empty_0)
-);
-wire counter_matched_1;
-wire [127:0] rto_out_1;
-
-RTO_Core rto_core_1(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_1),
-    .fifo_din(rto_core_fifo_din_1),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_1),
-    .rto_out(rto_out_1), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_1),
-    .empty(rto_core_empty_1)
-);
-wire counter_matched_2;
-wire [127:0] rto_out_2;
-
-RTO_Core rto_core_2(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_2),
-    .fifo_din(rto_core_fifo_din_2),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_2),
-    .rto_out(rto_out_2), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_2),
-    .empty(rto_core_empty_2)
-);
-wire counter_matched_3;
-wire [127:0] rto_out_3;
-
-RTO_Core rto_core_3(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_3),
-    .fifo_din(rto_core_fifo_din_3),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_3),
-    .rto_out(rto_out_3), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_3),
-    .empty(rto_core_empty_3)
-);
-wire counter_matched_4;
-wire [127:0] rto_out_4;
-
-RTO_Core rto_core_4(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_4),
-    .fifo_din(rto_core_fifo_din_4),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_4),
-    .rto_out(rto_out_4), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_4),
-    .empty(rto_core_empty_4)
-);
-wire counter_matched_5;
-wire [127:0] rto_out_5;
-
-RTO_Core rto_core_5(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_5),
-    .fifo_din(rto_core_fifo_din_5),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_5),
-    .rto_out(rto_out_5), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_5),
-    .empty(rto_core_empty_5)
-);
-wire counter_matched_6;
-wire [127:0] rto_out_6;
-
-RTO_Core rto_core_6(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_6),
-    .fifo_din(rto_core_fifo_din_6),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_6),
-    .rto_out(rto_out_6), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_6),
-    .empty(rto_core_empty_6)
-);
-wire counter_matched_7;
-wire [127:0] rto_out_7;
-
-RTO_Core rto_core_7(
-    .clk(s_axi_aclk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write_7),
-    .fifo_din(rto_core_fifo_din_7),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched_7),
-    .rto_out(rto_out_7), 
-    .timestamp_error_data(),
-    .overflow_error_data(),
-    .timestamp_error(),
-    .overflow_error(),
-    .full(rto_core_full_7),
-    .empty(rto_core_empty_7)
+    .full(rto_core_full),
+    .empty(rto_core_empty)
 );
 
 //////////////////////////////////////////////////////////////////////////////////
 // TTL Declaration
 //////////////////////////////////////////////////////////////////////////////////
+wire counter_matched;
 
 TTLx8_output
 (
@@ -530,7 +266,7 @@ ttlx8_output_0
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    .clk_x4(clk_x4),
+    .clk_x2(clk_x2),
     .output_pulse(output_pulse)
 );
 

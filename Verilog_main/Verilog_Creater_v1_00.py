@@ -30,7 +30,7 @@ class Verilog_maker:
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core']
         #Number of total dac controller number
-        self.total_dac_num = 8
+        self.total_dac_num = 1
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -191,6 +191,23 @@ class Verilog_maker:
         tcl_code += f' CONFIG.pcin_binarywidth {{0}} CONFIG.p_full_width {{48}}'
         tcl_code += f' CONFIG.p_width {{48}} CONFIG.p_binarywidth {{0}}]'
         tcl_code += f' [get_ips {dsp_name}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
+    def generate_xilinx_bram(self, folder_directory, bram_name):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name {bram_name}\n'
+        tcl_code += f'set_property -dict [list CONFIG.Memory_Type {{True_Dual_Port_RAM}}'
+        tcl_code += f' CONFIG.Write_Width_A {{72}} CONFIG.Write_Depth_A {{1024}} CONFIG.Read_Width_A {{72}}'
+        tcl_code += f' CONFIG.Operating_Mode_A {{NO_CHANGE}} CONFIG.Enable_A {{Always_Enabled}}'
+        tcl_code += f' CONFIG.Write_Width_B {{72}} CONFIG.Read_Width_B {{72}} CONFIG.Enable_B {{Always_Enabled}}'
+        tcl_code += f' CONFIG.Register_PortA_Output_of_Memory_Primitives {{true}} CONFIG.Register_PortB_Output_of_Memory_Primitives {{true}}'
+        tcl_code += f' CONFIG.Use_RSTA_Pin {{true}} CONFIG.Use_RSTB_Pin {{true}} CONFIG.Port_B_Clock {{100}}'
+        tcl_code += f' CONFIG.Port_B_Write_Rate {{50}} CONFIG.Port_B_Enable_Rate {{100}} CONFIG.EN_SAFETY_CKT {{true}}]'
+        tcl_code += f' [get_ips {bram_name}]\n'
         
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")
@@ -703,7 +720,6 @@ set_property -dict [ list \
         if current_line:
             concatenated_content += current_line + '\n'
         
-        print(concatenated_content)
         tcl_code += concatenated_content
         tcl_code += '\n'
         

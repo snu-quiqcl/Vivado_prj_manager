@@ -44,7 +44,7 @@ module TTLx8_output
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    input wire clk_x2,
+    input wire clk_x4,
     output wire output_pulse
 );
 
@@ -83,7 +83,7 @@ OSERDESE3_0 #(
     .ODDR_MODE("TRUE"),
     .SIM_DEVICE("ULTRASCALE_PLUS")
 ) oserdes3_output_0 (
-    .CLK(clk_x2),
+    .CLK(clk_x4),
     .CLKDIV(clk),
     .D(input_pulse),
     .OQ(output_pulse),

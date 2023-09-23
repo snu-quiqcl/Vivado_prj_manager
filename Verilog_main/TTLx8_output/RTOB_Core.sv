@@ -21,6 +21,9 @@
 
 
 module RTOB_Core
+#(
+    parameter THRESHOLD = 1000
+)
 (
     input wire clk,
     input wire auto_start,
@@ -30,7 +33,7 @@ module RTOB_Core
     input wire [127:0] fifo_din,
     input wire [63:0] counter,
     output wire counter_matched,
-    output wire [127:0] rto_out,
+    output wire [71:0] rto_out,
     output wire [127:0] timestamp_error_data,
     output wire [127:0] overflow_error_data,
     output wire timestamp_error,
@@ -40,7 +43,7 @@ module RTOB_Core
     );
 
 reg counter_match;
-reg [127:0] fifo_output;
+reg [71:0] fifo_output;
 reg [127:0] overflow_error_data_buffer;
 reg [127:0] timestamp_error_data_buffer;
 reg overflow_error_state;
@@ -57,13 +60,14 @@ wire rd_en;
 wire overflow_error_wire;
 wire timestamp_error_wire;
 wire timestamp_match;
-wire[127:0] fifo_dout;
+wire[71:0] fifo_dout;
 wire full_wire;
 wire empty_wire;
 wire overflow_dummy_wire;
 wire underflow_dummy_wire;
 wire timestamp_match_not_empty;
 wire fifo_output_en;
+wire new_bram_comp;
 
 assign flush_fifo                               = flush || reset;
 assign write_en                                 = write;
@@ -74,7 +78,7 @@ assign rd_en                                    = timestamp_error_wire || timest
 assign wr_en                                    = write_en && ~full_wire;
 assign overflow_error_wire                      = full_wire && write_en;
 assign fifo_output_en                           = ~timestamp_error_wire && timestamp_match_not_empty;
-assign rto_out[127:0]                           = fifo_output[127:0];
+assign rto_out[71:0]                            = fifo_output[71:0];
 assign overflow_error                           = overflow_error_state;
 assign timestamp_error                          = timestamp_error_state;
 assign empty                                    = empty_wire;
@@ -82,10 +86,17 @@ assign full                                     = full_wire;
 assign overflow_error_data[127:0]               = overflow_error_data_buffer[127:0];
 assign timestamp_error_data[127:0]              = timestamp_error_data_buffer[127:0];
 assign counter_matched                          = counter_match;
+assign full_wire                                = total_num > THRESHOLD;
+assign empty_wire                               = (total_num == 10'h0);
+assign new_bram_comp                            = (last_input_timetstamp < fifo_din[127:64]) && wr_en;
 
 //////////////////////////////////////////////////////////////////////////////////
 // Depth 8192, full threshold 8100 FIFO.
 //////////////////////////////////////////////////////////////////////////////////
+reg [9:0] input_top;
+reg [9:0] output_top;
+reg [63:0] last_input_timestamp;
+reg [9:0] total_num;
 
 blk_mem_gen_0 RTOB_Core_FIFO0(
     .clka(clk),
@@ -102,42 +113,42 @@ blk_mem_gen_0 RTOB_Core_FIFO0(
     .doutb(fifo_dout)
 );
 
-fifo_generator_0 RTO_Core_FIFO0(
-    .clk(clk),
-    .srst(flush_fifo),  // rst -> srst in Vivado 2020.2
-    .din(fifo_din),
-    .wr_en(wr_en),
-    .rd_en(rd_en),
-    .dout(fifo_dout),
-    .prog_full(full_wire),  // full -> prog_full to deal with full delay signal
-    .overflow(overflow_dummy_wire),
-    .empty(empty_wire),
-    .underflow(underflow_dummy_wire)
-);
-
 always @(posedge clk) begin
     if( reset ) begin
         counter_match                           <= 1'b0;
         overflow_error_state                    <= 1'b0;
         timestamp_error_state                   <= 1'b0;
-        fifo_output[127:0]                      <= 128'h0;
+        fifo_output[71:0]                       <= 72'h0;
         overflow_error_data_buffer[127:0]       <= 128'h0;
         timestamp_error_data_buffer[127:0]      <= 128'h0;
         counter_match                           <= 1'b0;
         timestamp_match_buffer                  <= 1'b0;
         timestamp_match_not_empty_buffer        <= 1'b0;
         timestamp_error_wire_buffer             <= 1'b0;
+        input_top                               <= 10'h0;
+        output_top                              <= 10'h0;
+        last_input_timestamp                    <= 64'h0;
+        total_num                               <= 10'h0;
     end
     else begin
-        timestamp_match_buffer                  <= ( fifo_dout[127:64] == counter[63:0] );
+        timestamp_match_buffer                  <= ( fifo_dout[71:8] == counter[63:0] );
         timestamp_match_not_empty_buffer        <= ( ~empty_wire && timestamp_match && auto_start );
-        timestamp_error_wire_buffer             <= (counter[63:0] > fifo_dout[127:64]) && auto_start && ~empty_wire;
+        timestamp_error_wire_buffer             <= (counter[63:0] > fifo_dout[71:8]) && auto_start && ~empty_wire;
         counter_match                           <= timestamp_match_not_empty;
         overflow_error_state                    <= overflow_error_wire;
         timestamp_error_state                   <= timestamp_error_wire;
+        if( wr_en ) begin
+            last_input_timestamp <= fifo_din[127:64];
+        end
+
+        if( new_bram_comp ) begin
+            input_top <= input_top + 10'h1;
+        end
+
         if( fifo_output_en ) begin
             fifo_output[127:0]                  <= fifo_dout[127:0];
             counter_match                       <= 1'b1;
+            output_top                          <= output_top + 10'h1;
         end
         
         else begin
@@ -149,7 +160,29 @@ always @(posedge clk) begin
         end
         
         if( timestamp_error_wire ) begin
-            timestamp_error_data_buffer[127:0]  <= fifo_dout[127:0];
+            timestamp_error_data_buffer[127:0]  <= {fifo_dout[71:8],56'h0.fifo_dout[7:0]};
+        end
+
+        case( {new_bram_comp, fifo_output_en} ) begin
+            2'b00: begin
+                total_num                       <= total_num;
+            end
+
+            2'b10: begin
+                total_num                       <= total_num + 10'h1;
+            end
+
+            2'b01:begin
+                total_num                       <= total_num - 10'h1;
+            end
+
+            2'b11: begin
+                total_num                       <= total_num;
+            end
+        endcase
+
+        if( (fifo_din[127:64] == 64'h0 ) && ( write == 1'b1 ) ) begin
+            total_num                           <= 10'h1;
         end
     end
 end

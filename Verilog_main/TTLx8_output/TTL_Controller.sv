@@ -103,7 +103,7 @@ module TTL_Controller#(
     //////////////////////////////////////////////////////////////////////////////////
     output wire output_pulse,
     
-    input wire clk_x2,
+    input wire clk_x4,
     
     //////////////////////////////////////////////////////////////////////////////////  
     // TimeController interface
@@ -216,9 +216,9 @@ axi2fifo_0
 // RTO Core Declaration
 //////////////////////////////////////////////////////////////////////////////////
 wire counter_matched;
-wire [127:0] rto_out;
+wire [71:0] rto_out;
 
-RTO_Core rto_core_0(
+RTOB_Core rtob_core_0(
     .clk(s_axi_aclk),
     .auto_start(auto_start),// need to be connected
     .reset(rto_core_reset),
@@ -257,7 +257,7 @@ ttlx8_output_0
     .selected_en(1'b1),
     .override_value(64'h0),
     .counter_matched(counter_matched),
-    .gpo_in(rto_out),
+    .gpo_in({rto_out[71:8],56'h0,rto_out[7:0]}),
     .busy(1'b0),
     .error_data(),
     .overrided(),
@@ -266,7 +266,7 @@ ttlx8_output_0
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    .clk_x2(clk_x2),
+    .clk_x4(clk_x4),
     .output_pulse(output_pulse)
 );
 

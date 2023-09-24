@@ -217,6 +217,27 @@ class Verilog_maker:
         tcl_code = tcl_code.replace("\\","/")
         
         return tcl_code
+    
+    def generate_xilinx_adj_fifo(self, folder_directory, fifo_name):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name {fifo_name}\n'
+        tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
+        tcl_code += f' CONFIG.Input_Data_Width {{64}} CONFIG.Input_Depth {{1024}}'
+        tcl_code += f' CONFIG.Output_Data_Width {{64}} CONFIG.Output_Depth {{1024}}'
+        tcl_code += f' CONFIG.Underflow_Flag {{true}} CONFIG.Overflow_Flag {{true}}'
+        tcl_code += f' CONFIG.Data_Count_Width {{10}} CONFIG.Write_Data_Count_Width {{10}}'
+        tcl_code += f' CONFIG.Read_Data_Count_Width {{10}} CONFIG.Programmable_Full_Type'
+        tcl_code += f' {{Single_Programmable_Full_Threshold_Constant}}'
+        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{1000}}'
+        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{999}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Assert_Value {{4}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Negate_Value {{5}}]'
+        tcl_code += f' [get_ips {fifo_name}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
 
     
     def generate_customized_ip(self, folder_directory):
@@ -482,13 +503,13 @@ class Verilog_maker:
         self.add_src(src_folder_directory,file_type)
         self.set_board(board_path, board_name)
         
-        self.tcl_commands += self.generate_xilinx_bram(folder_directory, 'blk_mem_gen_0')
+        self.tcl_commands += self.generate_xilinx_adj_fifo(folder_directory, 'adj_fifo_generator_0')
         
         # Save the TCL code to the .tcl file
         
         self.tcl_commands += self.generate_customized_ip(folder_directory)
         
-        self.tcl_commands += f'set_property top TimeController [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top TTLx8_out [current_fileset]\n'.replace("\\","/")
         self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TTLx8_out.sv }} [current_fileset]\n'.replace("\\","/")
         with open(file_path, 'w') as tcl_file:
             tcl_file.write(self.tcl_commands)
@@ -1004,7 +1025,7 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         for i in range(self.total_dac_num):
             tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
         for i in range(self.total_ttlx8_num):
-            tcl_code += f'assign_bd_address -offset 0xA00{i+1}0000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TTLx8_out_{i}/s_axi/reg0] -force\n'
+            tcl_code += f'assign_bd_address -offset 0xA001{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TTLx8_out_{i}/s_axi/reg0] -force\n'
         
         tcl_code += """
 assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force

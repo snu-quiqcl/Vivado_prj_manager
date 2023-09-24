@@ -84,29 +84,38 @@ assign timestamp_error_data[127:0]              = timestamp_error_data_buffer[12
 assign counter_matched                          = counter_match;
 assign full_wire                                = total_num > THRESHOLD;
 assign empty_wire                               = (total_num == 10'h0);
-assign new_bram_comp                            = (last_input_timestamp < fifo_din[127:64]) && wr_en;
+assign new_bram_comp                            = (last_input_timestamp != fifo_din[127:64]) && wr_en;
 
 //////////////////////////////////////////////////////////////////////////////////
-// Depth 8192, full threshold 8100 FIFO.
+// Depth 1024, full threshold 1000 FIFO.
 //////////////////////////////////////////////////////////////////////////////////
 reg [9:0] input_top;
 reg [9:0] output_top;
 reg [63:0] last_input_timestamp;
 reg [9:0] total_num;
 
-blk_mem_gen_0 RTOB_Core_FIFO0(
-    .clka(clk),
-    .clkb(clk),
-    .rsta(flush_fifo),
-    .rstb(1'b0),
-    .wea(wr_en),
-    .web(1'b0),
-    .addra(input_top),
-    .addrb(output_top),
-    .dina({fifo_din[127:64],fifo_din[7:0]}),
-    .douta(),
-    .dinb(),
-    .doutb(fifo_dout)
+adj_fifo_generator_0 RTOB_Core_timestamp_FIFO0(
+    .clk(clk),
+    .srst(flush_fifo),  // rst -> srst in Vivado 2020.2
+    .din(fifo_din[127:64]),
+    .wr_en(wr_en),
+    .rd_en(rd_en),
+    .dout(fifo_dout[71:8]),
+    .prog_full(full_wire),  // full -> prog_full to deal with full delay signal
+    .overflow(overflow_dummy_wire),
+    .empty(empty_wire),
+    .underflow(underflow_dummy_wire)
+);
+
+adj_fifo RTOB_Core_data_FIFO0
+(
+    .clk(clk),
+    .rst(flush_fifo),
+    .wr_en(wr_en),
+    .addr_in(input_top),
+    .addr_out(output_top),
+    .din(fifo_din[7:0]),
+    .dout(fifo_dout[7:0])
 );
 
 always @(posedge clk) begin
@@ -128,17 +137,20 @@ always @(posedge clk) begin
         overflow_error_state                    <= overflow_error_wire;
         timestamp_error_state                   <= timestamp_error_wire;
         if( wr_en ) begin
-            last_input_timestamp <= fifo_din[127:64];
+            last_input_timestamp                <= fifo_din[127:64];
         end
 
         if( new_bram_comp ) begin
-            input_top <= input_top + 10'h1;
+            input_top                           <= input_top + 10'h1;
+        end
+
+        if( rd_en ) begin
+            output_top                          <= output_top + 10'h1;
         end
 
         if( fifo_output_en ) begin
             fifo_output[127:0]                  <= fifo_dout[127:0];
             counter_match                       <= 1'b1;
-            output_top                          <= output_top + 10'h1;
         end
         
         else begin
@@ -153,7 +165,7 @@ always @(posedge clk) begin
             timestamp_error_data_buffer[127:0]  <= {fifo_dout[71:8],56'h0,fifo_dout[7:0]};
         end
 
-        case( {new_bram_comp, fifo_output_en} )
+        case( {new_bram_comp, rd_en} )
             2'b00: begin
                 total_num                       <= total_num;
             end
@@ -171,7 +183,8 @@ always @(posedge clk) begin
             end
         endcase
 
-        if( (fifo_din[127:64] == 64'h0 ) && ( write == 1'b1 ) ) begin
+        // to resolve when first input has timestamp of 64'h0
+        if( (fifo_din[127:64] == 64'h0 ) && ( wr_en == 1'b1 ) ) begin
             total_num                           <= 10'h1;
         end
     end

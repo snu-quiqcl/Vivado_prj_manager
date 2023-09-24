@@ -79,15 +79,14 @@ OSERDESE3 #(
     .INIT(1'b0),
     .IS_CLKDIV_INVERTED(1'b0),
     .IS_CLK_INVERTED(1'b0),
-    .IS_RST_INVERTED(1'b1),
-    .ODDR_MODE("TRUE"),
+    .IS_RST_INVERTED(1'b0),
     .SIM_DEVICE("ULTRASCALE_PLUS")
 ) oserdes3_output_0 (
     .CLK(clk_x4),
     .CLKDIV(clk),
-    .D(input_pulse),
+    .D(input_pulse_buffer),
     .OQ(output_pulse),
-    .RST(resetn),
+    .RST(reset),
     .T(1'b0)
 );
 
@@ -98,7 +97,7 @@ reg last_input_pulse;
 reg [7:0] input_pulse_buffer;
 
 always @(posedge clk) begin
-    if( resetn == 1'b1 ) begin
+    if( reset == 1'b1 ) begin
         last_input_pulse <= 1'b0;
     end
 

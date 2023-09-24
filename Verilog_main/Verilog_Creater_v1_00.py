@@ -1031,6 +1031,10 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
 assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
 assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
         """
+        #######################################################################
+        # SIMULATION TIME CONFIGURATION
+        #######################################################################
+        tcl_code += 'set_property -name {xsim.simulate.runtime} -value {100us} -objects [get_filesets sim_1]'
         
         tcl_code += '\n'
         

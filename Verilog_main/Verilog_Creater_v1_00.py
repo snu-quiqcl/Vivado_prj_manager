@@ -30,7 +30,7 @@ class Verilog_maker:
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core']
         #Number of total dac controller number
-        self.total_dac_num = 1
+        self.total_dac_num = 8
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -52,7 +52,7 @@ class Verilog_maker:
         self.board_name = "xilinx.com:zcu111:part0:1.4"
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = True
+        self.do_sim = False
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
@@ -105,9 +105,9 @@ class Verilog_maker:
         #one line command
         tcl_code += f'set_property -dict [list CONFIG.PartsPresent {{SIN_COS_LUT_only}}'
         tcl_code += f' CONFIG.Spurious_Free_Dynamic_Range {{90}} CONFIG.Frequency_Resolution {{0.01}}'
-        tcl_code += f' CONFIG.Phase_Width {{14}} CONFIG.Output_Width {{14}} CONFIG.Output_Selection'
+        tcl_code += f' CONFIG.Phase_Width {{15}} CONFIG.Output_Width {{15}} CONFIG.Output_Selection'
         tcl_code += f' {{Sine}} CONFIG.Optimization_Goal {{Speed}} CONFIG.Latency_Configuration {{Configurable}}'
-        tcl_code += f' CONFIG.Latency {{3}} CONFIG.Parameter_Entry {{Hardware_Parameters}} CONFIG.Noise_Shaping {{None}}'
+        tcl_code += f' CONFIG.Latency {{1}} CONFIG.Parameter_Entry {{Hardware_Parameters}} CONFIG.Noise_Shaping {{None}}'
         tcl_code += f' CONFIG.Has_Phase_Out {{false}} CONFIG.DATA_Has_TLAST {{Not_Required}} CONFIG.S_PHASE_Has_TUSER'
         tcl_code += f' {{Not_Required}} CONFIG.M_DATA_Has_TUSER {{Not_Required}} CONFIG.Output_Frequency1 {{0}} CONFIG.PINC1'
         tcl_code += f' {{0}}] [get_ips {dds_name}]\n'
@@ -680,6 +680,7 @@ class Verilog_maker:
             self.run_vivado_tcl(self.vivado_path, tcl_path)
             
     def generate_xilinx_block_design(self, folder_directory, prj_name):
+        print(f'folder dir : {folder_directory}')
         tcl_code = ''
         tcl_code += f'create_bd_design \"{prj_name}_blk\"\n'
         tcl_code += f'current_bd_design \"{prj_name}_blk\"\n'
@@ -731,7 +732,7 @@ set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3
             tcl_code += f'set TTLx8_out_{i} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTLx8_out TTLx8_out_{i} ]\n'
             if self.do_sim:
                 tcl_code += f'set output_pulse_{i} [ create_bd_port -dir O output_pulse_{i} ]\n'
-                tcl_code += f'connect_bd_net -net TTLx8_out_{i}_output_pulse [get_bd_ports output_pulse_{i}] [get_bd_pins TTLx8_out_{i}/output_pulse]'
+                tcl_code += f'connect_bd_net -net TTLx8_out_{i}_output_pulse [get_bd_ports output_pulse_{i}] [get_bd_pins TTLx8_out_{i}/output_pulse]\n'
         
         #######################################################################
         # DAC output port
@@ -909,14 +910,14 @@ connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_ports m00
         
         tcl_code += '\n'
         for i in range(self.total_dac_num):
-            tcl_code += f'connect_bd_intf_net -intf_net axi_interconnect_0_M0{i+2}_AXI [get_bd_intf_pins DAC_Controller_{i}/s_axi] [get_bd_intf_pins axi_interconnect_0/M0{i+2}_AXI]\n'
+            tcl_code += f'connect_bd_intf_net -intf_net axi_interconnect_0_M'+f'{i+2}'.zfill(2)+f'_AXI [get_bd_intf_pins DAC_Controller_{i}/s_axi] [get_bd_intf_pins axi_interconnect_0/M'+f'{i+2}'.zfill(2)+'_AXI]\n'
             
         #######################################################################
         # TTLx8_out AXI INTERCONNECTION
         #######################################################################
         tcl_code += '\n'
         for i in range(self.total_ttlx8_num):
-            tcl_code += f'connect_bd_intf_net -intf_net axi_interconnect_0_M0{self.total_dac_num + 2 + i}_AXI [get_bd_intf_pins TTLx8_out_{i}/s_axi] [get_bd_intf_pins axi_interconnect_0/M0{self.total_dac_num + 2 + i}_AXI]\n'
+            tcl_code += f'connect_bd_intf_net -intf_net axi_interconnect_0_M'+f'{self.total_dac_num + 2 + i}'.zfill(2)+f'_AXI [get_bd_intf_pins TTLx8_out_{i}/s_axi] [get_bd_intf_pins axi_interconnect_0/M'+f'{self.total_dac_num + 2 + i}'.zfill(2)+'_AXI]\n'
         
 
         #######################################################################
@@ -970,7 +971,7 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         # AXI INTERCONNECT ARESTN CONNECTION
         #######################################################################
         for i in range(self.total_dac_num + self.total_ttlx8_num + 2):
-            tcl_code += f' [get_bd_pins axi_interconnect_0/M0{i}_ARESETN]'
+            tcl_code += f' [get_bd_pins axi_interconnect_0/M'+f'{i}'.zfill(2)+'_ARESETN]'
             
         tcl_code += ' [get_bd_pins TimeController_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN]'
         tcl_code += ' [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]'
@@ -998,7 +999,7 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         for i in range(self.total_ttlx8_num):
             tcl_code += f' [get_bd_pins TTLx8_out_{i}/s_axi_aclk]'
         for i in range(self.total_dac_num + 2 + self.total_ttlx8_num):
-            tcl_code += f' [get_bd_pins axi_interconnect_0/M0{i}_ACLK] '
+            tcl_code += f' [get_bd_pins axi_interconnect_0/M'+f'{i}'.zfill(2)+'_ACLK] '
         tcl_code += """ [get_bd_pins TimeController_0/s_axi_aclk] [get_bd_pins clk_wiz_0/clk_in1]\
  [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK]\
  [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins usp_rf_data_converter_0/s0_axis_aclk] [get_bd_pins usp_rf_data_converter_0/s1_axis_aclk]\
@@ -1038,7 +1039,28 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         
         tcl_code += '\n'
         
-        
+        #######################################################################
+        # TEST CODE WRITTEN LOCALLY
+        #######################################################################
+        if self.do_sim == True:
+            tcl_code += """
+delete_bd_objs [get_bd_ports RFMC_DAC_00_N]
+delete_bd_objs [get_bd_ports RFMC_DAC_00_P]
+delete_bd_objs [get_bd_ports RF3_CLKO_A_C_N_228]
+delete_bd_objs [get_bd_ports RF3_CLKO_A_C_P_228]
+delete_bd_objs [get_bd_nets RF3_CLKO_A_C_N_2] [get_bd_ports RF3_CLKO_A_C_N_229]
+delete_bd_objs [get_bd_nets RF3_CLKO_A_C_P_2] [get_bd_ports RF3_CLKO_A_C_P_229]
+delete_bd_objs [get_bd_cells usp_rf_data_converter_0]
+make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
+add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv
+            """
+#         else:
+#             tcl_code += """
+# make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
+# add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+#             """
+            
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")
         

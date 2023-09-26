@@ -148,7 +148,7 @@ always @(posedge clk) begin
         end
 
         if( fifo_output_en ) begin
-            fifo_output[127:0]                  <= fifo_dout[127:0];
+            fifo_output[71:0]                  <= fifo_dout[71:0];
             counter_match                       <= 1'b1;
         end
         

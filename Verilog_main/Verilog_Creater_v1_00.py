@@ -42,7 +42,9 @@ class Verilog_maker:
         
         self.TTLx8_out_dir = os.path.join(self.target_dir,'TTLx8_out')
         
-        self.total_ttlx8_num = 1
+        self.TTL_ports = ['FMCP_HSPC_LA10_P', 'FMCP_HSPC_LA10_N']
+        
+        self.total_ttlx8_num = len(self.TTL_ports)
         
         self.total_rfdc_num = 1
         
@@ -681,6 +683,7 @@ class Verilog_maker:
             
     def generate_xilinx_block_design(self, folder_directory, prj_name):
         print(f'folder dir : {folder_directory}')
+        print(f'current python dir : {os.path.abspath(__file__)}')
         tcl_code = ''
         tcl_code += f'create_bd_design \"{prj_name}_blk\"\n'
         tcl_code += f'current_bd_design \"{prj_name}_blk\"\n'
@@ -725,14 +728,22 @@ set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3
         """
         if self.do_sim:
             tcl_code += 'set locked_0 [ create_bd_port -dir O locked_0 ]\n'
+            
+        
         #######################################################################
         # TTLx8
         #######################################################################
-        for i in range(self.total_ttlx8_num):
-            tcl_code += f'set TTLx8_out_{i} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTLx8_out TTLx8_out_{i} ]\n'
+        i__ = 0
+        for comp in self.TTL_ports:
+            tcl_code += f'set {comp} [ create_bd_port -dir O {comp} ]\n'
             if self.do_sim:
-                tcl_code += f'set output_pulse_{i} [ create_bd_port -dir O output_pulse_{i} ]\n'
-                tcl_code += f'connect_bd_net -net TTLx8_out_{i}_output_pulse [get_bd_ports output_pulse_{i}] [get_bd_pins TTLx8_out_{i}/output_pulse]\n'
+                tcl_code += f'set output_pulse_{i__} [ create_bd_port -dir O output_pulse_{i__} ]\n'
+            tcl_code += f'set TTLx8_out_{i__} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTLx8_out TTLx8_out_{i__} ]\n'
+            tcl_code += f'connect_bd_net -net TTLx8_out_{i__}_output_pulse [get_bd_ports {comp}] [get_bd_pins TTLx8_out_{i__}/output_pulse]'
+            if self.do_sim:
+                tcl_code += f' [get_bd_ports output_pulse_{i__}]'
+            tcl_code += '\n'
+            i__ += 1
         
         #######################################################################
         # DAC output port
@@ -1043,22 +1054,23 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         # TEST CODE WRITTEN LOCALLY
         #######################################################################
         if self.do_sim == True:
-            tcl_code += """
-delete_bd_objs [get_bd_ports RFMC_DAC_00_N]
-delete_bd_objs [get_bd_ports RFMC_DAC_00_P]
+            for i in range(self.total_dac_num):
+                tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_N]\n'
+                tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_P]\n'
+            tcl_code += f"""
 delete_bd_objs [get_bd_ports RF3_CLKO_A_C_N_228]
 delete_bd_objs [get_bd_ports RF3_CLKO_A_C_P_228]
 delete_bd_objs [get_bd_nets RF3_CLKO_A_C_N_2] [get_bd_ports RF3_CLKO_A_C_N_229]
 delete_bd_objs [get_bd_nets RF3_CLKO_A_C_P_2] [get_bd_ports RF3_CLKO_A_C_P_229]
 delete_bd_objs [get_bd_cells usp_rf_data_converter_0]
-make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
-add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+make_wrapper -files [get_files {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd')}] -top
+add_files -norecurse {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v')}
 add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv
             """
 #         else:
-#             tcl_code += """
-# make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
-# add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+#             tcl_code += f"""
+# make_wrapper -files [get_files {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd')}] -top
+# add_files -norecurse {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v')}
 #             """
             
         #using '\' makes error in vivado.bat. this should be replaced in '/'

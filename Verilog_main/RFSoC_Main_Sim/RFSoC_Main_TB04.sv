@@ -36,7 +36,8 @@ always begin
 end
 */
 
-wire output_pulse_0;
+wire output_pulse_x8_0;
+wire output_pulse_x1_0;
 wire locked_0;
 
 wire [255:0] m00_axis_00_tdata;
@@ -115,7 +116,8 @@ RFSoC_Main_blk_wrapper tb(
     .m00_axis_07_tready(m00_axis_07_tready),
     .m00_axis_07_tvalid(m00_axis_07_tvalid)*/
     
-    .output_pulse_0(output_pulse_0),
+    .output_pulse_x8_0(output_pulse_x8_0),
+    .output_pulse_x1_0(output_pulse_x1_0),
     .locked_0(locked_0)
 );
 
@@ -185,6 +187,7 @@ reg[1:0] resp7;
 reg[1:0] resp8;
 reg[1:0] resp9;
 reg[1:0] resp10;
+reg[1:0] resp11;
 
 initial begin
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.por_srstb_reset(1'b1);
@@ -222,11 +225,11 @@ initial begin
     #10000000;
     
     ///////////////////////////////////////////////////////////////////////////////////
-    // TTL Signal
+    // TTLx8 Signal
     ///////////////////////////////////////////////////////////////////////////////////
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + 8'b00110000, resp10);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + 8'b10110000, resp10);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + 8'b10110001, resp10);
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000004 << 64) + 8'b00010001, resp10);
     #10000000;
@@ -239,6 +242,22 @@ initial begin
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000011 << 64) + 8'b00000000, resp10);
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000012 << 64) + 8'b10101010, resp10);
+    #10000000;
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    // TTL Signal
+    ///////////////////////////////////////////////////////////////////////////////////
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + 8'b00110001, resp11);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000004 << 64) + 8'b10110001, resp11);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000005 << 64) + 8'b00110000, resp11);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000010 << 64) + 8'b11111110, resp11);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000011 << 64) + 8'b00000000, resp11);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000012 << 64) + 8'b10101011, resp11);
     #10000000;
 
 /*

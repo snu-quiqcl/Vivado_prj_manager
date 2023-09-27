@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module TTLx8_out#(
+module TTL_out#(
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Configuraiton
     //////////////////////////////////////////////////////////////////////////////////
@@ -37,9 +37,7 @@ module TTLx8_out#(
     parameter AXIS_DATA_WIDTH               = 256,
     parameter THRESHOLD                     = 1000,
     parameter DEPTH                         = 1024, //data number = 1024
-    parameter DATA_LEN                      = 8,
-    parameter ADDR_LEN                      = 10
-
+    parameter DATA_LEN                      = 1
 )
 (
     //////////////////////////////////////////////////////////////////////////////////
@@ -223,14 +221,13 @@ axi2fifo_0
 wire counter_matched;
 wire [127:0] rto_out;
 
-RTOB_Core
+RTOC_Core
 #(
     .THRESHOLD(THRESHOLD),
     .DEPTH(DEPTH), //data number = 1024
-    .DATA_LEN(DATA_LEN),
-    .ADDR_LEN(ADDR_LEN)
+    .DATA_LEN(DATA_LEN)
 )
-rtob_core_0
+rtoc_core_0
 (
     .clk(s_axi_aclk),
     .auto_start(auto_start),// need to be connected
@@ -254,12 +251,12 @@ rtob_core_0
 //////////////////////////////////////////////////////////////////////////////////
 wire counter_matched;
 
-TTLx8_Controller
+TTL_Controller
 #(
     .DEST_VAL(DEST_VAL),
     .CHANNEL_LENGTH(CHANNEL_LENGTH)
 )
-ttlx8_controller_0
+ttl_controller_0
 (
     //////////////////////////////////////////////////////////////////////////////////  
     // IO declaration for GPO_Core

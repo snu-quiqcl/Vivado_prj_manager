@@ -108,35 +108,56 @@ class Compiler:
                 # Define the command to be executed
                 cmd = [
                             'aarch64-none-elf-g++',                             #g++ also works
-                            '-march=armv8-a',
-                            '-mcpu=cortex-a53',
-                            '-nostartfiles',
-                            '-w',
-                            '-T', f'../C_Code/{file_name}/{file_name}.ld',
-                            '-I../C_Code//include',
+                            '-Wall',
+                            '-O2',
+                            '-c',
+                            '-fmessage-length=0',
+                            f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
+                            '-D',
+                            '__BAREMETAL__',
+                            '-I../Xilinx_Include/bspinclude/include',
+                            '-MMD',
+                            '-MP',
+                            f'-MF\"../C_Code/{file_name}/{file_name}.d\"',
+                            f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
+                            '-o',
+                            f'\"../C_Code/{file_name}/{file_name}.o\"'
                         ]
+                #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
                 if self.is_cpp == True:
-                    cmd += [f'../C_Code/{file_name}/{file_name}.cpp']
+                    cmd += [f'\"../C_Code/{file_name}/{file_name}.cpp\"']
                 else:
                     cmd += [f'../C_Code/{file_name}/{file_name}.c']
                 
-                cmd += [
-                            '../C_Code/lib/libxil.a',
-                            '../C_Code/lib/libmetal.a',
-                            '../C_Code/lib/libxilpm.a',
-                            '../C_Code/init/startup.S',
-                            f'../C_Code/{file_name}/_sbrk.c',
-                            f'../C_Code/{file_name}/close.c',
-                            f'../C_Code/{file_name}/write.c',
-                            f'../C_Code/{file_name}/lseek.c',
-                            f'../C_Code/{file_name}/read.c',
-                            f'../C_Code/{file_name}/inbyte.c',
-                            '-o', f'../C_Code/{file_name}/{file_name}.elf'
-                        ]
-        
+                cmd_conc = ''
+                for line in cmd:
+                    cmd_conc += (line + ' ')
+                    
                 # Execute the command
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
+                print(stderr)
+                
+                cmd = [
+                            'aarch64-none-elf-g++',
+                            f'-Wl,-T -Wl,../C_Code/{file_name}/{file_name}.ld',
+                            f'-L../Xilinx_Include/bsplib/lib',
+                            '-o',
+                            f'\"../C_Code/{file_name}/{file_name}.elf\"',
+                            f'../C_Code/{file_name}/{file_name}.o',
+                            '-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group',
+                            '-Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group',
+                            '-Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group',
+                            '-Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group',
+                            '-Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group'
+                    ]
+                cmd_conc = ''
+                for line in cmd:
+                    cmd_conc += (line + ' ')
+                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                stdout, stderr = process.communicate()
+                print(stderr)
+                
         
                 # Check the return code
                 if stderr and (stderr != f"c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/{file_name}/{file_name}.elf has a LOAD segment with RWX permissions\n"):
@@ -144,7 +165,7 @@ class Compiler:
                     raise Exception(stderr)
                 else:
                     print("Compilation successful.")
-            else:
+            else: # this is old version... code revision is required
                 Makefile_code = f"""
 # Define the compiler and compiler flags
 CC = aarch64-none-elf-gcc
@@ -257,7 +278,7 @@ if __name__ == "__main__":
     do_compile = True
     
     comp = Compiler()
-    file_name = "MALLOC_EXP"
+    file_name = "VECTOR_EXP"
     #Compile C Code
     comp.do_compile = do_compile
     comp.compile_code(file_name)

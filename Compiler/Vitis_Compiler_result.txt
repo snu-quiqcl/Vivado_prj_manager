@@ -1,0 +1,22 @@
+make all 
+'Building file: ../src/hello_world.cpp'
+'Invoking: ARM v8 g++ compiler'
+aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"src/hello_world.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"src/hello_world.d" -MT"src/hello_world.o" -o "src/hello_world.o" "../src/hello_world.cpp"
+'Finished building: ../src/hello_world.cpp'
+' '
+'Building target: ASDSD.elf'
+'Invoking: ARM v8 g++ linker'
+aarch64-none-elf-g++ -Wl,-T -Wl,../src/lscript.ld -LE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bsplib/lib -o "ASDSD.elf"  ./src/hello_world.o   -Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group -Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group -Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group
+'Finished building target: ASDSD.elf'
+' '
+'Invoking: ARM v8 Print Size'
+aarch64-none-elf-size ASDSD.elf  |tee "ASDSD.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+ 931332	   5016	  31391	 967739	  ec43b	ASDSD.elf
+'Finished building: ASDSD.elf.size'
+' '
+
+
+///////
+aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
+aarch64-none-elf-g++ -Wl,-T -Wl,VECTOR_EXP.ld -LE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bsplib/lib -o "VECTOR_EXP.elf"  VECTOR_EXP.o   -Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group -Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group -Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group

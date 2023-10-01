@@ -11,3 +11,9 @@ Open DAC_Controller files and index modules and xilins ips to prevent duplicatio
 250MHz -> Reaaching to 250MHz is challenging, so we have to return to 100MHz, nad use 1.25ns resolution of TTL signal.
 
 A fully completed device development is required.
+
+## Vitis_Creator_v1_00
+This python program creates platform and application project automatically with .xsa file which is created from vivado. This project includes firmware file which run binary code(ELF file) and conduct TCP communication.
+
+## Compiler
+This python program requires GNU aarch64-none-elf-g++ compiler in window to compile cpp files. It contains linker file, and start file which initialize BSS section before get into main function. After this it sends binary code to RFSoC with TCP protocol and run this code.

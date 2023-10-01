@@ -17,3 +17,7 @@ This python program creates platform and application project automatically with 
 
 ## Compiler
 This python program requires GNU aarch64-none-elf-g++ compiler in window to compile cpp files. It contains linker file, and start file which initialize BSS section before get into main function. After this it sends binary code to RFSoC with TCP protocol and run this code.
+
+you can download gnu compiler in here:
+https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
+(aarch64-none-elf)

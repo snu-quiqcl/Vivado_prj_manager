@@ -1,18 +1,5 @@
 #include "RFSoC_Driver.h"
 
-class TTL_out{
-    public:
-        uint64_t addr = XPAR_TTL_OUT_0_BASEADDR;
-        uint64_t last_pulse = 0;
-    public:
-        TTL_out(uint64_t addr =  (uint64_t) XPAR_TTL_OUT_0_BASEADDR ){
-            this->addr = addr;
-        };
-        void set(uint64_t pulse);
-        void set_ch(const char * pulse_ch);
-        uint64_t get_last_pulse();
-};
-
 void TTL_out::set(uint64_t pulse){
     this->last_pulse = pulse;
 }

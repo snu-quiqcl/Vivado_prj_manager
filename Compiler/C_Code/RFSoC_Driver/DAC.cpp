@@ -1,18 +1,8 @@
 #include "RFSoC_Driver.h"
 
-class DAC{
-    public:
-        uint64_t addr =  (uint64_t) XPAR_TTL_OUT_0_BASEADDR;
-        uint64_t sample_freq = 2000000000;
-    public:
-        DAC(uint64_t sample_freq = 2000000000, uint64_t addr =  (uint64_t) XPAR_TTL_OUT_0_BASEADDR ){
-            this->addr = addr;
-            this->sample_freq = sample_freq;
-        };
-        void initialize(uint64_t timestamp);
-        void set_freq(uint64_t timestamp,uint64_t freq);
-        void set_amp(uint64_t timestamp, long double amp);
-};
+void DAC::set_addr(uint64_t addr){
+    this->addr = addr;
+}
 
 void DAC::initialize(uint64_t timestamp = 0){
 }

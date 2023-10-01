@@ -57,6 +57,7 @@ int64_t simple_lexer(struct tcp_pcb *tpcb, const char * inst){
 					i++;
 				}
 				current_packet_num++;
+				xil_printf("PN : %d\r\n",current_packet_num);
 				if( current_packet_num == packet_number){
 					xil_printf("\r\nEND PACKET NUM : %d\r\n",current_packet_num);
 					xil_printf("ELF size : %d bytes\r\n",current_addr - DRAM_BASE_ADDRESS);

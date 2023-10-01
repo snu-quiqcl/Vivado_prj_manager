@@ -105,6 +105,9 @@ class Compiler:
     def compile_code(self, file_name):
         if self.do_compile == True:
             if self.use_make == False:
+                ###############################################################
+                ## main.cpp
+                ###############################################################
                 # Define the command to be executed
                 cmd = [
                             'aarch64-none-elf-g++',                             #g++ also works
@@ -133,18 +136,55 @@ class Compiler:
                 for line in cmd:
                     cmd_conc += (line + ' ')
                     
+                print(cmd_conc)
+                    
                 # Execute the command
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)
                 
+                ###############################################################
+                ## startup.S
+                ###############################################################
+                cmd = [
+                            'aarch64-none-elf-g++',                             #g++ also works
+                            '-Wall',
+                            '-O2',
+                            '-c',
+                            '-fmessage-length=0',
+                            f'-MT\"../C_Code/init/startup.o\"',
+                            '-D',
+                            '__BAREMETAL__',
+                            '-I../Xilinx_Include/bspinclude/include',
+                            '-MMD',
+                            '-MP',
+                            f'-MF\"../C_Code/init/startup.d\"',
+                            f'-MT\"../C_Code/init/startup.o\"',
+                            '-o',
+                            f'\"../C_Code/init/startup.o\"',
+                            '\"../C_Code/init/startup.S\"'
+                        ]
+                #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
+                cmd_conc = ''
+                for line in cmd:
+                    cmd_conc += (line + ' ')
+                    
+                # Execute the command
+                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                stdout, stderr = process.communicate()
+                print(stderr)
+                
+                ###############################################################
+                ## main.elf
+                ###############################################################
                 cmd = [
                             'aarch64-none-elf-g++',
-                            f'-Wl,-T -Wl,../C_Code/{file_name}/{file_name}.ld',
+                            f'-Wl,-T -Wl,../C_Code/linker/linker.ld',
                             f'-L../Xilinx_Include/bsplib/lib',
                             '-o',
                             f'\"../C_Code/{file_name}/{file_name}.elf\"',
                             f'../C_Code/{file_name}/{file_name}.o',
+                            f'../C_Code/init/startup.o',
                             '-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group',
                             '-Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group',
                             '-Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group',
@@ -154,6 +194,8 @@ class Compiler:
                 cmd_conc = ''
                 for line in cmd:
                     cmd_conc += (line + ' ')
+                    
+                print(cmd_conc)
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)

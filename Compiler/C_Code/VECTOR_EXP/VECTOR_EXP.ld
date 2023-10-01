@@ -13,7 +13,7 @@ MEMORY
 
 /* Specify the default entry point to the program */
 
-ENTRY(_start)
+ENTRY(_start_custom_)
 
 /* Define the sections, and where they are mapped in memory */
 

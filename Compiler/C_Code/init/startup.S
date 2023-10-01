@@ -13,8 +13,8 @@
 	.quad	_heap_start
 
 
-	.global _start
-_start:
+	.global _start_custom_
+_start_custom_:
 	mov	x0, #0
 	ldr	x1,.Lbss_start		/* calculate beginning of the BSS */
 	ldr	x2,.Lbss_end		/* calculate end of the BSS */

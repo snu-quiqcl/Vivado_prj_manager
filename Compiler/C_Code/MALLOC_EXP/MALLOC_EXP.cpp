@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include "xil_printf.h"
 #include "xil_cache.h"
-#include "memory_region.h"
 #include "malloc.h"
 
 static int p;
 
 int main(){
-	static int q;
+	static int q =40;
 	xil_printf("hello world\r\n");
 
 	int* a = (int*)malloc(sizeof(int));

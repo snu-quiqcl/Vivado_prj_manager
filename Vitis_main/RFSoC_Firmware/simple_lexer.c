@@ -1,15 +1,12 @@
-#include <string.h>
-#include "lwip/err.h"
-#include "lwip/tcp.h"
 #include "rfdc_controller.h"
 
 
 int64_t binary_mode = 0;
 int64_t packet_number = 0;
 int64_t current_packet_num = 0;
-unsigned char * current_addr = (unsigned char *)DRAM_BASE_ADDRESS;
+volatile unsigned char * current_addr = (volatile unsigned char *)DRAM_BASE_ADDRESS;
 
-int64_t simple_lexer(struct tcp_pcb *tpcb, const char * inst){
+int64_t simple_lexer(struct tcp_pcb *tpcb, char * inst){
 	int64_t module_num = 0;
 	int64_t fnct_num = 0;
 	int64_t param_num = 0;
@@ -57,7 +54,100 @@ int64_t simple_lexer(struct tcp_pcb *tpcb, const char * inst){
 					i++;
 				}
 				current_packet_num++;
-				xil_printf("PN : %d\r\n",current_packet_num);
+				//STATUS BAR...
+				/*
+for i in range(20):
+    a = f"""else if( current_packet_num == {i} * packet_number / 20 ){{
+    xil_printf("\\r");
+    xil_printf("TCP DATA STATUS ["""
+    for j in range(i+1):
+        a += '##'
+    for j in range(19-i):
+        a += '--'
+    a +=']");\n}'
+    print(a)
+				 */
+				if( current_packet_num == 0 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##--------------------------------------]");
+				}
+				else if( current_packet_num == 1 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [####------------------------------------]");
+				}
+				else if( current_packet_num == 2 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [######----------------------------------]");
+				}
+				else if( current_packet_num == 3 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [########--------------------------------]");
+				}
+				else if( current_packet_num == 4 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##########------------------------------]");
+				}
+				else if( current_packet_num == 5 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [############----------------------------]");
+				}
+				else if( current_packet_num == 6 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##############--------------------------]");
+				}
+				else if( current_packet_num == 7 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [################------------------------]");
+				}
+				else if( current_packet_num == 8 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##################----------------------]");
+				}
+				else if( current_packet_num == 9 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [####################--------------------]");
+				}
+				else if( current_packet_num == 10 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [######################------------------]");
+				}
+				else if( current_packet_num == 11 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [########################----------------]");
+				}
+				else if( current_packet_num == 12 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##########################--------------]");
+				}
+				else if( current_packet_num == 13 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [############################------------]");
+				}
+				else if( current_packet_num == 14 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##############################----------]");
+				}
+				else if( current_packet_num == 15 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [################################--------]");
+				}
+				else if( current_packet_num == 16 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [##################################------]");
+				}
+				else if( current_packet_num == 17 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [####################################----]");
+				}
+				else if( current_packet_num == 18 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [######################################--]");
+				}
+				else if( current_packet_num == 19 * packet_number / 20 ){
+				    xil_printf("\r");
+				    xil_printf("TCP DATA STATUS [########################################]");
+				}
+
 				if( current_packet_num == packet_number){
 					xil_printf("\r\nEND PACKET NUM : %d\r\n",current_packet_num);
 					xil_printf("ELF size : %d bytes\r\n",current_addr - DRAM_BASE_ADDRESS);
@@ -93,7 +183,7 @@ void set_current_binary_mode(int64_t mode){
 	return;
 }
 
-INLINE int64_t get_module(const char * inst){
+INLINE int64_t get_module(char * inst){
 	int64_t i = 0;
 	int64_t pos1 = 0;
 	int64_t pos2 = 0;
@@ -111,7 +201,7 @@ INLINE int64_t get_module(const char * inst){
 	return i;
 }
 
-INLINE int64_t get_fnct(const char * inst){
+INLINE int64_t get_fnct(char * inst){
 	int64_t i = 0;
 	int64_t pos1 = 0;
 	int64_t pos2 = 0;
@@ -129,7 +219,7 @@ INLINE int64_t get_fnct(const char * inst){
 	return i;
 }
 
-INLINE int64_t get_param(const char *inst, int64_t start_index, int64_t end_index){
+INLINE int64_t get_param(char *inst, int64_t start_index, int64_t end_index){
 	int64_t pos1 = 0;
 	int64_t pos2 = 0;
 	int64_t num = 0;
@@ -141,7 +231,7 @@ INLINE int64_t get_param(const char *inst, int64_t start_index, int64_t end_inde
 	return num;
 }
 
-INLINE int64_t is_end(const char * inst, int64_t start_index, int64_t end_index){
+INLINE int64_t is_end(char * inst, int64_t start_index, int64_t end_index){
 	int64_t pos1 = 0;
 	int64_t pos2 = 0;
 	pos1 = string_count(inst,start_index,'#')+1;

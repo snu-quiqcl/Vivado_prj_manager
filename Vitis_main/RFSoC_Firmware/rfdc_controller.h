@@ -11,6 +11,12 @@
 #include "xparameters.h"
 #include "xil_io.h"
 #include "xil_cache.h"
+#include "lwip/err.h"
+#include "lwip/tcp.h"
+#include "xil_exception.h"
+#include "netif/xadapter.h"
+#include "platform.h"
+#include "platform_config.h"
 
 #ifndef __BAREMETAL__
 #define __BAREMETAL__
@@ -42,6 +48,11 @@
 
 //Memory address
 #define DRAM_BASE_ADDRESS 0xf00000
+#define STACK_START_PTR_ADDR 0x700010
+#define STACK_END_PTR_ADDR 0x700020
+#define HEAP_START_PTR_ADDR 0x700030
+#define HEAP_END_PTR_ADDR 0x700040
+#define ENTRY_PTR_ADDR 0x700050
 
 #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
 
@@ -84,16 +95,16 @@ char * int642str(int64_t val, char * str_dest);
 char * substring(char * str_dest,char * str,int64_t start,int64_t end);
 int64_t string_count(char* str, int64_t pos, char spc);
 int64_t string2int64(char* str);
-int64_t wolc_strcmp(const char * str1, const char * str2);
+int64_t wolc_strcmp(char * str1, char * str2);
 /*
  * Simple Lexer
  */
-int64_t simple_lexer(struct tcp_pcb *tpcb, const char * inst);
+int64_t simple_lexer(struct tcp_pcb *tpcb, char * inst);
 void set_current_binary_mode(int64_t mode);
-int64_t get_module(const char * inst);
-int64_t get_fnct(const char * inst);
-int64_t get_param(const char * inst, int64_t start_index, int64_t end_index);
-int64_t is_end(const char * inst, int64_t start_index, int64_t end_index);
+int64_t get_module(char * inst);
+int64_t get_fnct(char * inst);
+int64_t get_param(char * inst, int64_t start_index, int64_t end_index);
+int64_t is_end(char * inst, int64_t start_index, int64_t end_index);
 void clear_DRAM();
 
 /*
@@ -102,4 +113,38 @@ void clear_DRAM();
 int64_t run_binary();
 int64_t save_binary(struct tcp_pcb *tpcb, int64_t entry_point, int64_t stack_start, int64_t stack_end, int64_t heap_start, int64_t heap_end, int64_t packet_number);
 
+
+/*
+ * Echo
+ */
+int start_application();
+err_t accept_callback(void *arg, struct tcp_pcb *newpcb, err_t err);
+err_t recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err);
+void print_app_header();
+int transfer_data();
+
+/*
+ * RFDC Controller
+ */
+void set_clock(int64_t freq);
+void write_fifo(int64_t module_num, int64_t timestamp, int64_t instruction);
+int64_t read_sampling_freq(struct tcp_pcb *tpcb);
+int64_t inst_process(struct tcp_pcb *tpcb, char * TCP_data);
+int64_t run_cpu_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t param_num);
+int64_t run_rtio_process(struct tcp_pcb *tpcb, int64_t module_num, int64_t fnct_num, int64_t timestamp_num, int64_t param_num);
+int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_point, int64_t stack_start, int64_t stack_end, int64_t heap_start, int64_t heap_end, int64_t packet_number);
+
+/*
+ * Main
+ */
+
+/* defined by each RAW mode application */
+void print_app_header();
+int start_application();
+int transfer_data();
+void tcp_fasttmr(void);
+void tcp_slowtmr(void);
+
+/* missing declaration in lwIP */
+void lwip_init();
 #endif

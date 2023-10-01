@@ -1,7 +1,22 @@
-#include "lwip/err.h"
-#include "lwip/tcp.h"
 #include "rfdc_controller.h"
 
+/*
+ * TCP data format
+ * {Module name} -> type M
+ * {Function_name} -> type F
+ * {Timestamp} -> type T
+ * {Param} -> Type P
+ * initial processing -> Type !
+ *
+ * 1. Timestamp output format
+ * #{Module name}#{Function name}#{Timestamp}#{Param}#!EOL
+ *
+ * 2. CPU instruction format
+ * #CPU#{Function name}#{Param}#!EOL
+ *
+ * 3. binary file send format
+ * #BIN#{Function name}#{Param = Total page num}#!EOL
+ */
 
 static int64_t sampling_freq = 0;
 
@@ -38,7 +53,6 @@ static INLINE void Xil_Out128(UINTPTR Addr, __uint128_t Value)
 /*
  * Sampling frequency of DAC
  */
-static int64_t sampling_freq;
 
 void set_clock(int64_t freq){
 	print("\n Configuring the Clock \r\n");
@@ -72,25 +86,10 @@ int64_t read_sampling_freq(struct tcp_pcb *tpcb){
 		xil_printf("no space in tcp_sndbuf\n\r");
 	}
 	xil_printf("TCP write done \r\n");
+
+	return 0;
 }
 
-/*
- * TCP data format
- * {Module name} -> type M
- * {Function_name} -> type F
- * {Timestamp} -> type T
- * {Param} -> Type P
- * initial processing -> Type !
- *
- * 1. Timestamp output format
- * #{Module name}#{Function name}#{Timestamp}#{Param}#!EOL
- *
- * 2. CPU instruction format
- * #CPU#{Function name}#{Param}#!EOL
- *
- * 3. binary file send format
- * #BIN#{Function name}#{Param = Total page num}#!EOL
- */
 
 int64_t inst_process(struct tcp_pcb *tpcb, char * TCP_data){
 	simple_lexer(tpcb,TCP_data);
@@ -113,6 +112,7 @@ int64_t run_cpu_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t param_nu
 			xil_printf("No matching function\r\n");
 			break;
 	}
+	return 0;
 }
 
 int64_t run_rtio_process(struct tcp_pcb *tpcb, int64_t module_num, int64_t fnct_num, int64_t timestamp_num, int64_t param_num){
@@ -124,6 +124,7 @@ int64_t run_rtio_process(struct tcp_pcb *tpcb, int64_t module_num, int64_t fnct_
 			xil_printf("No matching function\r\n");
 			break;
 	}
+	return 0;
 }
 
 int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_point, int64_t stack_start, int64_t stack_end, int64_t heap_start, int64_t heap_end, int64_t packet_number){
@@ -146,4 +147,5 @@ int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_po
 			xil_printf("No matching function\r\n");
 			break;
 	}
+	return 0;
 }

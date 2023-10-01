@@ -1,21 +1,4 @@
-#include <string.h>
-#include "lwip/err.h"
-#include "lwip/tcp.h"
 #include "rfdc_controller.h"
-#include "xil_exception.h"
-
-#define DATA_BASE_ADDR 0x700000
-#define STACK_START_PTR_ADDR 0x700010
-#define STACK_END_PTR_ADDR 0x700020
-#define HEAP_START_PTR_ADDR 0x700030
-#define HEAP_END_PTR_ADDR 0x700040
-#define ENTRY_PTR_ADDR 0x700050
-
-#define STACK_START_PTR_BIAS 0x10
-#define STACK_END_PTR_BIAS 0x20
-#define HEAP_START_PTR_BIAS 0x30
-#define HEAP_END_PTR_BIAS 0x40
-#define ENTRY_PTR_BIAS 0x50
 
 static int64_t bin_entry_point;
 static int64_t bin_stack_start;
@@ -26,10 +9,6 @@ static int64_t bin_heap_end;
 int64_t run_binary(){
 	xil_printf("RUN BIN\r\n");
 	// Set the stack pointer to STACK_END
-	uint64_t sp_val = DRAM_BASE_ADDRESS + bin_stack_start;
-	uint64_t main_addr = bin_entry_point;
-
-	volatile unsigned char * base_addr = DRAM_BASE_ADDRESS;
 	volatile int64_t * reg_addr;
 
 	reg_addr = (volatile int64_t *)STACK_START_PTR_ADDR;
@@ -136,6 +115,8 @@ int64_t run_binary(){
 	);
 	xil_printf("\r\nELF DONE\r\n");
 	clear_DRAM();
+
+	return 0;
 }
 
 int64_t save_binary(struct tcp_pcb *tpcb, int64_t entry_point, int64_t stack_start, int64_t stack_end, int64_t heap_start, int64_t heap_end, int64_t packet_number){
@@ -144,5 +125,7 @@ int64_t save_binary(struct tcp_pcb *tpcb, int64_t entry_point, int64_t stack_sta
 	bin_stack_end = stack_end;
 	bin_heap_start = heap_start;
 	bin_heap_end = heap_end;
+
+	return 0;
 }
 

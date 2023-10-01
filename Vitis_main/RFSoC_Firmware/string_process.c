@@ -1,6 +1,3 @@
-#include <string.h>
-#include "lwip/err.h"
-#include "lwip/tcp.h"
 #include "rfdc_controller.h"
 
 /*
@@ -86,7 +83,7 @@ char * int642str(int64_t val, char * str_dest){
 	return str_dest;
 }
 
-int64_t wolc_strcmp(const char * str1, const char * str2){
+int64_t wolc_strcmp(char * str1, char * str2){
 	int64_t i = 0;
 	while( (str1[i] != '\0') && (str2[i] != '\0') ){
 		i++;

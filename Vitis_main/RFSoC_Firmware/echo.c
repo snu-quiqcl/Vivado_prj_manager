@@ -25,15 +25,6 @@
  * OF SUCH DAMAGE.
  *
  */
-
-#include <stdio.h>
-#include <string.h>
-
-#if defined (__arm__) || defined (__aarch64__)
-#include "xil_printf.h"
-#endif
-#include "lwip/err.h"
-#include "lwip/tcp.h"
 #include "rfdc_controller.h"
 
 int transfer_data() {

@@ -2,11 +2,11 @@
 
 static current_timestamp = 0;
 
-static int64_t get_full_timestamp(){
+static int64_t get_timestamp(){
     return current_timestamp;
 }
 
-static int64_t get_timestamp(){
+static int64_t get_timestamp_coarse(){
     return (current_timestamp >> 3);
 }
 

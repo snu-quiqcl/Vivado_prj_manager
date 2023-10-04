@@ -15,18 +15,22 @@ void TTLx8_out::set(uint64_t pulse){
     else{
         this->last_pulse += ( pulse << ( get_timestamp() % 8 ) );
     }
-}
 
-void TTLx8_out::set_ch(const char * pulse_ch){
-    if( strcmp(pulse_ch,'ON') == 0 || strcmp(pulse_ch,'oN') == 0 || strcmp(pulse_ch, 'On') == 0 || strcmp(pulse_ch, 'on') == 0){
-        this -> set(1);
-    }
-    else if( strcmp(pulse_ch,'OFF') == 0 || strcmp(pulse_ch,'OFf') == 0 || strcmp(pulse_ch, 'OfF') == 0 || strcmp(pulse_ch, 'Off') == 0 || strcmp(pulse_ch, 'oFF') == 0 || strcmp(pulse_ch, 'oFf') == 0 || strcmp(pulse_ch, 'ofF') == 0 || strcmp(pulse_ch,'off') == 0 ){
-        this -> set(0);
-    }
+    reg128_write(this->addr, get_timestamp_coarse(), this->last_pulse);
     return;
 }
 
-uint64_t TTL_outx8::get_last_pulse(){
+void TTLx8_out::set_ch(const char * pulse_ch){
+    if( strcmp(pulse_ch,"ON") == 0 || strcmp(pulse_ch,"oN") == 0 || strcmp(pulse_ch, "On") == 0 || strcmp(pulse_ch, "on") == 0){
+        this -> set(1);
+    }
+    else if( strcmp(pulse_ch,"OFF") == 0 || strcmp(pulse_ch,"OFf") == 0 || strcmp(pulse_ch, "OfF") == 0 || strcmp(pulse_ch, "Off") == 0 || strcmp(pulse_ch, "oFF") == 0 || strcmp(pulse_ch, "oFf") == 0 || strcmp(pulse_ch, "ofF") == 0 || strcmp(pulse_ch,"off") == 0 ){
+        this -> set(0);
+    }
+    reg128_write(this->addr, get_timestamp_coarse(),this->last_pulse);
+    return;
+}
+
+uint64_t TTLx8_out::get_last_pulse(){
     return (this->last_pulse) >> ( ( this -> last_output_time ) % 8);
 }

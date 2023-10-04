@@ -9,8 +9,8 @@ aarch64-none-elf-gcc -march=armv8-a -mcpu=cortex-a53 -nostartfiles -T../MALLOC_E
 """
 import subprocess
 import os
-from elftools.elf.elffile import ELFFile
-from capstone import *
+from elftools.elf.elffile import ELFFile #pip install pyelftools
+from capstone import * #pip install capstone
 
 class Compiler:
     def __init__(self):
@@ -25,6 +25,29 @@ class Compiler:
         self.elf_data = None
         self.use_make = False
         self.is_cpp = True
+        
+        self.git_dir = r'C:\Jeonghyun\GIT'
+        self.xilinx_include_dir = r'Vivado_prj_manager\Compiler\Xilinx_Include\bspinclude\include'
+        self.rfsoc_driver_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver'
+        self.rfsoc_driver_include_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include'
+        
+        self.full_rfsoc_driver_dir = os.path.join(self.git_dir,self.rfsoc_driver_dir)
+        self.full_rfsoc_driver_include_dir = os.path.join(self.git_dir,self.rfsoc_driver_include_dir)
+        self.full_xilinx_include_dir = os.path.join(self.git_dir, self.xilinx_include_dir)
+    
+    def get_all_files_in_directory(self, directory,file_type):
+        file_list = []
+        is_filetype = False
+        
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                for types_ in file_type:
+                    if file.endswith(types_):
+                        is_filetype = True
+                if is_filetype:
+                    file_list.append(os.path.join(root, file))
+                is_filetype = False
+        return file_list
         
     def read_elf_file(self, file_name):
         elf_file_name = f'../C_Code/{file_name}/' + file_name + '.elf'
@@ -104,7 +127,59 @@ class Compiler:
             
     def compile_code(self, file_name):
         if self.do_compile == True:
+            driver_list = []
             if self.use_make == False:
+                ###############################################################
+                ## RFSoC Driver
+                ###############################################################
+                driver_files = self.get_all_files_in_directory(self.full_rfsoc_driver_dir,['cpp','c'])
+                for file_ in driver_files:
+                    compile_file_dir_, compile_file_ = os.path.split(file_)
+                    base_name, extension = os.path.splitext(compile_file_)
+                    cmd = [
+                                'aarch64-none-elf-g++',                             #g++ also works
+                                '-Wall',
+                                '-O2',
+                                '-c',
+                                '-fmessage-length=0',
+                                f'-MT\"{os.path.join(compile_file_dir_,base_name)}.o\"',
+                                '-D',
+                                '__BAREMETAL__',
+                                f'-I{self.full_rfsoc_driver_include_dir}',
+                                f'-I{self.full_xilinx_include_dir}',
+                                '-MMD',
+                                '-MP',
+                                f'-MF\"{os.path.join(compile_file_dir_,base_name)}.d\"',
+                                f'-MT\"{os.path.join(compile_file_dir_,base_name)}.o\"',
+                                '-o',
+                                f'\"{os.path.join(compile_file_dir_,base_name)}.o\"',
+                                f'\"{file_}\"'
+                            ]
+                    
+                    driver_list += [f'{os.path.join(compile_file_dir_,base_name)}.o']
+                    cmd_conc = ''
+                    for line in cmd:
+                        cmd_conc += (line + ' ')
+                        
+                    print(cmd_conc)
+                    
+                    process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                    stdout, stderr = process.communicate()
+                    print(stderr)
+                    
+                
+                ###############################################################
+                ## RFSoC Driver Library
+                ###############################################################
+                rfsoc_lib_name = 'RFSoC_lib'
+                cmd_conc = f'ar rcus {os.path.join(compile_file_dir_,rfsoc_lib_name)}.a '
+                for line in driver_list:
+                    cmd_conc += (line + ' ')
+                print(cmd_conc)
+                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                stdout, stderr = process.communicate()
+                print(stderr)
+                    
                 ###############################################################
                 ## main.cpp
                 ###############################################################
@@ -118,6 +193,7 @@ class Compiler:
                             f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
                             '-D',
                             '__BAREMETAL__',
+                            f'-I{self.full_rfsoc_driver_include_dir}',
                             '-I../Xilinx_Include/bspinclude/include',
                             '-MMD',
                             '-MP',
@@ -155,6 +231,7 @@ class Compiler:
                             f'-MT\"../C_Code/init/startup.o\"',
                             '-D',
                             '__BAREMETAL__',
+                            f'-I{self.full_rfsoc_driver_include_dir}',
                             '-I../Xilinx_Include/bspinclude/include',
                             '-MMD',
                             '-MP',
@@ -184,6 +261,7 @@ class Compiler:
                             '-o',
                             f'\"../C_Code/{file_name}/{file_name}.elf\"',
                             f'../C_Code/{file_name}/{file_name}.o',
+                            f'{self.full_rfsoc_driver_dir}/RFSoC_lib.a',
                             f'../C_Code/init/startup.o',
                             '-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group',
                             '-Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group',
@@ -191,7 +269,9 @@ class Compiler:
                             '-Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group',
                             '-Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group'
                     ]
-                cmd_conc = ''
+                
+                cmd_conc =''
+                
                 for line in cmd:
                     cmd_conc += (line + ' ')
                     

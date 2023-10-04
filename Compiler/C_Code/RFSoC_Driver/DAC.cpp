@@ -98,19 +98,19 @@ end
 
 void DAC::set_addr(uint64_t addr = (uint64_t) XPAR_DAC_CONTROLLER_0_BASEADDR ){
     this->addr = addr;
-}
-
-void DAC::initialize(uint64_t timestamp = 0){
+    return;
 }
 
 void DAC::set_freq(uint64_t freq){
     this->freq          = ((uint64_t)(((long double)freq/(long double)(this->sample_freq))*(((uint64_t)1<<48)-(uint64_t)1))) & MASK48BIT;
-    reg128_write(this-> addr, get_timestamp_corase() , (0x1 << 60) | this->freq);
+    reg128_write(this-> addr, get_timestamp_coarse() , (0x1 << 60) | this->freq);
+    return;
 }
 
 void DAC::set_amp(long double amp){
     this->amp           = ((uint64_t)(amp * ((1 << 15) - 1))) & MASK14BIT;
     reg128_write(this-> addr,get_timestamp_coarse(), (0x2 << 60) | ((this->amp) << 46) | ( (this->freq >> 2) & MASK46BIT) );
+    return;
 }
 
 void DAC::set_config(long double amp, uint64_t freq, long double phase, uint64_t shift = 0){
@@ -123,4 +123,5 @@ void DAC::set_config(long double amp, uint64_t freq, long double phase, uint64_t
     else{
         reg128_write(this-> addr,get_timestamp_coarse(), (0x1 << 63) | (((shift-1) & MASK3BIT) << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> ((8 - shift) * 2)) & MASK32BIT) );
     }
+    return;
 } 

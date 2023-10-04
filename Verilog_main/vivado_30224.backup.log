@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Wed Sep 27 19:28:34 2023
-# Process ID: 26088
+# Start of session at: Wed Sep 27 19:38:02 2023
+# Process ID: 30224
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -36,7 +36,7 @@ Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSo
 # set RF3_CLKO_A_C_N_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_N_229 ]
 # set RF3_CLKO_A_C_P_228 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P_228 ]
 # set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P_229 ]
-create_bd_cell: Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1706.293 ; gain = 543.508
+create_bd_cell: Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 1705.777 ; gain = 543.180
 # set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
 # set_property -dict [ list    CONFIG.CLKIN1_JITTER_PS {80.0}    CONFIG.CLKOUT1_DRIVES {Buffer}    CONFIG.CLKOUT1_JITTER {92.027}    CONFIG.CLKOUT1_PHASE_ERROR {96.948}    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {500}    CONFIG.CLKOUT2_DRIVES {Buffer}    CONFIG.CLKOUT3_DRIVES {Buffer}    CONFIG.CLKOUT4_DRIVES {Buffer}    CONFIG.CLKOUT5_DRIVES {Buffer}    CONFIG.CLKOUT6_DRIVES {Buffer}    CONFIG.CLKOUT7_DRIVES {Buffer}    CONFIG.MMCM_BANDWIDTH {OPTIMIZED}    CONFIG.MMCM_CLKFBOUT_MULT_F {8}    CONFIG.MMCM_CLKIN1_PERIOD {8.000}    CONFIG.MMCM_CLKOUT0_DIVIDE_F {2}    CONFIG.MMCM_COMPENSATION {AUTO}    CONFIG.PLL_CLKIN_PERIOD {8.000}    CONFIG.PRIMITIVE {PLL}    CONFIG.PRIM_IN_FREQ {124.998749}    CONFIG.RESET_PORT {resetn}    CONFIG.RESET_TYPE {ACTIVE_LOW}  ] $clk_wiz_0
 # set FMCP_HSPC_LA10_P [ create_bd_port -dir O FMCP_HSPC_LA10_P ]
@@ -195,7 +195,8 @@ Slave segment '/usp_rf_data_converter_0/s_axi/Reg' is being assigned into addres
 # start_gui
 update_compile_order -fileset sources_1
 open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
-validate_bd_design
+make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
+INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 INFO: [PSU-1]  DP_AUDIO clock source: RPLL is also being used by other peripheral clocks. Their outputs may get impacted if any driver changes DP_AUDIO PLL source to support runtime audio change 
 INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
 WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
@@ -263,305 +264,102 @@ Please resolve any mismatches by directly setting properties on BD cell </DAC_Co
 WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
 	FREQ_HZ = 124998749 
 Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-CRITICAL WARNING: [BD 41-759] The input pins (listed below) are either not connected or do not have a source port, and they don't have a tie-off specified. These pins are tied-off to all 0's to avoid error in Implementation flow.
-Please check your design and connect them as needed: 
-/TTL_out_0/clk_x4
-/TTL_out_1/clk_x4
-
-validate_bd_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:06 . Memory (MB): peak = 2765.578 ; gain = 14.340
-delete_bd_objs [get_bd_nets clk_wiz_0_clk_out1]
-connect_bd_net [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins TTLx8_out_0/clk_x4]
-connect_bd_net [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins TTLx8_out_1/clk_x4]
-save_bd_design
 Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
 Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui> 
-validate_bd_design
-INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
-WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-CRITICAL WARNING: [BD 41-759] The input pins (listed below) are either not connected or do not have a source port, and they don't have a tie-off specified. These pins are tied-off to all 0's to avoid error in Implementation flow.
-Please check your design and connect them as needed: 
-/TTL_out_0/clk_x4
-/TTL_out_1/clk_x4
-
-validate_bd_design: Time (s): cpu = 00:00:21 ; elapsed = 00:00:17 . Memory (MB): peak = 2795.457 ; gain = 13.570
-startgroup
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {499.99500}] [get_bd_cells clk_wiz_0]
-endgroup
-validate_bd_design
-INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
-WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-CRITICAL WARNING: [BD 41-759] The input pins (listed below) are either not connected or do not have a source port, and they don't have a tie-off specified. These pins are tied-off to all 0's to avoid error in Implementation flow.
-Please check your design and connect them as needed: 
-/TTL_out_0/clk_x4
-/TTL_out_1/clk_x4
-
-validate_bd_design: Time (s): cpu = 00:00:17 ; elapsed = 00:00:14 . Memory (MB): peak = 2845.438 ; gain = 2.879
-startgroup
-set_property -dict [list CONFIG.USE_LOCKED {false}] [get_bd_cells clk_wiz_0]
-endgroup
-validate_bd_design
-INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
-WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_6/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_6' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_6> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_7/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_7' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_7> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TimeController_0/s_axi_aclk have been updated from connected ip, but BD cell '/TimeController_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TimeController_0> to completely resolve these warnings.
-CRITICAL WARNING: [BD 41-759] The input pins (listed below) are either not connected or do not have a source port, and they don't have a tie-off specified. These pins are tied-off to all 0's to avoid error in Implementation flow.
-Please check your design and connect them as needed: 
-/TTL_out_0/clk_x4
-/TTL_out_1/clk_x4
-
-validate_bd_design: Time (s): cpu = 00:00:16 ; elapsed = 00:00:15 . Memory (MB): peak = 2850.574 ; gain = 0.000
-delete_bd_objs [get_bd_nets clk_wiz_0_clk_out1]
-connect_bd_net [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins TTLx8_out_0/clk_x4]
-validate_bd_design
-INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
-WARNING: [BD 41-237] Bus Interface property AWUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-237] Bus Interface property ARUSER_WIDTH does not match between /axi_interconnect_0/m00_couplers/auto_ds/S_AXI(0) and /axi_interconnect_0/xbar/M00_AXI(16)
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTLx8_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTLx8_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTLx8_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_0/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /TTL_out_1/s_axi_aclk have been updated from connected ip, but BD cell '/TTL_out_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </TTL_out_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_0/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_0' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_0> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_1/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_1' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_1> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_2/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_2' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_2> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_3/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_3' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_3> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_4/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_4' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_4> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/s_axi_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-WARNING: [BD 41-927] Following properties on pin /DAC_Controller_5/m00_axis_aclk have been updated from connected ip, but BD cell '/DAC_Controller_5' does not accept parameter changes, so they may not be synchronized with cell properties:
-	FREQ_HZ = 124998749 
-Please resolve any mismatches by directly setting properties on BD cell </DAC_Controller_5> to completely resolve these warnings.
-INFO: [Common 17-14] Message 'BD 41-927' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
-CRITICAL WARNING: [BD 41-759] The input pins (listed below) are either not connected or do not have a source port, and they don't have a tie-off specified. These pins are tied-off to all 0's to avoid error in Implementation flow.
-Please check your design and connect them as needed: 
-/TTLx8_out_1/clk_x4
-/TTL_out_0/clk_x4
-/TTL_out_1/clk_x4
-
-validate_bd_design: Time (s): cpu = 00:00:15 ; elapsed = 00:00:15 . Memory (MB): peak = 2858.035 ; gain = 7.461
-connect_bd_net [get_bd_pins TTLx8_out_1/clk_x4] [get_bd_pins clk_wiz_0/clk_out1]
-exit
-INFO: [Common 17-206] Exiting Vivado at Wed Sep 27 19:35:57 2023...
+VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v
+VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v
+VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+make_wrapper: Time (s): cpu = 00:00:14 ; elapsed = 00:00:12 . Memory (MB): peak = 2893.164 ; gain = 201.199
+add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+INFO: [BD 41-1662] The design 'RFSoC_Main_blk.bd' is already validated. Therefore parameter propagation will not be re-run.
+Wrote  : <E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main\RFSoC_Main.srcs\sources_1\bd\RFSoC_Main_blk\RFSoC_Main_blk.bd> 
+Wrote  : <E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/ui/bd_1203c447.ui> 
+VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.v
+VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/sim/RFSoC_Main_blk.v
+VHDL Output written to : E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+INFO: [BD 41-1029] Generation completed for the IP Integrator block clk_wiz_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block TTLx8_out_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block TTLx8_out_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block TTL_out_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block TTL_out_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_2 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_3 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_4 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_5 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_6 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block DAC_Controller_7 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block proc_sys_reset_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block TimeController_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/xbar .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/ip/RFSoC_Main_blk_auto_ds_0/RFSoC_Main_blk_auto_ds_0_ooc.xdc'
+WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI'. A default connection has been created.
+WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_ds .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/ip/RFSoC_Main_blk_auto_pc_0/RFSoC_Main_blk_auto_pc_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_pc .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block usp_rf_data_converter_0 .
+INFO: [xilinx.com:ip:zynq_ultra_ps_e:3.3-0] RFSoC_Main_blk_zynq_ultra_ps_e_0_0: 
+Changes in your design (including the PCW configuration settings) are not automatically exported from Vivado to Xilinx's SDK, Petalinux or Yocto.
+This is by design to avoid disrupting existing embedded development efforts. To have any changes of your design taking effect in the embedded software flow please export your
+design by going through Vivado's main menu, click on File, then Export finally select Export Hardware, please ensure you click on the Include BitStream option.
+The auto-generated HDF file is all you need to import in Xilinx's SDK, Petalinux or Yocto for your changes to be reflected in the Embedded Software Flow.
+For more information, please consult PG201, section: Exporting PCW Settings to Embedded Software Flows
+INFO: [PSU-0] Address Range of DDR (0x7ff00000 to 0x7fffffff) is reserved by PMU for internal purpose.
+WARNING: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI_HPM0_FPD'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block zynq_ultra_ps_e_0 .
+Exporting to file E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hw_handoff/RFSoC_Main_blk.hwh
+Generated Block Design Tcl file E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hw_handoff/RFSoC_Main_blk_bd.tcl
+Generated Hardware Definition File E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/synth/RFSoC_Main_blk.hwdef
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_1_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_2_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_3_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_4_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_5_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_6_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_DAC_Controller_7_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_TTL_out_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_TTL_out_1_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_TTLx8_out_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_TTLx8_out_1_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_TimeController_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_auto_ds_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_auto_pc_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_clk_wiz_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_proc_sys_reset_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_usp_rf_data_converter_0_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_xbar_0
+INFO: [IP_Flow 19-7066] Running IP cache check for IP RFSoC_Main_blk_zynq_ultra_ps_e_0_0
+[Wed Sep 27 19:41:13 2023] Launched RFSoC_Main_blk_xbar_0_synth_1, RFSoC_Main_blk_auto_ds_0_synth_1, RFSoC_Main_blk_TTL_out_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_3_0_synth_1, RFSoC_Main_blk_DAC_Controller_4_0_synth_1, RFSoC_Main_blk_proc_sys_reset_0_0_synth_1, RFSoC_Main_blk_TTL_out_1_0_synth_1, RFSoC_Main_blk_DAC_Controller_1_0_synth_1, RFSoC_Main_blk_DAC_Controller_2_0_synth_1, RFSoC_Main_blk_clk_wiz_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_6_0_synth_1, RFSoC_Main_blk_auto_pc_0_synth_1, RFSoC_Main_blk_DAC_Controller_7_0_synth_1, RFSoC_Main_blk_TimeController_0_0_synth_1, RFSoC_Main_blk_TTLx8_out_1_0_synth_1, RFSoC_Main_blk_TTLx8_out_0_0_synth_1, RFSoC_Main_blk_DAC_Controller_5_0_synth_1, RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1, RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1, synth_1...
+Run output will be captured here:
+RFSoC_Main_blk_xbar_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_xbar_0_synth_1/runme.log
+RFSoC_Main_blk_auto_ds_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_ds_0_synth_1/runme.log
+RFSoC_Main_blk_TTL_out_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TTL_out_0_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_0_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_3_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_3_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_4_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_4_0_synth_1/runme.log
+RFSoC_Main_blk_proc_sys_reset_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_proc_sys_reset_0_0_synth_1/runme.log
+RFSoC_Main_blk_TTL_out_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TTL_out_1_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_1_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_2_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_2_0_synth_1/runme.log
+RFSoC_Main_blk_clk_wiz_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_clk_wiz_0_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_6_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_6_0_synth_1/runme.log
+RFSoC_Main_blk_auto_pc_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_auto_pc_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_7_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_7_0_synth_1/runme.log
+RFSoC_Main_blk_TimeController_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TimeController_0_0_synth_1/runme.log
+RFSoC_Main_blk_TTLx8_out_1_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TTLx8_out_1_0_synth_1/runme.log
+RFSoC_Main_blk_TTLx8_out_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_TTLx8_out_0_0_synth_1/runme.log
+RFSoC_Main_blk_DAC_Controller_5_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_DAC_Controller_5_0_synth_1/runme.log
+RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_usp_rf_data_converter_0_0_synth_1/runme.log
+RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/RFSoC_Main_blk_zynq_ultra_ps_e_0_0_synth_1/runme.log
+synth_1: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/synth_1/runme.log
+[Wed Sep 27 19:41:14 2023] Launched impl_1...
+Run output will be captured here: E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:01:21 ; elapsed = 00:01:27 . Memory (MB): peak = 3229.457 ; gain = 329.379
+open_run impl_1
+INFO: [Device 21-403] Loading part xczu28dr-ffvg1517-2-e
+Netlist sorting complete. Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 4068.125 ; gain = 48.574
+INFO: [Netlist 29-17] Analyzing 3051 Unisim elements for replacement

@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Wed Sep 27 19:28:34 2023
-# Process ID: 26088
+# Start of session at: Wed Sep 27 19:38:02 2023
+# Process ID: 30224
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -12,21 +12,8 @@
 source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl}
 update_compile_order -fileset sources_1
 open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
-validate_bd_design
-delete_bd_objs [get_bd_nets clk_wiz_0_clk_out1]
-connect_bd_net [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins TTLx8_out_0/clk_x4]
-connect_bd_net [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins TTLx8_out_1/clk_x4]
-save_bd_design
-validate_bd_design
-startgroup
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {499.99500}] [get_bd_cells clk_wiz_0]
-endgroup
-validate_bd_design
-startgroup
-set_property -dict [list CONFIG.USE_LOCKED {false}] [get_bd_cells clk_wiz_0]
-endgroup
-validate_bd_design
-delete_bd_objs [get_bd_nets clk_wiz_0_clk_out1]
-connect_bd_net [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins TTLx8_out_0/clk_x4]
-validate_bd_design
-connect_bd_net [get_bd_pins TTLx8_out_1/clk_x4] [get_bd_pins clk_wiz_0/clk_out1]
+make_wrapper -files [get_files E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd] -top
+add_files -norecurse e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+wait_on_run impl_1
+open_run impl_1

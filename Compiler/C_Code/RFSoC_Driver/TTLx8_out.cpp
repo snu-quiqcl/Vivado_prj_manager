@@ -16,7 +16,7 @@ void TTLx8_out::set(uint64_t pulse){
         this->last_pulse += ( pulse << ( get_timestamp() % 8 ) );
     }
 
-    reg128_write(this->addr, get_timestamp_coarse(), this->last_pulse);
+    Xil_Out128(this->addr,MAKE128CONST( get_timestamp_coarse(), this->last_pulse));
     return;
 }
 
@@ -27,7 +27,7 @@ void TTLx8_out::set_ch(const char * pulse_ch){
     else if( strcmp(pulse_ch,"OFF") == 0 || strcmp(pulse_ch,"OFf") == 0 || strcmp(pulse_ch, "OfF") == 0 || strcmp(pulse_ch, "Off") == 0 || strcmp(pulse_ch, "oFF") == 0 || strcmp(pulse_ch, "oFf") == 0 || strcmp(pulse_ch, "ofF") == 0 || strcmp(pulse_ch,"off") == 0 ){
         this -> set(0);
     }
-    reg128_write(this->addr, get_timestamp_coarse(),this->last_pulse);
+    Xil_Out128(this->addr,MAKE128CONST( get_timestamp_coarse(),this->last_pulse));
     return;
 }
 

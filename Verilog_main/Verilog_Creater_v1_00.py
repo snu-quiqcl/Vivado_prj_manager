@@ -75,7 +75,7 @@ class Verilog_maker:
         self.board_name = "xilinx.com:zcu111:part0:1.4"
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = False
+        self.do_sim = True
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat

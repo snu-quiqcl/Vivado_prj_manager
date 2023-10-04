@@ -1,0 +1,33 @@
+In file included from E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:1:
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp: In member function 'void DAC::set_freq(uint64_t)':
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:106:72: warning: left shift count >= width of type [-Wshift-count-overflow]
+  106 |     Xil_Out128(this-> addr,MAKE128CONST( get_timestamp_coarse() , (0x1 << 60) | this->freq));
+      |                                                                    ~~~~^~~~~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
+   12 | #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
+      |                                                          ^~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp: In member function 'void DAC::set_amp(long double)':
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:112:70: warning: left shift count >= width of type [-Wshift-count-overflow]
+  112 |     Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x2 << 60) | ((this->amp) << 46) | ( (this->freq >> 2) & MASK46BIT) ));
+      |                                                                  ~~~~^~~~~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
+   12 | #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
+      |                                                          ^~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp: In member function 'void DAC::set_config(long double, uint64_t, long double, uint64_t)':
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:121:74: warning: left shift count >= width of type [-Wshift-count-overflow]
+  121 |         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x0 << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> 16) & MASK32BIT) ));
+      |                                                                      ~~~~^~~~~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
+   12 | #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
+      |                                                          ^~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:124:74: warning: left shift count >= width of type [-Wshift-count-overflow]
+  124 |         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x1 << 63) | (((shift-1) & MASK3BIT) << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> ((8 - shift) * 2)) & MASK32BIT) ));
+      |                                                                      ~~~~^~~~~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
+   12 | #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
+      |                                                          ^~
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp: In member function 'void TTLx8_out::set(uint64_t)':
+E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:4:46: warning: comparison of integer expressions of different signedness: 'uint64_t' {aka 'long unsigned int'} and 'int64_t' {aka 'long int'} [-Wsign-compare]
+    4 |     if( ( ( this -> last_output_time ) >> 3) < get_timestamp() ){
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/TEST2/TEST2.elf has a LOAD segment with RWX permissions

@@ -25,8 +25,11 @@ class Compiler:
         self.elf_data = None
         self.use_make = False
         self.is_cpp = True
+        self.total_command = ''
+        self.total_log = ''
         
-        self.git_dir = r'C:\Jeonghyun\GIT'
+        # self.git_dir = r'C:\Jeonghyun\GIT'
+        self.git_dir = r'E:\RFSoC\GIT'
         self.xilinx_include_dir = r'Vivado_prj_manager\Compiler\Xilinx_Include\bspinclude\include'
         self.rfsoc_driver_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver'
         self.rfsoc_driver_include_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include'
@@ -166,6 +169,8 @@ class Compiler:
                     process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                     stdout, stderr = process.communicate()
                     print(stderr)
+                    self.total_command += cmd_conc + '\n'
+                    self.total_log += stderr
                     
                 
                 ###############################################################
@@ -179,6 +184,8 @@ class Compiler:
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)
+                self.total_command += cmd_conc + '\n'
+                self.total_log += stderr
                     
                 ###############################################################
                 ## main.cpp
@@ -218,6 +225,8 @@ class Compiler:
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)
+                self.total_command += cmd_conc + '\n'
+                self.total_log += stderr
                 
                 ###############################################################
                 ## startup.S
@@ -250,6 +259,8 @@ class Compiler:
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)
+                self.total_command += cmd_conc + '\n'
+                self.total_log += stderr
                 
                 ###############################################################
                 ## main.elf
@@ -279,6 +290,14 @@ class Compiler:
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)
+                self.total_command += cmd_conc + '\n'
+                self.total_log += stderr
+                
+                current_file_dir, dump_ = os.path.split(os.path.realpath(__file__))
+                with open(os.path.join(current_file_dir,'LOG.txt'), 'w') as f:
+                    f.write(self.total_log)
+                with open(os.path.join(current_file_dir,'CMD.txt'), 'w') as f:
+                    f.write(self.total_command)
                 
         
                 # Check the return code

@@ -97,7 +97,7 @@ int main()
 
 	/* start the application (web server, rxtest, txtest, etc..) */
 	start_application();
-	set_clock(6400000);
+	set_clock(1600000);
 	//xil_printf("SET CLOCK DISABLED IN MAIN.C TEMPORARILY");
 	/* set binary mode false*/
 	set_current_binary_mode(0);

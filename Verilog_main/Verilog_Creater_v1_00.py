@@ -47,11 +47,11 @@ class Verilog_maker:
         
         self.TTL_out_dir = os.path.join(self.target_dir,'TTL_out')
         
-        self.TTLx8_ports = ['FMCP_HSPC_LA10_P', 'FMCP_HSPC_LA10_N']
+        self.TTLx8_ports = ['PMOD1_0_LS']
         
         self.total_ttlx8_num = len(self.TTLx8_ports)
         
-        self.TTL_ports = ['GPIO_LED_0_LS', 'GPIO_LED_1_LS']
+        self.TTL_ports = ['GPIO_LED_0_LS', 'GPIO_LED_1_LS','DACIO_00']
         
         self.total_ttl_num = len(self.TTL_ports)
         
@@ -75,7 +75,7 @@ class Verilog_maker:
         self.board_name = "xilinx.com:zcu111:part0:1.4"
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = True
+        self.do_sim = False
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
@@ -807,10 +807,10 @@ class Verilog_maker:
         tcl_code += 'set parentType [get_property TYPE $parentObj]\n'
         tcl_code += f'current_bd_instance $parentObj\n'
         tcl_code += """
-set RF3_CLKO_A_C_N_228 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_N_228 ]
-set RF3_CLKO_A_C_N_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_N_229 ]
-set RF3_CLKO_A_C_P_228 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P_228 ]
-set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 1600000000 RF3_CLKO_A_C_P_229 ]
+set RF3_CLKO_A_C_N_228 [ create_bd_port -dir I -type clk -freq_hz 2000000000 RF3_CLKO_A_C_N_228 ]
+set RF3_CLKO_A_C_N_229 [ create_bd_port -dir I -type clk -freq_hz 2000000000 RF3_CLKO_A_C_N_229 ]
+set RF3_CLKO_A_C_P_228 [ create_bd_port -dir I -type clk -freq_hz 2000000000 RF3_CLKO_A_C_P_228 ]
+set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 2000000000 RF3_CLKO_A_C_P_229 ]
 """
         #######################################################################
         # PLL
@@ -944,15 +944,15 @@ set_property -dict [ list \
    CONFIG.Analog_Detection {0} \
    CONFIG.DAC0_Fabric_Freq {125.000} \
    CONFIG.DAC0_Outclk_Freq {125.000} \
-   CONFIG.DAC0_PLL_Enable {true} \
+   CONFIG.DAC0_PLL_Enable {false} \
    CONFIG.DAC0_Refclk_Div {2} \
-   CONFIG.DAC0_Refclk_Freq {1600.000} \
+   CONFIG.DAC0_Refclk_Freq {2000.000} \
    CONFIG.DAC0_Sampling_Rate {2} \
    CONFIG.DAC1_Fabric_Freq {125.000} \
    CONFIG.DAC1_Outclk_Freq {125.000} \
-   CONFIG.DAC1_PLL_Enable {true} \
+   CONFIG.DAC1_PLL_Enable {false} \
    CONFIG.DAC1_Refclk_Div {2} \
-   CONFIG.DAC1_Refclk_Freq {1600.000} \
+   CONFIG.DAC1_Refclk_Freq {2000.000} \
    CONFIG.DAC1_Sampling_Rate {2} """
             for j in range(self.total_dac_num):
                 if j < 4:

@@ -38,7 +38,7 @@ class RFSoC_Mgr(TCP.RFSoC):
         self.file_name = file_name.replace('.cpp', '').replace('.c', '')
         
 if __name__ == "__main__":
-    file_name = 'TEST2'
+    file_name = 'skeleton_code'
     RFSoC_Mgr = RFSoC_Mgr()
     RFSoC_Mgr.set_file_name(file_name)
     RFSoC_Mgr.connect()

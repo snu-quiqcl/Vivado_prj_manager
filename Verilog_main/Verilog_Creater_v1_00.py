@@ -1207,16 +1207,16 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
                 tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_P]\n'
             block_addr = os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd'.lstrip('/').lstrip('\\'))
             wrapper_addr = os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v'.lstrip('/').lstrip('\\'))
-            tcl_code += f"""
-delete_bd_objs [get_bd_ports RF3_CLKO_A_C_N_228]
-delete_bd_objs [get_bd_ports RF3_CLKO_A_C_P_228]
-delete_bd_objs [get_bd_nets RF3_CLKO_A_C_N_2] [get_bd_ports RF3_CLKO_A_C_N_229]
-delete_bd_objs [get_bd_nets RF3_CLKO_A_C_P_2] [get_bd_ports RF3_CLKO_A_C_P_229]
-delete_bd_objs [get_bd_cells usp_rf_data_converter_0]
-make_wrapper -files [get_files {block_addr}] -top
-add_files -norecurse {wrapper_addr}
-add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv
-            """
+#             tcl_code += f"""
+# delete_bd_objs [get_bd_ports RF3_CLKO_A_C_N_228]
+# delete_bd_objs [get_bd_ports RF3_CLKO_A_C_P_228]
+# delete_bd_objs [get_bd_nets RF3_CLKO_A_C_N_2] [get_bd_ports RF3_CLKO_A_C_N_229]
+# delete_bd_objs [get_bd_nets RF3_CLKO_A_C_P_2] [get_bd_ports RF3_CLKO_A_C_P_229]
+# delete_bd_objs [get_bd_cells usp_rf_data_converter_0]
+# make_wrapper -files [get_files {block_addr}] -top
+# add_files -norecurse {wrapper_addr}
+# add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv
+#             """
 #         else:
 #             tcl_code += f"""
 # make_wrapper -files [get_files {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd'.lstrip('/').lstrip('\\'))}] -top

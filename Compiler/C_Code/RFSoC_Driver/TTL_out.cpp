@@ -21,3 +21,7 @@ void TTL_out::set_ch(const char * pulse_ch){
 uint64_t TTL_out::get_last_pulse(){
     return this->last_pulse;
 }
+
+void TTL_out::flush_fifo(){
+    Xil_Out128((this->addr | 0x10),MAKE128CONST(0,1));
+}

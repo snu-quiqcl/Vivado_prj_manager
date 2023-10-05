@@ -124,4 +124,8 @@ void DAC::set_config(long double amp, uint64_t freq, long double phase, uint64_t
         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x1 << 63) | (((shift-1) & MASK3BIT) << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> ((8 - shift) * 2)) & MASK32BIT) ));
     }
     return;
-} 
+}
+
+void DAC::flush_fifo(){
+    Xil_Out128((this->addr | 0x10),MAKE128CONST(0,1));
+}

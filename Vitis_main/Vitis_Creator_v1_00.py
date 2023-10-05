@@ -6,6 +6,7 @@ Created on Tue Sep 26 19:40:08 2023
 """
 import os
 import re
+import shutil
 import subprocess
 
 class Vitis_maker:
@@ -15,6 +16,10 @@ class Vitis_maker:
         self.git_dir = r'E:\RFSoC\GIT'
         self.tcl_commands = ''
         self.xsa_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Main_blk_wrapper.xsa')
+        self.bsp_lib_dir = os.path.join(self.git_dir,r'RFSoC\RFSoC_Design_V1_1\VITIS\RFSoC_Firmware_plt\export\RFSoC_Firmware_plt\sw\RFSoC_Firmware_plt\standalone_domain\bsplib')
+        self.bsp_include_dir = os.path.join(self.git_dir,r'RFSoC\RFSoC_Design_V1_1\VITIS\RFSoC_Firmware_plt\export\RFSoC_Firmware_plt\sw\RFSoC_Firmware_plt\standalone_domain\bspinclude')
+        self.xilinx_include_dir = os.path.join(self.git_dir,r'Vivado_prj_manager\Compiler\Xilinx_Include')
+        self.skeleton_dir = os.path.join(self.git_dir,r'Vivado_prj_manager\Compiler\C_Code\skeleton_code')
         self.lang = 'C'
         
         if self.lang == 'C++': # LWIP -> need extern "C"...
@@ -24,9 +29,7 @@ class Vitis_maker:
             self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware')
             self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS')
             
-        self.C_file_dir = os.path.join(self.target_dir,'RFSoC_Firmware_app','src')
-        self.ensure_directory_exists(self.C_file_dir)
-        # self.copy_C_files()
+        self.ensure_directory_exists(self.target_dir)
     
     def ensure_directory_exists(self, directory_dir):
         if not os.path.exists(directory_dir):
@@ -37,20 +40,32 @@ class Vitis_maker:
                 print(f"Error creating directory {directory_dir}: {error}")
         else:
             print(f"Directory {directory_dir} already exists.")
-            
-    def copy_C_files(self):
-        for filename in os.listdir(self.firmware_dir):
-            source_dir = os.path.join(self.firmware_dir, filename)
-            file_root, file_extension = os.path.splitext(filename)
-            new_filename = file_root + file_extension
-            destination_dir = os.path.join(self.C_file_dir, new_filename)
-            
-            C_code = ''
-            with open(source_dir, 'r') as source_file:
-                C_code = source_file.read()
-            
-            with open(destination_dir, 'w') as destination_file:
-                destination_file.write(C_code)
+        
+    def copy_bsp_include(self):
+        # Define the source directory and the destination path
+        source_directory = self.bsp_include_dir
+        destination_directory = os.path.join(self.xilinx_include_dir,'bspinclude')
+        
+        if os.path.exists(destination_directory):
+            shutil.rmtree(destination_directory)
+            print('Delete previous BSP include')
+            # Copy the entire directory
+        shutil.copytree(source_directory, destination_directory)
+        
+        print(f"BSP Include directory Copied the entire directory from {source_directory} to {destination_directory}.")
+        
+    def copy_bsp_lib(self):
+        # Define the source directory and the destination path
+        source_directory = self.bsp_lib_dir
+        destination_directory = os.path.join(self.xilinx_include_dir,'bsplib')
+        
+        # Copy the entire directory
+        if os.path.exists(destination_directory):
+            shutil.rmtree(destination_directory)
+            print('Delete previous bsp lib')
+        shutil.copytree(source_directory, destination_directory)
+        
+        print(f"BSP Lib directory Copied the entire directory from {source_directory} to {destination_directory}.")
         
     def run_vitis_tcl(self):
         file_dir = f'{self.target_dir}/make_project.tcl'
@@ -127,11 +142,75 @@ importsources -name RFSoC_Firmware_app -path "{self.firmware_dir}" -soft-link
     def set_workspace(self):
         self.tcl_commands += f'setws \"{self.target_dir}\"'
         self.tcl_commands += '\n'
+    
+    def set_lang(self, lang):
+        self.lang = lang
+        if self.lang == 'C++': # LWIP -> need extern "C"...
+            self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware_CPP')
+            self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS_CPP')
+        else:
+            self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware')
+            self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS')
+            
+        self.ensure_directory_exists(self.target_dir)
+        
+    def make_skeleton_code(self):
+        # XPAR_DAC_CONTROLLER_0_BASEADDR
+        # XPAR_TTL_OUT_0_BASEADDR
+        # XPAR_TTLX8_OUT_0_BASEADDR
+        # XPAR_TIMECONTROLLER_0_BASEADDR
+        file_path = os.path.join(self.xilinx_include_dir,'bspinclude','include','xparameters.h')
+        with open(file_path, 'r') as file:
+            content = file.read()
+
+        # Define the pattern
+        pattern = r"XPAR_(DAC_CONTROLLER|TTL_OUT|TTLX8_OUT|TIMECONTROLLER)_(\d+)_BASEADDR"
+        
+        # Find all matches in the content
+        matches = re.findall(pattern, content)
+        
+        # Convert tuple matches to single string format
+        addr_list = [f'XPAR_{match[0]}_{match[1]}_BASEADDR' for match in matches]
+        
+        self.ensure_directory_exists(self.skeleton_dir)
+        skeleton_code_path = os.path.join(self.skeleton_dir,'skeleton_code.cpp')
+        with open(skeleton_code_path,'w') as file:
+            skeleton_code = """
+#include "RFSoC_Driver.h"
+
+int main(){
+"""
+            for match in matches:
+                if match[0] == 'DAC_CONTROLLER':
+                    skeleton_code += f'    DAC dac_{match[1]};\n'
+                    skeleton_code += f'    dac_{match[1]}.set_addr(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    skeleton_code += f'    dac_{match[1]}.flush_fifo();\n'
+                    skeleton_code += '\n'
+                if match[0] == 'TTL_OUT':
+                    skeleton_code += f'    TTL_out ttl_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    skeleton_code += f'    ttl_out_{match[1]}.flush_fifo();\n'
+                    skeleton_code += '\n'
+                if match[0] == 'TTLX8_OUT':
+                    skeleton_code += f'    TTLx8_out ttlx8_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    skeleton_code += f'    ttlx8_out_{match[1]}.flush_fifo();\n'
+                    skeleton_code += '\n'
+                if match[0] == 'TIMECONTROLLER':
+                    skeleton_code += f'    TimeController tc_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    skeleton_code += f'    tc_{match[1]}.auto_stop();\n'
+                    skeleton_code += f'    tc_{match[1]}.reset();\n'
+                    skeleton_code += '\n'
+            skeleton_code += '}'
+            file.write(skeleton_code)
 
             
 if __name__ == "__main__":
     vtm = Vitis_maker()
+    
     vtm.set_workspace()
     vtm.make_vitis_platform()
     vtm.make_vitis_application()
     vtm.run_vitis_tcl()
+    
+    vtm.copy_bsp_include()
+    vtm.copy_bsp_lib()
+    vtm.make_skeleton_code()

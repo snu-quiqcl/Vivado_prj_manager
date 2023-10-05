@@ -124,6 +124,7 @@ class DAC{
         void set_freq(uint64_t freq);
         void set_amp(long double amp);
 	void set_config(long double amp, uint64_t freq, long double phase, uint64_t shift);
+    void flush_fifo();
 };
 
 /////////////////////////////////////////////////////////////
@@ -141,6 +142,7 @@ class TTL_out{
         void set(uint64_t pulse);
         void set_ch(const char * pulse_ch);
         uint64_t get_last_pulse();
+        void flush_fifo();
 };
 
 /////////////////////////////////////////////////////////////
@@ -159,6 +161,7 @@ class TTLx8_out{
         void set(uint64_t pulse);
         void set_ch(const char * pulse_ch);
         uint64_t get_last_pulse();
+        void flush_fifo();
 };
 
 /////////////////////////////////////////////////////////////

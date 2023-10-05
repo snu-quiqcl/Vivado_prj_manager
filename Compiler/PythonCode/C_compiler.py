@@ -298,12 +298,13 @@ class Compiler:
                     f.write(self.total_log)
                 with open(os.path.join(current_file_dir,'CMD.txt'), 'w') as f:
                     f.write(self.total_command)
+                    
+                log_dir = os.path.join(current_file_dir,'LOG.txt')
                 
         
                 # Check the return code
-                if stderr and (stderr != f"c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/{file_name}/{file_name}.elf has a LOAD segment with RWX permissions\n"):
-                    print("Error Code")
-                    raise Exception(stderr)
+                if 'error:' in self.total_log:
+                    raise Exception(f'Compile error. Check {log_dir}')
                 else:
                     print("Compilation successful.")
             else: # this is old version... code revision is required
@@ -419,7 +420,7 @@ if __name__ == "__main__":
     do_compile = True
     
     comp = Compiler()
-    file_name = "TEST1"
+    file_name = "skeleton_code"
     #Compile C Code
     comp.do_compile = do_compile
     comp.compile_code(file_name)

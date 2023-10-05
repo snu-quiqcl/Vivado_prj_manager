@@ -34,3 +34,7 @@ void TTLx8_out::set_ch(const char * pulse_ch){
 uint64_t TTLx8_out::get_last_pulse(){
     return (this->last_pulse) >> ( ( this -> last_output_time ) % 8);
 }
+
+void TTLx8_out::flush_fifo(){
+    Xil_Out128((this->addr | 0x10),MAKE128CONST(0,1));
+}

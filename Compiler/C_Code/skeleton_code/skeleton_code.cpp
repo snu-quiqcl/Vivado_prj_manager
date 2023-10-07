@@ -49,12 +49,28 @@ int main(){
     tc_0.auto_stop();
     tc_0.reset();
 
+    //Xil_Out128(XPAR_TTLX8_OUT_0_BASEADDR,MAKE128CONST(0,0xff));
     ttlx8_out_0.set(1);
-    delay(30);
-    ttlx8_out_0.set(0);
-    delay(40);
-    ttlx8_out_0.set(1);
-    delay(50);
-    ttlx8_out_0.set(0);
+    ttl_out_2.set(0);
+    dac_0.set_config(1.0,100,0,0);
+   
+    /*
+    ttl_out_2.set(1);
+    dac_0.set_config(1.0,100000000,0,0);
+    delay_coarse(5);
+    dac_0.set_config(1.0,80000000,0,0);
+    delay_coarse(3);
+    dac_0.set_config(0.5,60000000,0,0);
+    delay_coarse(20);
+    dac_0.set_config(1.0,100000000,0,0);
+*/
+    
+
+    //delay(30);
+    //ttlx8_out_0.set(0);
+    //delay(40);
+    //ttlx8_out_0.set(1);
+    //delay(50);
+    //ttlx8_out_0.set(0);
     tc_0.auto_start();
 }

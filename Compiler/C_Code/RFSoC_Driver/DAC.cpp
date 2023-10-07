@@ -108,15 +108,15 @@ void DAC::set_freq(uint64_t freq){
 }
 
 void DAC::set_amp(long double amp){
-    this->amp           = ((uint64_t)(amp * ((1 << 15) - 1))) & MASK14BIT;
+    this->amp           = ((uint64_t)(amp * ((1 << 14) - 1))) & MASK14BIT;
     Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), ((uint64_t)2 << 60) | (uint64_t)((uint64_t)(this->amp) << 46) | (uint64_t)( (uint64_t)(this->freq >> 2) & MASK46BIT) ));
     return;
 }
 
 void DAC::set_config(long double amp, uint64_t freq, long double phase, uint64_t shift = 0){
-    this->amp           = ((uint64_t)(amp * ((1 << 15) - 1))) & MASK14BIT;
+    this->amp           = ((uint64_t)(amp * ((1 << 14) - 1))) & MASK14BIT;
     this->freq          = ((uint64_t)(((long double)freq/(long double)(this->sample_freq))*(((uint64_t)1<<48)-(uint64_t)1))) & MASK48BIT;
-    this->phase         = ((uint64_t)(phase * ((1 << 15) - 1))) & MASK14BIT;
+    this->phase         = ((uint64_t)(phase * ((1 << 14) - 1))) & MASK14BIT;
     if( shift == 0 ){
         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x0 << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> 16) & MASK32BIT) ));
     }

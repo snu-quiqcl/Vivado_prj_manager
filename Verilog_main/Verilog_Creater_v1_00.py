@@ -51,7 +51,7 @@ class Verilog_maker:
         
         self.total_ttlx8_num = len(self.TTLx8_ports)
         
-        self.TTL_ports = ['GPIO_LED_0_LS', 'GPIO_LED_1_LS','DACIO_00']
+        self.TTL_ports = ['GPIO_LED_0_LS', 'GPIO_LED_1_LS','DACIO_00','PMOD0_0_LS']
         
         self.total_ttl_num = len(self.TTL_ports)
         

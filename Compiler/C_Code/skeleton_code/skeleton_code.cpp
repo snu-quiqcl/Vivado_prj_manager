@@ -42,6 +42,9 @@ int main(){
     TTL_out ttl_out_2(XPAR_TTL_OUT_2_BASEADDR);
     ttl_out_2.flush_fifo();
 
+    TTL_out ttl_out_3(XPAR_TTL_OUT_3_BASEADDR);
+    ttl_out_3.flush_fifo();
+
     TTLx8_out ttlx8_out_0(XPAR_TTLX8_OUT_0_BASEADDR);
     ttlx8_out_0.flush_fifo();
 
@@ -49,28 +52,9 @@ int main(){
     tc_0.auto_stop();
     tc_0.reset();
 
-    //Xil_Out128(XPAR_TTLX8_OUT_0_BASEADDR,MAKE128CONST(0,0xff));
-    ttlx8_out_0.set(1);
-    ttl_out_2.set(0);
-    dac_0.set_config(1.0,100,0,0);
-   
-    /*
-    ttl_out_2.set(1);
-    dac_0.set_config(1.0,100000000,0,0);
-    delay_coarse(5);
-    dac_0.set_config(1.0,80000000,0,0);
-    delay_coarse(3);
-    dac_0.set_config(0.5,60000000,0,0);
-    delay_coarse(20);
-    dac_0.set_config(1.0,100000000,0,0);
-*/
-    
+    ttl_out_3.set(0);
+    ttlx8_out_0.set(0);
 
-    //delay(30);
-    //ttlx8_out_0.set(0);
-    //delay(40);
-    //ttlx8_out_0.set(1);
-    //delay(50);
-    //ttlx8_out_0.set(0);
     tc_0.auto_start();
+
 }

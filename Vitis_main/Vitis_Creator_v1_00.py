@@ -74,8 +74,13 @@ class Vitis_maker:
             tcl_file.write(self.tcl_commands)
         # Start Vitis in batch mode and pass the TCL commands as input
         process = subprocess.Popen([self.vitis_dir, file_dir],
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=self.target_dir)
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, text=True, cwd=self.target_dir)
     
+    
+        while process.poll() == None:
+            out = process.stdout.readline()
+            print(out, end='')
+            
         # Wait for the process to complete
         stdout, stderr = process.communicate()
     

@@ -33,7 +33,7 @@ class Verilog_maker:
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core']
         #Number of total dac controller number
-        self.total_dac_num = 8
+        self.total_dac_num = 1
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -76,19 +76,24 @@ class Verilog_maker:
         self.tcl_commands = ''
         self.customized_ip_list = []
         self.do_sim = False
+        self.make_bit_stream = True
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
     
         # Start Vivado in batch mode and pass the TCL commands as input
         process = subprocess.Popen([self.vivado_executable, "-mode", "batch", "-source", tcl_path],
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, text=True)
     
+        while process.poll() == None:
+            out = process.stdout.readline()
+            print(out, end='')
+            
         # Wait for the process to complete
         stdout, stderr = process.communicate()
     
         # Print the output and error messages
-        print(stdout)
+        # print(stdout)
         print(stderr)
     
     def get_all_files_in_directory(self, directory,file_type):
@@ -748,7 +753,8 @@ class Verilog_maker:
             
             self.tcl_commands += self.add_customized_ip(folder_directory)
             self.tcl_commands += self.generate_xilinx_block_design(folder_directory, prj_name)
-            self.open_vivado(folder_directory,prj_name)
+            if self.make_bit_stream == False:
+                self.open_vivado(folder_directory,prj_name)
             with open(file_path, 'w') as tcl_file:
                 tcl_file.write(self.tcl_commands)
                 
@@ -1218,10 +1224,14 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
 # add_files -fileset sim_1 -norecurse E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv
 #             """
 #         else:
-#             tcl_code += f"""
-# make_wrapper -files [get_files {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd'.lstrip('/').lstrip('\\'))}] -top
-# add_files -norecurse {os.path.join(folder_directory,'/RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v'.lstrip('/').lstrip('\\'))}
-#             """
+        if self.make_bit_stream == True:
+            block_addr = os.path.join(folder_directory,'RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd'.lstrip('/').lstrip('\\'))
+            wrapper_addr = os.path.join(folder_directory,'RFSoC_Main/RFSoC_Main.gen/sources_1/bd/RFSoC_Main_blk/hdl/RFSoC_Main_blk_wrapper.v'.lstrip('/').lstrip('\\'))
+            tcl_code += f"""
+make_wrapper -files [get_files {block_addr}] -top
+add_files -norecurse {wrapper_addr}
+launch_runs impl_1 -to_step write_bitstream -jobs 6
+            """
             
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")
@@ -1304,6 +1314,24 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         tcl_code = tcl_code.replace("\\","/")
         
         self.tcl_commands += tcl_code
+    
+    def generate_xsa(self):
+        tcl_code = ''
+        file_path = os.path.join(self.git_dir, self.target_dir,'make_xsa.tcl')
+        if self.make_bit_stream == True:
+            bit_addr = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Main_blk_wrapper.xsa')
+            prj_addr = os.path.join(self.git_dir,self.target_dir,'RFSoC_Main_output/RFSoC_Main/RFSoC_Main.xpr')
+            tcl_code += f"""
+open_project {prj_addr}
+write_hw_platform -fixed -include_bit -force -file {bit_addr}
+            """
+            
+            tcl_code = tcl_code.replace("\\","/")
+            self.tcl_commands += tcl_code
+            with open(file_path, 'w') as tcl_file:
+                tcl_file.write(self.tcl_commands)
+
+            self.run_vivado_tcl(self.vivado_path, file_path)
             
     def run(self):
         self.generate_dac_controller()
@@ -1311,6 +1339,7 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         self.generate_ttlx8_out()
         self.generate_ttl_out()
         self.generate_RFSoC_main()
+        self.generate_xsa()
         
     
             

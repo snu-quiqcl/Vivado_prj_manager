@@ -103,7 +103,7 @@ rtoc_fifo_generator_0 RTOC_Core_FIFO0(
 );
 
 always @(posedge clk) begin
-    if( reset ) begin
+    if( flush_fifo ) begin
         counter_match                               <= 1'b0;
         overflow_error_state                        <= 1'b0;
         timestamp_error_state                       <= 1'b0;

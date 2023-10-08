@@ -76,7 +76,7 @@ class Verilog_maker:
         self.tcl_commands = ''
         self.customized_ip_list = []
         self.do_sim = False
-        self.make_bit_stream = True
+        self.make_bit_stream = (True and (not self.do_sim))
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat

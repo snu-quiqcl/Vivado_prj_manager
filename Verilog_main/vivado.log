@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sun Oct  8 15:38:35 2023
-# Process ID: 23596
+# Start of session at: Sun Oct  8 19:19:24 2023
+# Process ID: 20440
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\make_xsa.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -19,11 +19,11 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Desi
 INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TTLx8_out_output'.
 INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/TTL_out_output'.
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'E:/Xilinx/Vivado/2020.2/data/ip'.
-open_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1162.852 ; gain = 0.000
+open_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 1161.809 ; gain = 0.000
 # write_hw_platform -fixed -include_bit -force -file E:/RFSoC/GIT/Vivado_prj_manager/Vitis_main/RFSoC_Main_blk_wrapper.xsa
 INFO: [Vivado 12-4895] Creating Hardware Platform: E:/RFSoC/GIT/Vivado_prj_manager/Vitis_main/RFSoC_Main_blk_wrapper.xsa ...
 INFO: [Hsi 55-2053] elapsed time for repository (E:/Xilinx/Vivado/2020.2/data\embeddedsw) loading 1 seconds
 INFO: [Vivado 12-12467] The Hardware Platform can be used for Hardware
 INFO: [Vivado 12-4896] Successfully created Hardware Platform: E:/RFSoC/GIT/Vivado_prj_manager/Vitis_main/RFSoC_Main_blk_wrapper.xsa
-write_hw_platform: Time (s): cpu = 00:00:18 ; elapsed = 00:00:23 . Memory (MB): peak = 1162.852 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Sun Oct  8 15:39:12 2023...
+write_hw_platform: Time (s): cpu = 00:00:20 ; elapsed = 00:00:25 . Memory (MB): peak = 1161.809 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Sun Oct  8 19:20:06 2023...

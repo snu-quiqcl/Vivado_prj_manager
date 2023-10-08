@@ -7,18 +7,23 @@ void TTLx8_out::set(uint64_t pulse){
         uint64_t temp_last_pulse = (this->last_pulse >> 7 )& 0x1;
         this->last_pulse = 0;
 
-        for( int i = 0; i < (get_timestamp() % 8); i ++ ){
-            this-> last_pulse += (temp_last_pulse << i);
-            xil_printf("last pulse update: %llx\r\n",this->last_pulse);
+        int i =0;
+        for( i = 0; i < (get_timestamp() % 8); i ++ ){
+            this-> last_pulse = this->last_pulse | (temp_last_pulse << i);
+            xil_printf("i : %d last pulse update: %llx\r\n",i,this->last_pulse);
         }
 
-        this->last_pulse += this->last_pulse | ( pulse << ( get_timestamp() % 8 ) ) ;
+        for( i ; i < 8; i++){
+            this->last_pulse = this->last_pulse | ( pulse << i );
+            xil_printf("i : %d new pulse update: %llx\r\n",i,this->last_pulse);
+        }
         this->last_output_time = get_timestamp();
     }
     else{
         int i = (get_timestamp() % 8);
         for( i ; i < 8 ; i++){
             this->last_pulse = (this->last_pulse & ( 0xff - (1 << i) )) | ( pulse << i );
+            xil_printf("i : %d\r\n",i);
         }
         this->last_output_time = get_timestamp();
     }
@@ -27,6 +32,7 @@ void TTLx8_out::set(uint64_t pulse){
     xil_printf("%llx\r\n",this->last_pulse);
 
     Xil_Out128(this->addr,MAKE128CONST( get_timestamp_coarse(), this->last_pulse));
+    xil_printf("last pulse: %llx\r\n",this->last_pulse);
     return;
 }
 

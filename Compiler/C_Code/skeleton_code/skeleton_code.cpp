@@ -24,12 +24,4 @@ int main(){
     tc_0.auto_stop();
     tc_0.reset();
 
-    ttlx8_out_0.set(1);
-
-    delay(20);
-
-    ttlx8_out_0.set(0);
-
-    tc_0.auto_start();
-
 }

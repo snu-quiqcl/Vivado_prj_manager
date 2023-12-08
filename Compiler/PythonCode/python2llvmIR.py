@@ -16,8 +16,30 @@ class LLVMIR_Statement:
         module.triple = "aarch64-none-elf"
         self.module = module
         self.builder = None
-        self.function = None
-
+        self.function = []
+        self.classes = []
+        self.classes_id = []
+    
+    def translate_python2llvmir(self,code):
+        tree = ast.parse(python_code)
+        
+        self.classes = self.collect_classes(tree)
+        for classes_ in self.classes:
+            self.classes_id.append(classes_.name)
+        
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node not in (func_node for class_node in self.classes for func_node in class_node.body):
+                print(ast.dump(node, indent=4))
+                self.generate_function(node)
+            if isinstance(node, ast.ClassDef):
+                print(ast.dump(node, indent=4))
+                self.generate_class(node)
+        print('Converted LLVM IR')
+        print('##################################################################')
+        print('# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ')
+        print('##################################################################')
+        
+        print(str(ir_maker.module))
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)
         right = self.translate_node(node.right)
@@ -51,15 +73,22 @@ class LLVMIR_Statement:
     
         # Get the target of the assignment (assuming a single target for simplicity)
         target = node.targets[0]
-    
-        if not isinstance(target, ast.Name):
-            raise NotImplementedError("Only assignment to simple variables is supported")
-    
+        if hasattr(target,"value") and target.value != None:
+            print(ast.dump(node, indent=4))
+            value = self.translate_node(node.value)
+            
         # Compute the value to be assigned
         value = self.translate_node(node.value)
     
         # Check if the variable has been previously declared
-        if target.id not in self.function.variables:
+        if hasattr(target, 'attr'):
+            if hasattr(target, 'value') and target.value.id == 'self':
+                # Temporarily set to int64
+                self.class_self_variable[target.attr] = ir.IntType(64)
+                
+            var_ptr = self.function.variables[target.attr]
+        
+        elif target.id not in self.function.variables:
             # Allocate space for the variable (assuming it's an integer)
             var_ptr = self.builder.alloca(ir.IntType(64), name=target.id)
             self.function.variables[target.id] = var_ptr
@@ -127,12 +156,9 @@ class LLVMIR_Statement:
 
     def generate_function(self, node):
         if isinstance(node, ast.FunctionDef):
-            print(ast.dump(node, indent=4))
             # Simplified: assuming function returns int and takes int arguments
             
             arg_types = []
-            args = []
-            i = 0
             for arg in node.args.args:
                 if arg.annotation.id == 'int':
                     arg_types.append(ir.IntType(64))
@@ -156,6 +182,74 @@ class LLVMIR_Statement:
                 self.translate_node(stmt)
 
             # Simplified: assuming function ends with return
+            
+    def generate_class(self,node):
+        if isinstance(node,ast.ClassDef):
+            # Create a struct to represent the class data
+            field_types = []
+            for stmt in node.body:
+                if isinstance(stmt, ast.FunctionDef) and stmt.name == '__init__':                    
+                    for arg in stmt.args.args:
+                        if hasattr(arg,'annotation') and arg.annotation != None and arg.annotation.id == 'int':
+                            field_types.append(ir.IntType(64))
+                            
+                        else:
+                            field_types.append(ir.IntType(64))
+
+            # Create the struct type
+            class_struct = ir.LiteralStructType(field_types)
+            
+            class_struct = ir.GlobalVariable(self.module, 
+                                             class_struct, 
+                                             name=node.name)
+
+            # Initialize the struct (if necessary)
+            # class_struct.initializer = ir.Constant(class_struct, field_types)
+
+            # Generate methods
+            
+            for stmt in node.body:
+                if isinstance(stmt, ast.FunctionDef):
+                    self.generate_method(stmt, class_struct, node.name)
+        
+    def generate_method(self,node, class_struct, node_name):
+        if isinstance(node, ast.FunctionDef):            
+            arg_types = []
+            for arg in node.args.args:
+                if hasattr(arg,'annotation') and arg.annotation != None and arg.annotation.id == 'int':
+                    arg_types.append(ir.IntType(64))
+                    
+                else:
+                    arg_types.append(ir.IntType(64))
+            
+            method_type = ir.FunctionType(ir.IntType(64), [ir.PointerType(class_struct)] + arg_types)
+            method = ir.Function(self.module, method_type, name=f"{node_name}_{node.name}")
+            
+            method.args[0].name = method.name
+            
+            for i in range(len(method.args)):
+                if i < len(node.args.args):
+                    method.args[i+1].name = node.args.args[i].arg
+                    
+            block = method.append_basic_block(name="entry")
+            self.builder = ir.IRBuilder(block)
+            self.function = method
+            self.function.variables = dict()
+            
+            # self.function.variables[] 
+            # Generate IR for function body
+            for stmt in node.body:
+                self.translate_node(stmt)
+
+            # Simplified: assuming function ends with return
+    
+    def collect_classes(self, node):
+        classes = []
+        for item in ast.walk(node):
+            if isinstance(item, ast.ClassDef):
+                classes.append(item)
+        return classes
+
 
 if __name__ == "__main__":
     python_code1 = """
@@ -206,23 +300,17 @@ def foo( a:int = 10):
     print(a)
 """
     python_code = """
-def foo(a : int, b:int ) -> int:
-    b:int
-    b = 30
-    b = b + 1
-    return a + b
+class goo:
+    def __init__(self, d:int, e:int, f:int):
+        self.d = d
+        
+def foo(a : int, b:int , f:int) -> int:
+    c:int
+    c = 30
+    c = b + 1
+    return a + c
 """
-    llvm_code = ''
-    tree = ast.parse(python_code)
+    
     ir_maker = LLVMIR_Statement()
-
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            ir_maker.generate_function(node)
-    print('Converted LLVM IR')
-    print('##################################################################')
-    print('# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ')
-    print('##################################################################')
-
-    print(str(ir_maker.module))
+    ir_maker.translate_python2llvmir(python_code1)
 

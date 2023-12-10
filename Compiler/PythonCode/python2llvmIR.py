@@ -11,8 +11,11 @@
 # clang --target=aarch64 -mcpu=cortex-a53 -emit-llvm -S test1.cpp
 # llvm datalayout https://llvm.org/docs/LangRef.html#langref-datalayout
 # llvm IR reference manual https://releases.llvm.org/10.0.0/docs/LangRef.html#i-getelementptr
+# clang --target=aarch64 -mcpu=cortex-a53 -c test1.cpp -o test1.o
+# this command makes output file
 import ast
 import subprocess
+import os
 from llvmlite import ir, binding
 
 binding.initialize()
@@ -20,9 +23,10 @@ binding.initialize_all_targets()
 binding.initialize_all_asmprinters()
 module = ir.Module(name="module")
 module.triple = "aarch64-none-elf"
+module.data_layout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
 functions = dict()
 classes = dict()
-
+lists = dict()
 
 class LLVMIR_Statement:
     def __init__(self):
@@ -50,6 +54,10 @@ class LLVMIR_Statement:
         print('#################################################################')
         
         print(str(module))
+        #######################################################################
+        #Make .ll FIle
+        #######################################################################
+        self.write_file('output.ll')
         
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)
@@ -61,6 +69,8 @@ class LLVMIR_Statement:
             return self.builder.sub(left, right)
         elif isinstance(node.op, ast.Mult):
             return self.builder.mul(left, right)
+        else:
+            raise NotImplemented(f'{node.op} is not implemented')
         # ... other binary operators
 
     def translate_Constant(self, node):
@@ -97,7 +107,10 @@ class LLVMIR_Statement:
             return self.builder.load(var_ptr, var_name)
     
     def get_ptr(self,target):
-        return self.function.variables[target.id]
+        try:
+            return self.function.variables[target.id]
+        except:
+            raise Exception(f'{target} this variable is not declatred')
     
     def translate_Assign(self, node):
         if len(node.targets) != 1:
@@ -146,7 +159,8 @@ class LLVMIR_Statement:
             return_value = self.translate_node(node.value)
             self.builder.ret(return_value)
         else:
-            self.builder.ret_void()
+            print()
+            self.builder.ret(ir.Constant(self.function.return_value.type, 0))
     def translate_Call(self, node):
         ######################################################################
         # Call Function
@@ -172,6 +186,7 @@ class LLVMIR_Statement:
         # Assuming all types are integer for simplicity
         if not isinstance(node.annotation, ast.Name) or node.annotation.id != 'int':
             raise NotImplementedError("Only integer types are supported")
+            
         if self.is_self(node.target):
             if ('self_'+ node.target.attr) in self.declared_self_vars:
                 var_ptr = self.declared_self_vars['self_'+node.target.attr] ###///
@@ -299,7 +314,10 @@ class LLVMIR_Statement:
             if value == search_value:
                 return key
         return None 
-
+    
+    def write_file(self, filename):
+        with open(filename, "w") as f:
+            f.write(str(module))
 class Class_Maker(LLVMIR_Statement):
     def __init__(self):
         self.declared_method = dict()
@@ -309,6 +327,7 @@ class Class_Maker(LLVMIR_Statement):
         self.class_instance_ptr = None
         self.fields = set()
         self.field_types =[]
+        self.undefined_function = dict()
         
     def translate_class(self,node):
         if isinstance(node,ast.ClassDef):
@@ -388,6 +407,8 @@ class Func_Maker(LLVMIR_Statement):
         self.declared_class = {}
         self.declared_method = []
         self.function = None
+        self.undefined_function = dict()
+        self.builder = None
         
     def translate_function(self, node):
         if isinstance(node, ast.FunctionDef):
@@ -421,7 +442,23 @@ class Func_Maker(LLVMIR_Statement):
 
             # Simplified: assuming function ends with return   
             
-
+class List_Maker(LLVMIR_Statement):
+    def __init__(self, element_type = None):
+        self.element_type = element_type
+        self.undefined = False
+        if self.element_type == None:
+            self.undefined = True
+        else:
+            self.make_list()
+            
+    def make_list(self, array_size = 16):
+        return ir.ArrayType(self.element_type, array_size)
+        
+    def set_type(self,ir_type):
+        self.element_type = ir_type
+        self.undefined = False
+        self.make__list()
+        
 if __name__ == "__main__":
     python_code1 = """
 class dds:
@@ -472,18 +509,21 @@ def foo( a:int = 10):
 """
     python_code = """
 class goo:
-    def __init__(self, d:int, e:int, f:int):
+    def __init__(self, d:int, e:int, f:int)->int:
         self.q:int
         self.d:int
         self.e:int
         self.e = e
+        return
+    
     def mu(self):
         self.m:int
-        self.m = 30
+        self.m = 30 + (50+90)
         return self.m
         
 def foo(a : int, b:int , f:int) -> int:
     c:int
+    # num_list = [1,2,3,4]
     # c = 30
     # c = b + 1
     # d = c
@@ -491,8 +531,12 @@ def foo(a : int, b:int , f:int) -> int:
     #     c = i * 8
     goo_in = goo(1,2,3)
     # c = foo(1,2,3)
-    c = goo_in.mu()
+    c = goo_in.mu() + 50
     return a + c
+
+def main() -> int:
+    c:int
+    return 0
 """
     
     ir_maker = LLVMIR_Statement()

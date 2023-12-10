@@ -1,4 +1,4 @@
-class foo{
+/*class foo{
     public:
         int a;
         int b;
@@ -16,14 +16,21 @@ class foo{
             return c + 30;
         };
 };
+*/
+
+template<typename T>
+T sum(T a, T b){
+    return a + b;
+}
 
 int main(void){
     int a;
-    foo q;
+    sum<int>(a,a);
+    sum<char>(a,10);
 
-    a  = q.a;
+    int array[10] = {1,2,3};
+
     a = a + 1;
-    a = q.goo(23432);
     return a;
 }
 

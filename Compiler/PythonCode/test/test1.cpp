@@ -1,3 +1,4 @@
+
 /*class foo{
     public:
         int a;

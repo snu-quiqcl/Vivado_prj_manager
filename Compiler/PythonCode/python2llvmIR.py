@@ -57,7 +57,7 @@ class LLVMIR_Statement:
         #######################################################################
         #Make .ll FIle
         #######################################################################
-        self.write_file('output.ll')
+        self.write_file('./output/output.ll')
         
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)

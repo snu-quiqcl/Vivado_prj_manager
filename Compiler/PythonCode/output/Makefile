@@ -16,14 +16,13 @@ CFLAGS=-O2
 CFLAGS+=-Wall
 CFLAGS+=--target=aarch64
 CFLAGS+=-mcpu=cortex-a53
-CFLAGS+=-c
 
 # Assuming that startup.o and other .o files are already compiled
 # and you don't need to compile .c or .cpp files in this Makefile
 
-LINKER_SCRIPT=linker.ld
+LINKER_SCRIPT="C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\PythonCode\output\linker.ld"
 
-LDFLAGS=-T $(LINKER_SCRIPT)
+LDFLAGS=-Wl,-T -Wl,$(LINKER_SCRIPT)
 
 # Object files including the .ll file
 OBJ_FILES += $(S_FILE:.S=.o)
@@ -37,7 +36,7 @@ all: $(TARGET)
 	$(GCC) $(GCCFLAGS) $< -o $@
 
 $(TARGET): $(OBJ_FILES)
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(LL_FILE) -o $(TARGET) $(LDFLAGS)
+	$(CC) $(LDFLAGS)  -o $(TARGET) $(CFLAGS) $(OBJ_FILES) $(LL_FILE)
 
 # Clean rule
 clean:

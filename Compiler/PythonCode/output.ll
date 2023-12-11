@@ -3,6 +3,9 @@ target triple = "aarch64-none-unknown-elf"
 target datalayout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
 
 %"class.goo" = type {i64, i64, i64, i64}
+declare void @"xil_printf"(i8* %".1", ...) 
+
+@".str0" = internal constant [6 x i8] c"hello\00"
 define i64 @"class.goo.__init__"(%"class.goo"* %"self", i64 %"d", i64 %"e", i64 %"f") 
 {
 entry:
@@ -42,9 +45,17 @@ define i64 @"main"()
 {
 entry:
   %"c" = alloca i64
+  %".2" = alloca i8*
+  %".3" = bitcast [6 x i8]* @".str0" to i8*
+  store i8* %".3", i8** %".2"
+  %".5" = load i8*, i8** %".2"
+  call void (i8*, ...) @"xil_printf"(i8* %".5")
   %"c.1" = load i64, i64* %"c"
-  %".2" = icmp eq i64 %"c.1", 30
-  br i1 %".2", label %"then", label %"else"
+  %".7" = icmp eq i64 %"c.1", 30
+  %"c.2" = load i64, i64* %"c"
+  %".8" = icmp sgt i64 %"c.2", 20
+  %".9" = or i1 %".7", %".8"
+  br i1 %".9", label %"then", label %"else"
 then:
   store i64 40, i64* %"c"
   br label %"ifcont"

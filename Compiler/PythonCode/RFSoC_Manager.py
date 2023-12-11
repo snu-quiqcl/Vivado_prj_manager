@@ -19,7 +19,8 @@ class RFSoC_Mgr(TCP.RFSoC):
         
     def run_RFSoC(self):
         # Compile C Code in ../C_Code/
-        self.comp.compile_code(self.file_name)
+        # self.comp.compile_code(self.file_name)
+        self.compile_ll_file(self.file_name)
         
         # Read the ELF file
         elf_data = self.comp.read_elf_file(self.file_name)
@@ -38,7 +39,7 @@ class RFSoC_Mgr(TCP.RFSoC):
         self.file_name = file_name.replace('.cpp', '').replace('.c', '')
         
 if __name__ == "__main__":
-    file_name = 'skeleton_code'
+    file_name = 'output'
     RFSoC_Mgr = RFSoC_Mgr()
     RFSoC_Mgr.set_file_name(file_name)
     RFSoC_Mgr.connect()

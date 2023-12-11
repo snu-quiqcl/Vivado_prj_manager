@@ -18,15 +18,26 @@ import subprocess
 import os
 from llvmlite import ir, binding
 
+#LLVM initialization
 binding.initialize()
 binding.initialize_all_targets()
 binding.initialize_all_asmprinters()
+
+#Module deifinition
 module = ir.Module(name="module")
 module.triple = "aarch64-none-unknown-elf"
 module.data_layout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
+
+#Global variables
 functions = dict()
 classes = dict()
-lists = dict()
+list_types = dict()
+strings = dict()
+
+#External function definition
+printf_type = ir.FunctionType(ir.VoidType(), [ir.PointerType(ir.IntType(8))], var_arg=True)
+printf = ir.Function(module, printf_type, name="xil_printf")
+functions[printf.name] = printf
 
 class LLVMIR_Statement:
     def __init__(self):
@@ -36,6 +47,19 @@ class LLVMIR_Statement:
         tree = ast.parse(python_code)
         
         classes = self.collect_classes(tree)
+        # string constant initializer
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant) and type(node.value) == str:
+                if node.value in strings:
+                    pass
+                else:
+                    string_value = bytearray(node.value + '\0', encoding='ascii')
+                    string_type = ir.Constant(ir.ArrayType(ir.IntType(8), len(node.value) + 1 ),string_value)
+                    str_var = ir.GlobalVariable(module, string_type.type, name=f".str{len(strings)}")
+                    str_var.global_constant = True
+                    str_var.linkage = 'internal'
+                    str_var.initializer=string_type
+                    strings[node.value] = str_var
         
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) and node not in (func_node for class_node in classes for func_node in class_node.body):
@@ -74,7 +98,34 @@ class LLVMIR_Statement:
         # ... other binary operators
 
     def translate_Constant(self, node):
-        return ir.Constant(ir.IntType(64), node.value)  # Assuming integer constants
+        # https://stackoverflow.com/questions/58674264/llvmlite-hello-world-example-produces-wrong-output
+        global str_num
+        if type(node.value) == int:
+            return ir.Constant(ir.IntType(64), node.value)  # Assuming integer constants
+        elif type(node.value) == str:
+            if node.value in strings:
+                str_var = strings[node.value]
+            else:
+                string_value = bytearray(node.value + '\0', encoding='ascii')
+                string_type = ir.Constant(ir.ArrayType(ir.IntType(8), len(node.value) + 1 ),string_value)
+                str_var = ir.GlobalVariable(module, string_type.type, name=f".str{len(strings)}")
+                str_var.global_constant = True
+                str_var.linkage = 'internal'
+                str_var.initializer=string_type
+                strings[node.value] = str_var
+            if str_var.name in self.function.variables:
+                ptr_var = self.function.variables[str_var.name]
+            else:
+                ptr_var = self.builder.alloca(ir.PointerType(ir.IntType(8)))
+                self.function.variables[str_var.name] = ptr_var
+                
+            str_ptr = self.builder.bitcast(str_var, ir.PointerType(ir.IntType(8)))
+            print(str_ptr)
+            print(ptr_var)
+
+            # Store the string pointer into the pointer variable
+            self.builder.store(str_ptr, ptr_var)
+            return self.builder.load(ptr_var)
 
     def translate_Name(self, node):
         if hasattr(node, 'func') and ('class.' + node.func.id) in classes:
@@ -120,6 +171,8 @@ class LLVMIR_Statement:
         ###
         # target var 
         ###
+        if isinstance(node.value, ast.List):
+            print('helo')
         if self.is_self(target):
             if ('self_' + target.attr) in self.declared_self_vars:
                 var_ptr = self.declared_self_vars['self_'+target.attr] ###///
@@ -316,7 +369,30 @@ class LLVMIR_Statement:
             return self.builder.icmp_signed('>=', left, right)
         else:
             raise NotImplementedError("Unsupported comparison operation")
-
+            
+    def translate_BoolOp(self, node):
+        if isinstance(node.op, ast.And):
+            values = [self.translate_node(v) for v in node.values]
+            result = values[0]
+            for val in values[1:]:
+                result = self.builder.and_(result, val)
+            return result
+        elif isinstance(node.op, ast.Or):
+            values = [self.translate_node(v) for v in node.values]
+            result = values[0]
+            for val in values[1:]:
+                result = self.builder.or_(result, val)
+            return result
+        else:
+            raise NotImplementedError("Only 'And' BoolOps are implemented")
+            
+    def translate_List(self,node):
+        ir.ArrayType(element_type, len(array_values))
+    
+    def translate_Expr(self,node):
+        print(ast.dump(node, indent=4))
+        return self.translate_node(node.value)
+        
     def translate_node(self, node):
         if isinstance(node, ast.BinOp):
             return self.translate_BinOp(node)
@@ -340,6 +416,12 @@ class LLVMIR_Statement:
             return self.translate_If(node)
         elif isinstance(node, ast.Compare):
             return self.translate_Compare(node)
+        elif isinstance(node,ast.BoolOp):
+            return self.translate_BoolOp(node)
+        elif isinstance(node,ast.List):
+            return self.translate_List(node)
+        elif isinstance(node, ast.Expr):
+            return self.translate_Expr(node)
         # Add more node types here as needed
         else:
             print()
@@ -499,21 +581,24 @@ class Func_Maker(LLVMIR_Statement):
             # Simplified: assuming function ends with return   
             
 class List_Maker(LLVMIR_Statement):
-    def __init__(self, element_type = None):
+    def __init__(self, ir_builder, element_type = None):
         self.element_type = element_type
         self.undefined = False
-        if self.element_type == None:
-            self.undefined = True
-        else:
-            self.make_list()
+        self.builder = ir_builder
+        
             
     def make_list(self, array_size = 16):
-        return ir.ArrayType(self.element_type, array_size)
+        if self.element_type == None:
+            self.undefined = True
+            return ir.ArrayType(ir.IntType(64), 16)
+        else:
+            return ir.ArrayType(self.element_type, array_size)
         
     def set_type(self,ir_type):
         self.element_type = ir_type
         self.undefined = False
-        self.make__list()
+        if not self.element_type in list_types:
+            d
         
 if __name__ == "__main__":
     python_code1 = """
@@ -577,6 +662,8 @@ class goo:
         self.m = 30 + (50+90)
         return self.m
         
+
+@kernel        
 def foo(a : int, b:int , f:int) -> int:
     c:int
     # num_list = [1,2,3,4]
@@ -592,7 +679,8 @@ def foo(a : int, b:int , f:int) -> int:
 
 def main() -> int:
     c:int
-    if c == 30:
+    xil_printf('hello')
+    if c == 30 or c > 20:
         c = 40
     else:
         c = 60

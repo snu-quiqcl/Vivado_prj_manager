@@ -26,6 +26,8 @@ T sum(T a, T b){
 
 int main(void){
     int a;
+    char* str;
+    str = "abcd\0";
     sum<int>(a,a);
     sum<char>(a,10);
 

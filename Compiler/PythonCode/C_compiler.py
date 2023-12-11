@@ -33,6 +33,7 @@ class Compiler:
         self.xilinx_include_dir = r'Vivado_prj_manager\Compiler\Xilinx_Include\bspinclude\include'
         self.rfsoc_driver_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver'
         self.rfsoc_driver_include_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include'
+        self.clang = r'C:\Program Files\LLVM\bin\clang.exe' # You need to specify exact clang directory
         
         self.full_rfsoc_driver_dir = os.path.join(self.git_dir,self.rfsoc_driver_dir)
         self.full_rfsoc_driver_include_dir = os.path.join(self.git_dir,self.rfsoc_driver_include_dir)
@@ -132,8 +133,8 @@ class Compiler:
         cmd_conc = ''
         filename, file_extension = os.path.splitext(file_name)
         cmd = [
-                'clang',
-                '--target=aarch64',
+                f'{self.clang}',
+                '--target=aarch64-none-unknown-elf',
                 '-mcpu=cortex-a53',
                 '-c',
                 '-Wall',

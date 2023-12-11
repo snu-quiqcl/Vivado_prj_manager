@@ -1,5 +1,5 @@
 ; ModuleID = "module"
-target triple = "aarch64-none-elf"
+target triple = "aarch64-none-unknown-elf"
 target datalayout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
 
 %"class.goo" = type {i64, i64, i64, i64}
@@ -42,5 +42,15 @@ define i64 @"main"()
 {
 entry:
   %"c" = alloca i64
+  %"c.1" = load i64, i64* %"c"
+  %".2" = icmp eq i64 %"c.1", 30
+  br i1 %".2", label %"then", label %"else"
+then:
+  store i64 40, i64* %"c"
+  br label %"ifcont"
+else:
+  store i64 60, i64* %"c"
+  br label %"ifcont"
+ifcont:
   ret i64 0
 }

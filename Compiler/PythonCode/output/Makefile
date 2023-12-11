@@ -1,5 +1,4 @@
-CC=clang
-GCC=aarch64-none-elf-gcc
+CC=C:\Program Files\LLVM\bin\clang.exe
 
 TARGET=output.elf
 
@@ -7,10 +6,7 @@ LL_FILE=output.ll
 
 S_FILE=startup.S
 
-GCCFLAGS=-Wall
-GCCFLAGS+=-O2
 GCCFLAGS+=-c
-GCCFLAGS+=-fmessage-length=0
 
 CFLAGS=-O2
 CFLAGS+=-Wall
@@ -33,7 +29,7 @@ all: $(TARGET)
 # Rule to compile .ll to .o
 
 %.o: %.S
-	$(GCC) $(GCCFLAGS) $< -o $@
+	$(CC) $(GCCFLAGS) $< -o $@
 
 $(TARGET): $(OBJ_FILES)
 	$(CC) $(LDFLAGS)  -o $(TARGET) $(CFLAGS) $(OBJ_FILES) $(LL_FILE)

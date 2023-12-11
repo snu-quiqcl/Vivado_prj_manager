@@ -1,3 +1,1 @@
-warning: overriding the module target triple with aarch64 [-Woverride-module]
-1 warning generated.
 c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/output/output.elf has a LOAD segment with RWX permissions

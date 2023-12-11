@@ -22,7 +22,7 @@ binding.initialize()
 binding.initialize_all_targets()
 binding.initialize_all_asmprinters()
 module = ir.Module(name="module")
-module.triple = "aarch64-none-elf"
+module.triple = "aarch64-none-unknown-elf"
 module.data_layout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
 functions = dict()
 classes = dict()
@@ -57,7 +57,7 @@ class LLVMIR_Statement:
         #######################################################################
         #Make .ll FIle
         #######################################################################
-        self.write_file('./output/output.ll')
+        self.write_file('./output.ll')
         
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)
@@ -266,6 +266,57 @@ class LLVMIR_Statement:
         print(ast.dump(node, indent=4))
         return self.builder.load(var_ptr)
     
+    def translate_If(self, node):
+        condition = self.translate_node(node.test)
+
+        # Create basic blocks for the 'then' and 'else' parts and for continuation
+        then_block = self.builder.append_basic_block('then')
+        else_block = self.builder.append_basic_block('else') if node.orelse else None
+        continue_block = self.builder.append_basic_block('ifcont')
+
+        # Conditional branch based on the condition
+        self.builder.cbranch(condition, then_block, else_block or continue_block)
+
+        # 'then' part
+        self.builder.position_at_end(then_block)
+        for stmt in node.body:
+            self.translate_node(stmt)
+        self.builder.branch(continue_block)
+
+        # 'else' part (if there is one)
+        if node.orelse != None:
+            for stmt in node.orelse:
+                self.builder.position_at_end(else_block)
+                print(ast.dump(stmt, indent=4))
+                self.translate_node(stmt)
+                self.builder.branch(continue_block)
+
+        # Continue with the rest of the code
+        self.builder.position_at_end(continue_block)
+        
+    def translate_Compare(self, node):
+        if len(node.ops) != 1 or len(node.comparators) != 1:
+            raise NotImplementedError("Complex comparison not implemented")
+
+        left = self.translate_node(node.left)
+        right = self.translate_node(node.comparators[0])
+
+        op = node.ops[0]
+        if isinstance(op, ast.Eq):
+            return self.builder.icmp_signed('==', left, right)
+        elif isinstance(op, ast.NotEq):
+            return self.builder.icmp_signed('!=', left, right)
+        elif isinstance(op, ast.Lt):
+            return self.builder.icmp_signed('<', left, right)
+        elif isinstance(op, ast.LtE):
+            return self.builder.icmp_signed('<=', left, right)
+        elif isinstance(op, ast.Gt):
+            return self.builder.icmp_signed('>', left, right)
+        elif isinstance(op, ast.GtE):
+            return self.builder.icmp_signed('>=', left, right)
+        else:
+            raise NotImplementedError("Unsupported comparison operation")
+
     def translate_node(self, node):
         if isinstance(node, ast.BinOp):
             return self.translate_BinOp(node)
@@ -285,9 +336,14 @@ class LLVMIR_Statement:
             return self.translate_For(node)
         elif isinstance(node,ast.Attribute):
             return self.translate_Attribute(node)
+        elif isinstance(node,ast.If):
+            return self.translate_If(node)
+        elif isinstance(node, ast.Compare):
+            return self.translate_Compare(node)
         # Add more node types here as needed
         else:
-            raise NotImplementedError(f"Node type {type(node)} not implemented")
+            print()
+            raise NotImplementedError(f"Node type \n{ast.dump(node, indent=4)}\n not implemented")
     
     def collect_classes(self, node):
         classes = []
@@ -536,6 +592,10 @@ def foo(a : int, b:int , f:int) -> int:
 
 def main() -> int:
     c:int
+    if c == 30:
+        c = 40
+    else:
+        c = 60
     return 0
 """
     

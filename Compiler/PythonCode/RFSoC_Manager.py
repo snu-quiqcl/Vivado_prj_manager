@@ -20,7 +20,7 @@ class RFSoC_Mgr(TCP.RFSoC):
     def run_RFSoC(self):
         # Compile C Code in ../C_Code/
         # self.comp.compile_code(self.file_name)
-        self.compile_ll_file(self.file_name)
+        self.comp.compile_ll_file(self.file_name)
         
         # Read the ELF file
         elf_data = self.comp.read_elf_file(self.file_name)

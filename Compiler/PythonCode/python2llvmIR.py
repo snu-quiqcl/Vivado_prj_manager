@@ -18,37 +18,62 @@ import subprocess
 import os
 from llvmlite import ir, binding
 
+#######################################################################
 #LLVM initialization
+#######################################################################
 binding.initialize()
 binding.initialize_all_targets()
 binding.initialize_all_asmprinters()
 
+#######################################################################
 #Module deifinition
+#######################################################################
 module = ir.Module(name="module")
 module.triple = "aarch64-none-unknown-elf"
 module.data_layout = "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128"
 
+#######################################################################
 #Global variables
+#######################################################################
 functions = dict()
 classes = dict()
 list_types = dict()
 strings = dict()
 
+#######################################################################
+#Define size_t for aarch64
+#######################################################################
+size_t = ir.IntType(64)
+
+#######################################################################
 #External function definition
+#######################################################################
 printf_type = ir.FunctionType(ir.VoidType(), [ir.PointerType(ir.IntType(8))], var_arg=True)
 printf = ir.Function(module, printf_type, name="xil_printf")
 functions['print'] = printf
 
-malloc_type = ir.FunctionType(ir.PointerType(ir.IntType(8)), [ir.IntType(64)], var_arg=True)
-malloc = ir.Function(module, printf_type, name="malloc")
+# void * is set to i8 *
+malloc_type = ir.FunctionType(ir.PointerType(ir.IntType(8)), [size_t], var_arg=True)
+malloc = ir.Function(module, malloc_type, name="malloc")
 functions['malloc'] = malloc
 
 free_type = ir.FunctionType(ir.VoidType(), [ir.PointerType(ir.IntType(8))], var_arg=True)
-free = ir.Function(module, printf_type, name="free")
+free = ir.Function(module, free_type, name="free")
 functions['free'] = free
 
+#######################################################################
 #type table to make type <-> int value mapping
+#######################################################################
 type_table = dict()
+type_table[0] = None # Type is not defined yet
+
+#######################################################################
+#Element functions
+#######################################################################
+DECL_VAR        = 'class.PyObject.__init__'
+PYOBJECT        = 'class.PyObject'
+MALLOC          = 'malloc'
+
 
 class LLVMIR_Statement:
     def __init__(self):
@@ -122,7 +147,7 @@ class Element:
         for i in rannge(self size):
             *(target_value + i) = *(self value + i)
     
-    define decr_ref(self):
+    define decr_ref(self): -> MUST DECREASE REF NUM BEFORE FUNCTION RETURN
         self my_ref = my_ref - 1
         if my_ref == 0:
             free(self value)
@@ -150,7 +175,7 @@ After compile this code as a llvm ir and make it generated in this code
         #######################################################################
         arg_types = [ir.PointerType(class_type), ir.PointerType(ir.IntType(8)), ir.IntType(64), ir.IntType(64)]
                 
-        ret_type = class_type
+        ret_type = class_type.as_pointer()
         
         func_type = ir.FunctionType(ret_type, arg_types)
         function = ir.Function(module, func_type, name='class.PyObject.__init__')
@@ -343,22 +368,52 @@ After compile this code as a llvm ir and make it generated in this code
             if ('self_'+ node.target.attr) in self.declared_self_vars:
                 var_ptr = self.declared_self_vars['self_'+node.target.attr] ###///
             else:
-                var_ptr = self.builder.gep(self.function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), len(self.declared_self_vars))],'self_'+node.target.attr)
+                var_ptr = self.builder.gep(self.function.variables['self'],\
+                                           [ir.Constant(ir.IntType(32), 0), \
+                                            ir.Constant(ir.IntType(32), \
+                                            len(self.declared_self_vars))],\
+                                           'self_'+node.target.attr)
                 self.declared_self_vars['self_'+node.target.attr] = var_ptr
         else: 
             # Allocate space for the variable on the stack
             var_name = node.target.id
-            var_type = ir.IntType(64)  # Assuming 64-bit integers
-            var_ptr = self.builder.alloca(var_type, name=var_name)
-        
-            # Store the initial value if it exists
+            print(functions[MALLOC])
+            
             if node.value is not None:
                 value = self.translate_node(node.value)
                 self.builder.store(value, var_ptr)
+                var_type = self.get_ir_type(value)  # Assuming 64-bit integers SHOULD BE CHANGED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!S
+                
+                var_ptr = self.builder.alloca(var_type, name=var_name)
+                size = ir.Constant(ir.IntType(64),8)
+                
+                self.builder.store(value,var_type)
+            else:
+                var_type = ir.IntType(64)
+                var_ptr = self.builder.alloca(var_type, name=var_name)
+                size = ir.Constant(ir.IntType(64),8)
+                
+            malloc_ptr = self.builder.call(functions[MALLOC], [ir.Constant(size_t,8)])
+            self.builder.store(self.builder.load(var_ptr),\
+                              self.builder.bitcast(malloc_ptr, var_type.as_pointer()))
+            
+            malloc_ptr = self.builder.bitcast(malloc_ptr, ir.IntType(8).as_pointer())
+            if var_type in type_table:
+                pass
+            else:
+                type_table[var_type] = len(type_table)
+                
+            print(type_table)
+            element_ptr = self.builder.alloca(classes[PYOBJECT], name=var_name)
+            i8_ptr = self.builder.bitcast(var_ptr, ir.IntType(8).as_pointer())
+            arg_list = [element_ptr, i8_ptr, ir.Constant(ir.IntType(64), \
+                         type_table[var_type]), size]
+            
+            element_var = self.builder.call(functions[DECL_VAR], arg_list)
     
             # Save the variable in the function's symbol table (if you have one)
             # self is necessary to refer to it later in the function
-            self.function.variables[var_name] = var_ptr
+            self.function.variables[var_name] = element_var
         
         return var_ptr
         

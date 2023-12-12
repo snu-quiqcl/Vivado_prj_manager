@@ -37,7 +37,18 @@ strings = dict()
 #External function definition
 printf_type = ir.FunctionType(ir.VoidType(), [ir.PointerType(ir.IntType(8))], var_arg=True)
 printf = ir.Function(module, printf_type, name="xil_printf")
-functions[printf.name] = printf
+functions['print'] = printf
+
+malloc_type = ir.FunctionType(ir.PointerType(ir.IntType(8)), [ir.IntType(64)], var_arg=True)
+malloc = ir.Function(module, printf_type, name="malloc")
+functions['malloc'] = malloc
+
+free_type = ir.FunctionType(ir.VoidType(), [ir.PointerType(ir.IntType(8))], var_arg=True)
+free = ir.Function(module, printf_type, name="free")
+functions['free'] = free
+
+#type table to make type <-> int value mapping
+type_table = dict()
 
 class LLVMIR_Statement:
     def __init__(self):
@@ -47,6 +58,8 @@ class LLVMIR_Statement:
         tree = ast.parse(python_code)
         
         classes = self.collect_classes(tree)
+        self.make_PyObject_class()
+        
         # string constant initializer
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant) and type(node.value) == str:
@@ -82,6 +95,92 @@ class LLVMIR_Statement:
         #Make .ll FIle
         #######################################################################
         self.write_file('./output.ll')
+        
+    def make_PyObject_class(self):
+        """        
+#https://stackoverflow.com/questions/14608250/how-can-i-find-the-size-of-a-type
+# -> how to get sizeof type
+class Element:
+    define __init__(self,i8 * value, i64 size, i64 value_type):
+        self i8 * value
+        self i64 my_ref = 1
+        self i64 size = size
+        self value = bitcast malloc(size) to i8 *
+        self type = value_type
+        
+        for i in range(size)
+            *(self value + i) = *(value + i)
+    
+    define void set_value(self,i8 * value, i64 size):
+        free(self value)
+        self value = bitcast malloc(size) to i8 *
+        self size = size
+        for i in rannge(size):
+            *(self value + i) = *(value + i)
+    
+    define void get_value(self,i8 * target_value):
+        for i in rannge(self size):
+            *(target_value + i) = *(self value + i)
+    
+    define decr_ref(self):
+        self my_ref = my_ref - 1
+        if my_ref == 0:
+            free(self value)
+    
+    define incr_ref(self)
+        self my_ref = my_ref + 1
+        
+Run this code in CPP and check whether it runs well
+After compile this code as a llvm ir and make it generated in this code
+
+--> Too slow!    
+        """
+        # Create a struct to represent the class data
+        class_name = 'class.PyObject'
+        
+        # i8 * value (addr with type i8 *), i64 ref_num, i64 size 
+        field_types = [ir.PointerType(ir.IntType(8)), ir.IntType(64), ir.IntType(64), ir.IntType(64)]
+                
+        class_type = module.context.get_identified_type(class_name)
+        class_type.set_body(*field_types)
+        classes[class_type.name] = class_type
+        
+        #######################################################################
+        # PyObject __init__
+        #######################################################################
+        arg_types = [ir.PointerType(class_type), ir.PointerType(ir.IntType(8)), ir.IntType(64), ir.IntType(64)]
+                
+        ret_type = class_type
+        
+        func_type = ir.FunctionType(ret_type, arg_types)
+        function = ir.Function(module, func_type, name='class.PyObject.__init__')
+        
+        function.args[0].name = 'self'
+        function.args[1].name = 'value_addr'
+        function.args[2].name = 'size'
+        function.args[3].name = 'value_type'
+            
+        block = function.append_basic_block(name="entry")
+        builder = ir.IRBuilder(block)
+        function = function
+        function.variables = dict()
+        functions[function.name] = function
+        
+        for i in range(len(function.args)):
+            function.variables[function.args[i].name] = function.args[i]
+            
+        val_ptr = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
+        ref_num = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
+        size = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
+        value_type = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'size')
+        builder.store(function.args[1], val_ptr)
+        builder.store(ir.Constant(ir.IntType(64), 1), ref_num)
+        builder.store(function.args[2],size)
+        builder.store(function.args[3],value_type)
+        
+        
+        builder.ret(function.variables['self'])
+
         
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)
@@ -141,7 +240,7 @@ class LLVMIR_Statement:
               
             if self.is_self(node):
                 if node.attr in self.declared_self_vars:
-                    var_ptr = self.builder.gep(self.functino.args[0],'self_'+node.attr) ###///
+                    var_ptr = self.builder.gep(self.function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), len(self.declared_self_vars))],'self_'+node.target.attr) ###///
                 else:
                     var_ptr = self.builder.alloca(self.translate_Name(node.value).type, name='self_'+node.attr)
                     self.declared_self_vars[var_ptr.name] = var_ptr
@@ -579,8 +678,39 @@ class Func_Maker(LLVMIR_Statement):
                 self.translate_node(stmt)
 
             # Simplified: assuming function ends with return   
-            
+        
+
 class List_Maker(LLVMIR_Statement):
+    """
+    only first List pointer is in symbol table
+List 0      1       2       3       4 ... 2 ** n
+     |      |
+     V      V
+     NULL   List    0       1       2 ...
+
+class List:
+    define __init__(self, size = 16)
+        self List * addr   // if self addr == NULL -> It does not have
+                            // child list
+        self Eelement value
+        self i64 size = size
+        self i64 max = 16
+        
+    define append(self, Element element)
+        if self size + 1 > self max
+            temp_addr = malloc(sizeof(List) * 2 * self size)
+            for i = 0 ; i < self size; i++
+                *( temp_addr + i ) = *( self addr + i ) 
+            free(self addr)
+    
+For AST 
+    if isinstance(node,ast.BinOp) and (isinstance(node.left,ast.List) or isinstance(node.right,ast.List) ):
+        for i in len(right):
+             store(load(right List Type + i * sizeof(List Type)),(left List type + i))
+    if isinstance(node,ast.Subscrpit):
+        load()
+ 
+    """
     def __init__(self, ir_builder, element_type = None):
         self.element_type = element_type
         self.undefined = False
@@ -599,6 +729,10 @@ class List_Maker(LLVMIR_Statement):
         self.undefined = False
         if not self.element_type in list_types:
             d
+    def make_append_function(self):
+        asd
+    def make_init_function(self):
+        asd
         
 if __name__ == "__main__":
     python_code1 = """
@@ -649,41 +783,42 @@ def foo( a:int = 10):
     print(a)
 """
     python_code = """
-class goo:
-    def __init__(self, d:int, e:int, f:int)->int:
-        self.q:int
-        self.d:int
-        self.e:int
-        self.e = e
-        return
+# class goo:
+#     def __init__(self, d:int, e:int, f:int)->int:
+#         self.q:int
+#         self.d:int
+#         self.e:int
+#         self.e = e
+#         return
     
-    def mu(self):
-        self.m:int
-        self.m = 30 + (50+90)
-        return self.m
+#     def mu(self):
+#         self.m:int
+#         self.m = 30 + (50+90)
+#         return self.m
         
 
 @kernel        
-def foo(a : int, b:int , f:int) -> int:
-    c:int
-    # num_list = [1,2,3,4]
-    # c = 30
-    # c = b + 1
-    # d = c
-    # for i in range(8):
-    #     c = i * 8
-    goo_in = goo(1,2,3)
-    # c = foo(1,2,3)
-    c = goo_in.mu() + 50
-    return a + c
+# def foo(a : int, b:int , f:int) -> int:
+#     c:int
+#     # num_list = [1,2,3,4]
+#     # num_list[2]
+#     # c = 30
+#     # c = b + 1
+#     # d = c
+#     # for i in range(8):
+#     #     c = i * 8
+#     goo_in = goo(1,2,3)
+#     # c = foo(1,2,3)
+#     c = goo_in.mu() + 50
+#     return a + c
 
 def main() -> int:
     c:int
-    xil_printf('hello')
-    if c == 30 or c > 20:
-        c = 40
-    else:
-        c = 60
+    # print('hello')
+    # if c == 30 or c > 20:
+    #     c = 40
+    # else:
+    #     c = 60
     return 0
 """
     

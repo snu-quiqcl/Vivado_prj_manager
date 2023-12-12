@@ -23,16 +23,30 @@ entry:
   ret %"class.PyObject"* %"self"
 }
 
-define i64 @"main"() 
+define %"class.PyObject"* @"main"() 
 {
 entry:
-  %"c" = alloca i64
-  %".2" = call i8* (i64, ...) @"malloc"(i64 8)
-  %".3" = load i64, i64* %"c"
-  %".4" = bitcast i8* %".2" to i64*
-  store i64 %".3", i64* %".4"
-  %"c.1" = alloca %"class.PyObject"
-  %".6" = bitcast i64* %"c" to i8*
-  %".7" = call %"class.PyObject"* @"class.PyObject.__init__"(%"class.PyObject"* %"c.1", i8* %".6", i64 1, i64 8)
-  ret i64 0
+  %".2" = alloca i64
+  store i64 3, i64* %".2"
+  store i64 3, i64* %".2"
+  %".5" = getelementptr inbounds i64, i64* null, i64 1
+  %".6" = ptrtoint i64* %".5" to i64
+  %".7" = getelementptr inbounds %"class.PyObject", %"class.PyObject"* null, i64 1
+  %".8" = ptrtoint %"class.PyObject"* %".7" to i64
+  %".9" = call i8* (i64, ...) @"malloc"(i64 %".8")
+  %".10" = bitcast i8* %".9" to %"class.PyObject"*
+  %".11" = bitcast i64* %".2" to i8*
+  %"c" = call %"class.PyObject"* @"class.PyObject.__init__"(%"class.PyObject"* %".10", i8* %".11", i64 1, i64 %".6")
+  %".13" = alloca i64
+  store i64 30, i64* %".13"
+  store i64 30, i64* %".13"
+  %".16" = getelementptr inbounds i64, i64* null, i64 1
+  %".17" = ptrtoint i64* %".16" to i64
+  %".18" = getelementptr inbounds %"class.PyObject", %"class.PyObject"* null, i64 1
+  %".19" = ptrtoint %"class.PyObject"* %".18" to i64
+  %".20" = call i8* (i64, ...) @"malloc"(i64 %".19")
+  %".21" = bitcast i8* %".20" to %"class.PyObject"*
+  %".22" = bitcast i64* %".13" to i8*
+  %"d" = call %"class.PyObject"* @"class.PyObject.__init__"(%"class.PyObject"* %".21", i8* %".22", i64 1, i64 %".17")
+  ret %"class.PyObject"* null
 }

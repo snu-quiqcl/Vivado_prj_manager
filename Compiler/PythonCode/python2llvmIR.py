@@ -71,8 +71,10 @@ type_table['NO_TYPE'] = 0 # Type is not defined yet
 #Element functions
 #######################################################################
 DECL_VAR        = 'class.PyObject.__init__'
+SET_VAL         = 'class.PyObject.__set_value__'
 PYOBJECT        = 'class.PyObject'
 MALLOC          = 'malloc'
+FREE            = 'free'
 
 
 class LLVMIR_Statement:
@@ -136,13 +138,6 @@ class Element:
         for i in range(size)
             *(self value + i) = *(value + i)
     
-    define void set_value(self,i8 * value, i64 size):
-        free(self value)
-        self value = bitcast malloc(size) to i8 *
-        self size = size
-        for i in rannge(size):
-            *(self value + i) = *(value + i)
-    
     define void get_value(self,i8 * target_value):
         for i in rannge(self size):
             *(target_value + i) = *(self value + i)
@@ -186,7 +181,7 @@ After compile this code as a llvm ir and make it generated in this code
         function.args[3].name = 'value_type'
             
         block = function.append_basic_block(name="entry")
-        builder = ir.IRBuilder(block)
+        self.builder = ir.IRBuilder(block)
         function = function
         function.variables = dict()
         functions[function.name] = function
@@ -194,19 +189,143 @@ After compile this code as a llvm ir and make it generated in this code
         for i in range(len(function.args)):
             function.variables[function.args[i].name] = function.args[i]
             
-        val_ptr = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
-        ref_num = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
-        size = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
-        value_type = builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'size')
-        builder.store(function.args[1], val_ptr)
-        builder.store(ir.Constant(ir.IntType(64), 1), ref_num)
-        builder.store(function.args[2],size)
-        builder.store(function.args[3],value_type)
+        val_ptr = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
+        ref_num = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
+        size = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
+        value_type = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'type')
+        self.builder.store(ir.Constant(ir.IntType(64), 1), ref_num)
+        self.builder.store(function.args[2],size)
+        self.builder.store(function.args[3],value_type)
         
+        malloc_call = self.builder.call(functions[MALLOC], [self.builder.load(size)])
+        val_ptr = self.builder.bitcast(malloc_call, ir.PointerType(ir.IntType(8)))
         
-        builder.ret(function.variables['self'])
-
+        # Copy memory value
+        prepare_block = function.append_basic_block("prepare")
+        loop_block = function.append_basic_block("loop")
+        after_loop_block = function.append_basic_block("after_loop")
+        end_block = function.append_basic_block("end")
+        self.builder.branch(loop_block)
         
+        # Loop: for i in range(size)
+        self.builder.position_at_end(prepare_block)
+        i = self.builder.alloca(ir.IntType(64),0)
+        condition = self.builder.icmp_signed('<', self.builder.load(i), function.args[2],'condition')
+        self.builder.cbranch(condition, loop_block, end_block)
+        
+        # Memory copy logic
+        # *(self.value + i) = *(victim.value + i)
+        # Assuming victim also has a 'value' pointer, similar to 'self'
+        self.builder.position_at_end(loop_block)
+        victim_value = self.builder.alloca(ir.PointerType(ir.IntType(8)), name="victim.value")  # Placeholder
+        src_ptr = self.builder.gep(function.args[1], [self.builder.load(i)])
+        dst_ptr = self.builder.gep(val_ptr, [self.builder.load(i)])
+        self.builder.store(self.builder.load(src_ptr), dst_ptr)
+        self.builder.branch(after_loop_block)
+                
+        # AFTER LOOP
+        # Increment and check loop 
+        self.builder.position_at_end(after_loop_block)
+        self.builder.store(self.builder.add(self.builder.load(i), ir.Constant(ir.IntType(64), 1)),i)
+        end_condition = self.builder.icmp_signed('<', self.builder.load(i), function.args[2])
+        self.builder.cbranch(end_condition, loop_block, end_block)
+        
+        # END LOOP
+        self.builder.position_at_end(end_block)
+        
+        self.builder.ret(function.variables['self'])
+        
+        #######################################################################
+        # PyObject set_value
+        #######################################################################
+        """
+        define void set_value(self,PyObject * victim):
+            if self value != NULL:
+                free(self value)
+            self value = bitcast malloc(victim -> size) to i8 *
+            self size = victim -> size
+            for i in rannge(size):
+                *(self value + i) = *(value + i)
+        """
+        arg_types = [ir.PointerType(class_type), ir.PointerType(class_type)]
+        
+        ret_type = class_type.as_pointer()
+        
+        func_type = ir.FunctionType(ret_type, arg_types)
+        function = ir.Function(module, func_type, name='class.PyObject.set_value')
+        
+        function.args[0].name = 'self'
+        function.args[1].name = 'victim'
+        
+        block = function.append_basic_block(name="entry")
+        self.builder = ir.IRBuilder(block)
+        function = function
+        function.variables = dict()
+        functions[function.name] = function
+        
+        for i in range(len(function.args)):
+            function.variables[function.args[i].name] = function.args[i]
+            
+        self_val_ptr = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
+        self_ref_num = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
+        self_size = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
+        self_value_type = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'type')
+        
+        victim_val_ptr = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
+        victim_ref_num = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
+        victim_size = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
+        victim_value_type = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'type')
+        
+        # Free Variable
+        condition = self.builder.icmp_signed('!=', self.builder.load(self_val_ptr), ir.Constant(ir.PointerType(ir.IntType(8)), None))
+        with self.builder.if_then(condition):
+            self.builder.call(functions[FREE], [self.builder.load(self_val_ptr)])
+            
+        # self.value = bitcast malloc(victim.size) to i8*
+        victim_size_val = self.builder.load(victim_size)
+        malloc_call = self.builder.call(functions[MALLOC], [victim_size_val])
+        self_value_casted = self.builder.bitcast(malloc_call, ir.PointerType(ir.IntType(8)))
+        self.builder.store(self_value_casted, self_val_ptr)
+        
+        # self.size = victim.size
+        self.builder.store(victim_size_val, self_size)
+        
+        # Copy memory from victim to self.value
+        prepare_block = function.append_basic_block("prepare")
+        loop_block = function.append_basic_block("loop")
+        after_loop_block = function.append_basic_block("after_loop")
+        end_block = function.append_basic_block("end")
+        self.builder.branch(loop_block)
+        
+        # PREPARE LOOP
+        self.builder.position_at_end(prepare_block)
+        i = self.builder.alloca(ir.IntType(64),0)
+        condition = self.builder.icmp_signed('<', self.builder.load(i), victim_size_val,'condition')
+        self.builder.cbranch(condition, loop_block, end_block)
+        
+        # LOOP
+        # Memory copy logic
+        # *(self.value + i) = *(victim.value + i)
+        # Assuming victim also has a 'value' pointer, similar to 'self'
+        self.builder.position_at_end(loop_block)
+        victim_value = self.builder.alloca(ir.PointerType(ir.IntType(8)), name="victim.value")  # Placeholder
+        src_ptr = self.builder.gep(self.builder.load(victim_val_ptr), [self.builder.load(i)])
+        dst_ptr = self.builder.gep(self.builder.load(self_val_ptr), [self.builder.load(i)])
+        self.builder.store(self.builder.load(src_ptr), dst_ptr)
+        self.builder.branch(after_loop_block)
+        
+        # AFTER LOOP
+        # Increment and check loop 
+        self.builder.position_at_end(after_loop_block)
+        self.builder.store(self.builder.add(self.builder.load(i), ir.Constant(ir.IntType(64), 1)),i)
+        end_condition = self.builder.icmp_signed('<', self.builder.load(i), victim_size_val)
+        self.builder.cbranch(end_condition, loop_block, end_block)
+        
+        # END LOOP
+        self.builder.position_at_end(end_block)
+        
+        self.builder.ret(function.variables['self'])
+    
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)
         right = self.translate_node(node.right)
@@ -225,7 +344,9 @@ After compile this code as a llvm ir and make it generated in this code
         # https://stackoverflow.com/questions/58674264/llvmlite-hello-world-example-produces-wrong-output
         global str_num
         if type(node.value) == int:
-            return ir.Constant(ir.IntType(64), node.value)  # Assuming integer constants
+            # self.function.variables['const.{str(node.value)}'] = self.make_element_var('const.{str(node.value)}',node.value)
+            # return self.function.variables['const.{str(node.value)}']
+            return ir.Constant(ir.IntType(64),node.value)
         elif type(node.value) == str:
             if node.value in strings:
                 str_var = strings[node.value]
@@ -387,7 +508,7 @@ After compile this code as a llvm ir and make it generated in this code
     def make_element_var(self, var_name, node_value):
         if node_value is not None:
             value = self.translate_node(node_value)
-            var_type = value.type  # Assuming 64-bit integers SHOULD BE CHANGED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!S
+            var_type = value.type
             var_ptr = self.builder.alloca(var_type)
             self.builder.store(value, var_ptr)
             
@@ -580,7 +701,7 @@ After compile this code as a llvm ir and make it generated in this code
             return self.translate_Expr(node)
         # Add more node types here as needed
         else:
-            print()
+            print(ast.dump(node, indent=4))
             raise NotImplementedError(f"Node type \n{ast.dump(node, indent=4)}\n not implemented")
     
     def collect_classes(self, node):
@@ -881,7 +1002,8 @@ def foo( a:int = 10):
 
 def main() -> int:
     c = 3
-    d = 30
+    # c = 3
+    # d = 30
     # print('hello')
     # if c == 30 or c > 20:
     #     c = 40

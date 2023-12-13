@@ -19,21 +19,12 @@
 };
 */
 
-template<typename T>
-T sum(T a, T b){
-    return a + b;
-}
-
 int main(void){
     int a;
-    char* str;
-    str = "abcd\0";
-    sum<int>(a,a);
-    sum<char>(a,10);
-
-    int array[10] = {1,2,3};
-
-    a = a + 1;
+    int b;
+    for( a = 1; a < 10; a ++){
+        b = a;
+    }
     return a;
 }
 

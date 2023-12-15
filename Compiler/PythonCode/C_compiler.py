@@ -29,12 +29,12 @@ class Compiler:
         self.total_log = ''
         
         # self.git_dir = r'C:\Jeonghyun\GIT'
-        self.git_dir = r'C:\Jeonghyun\GIT'
+        self.git_dir = r'E:\RFSoC\GIT'
         self.xilinx_include_dir = r'Vivado_prj_manager\Compiler\Xilinx_Include\bspinclude\include'
         self.rfsoc_driver_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver'
         self.rfsoc_driver_include_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include'
-        self.clang = r'C:\Program Files\LLVM\bin\clang.exe' # You need to specify exact clang directory
-        
+        # self.clang = r'C:\Program Files\LLVM\bin\clang.exe' # You need to specify exact clang directory
+        self.clang = r'E:\LLVM\bin\clang.exe'
         self.full_rfsoc_driver_dir = os.path.join(self.git_dir,self.rfsoc_driver_dir)
         self.full_rfsoc_driver_include_dir = os.path.join(self.git_dir,self.rfsoc_driver_include_dir)
         self.full_xilinx_include_dir = os.path.join(self.git_dir, self.xilinx_include_dir)

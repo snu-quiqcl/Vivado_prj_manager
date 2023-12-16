@@ -1,6 +1,5 @@
 #include "PyCLong.h"
 #include "PyCMem.h"
-#include <stdio.h>
 
 int64_t
 PyC_get_int64_t(PyCObject * target){

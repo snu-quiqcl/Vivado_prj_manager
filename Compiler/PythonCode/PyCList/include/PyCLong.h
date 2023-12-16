@@ -18,7 +18,6 @@ PyC_make_int64(int64_t ival)
     PyCIntObject *v;
 
     v = PyC_INT_CAST(PyC_malloc(sizeof(PyCIntObject)));
-    PyC_CAST(v)->type.size          = INT64_SIZE;
     PyC_CAST(v)->type.type          = "int64";
     PyCIntObject * temp_addr        = PyC_INT_CAST(PyC_get_start_addr(PyC_CAST(v)));
     PyC_INT_CAST(temp_addr) -> size = INT64_SIZE;

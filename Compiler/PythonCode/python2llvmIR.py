@@ -70,9 +70,6 @@ type_table['NO_TYPE'] = 0 # Type is not defined yet
 #######################################################################
 #Element functions
 #######################################################################
-DECL_VAR        = 'class.PyObject.__init__'
-SET_VAL         = 'class.PyObject.__set_value__'
-PYOBJECT        = 'class.PyObject'
 MALLOC          = 'malloc'
 FREE            = 'free'
 
@@ -85,8 +82,6 @@ class LLVMIR_Statement:
         tree = ast.parse(python_code)
         
         classes = self.collect_classes(tree)
-        self.make_PyObject_class()
-        
         # string constant initializer
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant) and type(node.value) == str:
@@ -122,210 +117,7 @@ class LLVMIR_Statement:
         #Make .ll FIle
         #######################################################################
         self.write_file('./output.ll')
-        
-    def make_PyObject_class(self):
-        """        
-#https://stackoverflow.com/questions/14608250/how-can-i-find-the-size-of-a-type
-# -> how to get sizeof type
-class Element:
-    define __init__(self,i8 * value, i64 size, i64 value_type):
-        self i8 * value
-        self i64 my_ref = 1
-        self i64 size = size
-        self value = bitcast malloc(size) to i8 *
-        self type = value_type
-        
-        for i in range(size)
-            *(self value + i) = *(value + i)
-    
-    define void get_value(self,i8 * target_value):
-        for i in rannge(self size):
-            *(target_value + i) = *(self value + i)
-    
-    define decr_ref(self): -> MUST DECREASE REF NUM BEFORE FUNCTION RETURN
-        self my_ref = my_ref - 1
-        if my_ref == 0:
-            free(self value)
-    
-    define incr_ref(self)
-        self my_ref = my_ref + 1
-        
-Run this code in CPP and check whether it runs well
-After compile this code as a llvm ir and make it generated in this code
-
---> Too slow!    
-        """
-        # Create a struct to represent the class data
-        class_name = 'class.PyObject'
-        
-        # i8 * value (addr with type i8 *), i64 ref_num, i64 size 
-        field_types = [ir.PointerType(ir.IntType(8)), ir.IntType(64), ir.IntType(64), ir.IntType(64)]
-                
-        class_type = module.context.get_identified_type(class_name)
-        class_type.set_body(*field_types)
-        classes[class_type.name] = class_type
-        
-        #######################################################################
-        # PyObject __init__
-        #######################################################################
-        arg_types = [ir.PointerType(class_type), ir.PointerType(ir.IntType(8)), ir.IntType(64), ir.IntType(64)]
-                
-        ret_type = class_type.as_pointer()
-        
-        func_type = ir.FunctionType(ret_type, arg_types)
-        function = ir.Function(module, func_type, name='class.PyObject.__init__')
-        
-        function.args[0].name = 'self'
-        function.args[1].name = 'value_addr'
-        function.args[2].name = 'size'
-        function.args[3].name = 'value_type'
             
-        block = function.append_basic_block(name="entry")
-        self.builder = ir.IRBuilder(block)
-        function = function
-        function.variables = dict()
-        functions[function.name] = function
-        
-        for i in range(len(function.args)):
-            function.variables[function.args[i].name] = function.args[i]
-            
-        val_ptr = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
-        ref_num = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
-        size = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
-        value_type = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'type')
-        self.builder.store(ir.Constant(ir.IntType(64), 1), ref_num)
-        self.builder.store(function.args[2],size)
-        self.builder.store(function.args[3],value_type)
-        
-        malloc_call = self.builder.call(functions[MALLOC], [self.builder.load(size)])
-        val_ptr = self.builder.bitcast(malloc_call, ir.PointerType(ir.IntType(8)))
-        
-        # Copy memory value
-        prepare_block = function.append_basic_block("prepare")
-        loop_block = function.append_basic_block("loop")
-        after_loop_block = function.append_basic_block("after_loop")
-        end_block = function.append_basic_block("end")
-        self.builder.branch(loop_block)
-        
-        # Loop: for i in range(size)
-        self.builder.position_at_end(prepare_block)
-        i = self.builder.alloca(ir.IntType(64),0)
-        condition = self.builder.icmp_signed('<', self.builder.load(i), function.args[2],'condition')
-        self.builder.cbranch(condition, loop_block, end_block)
-        
-        # Memory copy logic
-        # *(self.value + i) = *(victim.value + i)
-        # Assuming victim also has a 'value' pointer, similar to 'self'
-        self.builder.position_at_end(loop_block)
-        victim_value = self.builder.alloca(ir.PointerType(ir.IntType(8)), name="victim.value")  # Placeholder
-        src_ptr = self.builder.gep(function.args[1], [self.builder.load(i)])
-        dst_ptr = self.builder.gep(val_ptr, [self.builder.load(i)])
-        self.builder.store(self.builder.load(src_ptr), dst_ptr)
-        self.builder.branch(after_loop_block)
-                
-        # AFTER LOOP
-        # Increment and check loop 
-        self.builder.position_at_end(after_loop_block)
-        self.builder.store(self.builder.add(self.builder.load(i), ir.Constant(ir.IntType(64), 1)),i)
-        end_condition = self.builder.icmp_signed('<', self.builder.load(i), function.args[2])
-        self.builder.cbranch(end_condition, loop_block, end_block)
-        
-        # END LOOP
-        self.builder.position_at_end(end_block)
-        
-        self.builder.ret(function.variables['self'])
-        
-        #######################################################################
-        # PyObject set_value
-        #######################################################################
-        """
-        define void set_value(self,PyObject * victim):
-            if self value != NULL:
-                free(self value)
-            self value = bitcast malloc(victim -> size) to i8 *
-            self size = victim -> size
-            for i in rannge(size):
-                *(self value + i) = *(value + i)
-        """
-        arg_types = [ir.PointerType(class_type), ir.PointerType(class_type)]
-        
-        ret_type = class_type.as_pointer()
-        
-        func_type = ir.FunctionType(ret_type, arg_types)
-        function = ir.Function(module, func_type, name='class.PyObject.set_value')
-        
-        function.args[0].name = 'self'
-        function.args[1].name = 'victim'
-        
-        block = function.append_basic_block(name="entry")
-        self.builder = ir.IRBuilder(block)
-        function = function
-        function.variables = dict()
-        functions[function.name] = function
-        
-        for i in range(len(function.args)):
-            function.variables[function.args[i].name] = function.args[i]
-            
-        self_val_ptr = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
-        self_ref_num = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
-        self_size = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
-        self_value_type = self.builder.gep(function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'type')
-        
-        victim_val_ptr = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 0)],'val_ptr')
-        victim_ref_num = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 1)],'ref_num')
-        victim_size = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 2)],'size')
-        victim_value_type = self.builder.gep(function.variables['victim'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), 3)],'type')
-        
-        # Free Variable
-        condition = self.builder.icmp_signed('!=', self.builder.load(self_val_ptr), ir.Constant(ir.PointerType(ir.IntType(8)), None))
-        with self.builder.if_then(condition):
-            self.builder.call(functions[FREE], [self.builder.load(self_val_ptr)])
-            
-        # self.value = bitcast malloc(victim.size) to i8*
-        victim_size_val = self.builder.load(victim_size)
-        malloc_call = self.builder.call(functions[MALLOC], [victim_size_val])
-        self_value_casted = self.builder.bitcast(malloc_call, ir.PointerType(ir.IntType(8)))
-        self.builder.store(self_value_casted, self_val_ptr)
-        
-        # self.size = victim.size
-        self.builder.store(victim_size_val, self_size)
-        
-        # Copy memory from victim to self.value
-        prepare_block = function.append_basic_block("prepare")
-        loop_block = function.append_basic_block("loop")
-        after_loop_block = function.append_basic_block("after_loop")
-        end_block = function.append_basic_block("end")
-        self.builder.branch(loop_block)
-        
-        # PREPARE LOOP
-        self.builder.position_at_end(prepare_block)
-        i = self.builder.alloca(ir.IntType(64),0)
-        condition = self.builder.icmp_signed('<', self.builder.load(i), victim_size_val,'condition')
-        self.builder.cbranch(condition, loop_block, end_block)
-        
-        # LOOP
-        # Memory copy logic
-        # *(self.value + i) = *(victim.value + i)
-        # Assuming victim also has a 'value' pointer, similar to 'self'
-        self.builder.position_at_end(loop_block)
-        victim_value = self.builder.alloca(ir.PointerType(ir.IntType(8)), name="victim.value")  # Placeholder
-        src_ptr = self.builder.gep(self.builder.load(victim_val_ptr), [self.builder.load(i)])
-        dst_ptr = self.builder.gep(self.builder.load(self_val_ptr), [self.builder.load(i)])
-        self.builder.store(self.builder.load(src_ptr), dst_ptr)
-        self.builder.branch(after_loop_block)
-        
-        # AFTER LOOP
-        # Increment and check loop 
-        self.builder.position_at_end(after_loop_block)
-        self.builder.store(self.builder.add(self.builder.load(i), ir.Constant(ir.IntType(64), 1)),i)
-        end_condition = self.builder.icmp_signed('<', self.builder.load(i), victim_size_val)
-        self.builder.cbranch(end_condition, loop_block, end_block)
-        
-        # END LOOP
-        self.builder.position_at_end(end_block)
-        
-        self.builder.ret(function.variables['self'])
-    
     def translate_BinOp(self, node):
         left = self.translate_node(node.left)
         right = self.translate_node(node.right)
@@ -411,10 +203,9 @@ After compile this code as a llvm ir and make it generated in this code
     def translate_Return(self, node):
         if node.value:
             return_value = self.translate_node(node.value)
-            # self.builder.ret(return_value)
-            self.builder.ret(ir.Constant(classes[PYOBJECT].as_pointer(), None))
+            self.builder.ret(return_value)
         else:
-            self.builder.ret(ir.Constant(classes[PYOBJECT].as_pointer(), 0))
+            self.builder.ret(self.function.ret.as_pointer(), None)
     def translate_Call(self, node):
         ######################################################################
         # Call Function
@@ -510,33 +301,15 @@ After compile this code as a llvm ir and make it generated in this code
             value = self.translate_node(node_value)
             var_type = value.type
             var_ptr = self.builder.alloca(var_type)
-            self.builder.store(value, var_ptr)
             
         else:
             var_type = ir.IntType(64)
             var_ptr = self.builder.alloca(var_type)
             value = ir.Constant(ir.IntType(64), 0)
-        
-        if var_type in type_table:
-            pass
-        else:
-            type_table[var_type] = len(type_table)
-            
         self.builder.store(value,var_ptr)
-        var_size = self.get_size_of_type(var_type)
-        malloc_size = self.get_size_of_type(classes[PYOBJECT])
-        element_ptr = self.builder.bitcast(self.builder.call(functions[MALLOC], [malloc_size]), classes[PYOBJECT].as_pointer())
-        i8_ptr = self.builder.bitcast(var_ptr, ir.IntType(8).as_pointer())
-        
-        arg_list = [element_ptr, i8_ptr, ir.Constant(ir.IntType(64), \
-                     type_table[var_type]), var_size]
-        
-        element_var = self.builder.call(functions[DECL_VAR], arg_list)
-        element_var.name = var_name
-
         # Save the variable in the function's symbol table (if you have one)
         # self is necessary to refer to it later in the function
-        self.function.variables[var_name] = element_var
+        self.function.variables[var_name] = var_ptr
         
         return var_ptr
         
@@ -664,6 +437,7 @@ After compile this code as a llvm ir and make it generated in this code
             raise NotImplementedError("Only 'And' BoolOps are implemented")
             
     def translate_List(self,node):
+        # To do
         ir.ArrayType(element_type, len(array_values))
     
     def translate_Expr(self,node):
@@ -714,7 +488,7 @@ After compile this code as a llvm ir and make it generated in this code
     def get_ir_type(self, node):
         if hasattr(node,'annotation') and node.annotation != None and node.annotation.id == 'int':
             return ir.IntType(64)
-        elif hasattr(node, 'id') and node.id != None and type(node.id) == 'int':
+        elif hasattr(node, 'id') and node.id != None and (type(node.id) == 'int' or node.id == 'int'):
             return ir.IntType(64)
         
     def is_self(self,node):
@@ -795,7 +569,7 @@ class Class_Maker(LLVMIR_Statement):
                     print(arg.arg)
                     arg_types.append(self.get_ir_type(arg))
             
-            ret_type = classes[PYOBJECT].as_pointer()
+            ret_type = self.get_ir_type(node.returns)
             method_type = ir.FunctionType(ir.IntType(64), [ ir.PointerType(self.class_type) ] + arg_types)
             method = ir.Function(module, method_type, name=f"class.{node_name}.{node.name}")
             
@@ -846,7 +620,7 @@ class Func_Maker(LLVMIR_Statement):
             for arg in node.args.args:
                 arg_types.append(self.get_ir_type(arg))
                     
-            ret_type = classes[PYOBJECT].as_pointer()
+            ret_type = self.get_ir_type(node.returns)
             func_type = ir.FunctionType(ret_type, arg_types)
             function = ir.Function(module, func_type, name=node.name)
             
@@ -868,59 +642,6 @@ class Func_Maker(LLVMIR_Statement):
             # Simplified: assuming function ends with return   
         
 
-class List_Maker(LLVMIR_Statement):
-    """
-    only first List pointer is in symbol table
-List 0      1       2       3       4 ... 2 ** n
-     |      |
-     V      V
-     NULL   List    0       1       2 ...
-
-class List:
-    define __init__(self, size = 16)
-        self List * addr   // if self addr == NULL -> It does not have
-                            // child list
-        self Eelement value
-        self i64 size = size
-        self i64 max = 16
-        
-    define append(self, Element element)
-        if self size + 1 > self max
-            temp_addr = malloc(sizeof(List) * 2 * self size)
-            for i = 0 ; i < self size; i++
-                *( temp_addr + i ) = *( self addr + i ) 
-            free(self addr)
-    
-For AST 
-    if isinstance(node,ast.BinOp) and (isinstance(node.left,ast.List) or isinstance(node.right,ast.List) ):
-        for i in len(right):
-             store(load(right List Type + i * sizeof(List Type)),(left List type + i))
-    if isinstance(node,ast.Subscrpit):
-        load()
- 
-    """
-    def __init__(self, ir_builder, element_type = None):
-        self.element_type = element_type
-        self.undefined = False
-        self.builder = ir_builder
-        
-            
-    def make_list(self, array_size = 16):
-        if self.element_type == None:
-            self.undefined = True
-            return ir.ArrayType(ir.IntType(64), 16)
-        else:
-            return ir.ArrayType(self.element_type, array_size)
-        
-    def set_type(self,ir_type):
-        self.element_type = ir_type
-        self.undefined = False
-        if not self.element_type in list_types:
-            d
-    def make_append_function(self):
-        asd
-    def make_init_function(self):
-        asd
         
 if __name__ == "__main__":
     python_code1 = """
@@ -1002,13 +723,17 @@ def foo( a:int = 10):
 
 def main() -> int:
     c = 3
-    # c = 3
-    # d = 30
-    # print('hello')
-    # if c == 30 or c > 20:
-    #     c = 40
-    # else:
-    #     c = 60
+    c = 3
+    d = 30
+    print('hello')
+    if c == 30 or c > 20:
+        c = 40
+    elif c == 50:
+        c = 60
+    elif c == 60:
+        c = 70
+    else:
+        c = 60
     return 0
 """
     

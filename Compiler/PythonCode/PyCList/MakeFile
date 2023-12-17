@@ -26,7 +26,7 @@ $(EXECUTABLE): $(OBJECTS)
 
 # Rule for object files, depends on the corresponding c file
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+	$(CC) -g $(CFLAGS) $(INCLUDES) $< -o $@
 
 # Clean rule
 clean:

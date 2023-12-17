@@ -3,12 +3,14 @@
 
 #include <stdint.h>
 
-#define NUM_TYPE        (3)     // number of declared types
+#define PyC_SSIZE_T_MAX INTPTR_MAX
+#define NUM_TYPE        (4)     // number of declared types
 #define MAX_TYPE_LEN    (20)    // Length of type name
 #define BYTE_BIT        (8)     // Bit number of 1 byte
 #define INT64_SIZE      (8*BYTE_BIT)
-
-#define PyC_CAST(v)       ((PyCObject *) (v) )
+#define DOUBLE_SIZE     (8*BYTE_BIT)
+#define PyC_CAST(v)     ((PyCObject *) (v) )
+#define PyC_ELE(v)      (PyC_CAST((v) + sizeof(PyCObject)))
 
 #ifndef int64_t
 #define int64_t long

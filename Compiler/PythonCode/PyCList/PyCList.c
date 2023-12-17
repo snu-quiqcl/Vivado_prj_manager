@@ -1,12 +1,11 @@
 #include "PyCList.h"
 #include "PyCMem.h"
-
-#define PyC_SET_SIZE(v,size) (((v)->len) = (size))
+#include <stdio.h>
 
 static int
 list_resize(PyCListObject *self, size_t newsize)
 {
-    PyCObject **items;
+    PyCObject **items = NULL;
     size_t new_allocated, num_allocated_bytes;
     size_t allocated = self->allocated;
 
@@ -15,7 +14,7 @@ list_resize(PyCListObject *self, size_t newsize)
        the allocated size, then proceed with the realloc() to shrink the list.
     */
     if (allocated >= newsize && newsize >= (allocated >> 1)) {
-        PyC_SET_LEN(self, newsize);
+        PyC_SET_LEN(PyC_GET_LIST(self), newsize);
         return 0;
     }
 
@@ -33,14 +32,14 @@ list_resize(PyCListObject *self, size_t newsize)
     /* Do not overallocate if the new size is closer to overallocated size
      * than to the old size.
      */
-    if (newsize - PyC_LIST_SIZE(self) > (size_t)(new_allocated - newsize))
+    if (newsize - PyC_LIST_SIZE(PyC_GET_LIST(self)) > (size_t)(new_allocated - newsize))
         new_allocated = ((size_t)newsize + 3) & ~(size_t)3;
 
     if (newsize == 0)
         new_allocated = 0;
     if (new_allocated <= (size_t)( PyC_SSIZE_T_MAX ) / sizeof(PyCObject *)) {
         num_allocated_bytes = new_allocated * sizeof(PyCObject *);
-        items = (PyCObject **)PyCMem_Realloc(self->ob_item, num_allocated_bytes);
+        items = (PyCObject **)PyCMem_Realloc(PyC_GET_LIST(self)->ob_item, num_allocated_bytes);
     }
     else {
         // integer overflow
@@ -49,16 +48,16 @@ list_resize(PyCListObject *self, size_t newsize)
     if (items == NULL) {
         return -1;
     }
-    self->ob_item = items;
-    PyC_SET_SIZE(self, newsize);
-    self->allocated = new_allocated;
+    PyC_GET_LIST(self)->ob_item = items;
+    PyC_SET_SIZE(PyC_GET_LIST(self), newsize);
+    PyC_GET_LIST(self)->allocated = new_allocated;
     return 0;
 }
 
 static int
 ins1(PyCListObject *self, size_t where, PyCObject *v)
 {
-    size_t i, n = PyC_LIST_SIZE(self);
+    size_t i, n = PyC_LIST_SIZE(PyC_GET_LIST(self));
     PyCObject **items;
     if (v == NULL) {
         return -1;
@@ -90,7 +89,7 @@ PyCList_Insert(PyCObject *op, size_t where, PyCObject *newitem)
 int
 _PyCList_AppendTakeRefListResize(PyCListObject *self, PyCObject *newitem)
 {
-    size_t len = PyC_LIST_SIZE(self);
+    size_t len = PyC_LIST_SIZE(PyC_ELE(self));
     if (list_resize(self, len + 1) < 0) {
         PyC_DECREF(newitem);
         return -1;
@@ -103,7 +102,7 @@ int
 PyCList_Append(PyCObject *op, PyCObject *newitem)
 {
     if (newitem != NULL) {
-        return _PyCList_AppendTakeRefListResize((PyCListObject *)op, PyC_INCREF(newitem));
+        return _PyCList_AppendTakeRefListResize(PyC_LIST_CAST(op), PyC_INCREF(newitem));
     }
     return -1;
 }

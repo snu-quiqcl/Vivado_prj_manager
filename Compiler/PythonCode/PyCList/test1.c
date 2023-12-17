@@ -23,12 +23,12 @@ int main(){
 
     printf("%s\n",d->type.type);
 
-    PyCMem_Free(a);
-    PyCMem_Free(b);
-    PyCMem_Free(c);
-    PyCMem_Free(d);
-    //
     
-    PyCObject * l = PyCList_New(1);
-    PyCMem_Free(l);
+    PyCObject * l = PyCList_New(0);
+    PyCList_Append(l,a);
+    printf("%s\n",(PyC_GET_LIST(l)->ob_item)[0]->type.type);
+    printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,0)));
+    //int k = PyC_LIST_SIZE(PyC_ELE(l));
+    //printf("%d\n",k);
+    //PyCMem_Free(l);
 }

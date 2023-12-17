@@ -5,9 +5,11 @@
 #include "PyCMem.h"
 #include "PyCType.h"
 
-#define PyC_SET_LEN(v,size) (((v)->len) = (size))
+#define PyC_SET_LEN(v,size) (((PyC_LIST_CAST(v))->len) = (size))
 #define PyC_LIST_CAST(v) ((PyCListObject *)(v))
 #define PyC_LIST_SIZE(v) (PyC_LIST_CAST(v) -> len)
+#define PyC_SET_SIZE(v,size) (((PyC_LIST_CAST(v))->len) = (size))
+#define PyC_GET_LIST(v) (PyC_LIST_CAST(PyC_ELE(v)))
 
 typedef struct {
     /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */
@@ -66,7 +68,7 @@ PyCList_New(size_t size)
 
 static inline void
 PyCList_SET_ITEM(PyCObject *op, size_t index, PyCObject *value) {
-    PyCListObject *list = PyC_LIST_CAST(op);
+    PyCListObject *list = PyC_GET_LIST(op);
     list->ob_item[index] = value;
 }
 
@@ -91,10 +93,11 @@ valid_index(size_t i, size_t limit)
 static inline PyCObject *
 PyCList_GetItem(PyCObject *op, size_t i)
 {
-    if (!valid_index(i, PyC_LIST_SIZE(op))) {
+    PyCListObject * v = PyC_GET_LIST(op);
+    if (!valid_index(i, PyC_LIST_SIZE(v))) {
         return NULL;
     }
-    return ((PyCListObject *)op) -> ob_item[i];
+    return v -> ob_item[i];
 }
 
 #endif

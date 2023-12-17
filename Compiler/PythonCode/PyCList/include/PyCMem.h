@@ -24,13 +24,20 @@ PyCMem_Malloc(size_t size)
 static inline PyCObject *
 PyCMem_Realloc(PyCObject * data, size_t size)
 {
-    PyCObject * v = PyCMem_Malloc(size);
-    int i = 0 ;
-    for( i = 0; i < size + sizeof(PyCObject); i++){
-        *(UNIT_CAST(v) + i) = *(UNIT_CAST(data) + i);
+    PyCObject * v;
+
+    if( data == NULL ){
+        v = PyC_CAST(malloc(size));
+        int i =0;
+        for( i = 0; i < size; i ++){
+            *(UNIT_CAST(v)+i) = (UNIT_DATA) 0;
+        }
     }
-    PyCMem_Free(data);
-    
+
+    else{
+        v = PyC_CAST(realloc(data, size));
+    }
+
     return v;
 }
 

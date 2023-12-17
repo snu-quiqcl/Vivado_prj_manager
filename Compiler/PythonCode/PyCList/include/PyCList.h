@@ -6,8 +6,9 @@
 #include "PyCType.h"
 
 #define PyC_SET_LEN(v,size) (((v)->len) = (size))
-#define PyC_SIZE(v) ((v) -> len)
 #define PyC_LIST_CAST(v) ((PyCListObject *)(v))
+#define PyC_LIST_SIZE(v) (PyC_LIST_CAST(v) -> len)
+
 typedef struct {
     /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */
     PyCObject **ob_item;
@@ -61,6 +62,39 @@ PyCList_New(size_t size)
     op_ele->allocated = size;
     PyC_SET_LEN(op_ele, size);
     return (PyCObject *) op;
+}
+
+static inline void
+PyCList_SET_ITEM(PyCObject *op, size_t index, PyCObject *value) {
+    PyCListObject *list = PyC_LIST_CAST(op);
+    list->ob_item[index] = value;
+}
+
+static int ins1(PyCListObject *self, size_t where, PyCObject *v);
+int PyList_Insert(PyCObject *op, size_t where, PyCObject *newitem);
+int _PyList_AppendTakeRefListResize(PyCListObject *self, PyCObject *newitem);
+int PyList_Append(PyCObject *op, PyCObject *newitem);
+
+static inline int
+valid_index(size_t i, size_t limit)
+{
+    /* The cast to size_t lets us use just a single comparison
+       to check whether i is in the range: 0 <= i < limit.
+
+       See:  Section 14.2 "Bounds Checking" in the Agner Fog
+       optimization manual found at:
+       https://www.agner.org/optimize/optimizing_cpp.pdf
+    */
+    return (size_t) i < (size_t) limit;
+}
+
+static inline PyCObject *
+PyCList_GetItem(PyCObject *op, size_t i)
+{
+    if (!valid_index(i, PyC_LIST_SIZE(op))) {
+        return NULL;
+    }
+    return ((PyCListObject *)op) -> ob_item[i];
 }
 
 #endif

@@ -1,4 +1,5 @@
 #include "PyCLong.h"
+#include "PyCList.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,6 +7,7 @@ int main(){
     PyCObject *a = PyC_make_int64(10);
     PyCObject *b = PyC_make_int64(20);
     PyCObject *c = PyC_make_char('c');
+    printf("%d\n",sizeof(PyCObject));
     printf("%lld\n",PyC_get_int64_t(a));
     printf("%lld\n",PyC_get_int64_t(b));
     PyCMem_Set_value(a,b);
@@ -24,5 +26,9 @@ int main(){
     PyCMem_Free(a);
     PyCMem_Free(b);
     PyCMem_Free(c);
-    //PyCMem_Free(d);
+    PyCMem_Free(d);
+    //
+    
+    PyCObject * l = PyCList_New(1);
+    PyCMem_Free(l);
 }

@@ -12,9 +12,9 @@ void PyCMem_Free(PyCObject * ob){
     }
     else if( strcmp(ob->type.type, "list") == 0 ){
         printf("free list\n");
-        PyCListObject * v = (PyCListObject *)ob;
-        free(v->ob_item);
-        free(v);
+        PyCListObject * v = (PyCListObject *)(ob+1);
+        free(v-> ob_item);
+        free(ob);
     }
     else{
         printf("free %s\n", ob->type.type);

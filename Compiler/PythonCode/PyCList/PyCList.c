@@ -33,7 +33,7 @@ list_resize(PyCListObject *self, size_t newsize)
     /* Do not overallocate if the new size is closer to overallocated size
      * than to the old size.
      */
-    if (newsize - PyC_SIZE(self) > (size_t)(new_allocated - newsize))
+    if (newsize - PyC_LIST_SIZE(self) > (size_t)(new_allocated - newsize))
         new_allocated = ((size_t)newsize + 3) & ~(size_t)3;
 
     if (newsize == 0)
@@ -53,4 +53,57 @@ list_resize(PyCListObject *self, size_t newsize)
     PyC_SET_SIZE(self, newsize);
     self->allocated = new_allocated;
     return 0;
+}
+
+static int
+ins1(PyCListObject *self, size_t where, PyCObject *v)
+{
+    size_t i, n = PyC_LIST_SIZE(self);
+    PyCObject **items;
+    if (v == NULL) {
+        return -1;
+    }
+
+    if (list_resize(self, n+1) < 0)
+        return -1;
+
+    if (where < 0) {
+        where += n;
+        if (where < 0)
+            where = 0;
+    }
+    if (where > n)
+        where = n;
+    items = self->ob_item;
+    for (i = n; --i >= where; )
+        items[i+1] = items[i];
+    items[where] = PyC_INCREF(v);
+    return 0;
+}
+
+int
+PyCList_Insert(PyCObject *op, size_t where, PyCObject *newitem)
+{
+    return ins1((PyCListObject *)op, where, newitem);
+}
+
+int
+_PyCList_AppendTakeRefListResize(PyCListObject *self, PyCObject *newitem)
+{
+    size_t len = PyC_LIST_SIZE(self);
+    if (list_resize(self, len + 1) < 0) {
+        PyC_DECREF(newitem);
+        return -1;
+    }
+    PyCList_SET_ITEM(self, len, newitem);
+    return 0;
+}
+
+int
+PyCList_Append(PyCObject *op, PyCObject *newitem)
+{
+    if (newitem != NULL) {
+        return _PyCList_AppendTakeRefListResize((PyCListObject *)op, PyC_INCREF(newitem));
+    }
+    return -1;
 }

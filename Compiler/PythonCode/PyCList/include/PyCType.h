@@ -10,7 +10,8 @@
 #define INT64_SIZE      (8*BYTE_BIT)
 #define DOUBLE_SIZE     (8*BYTE_BIT)
 #define PyC_CAST(v)     ((PyCObject *) (v) )
-#define PyC_ELE(v)      (PyC_CAST((v) + sizeof(PyCObject)))
+#define PyC_ELE(v)      (PyC_CAST((v) + 1))
+#define PyC_SIZE(v)     (PyC_CAST(v)->size)
 
 #ifndef int64_t
 #define int64_t long

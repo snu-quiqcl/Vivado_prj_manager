@@ -5,13 +5,18 @@
 #include "malloc.h" //from xilinx BSP libraries
 #include "string.h"
 
+#define UNIT_DATA  uint8_t
+#define UNIT_CAST(v) ( (UNIT_DATA* ) (v) )
+#define PyC_DECREF(v) PyC_DecRef((PyC_CAST(v)))
+#define PyC_INCREF(v) PyC_IncRef((PyC_CAST(v)))
+
 void PyCMem_Free(PyCObject * ob);
 
 static inline PyCObject *   // You must write this function as a static inline. If not, it returns 32 bit address, and make malfunction
 PyCMem_Malloc(size_t size)
 {
     PyCObject * v = PyC_CAST( malloc(sizeof(PyCObject) + size) );
-    v->ref_cnt = 1;
+    v->ref_cnt = 0;
     v->type.size = size;
     return v;
 }
@@ -22,7 +27,7 @@ PyCMem_Realloc(PyCObject * data, size_t size)
     PyCObject * v = PyCMem_Malloc(size);
     int i = 0 ;
     for( i = 0; i < size + sizeof(PyCObject); i++){
-        *(v + i) = *(data + i);
+        *(UNIT_CAST(v) + i) = *(UNIT_CAST(data) + i);
     }
     PyCMem_Free(data);
     
@@ -32,7 +37,7 @@ PyCMem_Realloc(PyCObject * data, size_t size)
 static inline PyCObject *
 PyCMem_Get_start_addr(PyCObject * addr)
 {
-    return PyC_CAST(addr + sizeof(PyCObject));
+    return PyC_CAST(addr) + 1;
 }
 
 static inline PyCObject * 
@@ -49,13 +54,35 @@ PyCMem_Set_value(PyCObject * target_addr, PyCObject * source_addr)
         target_addr = PyCMem_Malloc(size);
     }
     for( i = 0; i < size; i++){
-        *(t + i) = *(s + i);
+        *(UNIT_CAST(t) + i) = *(UNIT_CAST(s) + i);
     }
     return target_addr;
 }
 
 static inline PyCObject *
 PyCMem_Calloc(size_t len, size_t ele_size){
+    PyCObject * v = PyC_CAST( malloc(ele_size * len) );
+    int i =0;
+    for( i = 0 ; i < ele_size * len; i++){
+        *(UNIT_CAST(v)+i) = (UNIT_DATA)(0);
+    }
+    return v;
+
+}
+
+static inline PyCObject *
+PyC_DecRef(PyCObject * v){   
+    v->ref_cnt = v->ref_cnt - 1;
+    if( v->ref_cnt <= 0 ){
+        PyCMem_Free(v);
+    }
+    return v;
+}
+
+static inline PyCObject *
+PyC_IncRef(PyCObject * v){   
+    v->ref_cnt = v->ref_cnt + 1;
+    return v;
 }
 
 #endif // PyCMem.h

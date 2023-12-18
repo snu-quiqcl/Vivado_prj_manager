@@ -20,9 +20,13 @@ int main(){
     printf("%f\n",PyC_get_double(d));
     
     PyCObject * l = PyCList_New(0);
+    PyCObject * l1 = PyCList_New(0);
+    PyCList_Append(l1,a);
     PyCList_Append(l,a);
     PyCList_Append(l,b);
+    PyCList_Append(l,l1);
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,0)));
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,1)));
+    printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(PyCList_GetItem(l,2),0)));
     //PyCMem_Free(l);
 }

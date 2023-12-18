@@ -725,7 +725,7 @@ def main() -> int:
     c = 3
     c = 3
     d = 30
-    print('hello')
+    print('hello\\n\\r')
     if c == 30 or c > 20:
         c = 40
     elif c == 50:
@@ -734,6 +734,8 @@ def main() -> int:
         c = 70
     else:
         c = 60
+        
+    print('c = %d',c)
     return 0
 """
     

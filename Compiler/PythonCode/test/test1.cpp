@@ -22,6 +22,7 @@
 int main(void){
     int a;
     int b;
+    long double c = 1.0;
     for( a = 1; a < 10; a ++){
         b = a;
     }

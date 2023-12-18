@@ -8,29 +8,31 @@ define dso_local noundef i32 @main() #0 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
   %3 = alloca i32, align 4
+  %4 = alloca fp128, align 16
   store i32 0, ptr %1, align 4
+  store fp128 0xL00000000000000003FFF000000000000, ptr %4, align 16
   store i32 1, ptr %2, align 4
-  br label %4
+  br label %5
 
-4:                                                ; preds = %9, %0
-  %5 = load i32, ptr %2, align 4
-  %6 = icmp slt i32 %5, 10
-  br i1 %6, label %7, label %12
+5:                                                ; preds = %10, %0
+  %6 = load i32, ptr %2, align 4
+  %7 = icmp slt i32 %6, 10
+  br i1 %7, label %8, label %13
 
-7:                                                ; preds = %4
-  %8 = load i32, ptr %2, align 4
-  store i32 %8, ptr %3, align 4
-  br label %9
+8:                                                ; preds = %5
+  %9 = load i32, ptr %2, align 4
+  store i32 %9, ptr %3, align 4
+  br label %10
 
-9:                                                ; preds = %7
-  %10 = load i32, ptr %2, align 4
-  %11 = add nsw i32 %10, 1
-  store i32 %11, ptr %2, align 4
-  br label %4, !llvm.loop !4
+10:                                               ; preds = %8
+  %11 = load i32, ptr %2, align 4
+  %12 = add nsw i32 %11, 1
+  store i32 %12, ptr %2, align 4
+  br label %5, !llvm.loop !4
 
-12:                                               ; preds = %4
-  %13 = load i32, ptr %2, align 4
-  ret i32 %13
+13:                                               ; preds = %5
+  %14 = load i32, ptr %2, align 4
+  ret i32 %14
 }
 
 attributes #0 = { mustprogress noinline norecurse nounwind optnone uwtable "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="cortex-a53" "target-features"="+aes,+crc,+crypto,+fp-armv8,+neon,+sha2,+v8a,-fmv" }

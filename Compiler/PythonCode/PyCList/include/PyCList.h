@@ -5,13 +5,10 @@
 #include "PyCMem.h"
 #include "PyCType.h"
 
-#define PyC_SET_LEN(v,size) (((PyC_LIST_CAST(v))->len) = (size))
 #define PyC_LIST_CAST(v) ((PyCListObject *)(v))
-#define PyC_LIST_SIZE(v) (PyC_LIST_CAST(v) -> len)
-#define PyC_SET_SIZE(v,size) (((PyC_LIST_CAST(v))->len) = (size))
-#define PyC_GET_LIST(v) (PyC_LIST_CAST(PyC_ELE(v)))
 
 typedef struct {
+    PyCObject_VAR_HEAD
     /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */
     PyCObject **ob_item;
 
@@ -29,7 +26,6 @@ typedef struct {
     //Allocated memory
     size_t allocated;
     //length of list
-    size_t  len;
 } PyCListObject;
 
 static int list_resize(PyCListObject *self, size_t newsize);
@@ -47,29 +43,26 @@ PyCList_New(size_t size)
     if (op == NULL) {
         return NULL;
     }
-    PyC_CAST(op) -> type.type = "list";
-
-    PyCListObject * op_ele = PyC_LIST_CAST(PyC_ELE(op));
+    PyC_SET_TYPE(op,"list");
 
     if (size <= 0) {
-        op_ele->ob_item = NULL;
+        op->ob_item = NULL;
     }
     else {
-        op_ele->ob_item = (PyCObject **) PyCMem_Calloc(size, sizeof(PyCObject *));
-        if (op_ele->ob_item == NULL) {
+        op->ob_item = (PyCObject **) PyCMem_Calloc(size, sizeof(PyCObject *));
+        if (op->ob_item == NULL) {
             PyC_DECREF(op);
             return NULL;
         }
     }
-    op_ele->allocated = size;
-    PyC_SET_LEN(op_ele, size);
+    op->allocated = size;
+    PyC_SET_SIZE(op, size);
     return (PyCObject *) op;
 }
 
 static inline void
 PyCList_SET_ITEM(PyCObject *op, size_t index, PyCObject *value) {
-    PyCListObject *list = PyC_GET_LIST(op);
-    list->ob_item[index] = value;
+    PyC_LIST_CAST(op)->ob_item[index] = value;
 }
 
 static int ins1(PyCListObject *self, size_t where, PyCObject *v);
@@ -93,8 +86,8 @@ valid_index(size_t i, size_t limit)
 static inline PyCObject *
 PyCList_GetItem(PyCObject *op, size_t i)
 {
-    PyCListObject * v = PyC_GET_LIST(op);
-    if (!valid_index(i, PyC_LIST_SIZE(v))) {
+    PyCListObject * v = PyC_LIST_CAST(op);
+    if (!valid_index(i, PyC_SIZE(v))) {
         return NULL;
     }
     return v -> ob_item[i];

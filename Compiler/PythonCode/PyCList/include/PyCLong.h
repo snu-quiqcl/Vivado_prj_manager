@@ -9,19 +9,18 @@
 #define PyC_DOUBLE_CAST(v)  ( (PyCDoubleObject *)(v) )
 
 typedef struct{
-    int8_t          len;
-    int8_t          sign;
-    int64_t         value;
+    PyCObject_VAR_HEAD 
+    int64_t         value[1];
 }PyCIntObject;
 
 typedef struct{
+    PyCObject_VAR_HEAD
     char            value;
 }PyCCharObject;
 
 typedef struct{
-    int8_t          len;
-    int8_t          sign;
-    double          value;
+    PyCObject_VAR_HEAD
+    double          value[1];
 }PyCDoubleObject;
 
 static inline PyCObject *
@@ -30,11 +29,10 @@ PyC_make_int64(int64_t ival)
     PyCIntObject *v;
 
     v = PyC_INT_CAST(PyCMem_Malloc(sizeof(PyCIntObject)));
-    PyC_CAST(v)->type.type          = "int64";
-    PyCIntObject * temp_addr        = PyC_INT_CAST(PyCMem_Get_start_addr(PyC_CAST(v)));
-    PyC_INT_CAST(temp_addr) -> len = INT64_SIZE;
-    PyC_INT_CAST(temp_addr) -> sign = (ival > 0)? 0:1;
-    PyC_INT_CAST(temp_addr) -> value= ival;
+    PyC_SET_TYPE(v,"int64");
+    size_t sign = (ival > 0)? 1:-1;
+    PyC_SET_SIZE(v,sign);
+    (v->value)[0] = sign * ival;
     
     return (PyCObject *)v;
 }
@@ -45,11 +43,10 @@ PyC_make_double(long double ival)
     PyCDoubleObject *v;
 
     v = PyC_DOUBLE_CAST(PyCMem_Malloc(sizeof(PyCDoubleObject)));
-    PyC_CAST(v) -> type.type      = "double";
-    PyCDoubleObject * temp_addr     = PyC_DOUBLE_CAST(PyCMem_Get_start_addr(PyC_CAST(v)));
-    PyC_DOUBLE_CAST(temp_addr) -> len = DOUBLE_SIZE;
-    PyC_DOUBLE_CAST(temp_addr) -> sign = (ival > 0.0)? 0:1;
-    PyC_DOUBLE_CAST(temp_addr) -> value = ival;
+    PyC_SET_TYPE(v,"double");
+    size_t sign = (ival > 0)? 1:-1;
+    PyC_SET_SIZE(v,sign);
+    (v->value)[0] = sign * ival;
 
     return (PyCObject *)v;
 }
@@ -60,9 +57,9 @@ PyC_make_char(char ival)
     PyCCharObject *v;
 
     v = PyC_CHAR_CAST(PyCMem_Malloc(sizeof(PyCCharObject)));
-    PyC_CAST(v)->type.type          = "char";
-    PyCCharObject * temp_addr       = PyC_CHAR_CAST(PyCMem_Get_start_addr(PyC_CAST(v)));
-    PyC_CHAR_CAST(temp_addr) -> value = ival;
+    PyC_SET_TYPE(v,"char");
+    PyC_SET_SIZE(v,1);
+    v->value = ival;
 
     return (PyCObject *)v;
 }

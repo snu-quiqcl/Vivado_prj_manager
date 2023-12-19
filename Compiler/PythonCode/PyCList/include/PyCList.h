@@ -1,7 +1,5 @@
 #ifndef PYCLIST_INCLUDE
 #define PYCLIST_INCLUDE
-
-#include <stdlib.h>
 #include "PyCMem.h"
 #include "PyCType.h"
 
@@ -29,7 +27,7 @@ typedef struct {
 } PyCListObject;
 
 
-static inline PyCObject *
+static inline void *
 PyCList_New(size_t size)
 {
     PyCListObject *op;
@@ -64,9 +62,9 @@ PyCList_SET_ITEM(PyCObject *op, size_t index, PyCObject *value) {
     PyC_LIST_CAST(op)->ob_item[index] = value;
 }
 
-int PyList_Insert(PyCObject *op, size_t where, PyCObject *newitem);
-int _PyList_AppendTakeRefListResize(PyCListObject *self, PyCObject *newitem);
-int PyList_Append(PyCObject *op, PyCObject *newitem);
+int PyCList_Insert(PyCObject *op, size_t where, PyCObject *newitem);
+int _PyCList_AppendTakeRefListResize(PyCListObject *self, PyCObject *newitem);
+int PyCList_Append(PyCObject *op, PyCObject *newitem);
 
 static inline int
 valid_index(size_t i, size_t limit)

@@ -1,11 +1,9 @@
 #ifndef PYCTYPE_INCLUDE
 #define PYCTYPE_INCLUDE
 
-#include <stdint.h>
-#include <string.h>
 #include "PyCTypedef.h"
 
-#define PyC_SSIZE_T_MAX         INTPTR_MAX
+#define PyC_SSIZE_T_MAX         1000000000 //INTPTR_MAX in stdint.h
 #define NUM_TYPE                (4)     // number of declared types
 #define MAX_TYPE_LEN            (20)    // Length of type name
 #define BYTE_BIT                (8)     // Bit number of 1 byte
@@ -44,9 +42,6 @@
         }                                                                   \
     } while (0)
 
-#ifndef int64_t
-#define int64_t long
-#endif
 
 extern char ** new_type_table;
 extern int64_t num_type;
@@ -72,4 +67,5 @@ typedef struct {
 int64_t do_richcompare(PyCObject *v, PyCObject *w, int op);
 int64_t PyCObject_RichCompare(PyCObject *v, PyCObject *w, int op);
 int64_t PyCObject_RichCompareBool(PyCObject *v, PyCObject *w, int op);
+int64_t strcmp(char * a, char * b);
 #endif // PyCType.h

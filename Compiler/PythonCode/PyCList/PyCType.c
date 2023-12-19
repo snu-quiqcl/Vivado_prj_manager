@@ -1,5 +1,4 @@
 #include "PyCType.h"
-#include <stdio.h>
 
 int64_t num_type = (NUM_TYPE + 0);
 char type_table[NUM_TYPE][MAX_TYPE_LEN] = \
@@ -54,4 +53,20 @@ PyCObject_RichCompareBool(PyCObject *v, PyCObject *w, int op)
     return res;
 }
 
+int strcmp(char * a, char * b){
+    int i = 0;
+    do{
+        if( *(a+i) != *(b+i) ){
+            return 1;
+        }
+        else if(*(a+i) == '\0'){
+            if( *(b+i) == '\0'){
+                return 0;
+            }
+            else return 1;
+        }
+
+        else i+=1;
+    }while(1);
+}
 

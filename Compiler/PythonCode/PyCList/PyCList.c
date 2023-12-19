@@ -1,6 +1,5 @@
 #include "PyCList.h"
 #include "PyCMem.h"
-#include <stdio.h>
 
 static int
 list_resize(PyCListObject *self, size_t newsize)
@@ -142,3 +141,4 @@ PyCList_remove(PyCListObject *self, PyCObject *value)
         }
     }
 }
+

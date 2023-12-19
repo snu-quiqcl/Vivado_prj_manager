@@ -23,6 +23,9 @@ typedef struct{
     double          value[1];
 }PyCDoubleObject;
 
+int64_t int64_t_richcompare(PyCObject * v, PyCObject * w, int op);
+int64_t char_richcompare(PyCObject * v, PyCObject * w, int op);
+
 static inline PyCObject *
 PyC_make_int64(int64_t ival)
 {
@@ -33,6 +36,7 @@ PyC_make_int64(int64_t ival)
     size_t sign = (ival > 0)? 1:-1;
     PyC_SET_SIZE(v,sign);
     (v->value)[0] = sign * ival;
+    PyC_CAST(v)->type.tp_richcompare = &(int64_t_richcompare);
     
     return (PyCObject *)v;
 }
@@ -47,6 +51,7 @@ PyC_make_double(long double ival)
     size_t sign = (ival > 0)? 1:-1;
     PyC_SET_SIZE(v,sign);
     (v->value)[0] = sign * ival;
+    PyC_CAST(v)->type.tp_richcompare = &(char_richcompare);
 
     return (PyCObject *)v;
 }
@@ -63,7 +68,6 @@ PyC_make_char(char ival)
 
     return (PyCObject *)v;
 }
-
 
 int64_t PyC_get_int64_t(PyCObject * target);
 char    PyC_get_char(PyCObject * target);

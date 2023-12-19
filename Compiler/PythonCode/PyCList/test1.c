@@ -4,19 +4,27 @@
 #include <stdlib.h>
 
 void show_list_structure(PyCObject * v){
-    if( IS_TYPE(v,"list") ){
+    if( PyC_IS_TYPE(v,"list") ){
         printf("[");
 
         PyCObject ** ptr = PyC_LIST_CAST(v) -> ob_item;
         int i = 0;
 
-        printf("size : %d\n",PyC_SIZE(PyC_LIST_CAST(v)));
         for( i = 0; i < PyC_SIZE(PyC_LIST_CAST(v)); i++){
             show_list_structure(*ptr);
+            if( i != (PyC_SIZE(PyC_LIST_CAST(v)) - 1) ){
+                printf(",");
+            }
             ptr = ptr + 1;
         }
 
         printf("]");
+    }
+    else if(PyC_IS_TYPE(v,"int64")){
+        printf("%d",PyC_get_int64_t(v));
+    }
+    else if(PyC_IS_TYPE(v,"char")){
+        printf("%c",PyC_get_char(v));
     }
 }
 
@@ -41,10 +49,17 @@ int main(){
     PyCList_Append(l1,a);
     PyCList_Append(l,a);
     PyCList_Append(l,b);
+    PyCList_Append(l,c);
     PyCList_Append(l,l1);
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,0)));
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,1)));
-    printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(PyCList_GetItem(l,2),0)));
+    printf("%c\n", PyC_get_char(PyCList_GetItem(l,2)));
+    printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(PyCList_GetItem(l,3),0)));
+    show_list_structure(l);
+    printf("\n");
+    printf("%d\n",PyCObject_RichCompareBool(a,b,PyC_EQ));
+    printf("%d\n",PyCObject_RichCompareBool(a,a,PyC_EQ));
+    PyCList_remove(l,c);
     show_list_structure(l);
     //PyCMem_Free(l);
 }

@@ -92,5 +92,6 @@ PyCList_GetItem(PyCObject *op, size_t i)
 }
 
 void PyCList_dealloc(PyCListObject *op);
+void PyCList_remove(PyCListObject *self, PyCObject *value);
 
 #endif

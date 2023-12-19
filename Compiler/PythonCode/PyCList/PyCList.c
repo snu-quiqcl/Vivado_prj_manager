@@ -120,6 +120,25 @@ PyCList_dealloc(PyCListObject *op)
         while (--i >= 0) {
             PyC_DECREF(op->ob_item[i]);
         }
-        PyCMem_Free(op->ob_item);
+        free(op->ob_item);
+    }
+}
+
+void
+PyCList_remove(PyCListObject *self, PyCObject *value)
+{
+    size_t i, j;
+
+    for (i = 0; i < PyC_SIZE(self); i++) {
+        PyCObject *obj = self->ob_item[i];
+        int64_t cmp = PyCObject_RichCompareBool(obj, value, PyC_EQ);
+        if (cmp > 0) {
+            PyC_DECREF(self->ob_item[i]);
+            for( j = i + 1; j < PyC_SIZE(self); j ++ ){
+                self->ob_item[j-1] = self->ob_item[j];
+            }
+            self->ob_item = PyCMem_Realloc(self->ob_item,PyC_SIZE(self)-1);
+            PyC_SET_SIZE(self,PyC_SIZE(self)-1);
+        }
     }
 }

@@ -136,7 +136,7 @@ class LLVMIR_Statement:
         # https://stackoverflow.com/questions/58674264/llvmlite-hello-world-example-produces-wrong-output
         global str_num
         if type(node.value) == int:
-            # self.function.variables['const.{str(node.value)}'] = self.make_element_var('const.{str(node.value)}',node.value)
+            # self.function.variables['const.{str(node.value)}'] = self.make_new_var('const.{str(node.value)}',node.value)
             # return self.function.variables['const.{str(node.value)}']
             return ir.Constant(ir.IntType(64),node.value)
         elif type(node.value) == str:
@@ -258,11 +258,8 @@ class LLVMIR_Statement:
                 self.function.variables[var_ptr.name] = var_ptr
             
             else:            
-                ######################################################################
-                # PyObject Done
-                ######################################################################
                 # Allocate space for the variable on the stack
-                var_ptr = self.make_element_var(target.id, node.value)
+                var_ptr = self.make_new_var(target.id, node.value)
                 
             return var_ptr
             
@@ -288,15 +285,12 @@ class LLVMIR_Statement:
                                            'self_'+node.target.attr)
                 self.declared_self_vars['self_'+node.target.attr] = var_ptr
         else: 
-            ######################################################################
-            # PyObject Done
-            ######################################################################
             # Allocate space for the variable on the stack
-            var_ptr = self.make_element_var(node.target.id, node.value)
+            var_ptr = self.make_new_var(node.target.id, node.value)
         
         return var_ptr
     
-    def make_element_var(self, var_name, node_value):
+    def make_new_var(self, var_name, node_value):
         if node_value is not None:
             value = self.translate_node(node_value)
             var_type = value.type

@@ -106,3 +106,20 @@ PyCList_Append(PyCObject *op, PyCObject *newitem)
     }
     return -1;
 }
+
+void
+PyCList_dealloc(PyCListObject *op)
+{
+    size_t i;
+    if (op->ob_item != NULL) {
+        /* Do it backwards, for Christian Tismer.
+           There's a simple test case where somehow this reduces
+           thrashing when a *very* large list is created and
+           immediately deleted. */
+        i = PyC_SIZE(op);
+        while (--i >= 0) {
+            PyC_DECREF(op->ob_item[i]);
+        }
+        PyCMem_Free(op->ob_item);
+    }
+}

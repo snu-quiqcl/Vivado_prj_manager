@@ -28,7 +28,6 @@ typedef struct {
     //length of list
 } PyCListObject;
 
-static int list_resize(PyCListObject *self, size_t newsize);
 
 static inline PyCObject *
 PyCList_New(size_t size)
@@ -65,7 +64,6 @@ PyCList_SET_ITEM(PyCObject *op, size_t index, PyCObject *value) {
     PyC_LIST_CAST(op)->ob_item[index] = value;
 }
 
-static int ins1(PyCListObject *self, size_t where, PyCObject *v);
 int PyList_Insert(PyCObject *op, size_t where, PyCObject *newitem);
 int _PyList_AppendTakeRefListResize(PyCListObject *self, PyCObject *newitem);
 int PyList_Append(PyCObject *op, PyCObject *newitem);
@@ -92,5 +90,7 @@ PyCList_GetItem(PyCObject *op, size_t i)
     }
     return v -> ob_item[i];
 }
+
+void PyCList_dealloc(PyCListObject *op);
 
 #endif

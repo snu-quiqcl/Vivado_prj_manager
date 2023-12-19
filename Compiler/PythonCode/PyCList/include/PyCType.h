@@ -2,6 +2,7 @@
 #define PYCTYPE_INCLUDE
 
 #include <stdint.h>
+#include <string.h>
 
 #define PyC_SSIZE_T_MAX         INTPTR_MAX
 #define NUM_TYPE                (4)     // number of declared types
@@ -17,6 +18,7 @@
 #define PyCObject_VAR_HEAD      PyCVarObject ob_base;
 #define PyC_SET_REFCNT(v,n)     (PyC_CAST(v)->ref_cnt = (n))
 #define PyC_REFCNT(v)           (PyC_CAST(v)->ref_cnt)
+#define IS_TYPE(ob, typ)        ( (strcmp((PyC_CAST(ob)) -> type.type, (typ))) == 0 )
 
 #ifndef int64_t
 #define int64_t long

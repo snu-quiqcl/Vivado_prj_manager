@@ -3,6 +3,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void show_list_structure(PyCObject * v){
+    if( IS_TYPE(v,"list") ){
+        printf("[");
+
+        PyCObject ** ptr = PyC_LIST_CAST(v) -> ob_item;
+        int i = 0;
+
+        printf("size : %d\n",PyC_SIZE(PyC_LIST_CAST(v)));
+        for( i = 0; i < PyC_SIZE(PyC_LIST_CAST(v)); i++){
+            show_list_structure(*ptr);
+            ptr = ptr + 1;
+        }
+
+        printf("]");
+    }
+}
+
 int main(){
     PyCObject *a = PyC_make_int64(10);
     PyCObject *b = PyC_make_int64(20);
@@ -28,5 +45,6 @@ int main(){
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,0)));
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(l,1)));
     printf("%lld\n",PyC_get_int64_t(PyCList_GetItem(PyCList_GetItem(l,2),0)));
+    show_list_structure(l);
     //PyCMem_Free(l);
 }

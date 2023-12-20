@@ -1,7 +1,3 @@
-#ifdef__cplusplus
-extern "C"{
-#endif
-
 #include "PyCLong.h"
 #include "PyCMem.h"
 

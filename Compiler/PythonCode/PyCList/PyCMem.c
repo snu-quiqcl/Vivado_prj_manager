@@ -1,7 +1,3 @@
-#ifdef__cplusplus
-extern "C"{
-#endif
-
 #include "PyCMem.h"
 #include "PyCList.h"
 #include "PyCType.h"

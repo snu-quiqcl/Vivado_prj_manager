@@ -1,0 +1,41 @@
+# Makefile
+
+# Compiler
+CC=gcc
+FCC=g++
+
+# Compiler flags
+CFLAGS=-Wall -c
+
+# Include directory
+INCLUDES=-I./include
+
+# Find all .c files in the current directory
+SOURCES=$(wildcard *.c)
+FSOURCES=$(wildcard *.cpp)
+
+# Convert the .c files to .o files
+OBJECTS=$(SOURCES:.c=.o)
+FOBJECTS=$(FSOURCES:.cpp=.o)
+
+# Executable name
+EXECUTABLE=test1.exe
+
+# Default target
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS) $(FOBJECTS)
+	$(FCC) $(INCLUDES) $(OBJECTS) $(FOBJECTS) -o $(EXECUTABLE)
+
+# Rule for object files, depends on the corresponding c file
+
+%.o: %.cpp
+	$(FCC) $(CFLAGS) $(INCLUDES) $< -o $@ 
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+
+# Clean rule
+clean:
+	rm -f $(OBJECTS) $(EXECUTABLE)
+

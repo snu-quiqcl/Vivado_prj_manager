@@ -2,6 +2,10 @@
 #include "PyCMem.h"
 #include <stdio.h>
 
+#ifdef__cplusplus
+extern "C"{
+#endif
+
 static int
 list_resize(PyCListObject *self, size_t newsize)
 {

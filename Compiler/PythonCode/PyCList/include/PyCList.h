@@ -1,6 +1,10 @@
 #ifndef PYCLIST_INCLUDE
 #define PYCLIST_INCLUDE
 
+#ifdef__cplusplus
+extern "C"{
+#endif
+
 #include <stdlib.h>
 #include "PyCMem.h"
 #include "PyCType.h"
@@ -93,5 +97,9 @@ PyCList_GetItem(PyCObject *op, size_t i)
 
 void PyCList_dealloc(PyCListObject *op);
 void PyCList_remove(PyCListObject *self, PyCObject *value);
+
+#ifdef__cplusplus
+}
+#endif
 
 #endif

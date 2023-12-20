@@ -1,6 +1,10 @@
 #ifndef PYCLONG_INCLUDE
 #define PYCLONG_INCLUDE
 
+#ifdef__cplusplus
+extern "C"{
+#endif
+
 #include "PyCType.h"
 #include "PyCMem.h"
 
@@ -72,4 +76,8 @@ PyC_make_char(char ival)
 int64_t PyC_get_int64_t(PyCObject * target);
 char    PyC_get_char(PyCObject * target);
 double  PyC_get_double(PyCObject * target);
+#ifdef__cplusplus
+}
+#endif
+
 #endif

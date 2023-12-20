@@ -1,9 +1,9 @@
-#include "PyCLong.h"
-#include "PyCMem.h"
-
 #ifdef__cplusplus
 extern "C"{
 #endif
+
+#include "PyCLong.h"
+#include "PyCMem.h"
 
 int64_t
 PyC_get_int64_t(PyCObject * v){

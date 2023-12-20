@@ -1,6 +1,7 @@
 #include "PyCMem.h"
 #include "PyCList.h"
 #include "PyCType.h"
+#include "string.h"
 
 void PyCMem_Free(PyCObject * ob){
     if( PyC_IS_TYPE(ob, "NULL") ){

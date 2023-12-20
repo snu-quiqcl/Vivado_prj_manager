@@ -2,17 +2,16 @@
 #define PYCMEM_INCLUDE
 
 #include "PyCType.h"
+#include "malloc.h" //from xilinx BSP libraries
+#include "string.h"
 
-#define UNIT_DATA  char
+#define UNIT_DATA  uint8_t
 #define UNIT_CAST(v) ( (UNIT_DATA* ) (v) )
 #define PyC_DECREF(v) PyC_DecRef(PyC_CAST(v))
 #define PyC_INCREF(v) PyC_IncRef(PyC_CAST(v))
 
 void PyCMem_Free(PyCObject * ob);
 
-extern void *malloc(size_t a);
-extern void free(void * a);
-extern void * realloc(void * v, size_t a);
 static inline PyCObject *   // You must write this function as a static inline. If not, it returns 32 bit address, and make malfunction
 PyCMem_Malloc(size_t size)
 {

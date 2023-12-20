@@ -1,6 +1,10 @@
 #ifndef PYCMEM_INCLUDE
 #define PYCMEM_INCLUDE
 
+#ifdef__cplusplus
+extern "C"{
+#endif
+
 #include "PyCType.h"
 #include "malloc.h" //from xilinx BSP libraries
 #include "string.h"
@@ -68,5 +72,9 @@ PyC_IncRef(PyCObject * v){
     v->ref_cnt = ref_cnt + 1;
     return v;
 }
+
+#ifdef__cplusplus
+}
+#endif
 
 #endif // PyCMem.h

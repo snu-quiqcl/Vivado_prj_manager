@@ -1,6 +1,10 @@
 #ifndef PYCTYPE_INCLUDE
 #define PYCTYPE_INCLUDE
 
+#ifdef__cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <string.h>
 #include "PyCTypedef.h"
@@ -72,4 +76,9 @@ typedef struct {
 int64_t do_richcompare(PyCObject *v, PyCObject *w, int op);
 int64_t PyCObject_RichCompare(PyCObject *v, PyCObject *w, int op);
 int64_t PyCObject_RichCompareBool(PyCObject *v, PyCObject *w, int op);
+
+#ifdef__cplusplus
+}
+#endif
+
 #endif // PyCType.h

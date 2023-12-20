@@ -1,6 +1,10 @@
 #include "PyCLong.h"
 #include "PyCMem.h"
 
+#ifdef__cplusplus
+extern "C"{
+#endif
+
 int64_t
 PyC_get_int64_t(PyCObject * v){
     int64_t sign = (PyC_SIZE(PyC_INT_CAST(v)) > 0)? 1:-1;

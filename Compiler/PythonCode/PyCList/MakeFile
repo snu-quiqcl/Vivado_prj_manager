@@ -2,6 +2,7 @@
 
 # Compiler
 CC=gcc
+FCC=g++
 
 # Compiler flags
 CFLAGS=-Wall -c
@@ -11,9 +12,11 @@ INCLUDES=-I./include
 
 # Find all .c files in the current directory
 SOURCES=$(wildcard *.c)
+FSOURCES=$(wildcard *.cpp)
 
 # Convert the .c files to .o files
 OBJECTS=$(SOURCES:.c=.o)
+FOBJECTS=$(FSOURCES:.cpp=.o)
 
 # Executable name
 EXECUTABLE=test1.exe
@@ -22,7 +25,7 @@ EXECUTABLE=test1.exe
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(INCLUDES) $(OBJECTS) -o $(EXECUTABLE)
+	$(FCC) $(INCLUDES) $(OBJECTS) $(FOBJECTS) -o $(EXECUTABLE)
 
 # Rule for object files, depends on the corresponding c file
 %.o: %.c

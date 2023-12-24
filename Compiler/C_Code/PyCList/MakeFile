@@ -37,5 +37,5 @@ $(EXECUTABLE): $(OBJECTS) $(FOBJECTS)
 
 # Clean rule
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -f $(OBJECTS) $(EXECUTABLE) test1.o
 

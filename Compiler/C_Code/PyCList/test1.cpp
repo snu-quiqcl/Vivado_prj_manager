@@ -30,8 +30,11 @@ void show_list_structure(PyCObject * v){
 
 int main(){
     PyCObject *a = PyC_make_int64(10);
+    PyC_INCREF(a);
     PyCObject *b = PyC_make_int64(20);
+    PyC_INCREF(b);
     PyCObject *c = PyC_make_char('c');
+    PyC_INCREF(c);
     printf("%d\n",sizeof(PyCObject));
     printf("%lld\n",PyC_get_int64_t(a));
     printf("%lld\n",PyC_get_int64_t(b));
@@ -61,5 +64,16 @@ int main(){
     printf("%d\n",PyCObject_RichCompareBool(a,a,PyC_EQ));
     PyCList_remove(l,c);
     show_list_structure(l);
+    printf("\n");
+    PyCList_Append(l,a);
+    show_list_structure(l);
+    printf("\n");
+
+    PyCObject * l2 = PyCList_New(3);
+    PyCList_SET_ITEM(l2, 0, a);
+    PyCList_SET_ITEM(l2, 1, c);
+    PyCList_SET_ITEM(l2, 2, b);
+    show_list_structure(l2);
+
     //PyCMem_Free(l);
 }

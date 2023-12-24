@@ -58,7 +58,7 @@ class Token_Object:
         return self.statement
     
     def __type__(self):
-        return str(self.var_type)
+        return self.var_type
     
     def __value__(self):
         return self.value()
@@ -79,20 +79,21 @@ class Basic_Statement:
         right_code = self.normal_statement(node.right).__statement__()
         if self.normal_statement(node.left).__type__() != self.normal_statement(node.right).__type__():
             raise Exception(f'{self.normal_statement(node.left).__statement__()} \
-                            and {self.normal_statement(node.right).__statement__()} \
-                            type is different')
+and {self.normal_statement(node.right).__statement__()} \
+type is different ({self.normal_statement(node.left).__type__()} !=\
+{self.normal_statement(node.right).__type__()})')
         op_code = self.operator_to_c(node.op)
         
         return Token_Object(f"({left_code} {op_code} {right_code})",\
-                            self.normal_statement(node.left).__type__)
+                            self.normal_statement(node.left).__type__())
     
     def translate_Constant(self,node):
         if type(node.value).__name__ == 'str':
             if len(node.value) == 1:
-                return Token_Object(node.value,'char')
+                return Token_Object(str(node.value),'char')
             else:
                 return Token_Object("\""+node.value + "\"", 'str')
-        return Token_Object(node.value,type(node.value).__name__)
+        return Token_Object(str(node.value),type(node.value).__name__)
     
     def translate_Expr(self,node):
         return Token_Object(f"{self.normal_statement(node.value).__statement__()};\n" + make_indent(),None)
@@ -103,10 +104,11 @@ class Basic_Statement:
                             ,self.normal_statement(node.value).__type__) #CHECK!!
         
     def translate_Call(self,node):
+        # print(ast.dump(node, indent=4))
         if hasattr(node.func, 'value'):
-            if node.func.value.id in self.declared_class:
+            if node.func.value.id in self.declared_vars:
                 c_code = ""
-                c_code += f"{self.declared_class[node.func.value.id]}_{node.func.attr}(&{node.func.value.id},"
+                c_code += f"{node.func.value.id}.{node.func.attr}("
                 param_num = len(node.args)
                 param_index = 0
                 for stmt in node.args:
@@ -115,7 +117,20 @@ class Basic_Statement:
                     if not param_index == param_num:
                         c_code += ', '
                 c_code += ')'
-                return Token_Object(c_code,'FUNC_CALL')
+                return Token_Object(c_code,self.declared_vars[node.func.value.id].__type__().declared_method[node.func.attr].ret_type)
+        
+        elif node.func.id in classes:
+            c_code = ""
+            c_code += f"{node.func.id}("
+            param_num = len(node.args)
+            param_index = 0
+            for stmt in node.args:
+                c_code += self.normal_statement(stmt).__statement__()
+                param_index += 1
+                if not param_index == param_num:
+                    c_code += ', '
+            c_code += ')'
+            return Token_Object(c_code,classes[node.func.id])
         else:
             c_code = ""
             if node.func.id in functions:
@@ -219,7 +234,7 @@ class Basic_Statement:
                 var_name = target.id
                 var_value = self.normal_statement(node.value).__statement__()
                 c_code += f"{var_name} = {var_value};\n" + make_indent()
-                self.declared_class[var_name] = node.value.func.id
+                self.declared_vars[var_name] = Token_Object(var_name, classes[node.value.func.id])
                 return Token_Object(c_code, 'class assign')
             
             # Variable is declared as a this-> variable
@@ -252,6 +267,9 @@ class Basic_Statement:
                         self.declared_vars[var_name] = Token_Object(var_name,'list')
                         
                         return Token_Object(c_code, 'list assign')
+                    #####################################################################
+                    # we have to consider when already declared list is redeclared again...
+                    #####################################################################
             
             else:
                 var_name = target.id
@@ -263,7 +281,10 @@ class Basic_Statement:
                 for target in node.targets:
                     var_name = target.id
                     if self.declared_vars[var_name].__type__() != value.__type__():
-                        raise Exception(f'{var_name} and {value.__statement__()} has different type ({self.declared_vars[var_name].__type__ ()}!={value.__type__()})')
+                        print(ast.dump(node, indent=4))
+                        raise Exception(f'{var_name} and {value.__statement__()} \
+has different type ({self.declared_vars[var_name].__type__ ()}\
+!={value.__type__()})')
                     c_code += f"{var_name} = {value.__statement__()};\n" + make_indent()
                     if len(node.targets) == 1:
                         return Token_Object(c_code, self.declared_vars[var_name].__type__ )
@@ -291,7 +312,7 @@ class Basic_Statement:
         for stmt in node.orelse:
             c_code += self.handle_elif_blocks(stmt).__statement__()
     
-        return Token_Object(c_code,'If')
+        return Token_Object(c_code,'if')
     
     def handle_elif_blocks(self, node):
         c_code = ""
@@ -312,12 +333,17 @@ class Basic_Statement:
                 c_code += self.handle_elif_blocks(node.orelse).__statement__()
         #ELSE case
         else:
+            inc_indent()
+            inc_indent()
             #only when else case exist
             if not len(node) == 0:
                 c_code += 'else {\n' + make_indent()
-                for stmt in node.body:
+                for stmt in node:
                     c_code += self.normal_statement(stmt).__statement__()
+                dec_indent()
                 c_code += '}\n' + make_indent()
+            
+            dec_indent()
     
         return Token_Object(c_code,'elif')
     
@@ -378,7 +404,7 @@ class Basic_Statement:
             return self.translate_If(node)
         elif isinstance(node, ast.For):
             return self.tranlstae_For(node)
-        else: #String process problem
+        else: 
             raise NotImplemented(f'{node} is not implemented')
             print("unpared token")
             return ast.unparse(node)
@@ -573,8 +599,10 @@ class Func_Maker(Basic_Statement):
         c_code = ''
         if hasattr(stmt,"returns") and hasattr(stmt.returns,"id") and stmt.returns != None:
             c_code += f"{stmt.returns.id} {self.class_name}::{stmt.name}(" + make_indent()
+            self.ret_type = stmt.returns.id
         else:
             c_code +=  f"int {self.class_name}::{stmt.name}(" + make_indent()
+            self.ret_type = 'int'
         
         param_num = -len(stmt.args.defaults)
         param_index = 0
@@ -667,6 +695,7 @@ class interpreter:
                 reset_indent()
                 
             elif isinstance(node, ast.FunctionDef):
+                # print(ast.dump(node, indent=4))
                 reset_indent()
                 check_exist = False
                 for class_ in classes:
@@ -700,7 +729,7 @@ class dds:
     def __init__(self, a:int = 3):
         self.a:int 
         self.a = a
-    def out(self, q:int, c:int = 10) ->char:
+    def out(self, q:int, c:int = 10) ->int:
         self.a = 30 + 50
         b:int = 30
         print(self.a)
@@ -710,24 +739,24 @@ class dds:
             print("hello")
             return 1 - 90
             
-    #     else:
-    #         print("END")
-    #         return 3
-    #     return a
+        else:
+            print("END")
+            return 3
+        return a
     # def goo(self, c:int) -> int:
     #     print("hello")
             
 def foo( a:int = 10 ):
     b:int
     b = 30
-    # new_dds = dds(30+40,50)
-    # new_dds.out(30,40)
+    new_dds = dds(30+40,50)
+    new_dds.out(30,40)
     # num_list = list()
-    # new_list = [1,2,3]
-    # x:int = new_dds.out(20,30,60) + 20
-    # x = (30 + 50)
+    new_list = [1,2,3]
+    x:int = new_dds.out(20,30,60) + 20
+    x = (30 + 50)
     
-    new_list = [5,9,10,'c']
+    new_list2 = [5,9,10,'c']
     
     # new_list[1+10] =3
     

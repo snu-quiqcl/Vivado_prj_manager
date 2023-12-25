@@ -11,6 +11,12 @@ import subprocess
 
 classes = dict()
 functions = dict()
+types = dict()
+
+types['int'] = 'int'
+types['char'] = 'char'
+types['list'] = 'list'
+types['str'] = 'str'
     
 indent = 0
 
@@ -53,6 +59,7 @@ class Token_Object:
         self.statement = statement
         self.var_type = var_type
         self.value = None
+        self.is_R = False
     
     def __statement__(self):
         return self.statement
@@ -68,11 +75,24 @@ class Token_Object:
     
     def set_value(self,value):
         self.value = value
+        
+    def set_is_R(self):
+        self.is_R = True
+    
+    def get_is_R(self):
+        return self.is_R
             
 
 class Basic_Statement:
     def __init__(self):
+        self.c_code = ''
         print('basic')
+        
+    def append_code(self, code):
+        self.c_code += code
+        
+    def get_code(self):
+        return self.c_code
         
     def translate_BinOp(self, node):
         left_code = self.normal_statement(node.left).__statement__()
@@ -90,10 +110,10 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
     def translate_Constant(self,node):
         if type(node.value).__name__ == 'str':
             if len(node.value) == 1:
-                return Token_Object(str(node.value),'char')
+                return Token_Object(str(node.value),types['char'])
             else:
-                return Token_Object("\""+node.value + "\"", 'str')
-        return Token_Object(str(node.value),type(node.value).__name__)
+                return Token_Object("\""+node.value + "\"", types['str'])
+        return Token_Object(str(node.value),types[type(node.value).__name__])
     
     def translate_Expr(self,node):
         return Token_Object(f"{self.normal_statement(node.value).__statement__()};\n" + make_indent(),None)
@@ -101,7 +121,7 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
     def translate_Subscript(self,node):
         return Token_Object(f"{self.normal_statement(node.value).__statement__()}\
                             [{self.normal_statement(node.slice).__statement__()}]"\
-                            ,self.normal_statement(node.value).__type__) #CHECK!!
+                            ,self.normal_statement(node.value).__type__()) #CHECK!!
         
     def translate_Call(self,node):
         # print(ast.dump(node, indent=4))
@@ -152,7 +172,7 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
         if node.id in self.declared_vars:
             return self.declared_vars[node.id]
         else:
-            raise Exception(f'{node.id} is not declared')
+            raise Exception(f'{node.id} is not defined')
     
     def translate_Compare(self,node):
         if self.normal_statement(node.left).__type__() != self.normal_statement(node.comparators[0]).__type__():
@@ -183,33 +203,30 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
     
     def tranlsate_AnnAssign(self,node):
         c_code = ''
-        if hasattr(node.value,'func') and node.value.func.id == 'list':
-            var_name = node.target.id
-            if var_name not in self.declared_vars:
-                c_code += f"{node.annotation.id} * {var_name};\n" + make_indent()
-                self.declared_vars[var_name] = Token_Object(c_code,node.annotation.id)
-                
-            return  Token_Object(c_code,node.annotation.id)
+        target = node.target
         
-        elif isinstance(node.value,ast.List):
-            var_name = node.target.id
-            if var_name not in self.declared_vars:
-                c_code += f"{node.annotation.id} {var_name}[] = {{"
-                self.declared_vars.add(var_name)
-                param_num = len(node.value.elts)
-                param_index = 0
-                for elt in node.value.elts:
-                    c_code += self.normal_statement(elt)
-                    param_index += 1
-                    if param_index != param_num:
-                        c_code += ', '
-                c_code += '};\n' + make_indent()
-            else:
-                param_num = len(node.value.elts)
-                param_index = 0
-                for elt in node.value.elts:
-                    c_code += f"{var_name}[{param_index}] = {self.normal_statement(elt)};\n" + make_indent()
-                    param_index += 1
+        if not self.is_self(target):
+            if target.id in self.declared_vars:
+                raise Exception(f'variable re declaration {target.id}')
+            
+            self.append_code(f'{node.annotation.id} {target.id};\n' + make_indent())
+            self.declared_vars[target.id] = Token_Object(target.id, types[node.annotation.id])
+            
+            var_name = self.normal_statement(target)
+            if hasattr(node, 'value') and node.value != None:
+                var_value = self.normal_statement(node.value)
+                c_code += f"{var_name.__statement__()} = {var_value.__statement__()};\n" + make_indent()
+                
+                if self.declared_vars[var_name.__statement__()].__type__() != var_value.__type__():
+                    print(ast.dump(node, indent=4))
+                    raise Exception(f'{var_name.__statement__()} and {var_value.__statement__()} \
+has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
+!={var_value.__type__()})')
+            
+            if var_name.get_is_R():
+                raise Exception(f'R value cannot be assigned({var_name.__statement__()})')
+            
+            return Token_Object(c_code, self.declared_vars[var_name.__statement__()].__type__ ())
         else:
             # For class inherent variable declaration
             if isinstance(node.target,ast.Attribute) and node.target.value.id == 'self':
@@ -230,12 +247,21 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
         c_code = ''
         for target in node.targets: #target can be multiple?
             # Class variable declaration
-            if hasattr(node.value,'func') and (node.value.func.id in classes):
-                var_name = target.id
-                var_value = self.normal_statement(node.value).__statement__()
-                c_code += f"{var_name} = {var_value};\n" + make_indent()
-                self.declared_vars[var_name] = Token_Object(var_name, classes[node.value.func.id])
-                return Token_Object(c_code, 'class assign')
+            if not self.is_self(target):
+                var_name = self.normal_statement(target)
+                var_value = self.normal_statement(node.value)
+                
+                if var_name.get_is_R():
+                    raise Exception(f'R value cannot be assigned({var_name.__statement__()})')
+                
+                c_code += f"{var_name.__statement__()} = {var_value.__statement__()};\n" + make_indent()
+                self.declared_vars[var_name] = Token_Object(var_name, var_value.__type__())
+                if self.declared_vars[var_name].__type__() != var_value.__type__():
+                        print(ast.dump(node, indent=4))
+                        raise Exception(f'{var_name.__statement__()} and {var_value.__statement__()} \
+has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
+!={var_value.__type__()})')
+                return Token_Object(c_code, self.declared_vars[var_name.__statement__()].__type__ ())
             
             # Variable is declared as a this-> variable
             elif self.is_self(target) and target.attr in self.declared_this_vars:
@@ -243,53 +269,6 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
                 var_value = self.normal_statement(node.value).__statement__()
                 c_code += f"{var_name} = {var_value};\n" + make_indent()
                 return Token_Object(c_code, 'assign')
-                
-            # List Declaration
-            elif isinstance(node.value,ast.List):
-                var_name = target.id
-                if var_name not in self.declared_vars:
-                    if node.value.elts is not None:
-                        c_code += f'PyCObject * {var_name} = PyCList_New({len(node.value.elts)});\n' + make_indent()
-                        
-                        for ele in node.value.elts:
-                            element = self.normal_statement(ele)
-                            ele_name = element.__statement__()
-                            ele_type = element.__type__()
-                            if ele_type == 'int':
-                                c_code += f'PyCObject * list_componenet_class_{get_list_value_num()} = PyCListAppend({var_name},PyC_make_int64({ele_name}));\n' + make_indent()
-                            elif ele_type == 'char':
-                                c_code += f'PyCObject * list_componenet_class_{get_list_value_num()} = PyCListAppend({var_name},PyC_make_char({ele_name}));\n' + make_indent()
-                            
-                            c_code += f'PyC_INCREF(list_componenet_class_{get_list_value_num()});\n' + make_indent()
-                            c_code += f'PyCList_SET_ITEM(list_componenet_class_{get_list_value_num()});\n' + make_indent()
-                            self.declared_vars[f'list_componenet_class_{get_list_value_num()}'] = Token_Object(f'list_componenet_class_{get_list_value_num()}','PyCObject *')
-                            inc_list_value_num()
-                        self.declared_vars[var_name] = Token_Object(var_name,'list')
-                        
-                        return Token_Object(c_code, 'list assign')
-                    #####################################################################
-                    # we have to consider when already declared list is redeclared again...
-                    #####################################################################
-            
-            else:
-                var_name = target.id
-                value = self.normal_statement(node.value)
-                if var_name not in self.declared_vars:
-                    c_code += f"value.__type__() {var_name};\n" + make_indent()
-                    self.declared_vars[var_name] =Token_Object(var_name, value.__type__())
-
-                for target in node.targets:
-                    var_name = target.id
-                    if self.declared_vars[var_name].__type__() != value.__type__():
-                        print(ast.dump(node, indent=4))
-                        raise Exception(f'{var_name} and {value.__statement__()} \
-has different type ({self.declared_vars[var_name].__type__ ()}\
-!={value.__type__()})')
-                    c_code += f"{var_name} = {value.__statement__()};\n" + make_indent()
-                    if len(node.targets) == 1:
-                        return Token_Object(c_code, self.declared_vars[var_name].__type__ )
-                    
-                return Token_Object(c_code, None )
     
     def translate_Return(self,node):
         return_ob = self.normal_statement(node.value)
@@ -347,7 +326,7 @@ has different type ({self.declared_vars[var_name].__type__ ()}\
     
         return Token_Object(c_code,'elif')
     
-    def tranlstae_For(self,node):
+    def translate_For(self,node):
         # print(ast.dump(node, indent=4))
         c_code = ''
         loop_var = node.target.id
@@ -374,6 +353,34 @@ has different type ({self.declared_vars[var_name].__type__ ()}\
         dec_indent()
         c_code += "}\n" + make_indent()
         return Token_Object(c_code, 'FOR')
+    
+    def translate_List(self, node):
+        var_name = f'list_pointer_{get_list_value_num()}'
+        if node.elts is not None:
+            self.append_code(f'list_ele {var_name} = PyCList_New({len(node.elts)});\n' + make_indent())
+            inc_list_value_num()
+            index = 0
+            
+            for ele in node.elts:
+                element = self.normal_statement(ele)
+                ele_name = element.__statement__()
+                ele_type = element.__type__()
+                if ele_type == 'int':
+                    self.append_code(f'list_ele list_componenet_class_{get_list_value_num()} = PyC_make_int64({ele_name});\n' + make_indent())
+                elif ele_type == 'char':
+                    self.append_code(f'list_ele list_componenet_class_{get_list_value_num()} = PyC_make_char({ele_name});\n' + make_indent())
+                
+                self.append_code(f'PyC_INCREF(list_componenet_class_{get_list_value_num()});\n' + make_indent())
+                self.append_code(f'PyCList_SET_ITEM({var_name}, {index}, list_componenet_class_{get_list_value_num()});\n' + make_indent())
+                self.declared_vars[f'list_componenet_class_{get_list_value_num()}'] = Token_Object(f'list_componenet_class_{get_list_value_num()}','PyCObject *')
+                inc_list_value_num()
+                index += 1
+            self.declared_vars[var_name] = Token_Object(var_name,'list')
+            
+            return self.declared_vars[var_name]
+        #####################################################################
+        # we have to consider when already declared list is redeclared again...
+        #####################################################################
         
     def normal_statement(self,node):
         if isinstance(node, ast.BinOp):
@@ -403,10 +410,12 @@ has different type ({self.declared_vars[var_name].__type__ ()}\
         elif isinstance(node, ast.If):
             return self.translate_If(node)
         elif isinstance(node, ast.For):
-            return self.tranlstae_For(node)
+            return self.translate_For(node)
+        elif isinstance(node, ast.List):
+            return self.translate_List(node)
         else: 
+            print(ast.dump(node,indent=4))
             raise NotImplemented(f'{node} is not implemented')
-            print("unpared token")
             return ast.unparse(node)
             
     def operator_to_c(self, op_node):
@@ -439,6 +448,7 @@ class Class_Maker(Basic_Statement):
         self.declared_this_vars = dict()
         self.class_name = None
         self.body = None
+        self.c_code = ''
         
     def translate_class(self,node):
         self.body = node
@@ -547,52 +557,43 @@ class Func_Maker(Basic_Statement):
         self.class_name = None
         self.ret_type = None
         self.body = None
+        self.c_code = ''
         
     def translate_function(self,node):
         if isinstance(node, ast.FunctionDef):
             if hasattr(node,"returns") and hasattr(node.returns,"id") and node.returns != None:
-                c_code = f"{node.returns.id} {node.name}("
+                self.append_code(f"{node.returns.id} {node.name}(")
                 self.ret_type = node.returns.id
             else:
-                c_code = f"int {node.name}("
+                self.append_code(f"int {node.name}(")
                 self.ret_type = 'int'
             
             self.func_name = node.name
-            #For check delcared variable
-            # print(ast.dump(node, indent=4))
             
-            param_num = -len(node.args.defaults)
-            param_index = 0
-            
-            for arg in node.args.args:
-                c_code += f" {arg.annotation.id} {arg.arg}"
-                if param_num >= 0 and len(node.args.defaults) != 0:
-                    c_code += " = " + str(node.args.defaults[param_num].value) + " "
-                param_num += 1
-                param_index += 1
-                if param_index != len(node.args.args):
-                    c_code += ","
+            self.add_function_args(node)
             
             inc_indent()
             
-            c_code += ") {\n" + make_indent()
+            self.append_code(") {\n" + make_indent())
             
             for arg in node.args.args:
                 self.declared_vars[arg.arg] = Token_Object(arg.arg, arg.annotation.id)
+                self.declared_vars[arg.arg].set_is_R()
                 
             for stmt in node.body:
-                c_code += self.normal_statement(stmt).__statement__()
+                print(ast.dump(stmt,indent=4))
+                self.append_code(self.normal_statement(stmt).__statement__())
                 
-            c_code += "}\n" + make_indent()
+            self.append_code("}\n" + make_indent())
             dec_indent()
-            return c_code
+            return self.get_code()
         
         else:
-            c_code = ""
-            c_code += self.normal_statement(node)
-            c_code += "}\n" + make_indent()
+            self.append_code("")
+            self.append_code(self.normal_statement(node))
+            self.append_code("}\n" + make_indent())
                     
-            return c_code
+            return self.get_code()
         
     def translate_method(self,stmt):
         inc_indent()
@@ -608,16 +609,7 @@ class Func_Maker(Basic_Statement):
         param_index = 0
         
         #Parameter Declaration
-        for arg in stmt.args.args:
-            if arg.arg != 'self':
-                c_code +=f" {arg.annotation.id} {arg.arg}"
-                # Note that class method contains self variable
-                param_index += 1
-                if param_num >= 0 and len(stmt.args.defaults) != 0:
-                    c_code += " = " + str(stmt.args.defaults[param_num].value) + " "
-                param_num += 1
-                if param_index != (len(stmt.args.args)-1):
-                    c_code += ","
+        self.add_function_args(stmt)
         
         for arg in stmt.args.args:
             if arg.arg != 'self':
@@ -641,16 +633,7 @@ class Func_Maker(Basic_Statement):
         param_index = 0
         
         #Parameter Declaration
-        for arg in stmt.args.args:
-            if arg.arg != 'self':
-                c_code +=f" {arg.annotation.id} {arg.arg}"
-                # Note that class method contains self variable
-                param_index += 1
-                if param_num >= 0 and len(stmt.args.defaults) != 0:
-                    c_code += " = " + str(stmt.args.defaults[param_num].value) + " "
-                param_num += 1
-                if param_index != (len(stmt.args.args)-1):
-                    c_code += ","
+        self.add_function_args(stmt)
                     
         for arg in stmt.args.args:
             if arg.arg != 'self':
@@ -665,6 +648,23 @@ class Func_Maker(Basic_Statement):
         c_code += '}\n' + make_indent()
         
         return c_code
+    
+    def add_function_args(self, node):
+        param_num = len(node.args.defaults)
+        param_start_index = len(node.args.defaults) - len(node.args.args)
+        param_index = 0
+                
+        for arg in node.args.args:
+            if arg.arg != 'self':
+                self.append_code(f" {arg.annotation.id} {arg.arg}")
+                # Note that class method contains self variable
+                if param_index >= param_start_index and len(node.args.defaults) != 0:
+                    self.append_code(" = " + str(node.args.defaults[param_index].value) + " ")
+                if param_index < (len(node.args.args) - 1):
+                    self.append_code(",")
+                param_index += 1
+            else:
+                param_index += 1
         
     def initialize_class_ob(self,class_ob, name):
         self.declared_vars = class_ob.declared_vars
@@ -678,20 +678,32 @@ class Func_Maker(Basic_Statement):
             
 
 class interpreter:
-    def __inint__(self):
+    def __init__(self):
+        self.c_code = r'#include <stdio.h>' + '\r\n'
+        self.c_code += """#include "PyCObjcet.h"
+#include "PyCMem.h"
+#include "PyCList.h"
+#include "PyCType.h"
+#include "PyCTypedef.h"
+
+#define list (PyCListObject * )
+#define list_ele (PyCObject * )
+        """
+        
+        self.c_code += '\r\n'
         print("python 2 C")
         
     def python_to_c(self,source_code):
         tree = ast.parse(source_code)
     
-        c_code = ""
         global classes
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
                 reset_indent()
                 temp_class_maker = Class_Maker()
-                c_code += temp_class_maker.translate_class(node)
+                self.c_code += temp_class_maker.translate_class(node)
                 classes[temp_class_maker.class_name] = temp_class_maker
+                types[temp_class_maker.class_name] = temp_class_maker
                 reset_indent()
                 
             elif isinstance(node, ast.FunctionDef):
@@ -705,16 +717,19 @@ class interpreter:
                 
                 if not check_exist:
                     temp_func_maker = Func_Maker()
-                    c_code += temp_func_maker.translate_function(node)
+                    self.c_code += temp_func_maker.translate_function(node)
                     functions[temp_func_maker.func_name] = temp_func_maker
                     
                 reset_indent()
     
-        return c_code
+        return self.c_code
     
-    def save_c_code_to_file(self, c_code, output_filename):
+    def save_c_code_to_file(self, output_filename):
         with open(output_filename, 'w') as f:
-            f.write(c_code)
+            f.write(self.c_code)
+            
+    def show_c_code(self):
+        print(self.c_code)
 
 ##############################################################################
 # External function declare
@@ -725,38 +740,39 @@ functions['print'] = xil_printf
 
 if __name__ == "__main__":
     python_code = """
-class dds:
-    def __init__(self, a:int = 3):
-        self.a:int 
-        self.a = a
-    def out(self, q:int, c:int = 10) ->int:
-        self.a = 30 + 50
-        b:int = 30
-        print(self.a)
-        if b < 0:
-            print("oh")
-        elif self.a > 0 and b < 10 and 3 == 4:
-            print("hello")
-            return 1 - 90
+# class dds:
+#     def __init__(self, a:int = 3):
+#         self.a:int 
+#         self.a = a
+#     def out(self, q:int, c:int = 10) ->int:
+#         self.a = 30 + 50
+#         b:int = 30
+#         print(self.a)
+#         if b < 0:
+#             print("oh")
+#         elif self.a > 0 and b < 10 and 3 == 4:
+#             print("hello")
+#             return 1 - 90
             
-        else:
-            print("END")
-            return 3
-        return a
-    # def goo(self, c:int) -> int:
-    #     print("hello")
+#         else:
+#             print("END")
+#             return 3
+#         return a
+#     # def goo(self, c:int) -> int:
+#     #     print("hello")
             
-def foo( a:int = 10 ):
-    b:int
-    b = 30
-    new_dds = dds(30+40,50)
-    new_dds.out(30,40)
+def foo( a:int = 10):
+    b:int = 30
+    c:int
+    c = 50
+    # new_dds = dds(30+40,50)
+    # new_dds.out(30,40)
     # num_list = list()
-    new_list = [1,2,3]
-    x:int = new_dds.out(20,30,60) + 20
-    x = (30 + 50)
+    # new_list:list = [1,2,3,[1,2,3,[2,'c']]]
+    # x:int = new_dds.out(20,30,60) + 20
+    # x = (30 + 50)
     
-    new_list2 = [5,9,10,'c']
+    # new_list2 = [5,9,10,'c']
     
     # new_list[1+10] =3
     
@@ -776,19 +792,11 @@ def foo( a:int = 10 ):
     print(a)
 """
     interp = interpreter()
-    c_code = r'#include <stdio.h>' + '\r\n'
-    c_code += """#include "PyCObjcet.h"
-#include "PyCMem.h"
-#include "PyCList.h"
-#include "PyCType.h"
-#include "PyCTypedef.h"
-    """
+    interp.python_to_c(python_code)
     
-    c_code += '\r\n'
-    c_code += interp.python_to_c(python_code)
     print('Converted C')
     print('##################################################################')
     print('##################################################################')
     print('##################################################################')
-    print(c_code)
+    interp.show_c_code()
 

@@ -12,11 +12,6 @@ import subprocess
 classes = dict()
 functions = dict()
 types = dict()
-
-types['int'] = 'int'
-types['char'] = 'char'
-types['list'] = 'list'
-types['str'] = 'str'
     
 indent = 0
 
@@ -70,6 +65,9 @@ class Token_Object:
     def __value__(self):
         return self.value()
     
+    def __is_R__(self):
+        return self.is_R
+    
     def set_statement(self,statement):
         self.statement = statement
     
@@ -78,9 +76,6 @@ class Token_Object:
         
     def set_is_R(self):
         self.is_R = True
-    
-    def get_is_R(self):
-        return self.is_R
             
 
 class Basic_Statement:
@@ -209,7 +204,7 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
             if target.id in self.declared_vars:
                 raise Exception(f'variable re declaration {target.id}')
             
-            self.append_code(f'{node.annotation.id} {target.id};\n' + make_indent())
+            self.append_code(f'{types[node.annotation.id].__statement__()} {target.id};\n' + make_indent())
             self.declared_vars[target.id] = Token_Object(target.id, types[node.annotation.id])
             
             var_name = self.normal_statement(target)
@@ -218,12 +213,11 @@ type is different ({self.normal_statement(node.left).__type__()} !=\
                 c_code += f"{var_name.__statement__()} = {var_value.__statement__()};\n" + make_indent()
                 
                 if self.declared_vars[var_name.__statement__()].__type__() != var_value.__type__():
-                    print(ast.dump(node, indent=4))
                     raise Exception(f'{var_name.__statement__()} and {var_value.__statement__()} \
 has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
 !={var_value.__type__()})')
             
-            if var_name.get_is_R():
+            if var_name.__is_R__():
                 raise Exception(f'R value cannot be assigned({var_name.__statement__()})')
             
             return Token_Object(c_code, self.declared_vars[var_name.__statement__()].__type__ ())
@@ -235,7 +229,7 @@ has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
             elif hasattr(node.target,'id') and not node.target.id in self.declared_vars:
                 if not node.target.id in self.declared_vars:
                     self.declared_vars[node.target.id] = Token_Object(node.target.id, node.annotation.id)
-                c_code += f"{node.annotation.id} {node.target.id};\n" + make_indent()
+                c_code += f"{types[node.annotation.id].__statement__()} {node.target.id};\n" + make_indent()
                 var_name = node.target.id
                 if hasattr(node,'value') and node.value != None:
                     var_value = self.normal_statement(node.value).__statement__()
@@ -251,13 +245,12 @@ has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
                 var_name = self.normal_statement(target)
                 var_value = self.normal_statement(node.value)
                 
-                if var_name.get_is_R():
+                if var_name.__is_R__():
                     raise Exception(f'R value cannot be assigned({var_name.__statement__()})')
                 
                 c_code += f"{var_name.__statement__()} = {var_value.__statement__()};\n" + make_indent()
                 self.declared_vars[var_name] = Token_Object(var_name, var_value.__type__())
                 if self.declared_vars[var_name].__type__() != var_value.__type__():
-                        print(ast.dump(node, indent=4))
                         raise Exception(f'{var_name.__statement__()} and {var_value.__statement__()} \
 has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
 !={var_value.__type__()})')
@@ -344,8 +337,9 @@ has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
             end = self.normal_statement(node.iter.args[0]).__statement__()
             step = "1"
 
+        c_code += self.normal_statement(node.target).__statement__() + ';\n' +make_indent()
         inc_indent()
-        c_code += f"for (int {loop_var} = {start}; {loop_var} < {end}; {loop_var} += {step}) {{\n" + make_indent()
+        c_code += f"for ({loop_var} = {start}; {loop_var} < {end}; {loop_var} += {step}) {{\n" + make_indent()
         
         for stmt in node.body:
             c_code += self.normal_statement(stmt).__statement__()
@@ -357,7 +351,8 @@ has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
     def translate_List(self, node):
         var_name = f'list_pointer_{get_list_value_num()}'
         if node.elts is not None:
-            self.append_code(f'list_ele {var_name} = PyCList_New({len(node.elts)});\n' + make_indent())
+            var_type = types['list_ele'].__statement__()
+            self.append_code(f'{var_type} {var_name} = PyCList_New({len(node.elts)});\n' + make_indent())
             inc_list_value_num()
             index = 0
             
@@ -365,17 +360,17 @@ has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
                 element = self.normal_statement(ele)
                 ele_name = element.__statement__()
                 ele_type = element.__type__()
-                if ele_type == 'int':
-                    self.append_code(f'list_ele list_componenet_class_{get_list_value_num()} = PyC_make_int64({ele_name});\n' + make_indent())
+                if ele_type == 'int64_t':
+                    self.append_code(f'{var_type} list_componenet_class_{get_list_value_num()} = PyC_make_int64({ele_name});\n' + make_indent())
                 elif ele_type == 'char':
-                    self.append_code(f'list_ele list_componenet_class_{get_list_value_num()} = PyC_make_char({ele_name});\n' + make_indent())
+                    self.append_code(f'{var_type} list_componenet_class_{get_list_value_num()} = PyC_make_char({ele_name});\n' + make_indent())
                 
                 self.append_code(f'PyC_INCREF(list_componenet_class_{get_list_value_num()});\n' + make_indent())
                 self.append_code(f'PyCList_SET_ITEM({var_name}, {index}, list_componenet_class_{get_list_value_num()});\n' + make_indent())
                 self.declared_vars[f'list_componenet_class_{get_list_value_num()}'] = Token_Object(f'list_componenet_class_{get_list_value_num()}','PyCObject *')
                 inc_list_value_num()
                 index += 1
-            self.declared_vars[var_name] = Token_Object(var_name,'list')
+            self.declared_vars[var_name] = Token_Object(var_name,types['list'])
             
             return self.declared_vars[var_name]
         #####################################################################
@@ -437,17 +432,43 @@ has different type ({self.declared_vars[var_name.__statement__()].__type__ ()}\
             return True
         else:
             return False
+        
+    def add_function_args(self, node):
+        param_start_index = len(node.args.args)-len(node.args.defaults)
+        param_index = 0
+                
+        for arg in node.args.args:
+            if arg.arg != 'self':
+                self.append_code(f" {types[arg.annotation.id].__statement__()} {arg.arg}")
+                # Note that class method contains self variable
+                if param_index >= param_start_index and len(node.args.defaults) != 0:
+                    self.append_code(" = " + str(node.args.defaults[param_index - param_start_index].value) + " ")
+                if param_index < (len(node.args.args) - 1):
+                    self.append_code(",")
+                param_index += 1
+            else:
+                param_index += 1
     
 
 class Class_Maker(Basic_Statement):
     def __init__(self):
+        # Variable symbol table
         self.declared_vars = dict()
+        # Class symbol table
         self.declared_class = dict()
+        # Method symbol table
         self.declared_method = dict()
+        #current function name
         self.func_name = None
+        # this-> variable symbol table
         self.declared_this_vars = dict()
+        #current class name
         self.class_name = None
+        # return type of function
+        self.ret_type = None
+        # current function's body AST
         self.body = None
+        # current function's c code
         self.c_code = ''
         
     def translate_class(self,node):
@@ -455,118 +476,108 @@ class Class_Maker(Basic_Statement):
         if isinstance(node, ast.ClassDef):
             class_name = node.name
             self.class_name = class_name
-            c_code = f"class {class_name} {{\n" + make_indent()
+            self.append_code(f"class {class_name} {{\n" + make_indent())
             
             # Get all self value
             for stmt in node.body:
                 for arg in ast.walk(stmt):
+                    # Condition whether variable is self variable or not
                     if hasattr(arg,'target') and hasattr(arg.target,'value') \
                             and hasattr(arg.target.value,'id') \
                             and arg.target.value.id == 'self':
+                        # Check whether variable is in symbol table already or not
                         if not arg.target.attr in self.declared_this_vars:
                             if hasattr(arg,'annotation'):
+                                # Put this->variable in declared symbol table with type
                                 if not arg.target.attr in self.declared_this_vars:
                                     self.declared_this_vars[arg.target.attr] = \
                                     Token_Object(f'{arg.target.attr}', \
-                                    arg.annotation.id)
+                                    types[arg.annotation.id])
                                 else:
                                     raise Exception(f'self.{arg.target.attr} is already declared')
             
             inc_indent()
-            c_code += "public:\n" + make_indent()
+            #Declare class variables
+            self.append_code("public:\n" + make_indent())
             for arg in self.declared_this_vars:
-                c_code += f'{self.declared_this_vars[arg].__type__()} {self.declared_this_vars[arg].__statement__()};\n'  + make_indent()
+                self.append_code(f'{self.declared_this_vars[arg].__type__().__statement__()} \
+{self.declared_this_vars[arg].__statement__()};\n'  + make_indent() )
             
             dec_indent()
-            c_code += '\n'+make_indent()
+            self.append_code('\n'+make_indent())
             inc_indent()
-            c_code += "public:\n" + make_indent()
+            #Declare function method. Implementation is at outside of class declaration
+            self.append_code("public:\n" + make_indent())
+            self.append_code(f'{class_name}(){{}};\n' + make_indent())
             
             for stmt in node.body:
                 if isinstance(stmt, ast.FunctionDef):
+                    param_index = 0
                     if stmt.name == "__init__":
                         self.declared_method[stmt.name] = Func_Maker()
-                        c_code += f"{class_name}("
-                        param_num = -len(stmt.args.defaults)
-                        param_index = 0
+                        self.append_code(f"{class_name}(")
                         
-                        for arg in stmt.args.args:
-                            if arg.arg != 'self':
-                                c_code +=f" {arg.annotation.id} {arg.arg}"
-                                # Note that class method contains self variable
-                                param_num += 1
-                                if param_num >= 0:
-                                    c_code += " = " + str(stmt.args.defaults[param_num].value) + " "
-                                param_index += 1
-                                if param_index != (len(stmt.args.args)-1):
-                                    c_code += ","
-                        c_code += ");\n" + make_indent()
-            
-            
-            #Method declaration in class
-            for stmt in node.body:
-                if isinstance(stmt, ast.FunctionDef) and stmt.name != "__init__":
-                    self.declared_method[stmt.name] = Func_Maker()
-                    if hasattr(stmt,"returns") and hasattr(stmt.returns,"id") and stmt.returns != None:
-                        c_code += f"{stmt.returns.id} {stmt.name}("
                     else:
-                        c_code +=  f"int {stmt.name}("
-                    
-                    param_num = -len(stmt.args.defaults)
-                    param_index = 0
-                    
+                        self.declared_method[stmt.name] = Func_Maker()
+                        if hasattr(stmt,"returns") and hasattr(stmt.returns,"id") and stmt.returns != None:
+                            self.append_code(f"{types[stmt.returns.id].__statement__()} {stmt.name}(")
+                        else:
+                            raise Exception(f'{stmt.name} has no return type')
                     for arg in stmt.args.args:
                         if arg.arg != 'self':
-                            c_code +=f" {arg.annotation.id} {arg.arg}"
-                            # Note that class method contains self variable
-                            param_index += 1
-                            if param_num >= 0 and len(stmt.args.defaults) != 0:
-                                c_code += " = " + str(stmt.args.defaults[param_num].value) + " "
-                            param_num += 1
-                            if param_index != (len(stmt.args.args)-1):
-                                c_code += ","
-                    
-                    c_code += ");\n" + make_indent()
+                            self.append_code(f" {types[arg.annotation.id].__statement__()} {arg.arg}")
+                            if param_index < (len(stmt.args.args) - 1):
+                                self.append_code(",")
+                        param_index += 1
+                        
+                    self.append_code(");\n" + make_indent())
+                            
             dec_indent();
-            c_code += "};\n\n" + make_indent()
+            self.append_code("};\n\n" + make_indent())
             
             for methods in self.declared_method:
                 self.declared_method[methods].initialize_class_ob(self,methods)
 
             # Class Method Implementation
             for stmt in node.body:
-                # Non-init method
-                if isinstance(stmt, ast.FunctionDef) and stmt.name != "__init__":
-                    c_code += self.declared_method[stmt.name].translate_method(stmt)
-                    
-                #Init Method
-                if isinstance(stmt, ast.FunctionDef) and stmt.name == "__init__":
-                    c_code += self.declared_method[stmt.name].translate_init(stmt)
+                if isinstance(stmt, ast.FunctionDef):
+                    self.append_code(self.declared_method[stmt.name].translate_method(stmt))
                     
                 
-            return c_code
+            return self.get_code()
+        
+    def __statement__(self):
+        return self.class_name
 
 
 class Func_Maker(Basic_Statement):
     def __init__(self):
+        # Variable symbol table
         self.declared_vars = dict()
+        # Class symbol table
         self.declared_class = dict()
+        # Method symbol table
         self.declared_method = dict()
+        #current function name
         self.func_name = None
+        # this-> variable symbol table
         self.declared_this_vars = dict()
+        #current class name
         self.class_name = None
+        # return type of function
         self.ret_type = None
+        # current function's body AST
         self.body = None
+        # current function's c code
         self.c_code = ''
         
     def translate_function(self,node):
         if isinstance(node, ast.FunctionDef):
             if hasattr(node,"returns") and hasattr(node.returns,"id") and node.returns != None:
-                self.append_code(f"{node.returns.id} {node.name}(")
-                self.ret_type = node.returns.id
+                self.append_code(f"{types[node.returns.id].__statement__()} {node.name}(")
+                self.ret_type = types[node.returns.id]
             else:
-                self.append_code(f"int {node.name}(")
-                self.ret_type = 'int'
+                raise Exception(f'{node.name} has no return type')
             
             self.func_name = node.name
             
@@ -581,7 +592,6 @@ class Func_Maker(Basic_Statement):
                 self.declared_vars[arg.arg].set_is_R()
                 
             for stmt in node.body:
-                print(ast.dump(stmt,indent=4))
                 self.append_code(self.normal_statement(stmt).__statement__())
                 
             self.append_code("}\n" + make_indent())
@@ -597,16 +607,15 @@ class Func_Maker(Basic_Statement):
         
     def translate_method(self,stmt):
         inc_indent()
-        c_code = ''
-        if hasattr(stmt,"returns") and hasattr(stmt.returns,"id") and stmt.returns != None:
-            c_code += f"{stmt.returns.id} {self.class_name}::{stmt.name}(" + make_indent()
-            self.ret_type = stmt.returns.id
+        if stmt.name != '__init__':
+            if hasattr(stmt,"returns") and hasattr(stmt.returns,"id") and stmt.returns != None:
+                self.append_code(f"{types[stmt.returns.id].__statement__()} {self.class_name}::{stmt.name}(")
+                self.ret_type = types[stmt.returns.id]
+            else:
+                raise Exception(f'{stmt.name} has no return type')
+            
         else:
-            c_code +=  f"int {self.class_name}::{stmt.name}(" + make_indent()
-            self.ret_type = 'int'
-        
-        param_num = -len(stmt.args.defaults)
-        param_index = 0
+            self.append_code(f'{self.class_name}::{self.class_name}(')
         
         #Parameter Declaration
         self.add_function_args(stmt)
@@ -617,55 +626,14 @@ class Func_Maker(Basic_Statement):
             else:
                 self.declared_vars[arg.arg] = Token_Object(arg.arg, 'class')
         
-        c_code += "){\n" + make_indent()
+        self.append_code("){\n" + make_indent())
         for arg in stmt.body:
-            c_code += self.normal_statement(arg).__statement__()
+            self.append_code(self.normal_statement(arg).__statement__())
         dec_indent()
-        c_code += '}\n' + make_indent()
+        self.append_code('}\n' + make_indent())
         
-        return c_code
-        
-    def translate_init(self,stmt):
-        inc_indent()
-        c_code = f'{self.class_name}('
-        
-        param_num = -len(stmt.args.defaults)
-        param_index = 0
-        
-        #Parameter Declaration
-        self.add_function_args(stmt)
-                    
-        for arg in stmt.args.args:
-            if arg.arg != 'self':
-                self.declared_vars[arg.arg] = Token_Object(arg.arg, arg.annotation.id)
-            else:
-                self.declared_vars[arg.arg] = Token_Object(arg.arg, 'class')
-        
-        c_code += "){\n" + make_indent()
-        for arg in stmt.body:
-            c_code += self.normal_statement(arg).__statement__()
-        dec_indent()
-        c_code += '}\n' + make_indent()
-        
-        return c_code
+        return self.get_code() 
     
-    def add_function_args(self, node):
-        param_num = len(node.args.defaults)
-        param_start_index = len(node.args.defaults) - len(node.args.args)
-        param_index = 0
-                
-        for arg in node.args.args:
-            if arg.arg != 'self':
-                self.append_code(f" {arg.annotation.id} {arg.arg}")
-                # Note that class method contains self variable
-                if param_index >= param_start_index and len(node.args.defaults) != 0:
-                    self.append_code(" = " + str(node.args.defaults[param_index].value) + " ")
-                if param_index < (len(node.args.args) - 1):
-                    self.append_code(",")
-                param_index += 1
-            else:
-                param_index += 1
-        
     def initialize_class_ob(self,class_ob, name):
         self.declared_vars = class_ob.declared_vars
         self.declared_class = class_ob.declared_class
@@ -675,6 +643,9 @@ class Func_Maker(Basic_Statement):
         self.class_name = class_ob.class_name
         self.ret_type = None
         self.body = class_ob.body
+        
+    def __statement__(self):
+        return self.func_name
             
 
 class interpreter:
@@ -707,7 +678,7 @@ class interpreter:
                 reset_indent()
                 
             elif isinstance(node, ast.FunctionDef):
-                # print(ast.dump(node, indent=4))
+                print(ast.dump(node, indent=4))
                 reset_indent()
                 check_exist = False
                 for class_ in classes:
@@ -738,37 +709,47 @@ xil_printf = Func_Maker()
 xil_printf.name = 'xil_printf'
 functions['print'] = xil_printf
 
+##############################################################################
+# Type declare
+##############################################################################
+types['int'] = Token_Object('int64_t','int64_t')
+types['char'] = Token_Object('char','char')
+types['list'] = Token_Object('list','list')
+types['list_ele'] = Token_Object('list_ele','list_ele')
+types['str'] = Token_Object('str','str')
+
 if __name__ == "__main__":
     python_code = """
-# class dds:
-#     def __init__(self, a:int = 3):
-#         self.a:int 
-#         self.a = a
-#     def out(self, q:int, c:int = 10) ->int:
-#         self.a = 30 + 50
-#         b:int = 30
-#         print(self.a)
-#         if b < 0:
-#             print("oh")
-#         elif self.a > 0 and b < 10 and 3 == 4:
-#             print("hello")
-#             return 1 - 90
+class dds:
+    def __init__(self, a:int = 3):
+        self.a:int 
+        self.a = a
+        
+    def out(self, q:int, c:int = 10) ->int:
+        self.a = 30 + 50
+        b:int = 30
+        print(self.a)
+        if b < 0:
+            print("oh")
+        elif self.a > 0 and b < 10 and 3 == 4:
+            print("hello")
+            return 1 - 90
             
-#         else:
-#             print("END")
-#             return 3
-#         return a
-#     # def goo(self, c:int) -> int:
-#     #     print("hello")
+        else:
+            print("END")
+            return 3
+        return a
+    def goo(self, c:int) -> int:
+        print("hello")
             
-def foo( a:int = 10):
+def foo( a:int, q:int = 64) -> int:
     b:int = 30
     c:int
     c = 50
-    # new_dds = dds(30+40,50)
+    new_dds:dds = dds(30+40,50)
     # new_dds.out(30,40)
     # num_list = list()
-    # new_list:list = [1,2,3,[1,2,3,[2,'c']]]
+    new_list:list = [1,2,3,[1,2,3,[2,'c']]]
     # x:int = new_dds.out(20,30,60) + 20
     # x = (30 + 50)
     
@@ -785,11 +766,10 @@ def foo( a:int = 10):
     
     x:int = 30
     if x == 80:
-        print(x)
+        print("x = %d",x)
     elif x == 40:
-        print( x + 60)
+        print("x+60 = %d", x + 60)
         
-    print(a)
 """
     interp = interpreter()
     interp.python_to_c(python_code)

@@ -5,7 +5,7 @@
 // 
 // Create Date: 2023/09/09 20:00:35
 // Design Name: 
-// Module Name: TTLx8_output
+// Module Name: TTL_output
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -23,7 +23,8 @@
 module TTL_Controller
 #(
     parameter DEST_VAL = 16'h0,
-    parameter CHANNEL_LENGTH = 12
+    parameter CHANNEL_LENGTH = 12,
+    parameter OUTPUT_NUM = 8
 )
 (
     //////////////////////////////////////////////////////////////////////////////////  
@@ -44,7 +45,8 @@ module TTL_Controller
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    output wire output_pulse
+    input wire clk_x4,
+    output wire [OUTPUT_NUM - 1:0] output_pulse
 );
 
 //////////////////////////////////////////////////////////////////////////////////  
@@ -76,17 +78,16 @@ GPO_Core0(
 //////////////////////////////////////////////////////////////////////////////////  
 // TTL
 //////////////////////////////////////////////////////////////////////////////////
-reg last_input_pulse;
-assign output_pulse             = last_input_pulse;
+reg [OUTPUT_NUM - 1:0] last_input_pulse;
 
 always @(posedge clk) begin
     if( reset == 1'b1 ) begin
-        last_input_pulse        <= 1'b0;
+        last_input_pulse[OUTPUT_NUM-1:0] <= {OUTPUT_NUM{1'b0}};
     end
 
     else begin
         if( selected == 1'b1 ) begin
-            last_input_pulse    <= gpo_out[0];
+            last_input_pulse[OUTPUT_NUM - 1:0] <= gpo_out[OUTPUT_NUM - 1:0];
         end
     end
 end

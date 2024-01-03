@@ -30,14 +30,17 @@ module TTL_out#(
     parameter AXI_STROBE_LEN                = 4, // LOG(AXI_STROBE_WDITH)
     
     //////////////////////////////////////////////////////////////////////////////////
-    // RFDC & GPO Configuration
+    // TTL & GPO Configuration
     //////////////////////////////////////////////////////////////////////////////////
     parameter DEST_VAL                      = 16'h0,
     parameter CHANNEL_LENGTH                = 12,
     parameter AXIS_DATA_WIDTH               = 256,
     parameter THRESHOLD                     = 1000,
     parameter DEPTH                         = 1024, //data number = 1024
-    parameter DATA_LEN                      = 1
+    parameter DATA_LEN                      = 8,
+    parameter ADDR_LEN                      = 10,
+    parameter OUTPUT_NUM                    = 8
+
 )
 (
     //////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +107,9 @@ module TTL_out#(
     //////////////////////////////////////////////////////////////////////////////////  
     // Port for TTL Module
     //////////////////////////////////////////////////////////////////////////////////
-    output wire output_pulse,
+    output wire [OUTPUT_NUM - 1 : 0] output_pulse,
+    
+    input wire clk_x4,
     
     //////////////////////////////////////////////////////////////////////////////////  
     // TimeController interface
@@ -219,13 +224,14 @@ axi2fifo_0
 wire counter_matched;
 wire [127:0] rto_out;
 
-RTOC_Core
+RTOB_Core
 #(
     .THRESHOLD(THRESHOLD),
     .DEPTH(DEPTH), //data number = 1024
-    .DATA_LEN(DATA_LEN)
+    .DATA_LEN(DATA_LEN),
+    .ADDR_LEN(ADDR_LEN)
 )
-rtoc_core_0
+rtob_core_0
 (
     .clk(s_axi_aclk),
     .auto_start(auto_start),// need to be connected
@@ -252,7 +258,8 @@ wire counter_matched;
 TTL_Controller
 #(
     .DEST_VAL(DEST_VAL),
-    .CHANNEL_LENGTH(CHANNEL_LENGTH)
+    .CHANNEL_LENGTH(CHANNEL_LENGTH),
+    .OUTPUT_NUM(DATA_LEN)
 )
 ttl_controller_0
 (
@@ -274,6 +281,7 @@ ttl_controller_0
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
+    .clk_x4(clk_x4),
     .output_pulse(output_pulse)
 );
 

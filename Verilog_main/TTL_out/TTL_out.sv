@@ -38,9 +38,7 @@ module TTL_out#(
     parameter THRESHOLD                     = 1000,
     parameter DEPTH                         = 1024, //data number = 1024
     parameter DATA_LEN                      = 8,
-    parameter ADDR_LEN                      = 10,
-    parameter OUTPUT_NUM                    = 8
-
+    parameter ADDR_LEN                      = 10
 )
 (
     //////////////////////////////////////////////////////////////////////////////////
@@ -107,9 +105,14 @@ module TTL_out#(
     //////////////////////////////////////////////////////////////////////////////////  
     // Port for TTL Module
     //////////////////////////////////////////////////////////////////////////////////
-    output wire [OUTPUT_NUM - 1 : 0] output_pulse,
-    
-    input wire clk_x4,
+    output wire output_pulse_7,
+    output wire output_pulse_6,
+    output wire output_pulse_5,
+    output wire output_pulse_4,
+    output wire output_pulse_3,
+    output wire output_pulse_2,
+    output wire output_pulse_1,
+    output wire output_pulse_0,
     
     //////////////////////////////////////////////////////////////////////////////////  
     // TimeController interface
@@ -258,8 +261,7 @@ wire counter_matched;
 TTL_Controller
 #(
     .DEST_VAL(DEST_VAL),
-    .CHANNEL_LENGTH(CHANNEL_LENGTH),
-    .OUTPUT_NUM(DATA_LEN)
+    .CHANNEL_LENGTH(CHANNEL_LENGTH)
 )
 ttl_controller_0
 (
@@ -281,8 +283,14 @@ ttl_controller_0
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    .clk_x4(clk_x4),
-    .output_pulse(output_pulse)
+    .output_pulse_7(output_pulse_7),
+    .output_pulse_6(output_pulse_6),
+    .output_pulse_5(output_pulse_5),
+    .output_pulse_4(output_pulse_4),
+    .output_pulse_3(output_pulse_3),
+    .output_pulse_2(output_pulse_2),
+    .output_pulse_1(output_pulse_1),
+    .output_pulse_0(output_pulse_0)
 );
 
 endmodule

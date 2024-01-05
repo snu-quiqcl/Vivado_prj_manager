@@ -528,8 +528,8 @@ if __name__ == "__main__":
     file_name = "skeleton_code"
     #Compile C Code
     comp.do_compile = do_compile
-    # comp.compile_code(file_name)
-    comp.compile_ll_file('output')
+    comp.compile_code(file_name)
+    # comp.compile_ll_file('output')
     
     # Read the ELF file
     elf_data = comp.read_elf_file(file_name)

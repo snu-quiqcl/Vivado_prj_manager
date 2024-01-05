@@ -23,8 +23,7 @@
 module TTL_Controller
 #(
     parameter DEST_VAL = 16'h0,
-    parameter CHANNEL_LENGTH = 12,
-    parameter OUTPUT_NUM = 8
+    parameter CHANNEL_LENGTH = 12
 )
 (
     //////////////////////////////////////////////////////////////////////////////////  
@@ -45,8 +44,14 @@ module TTL_Controller
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    input wire clk_x4,
-    output wire [OUTPUT_NUM - 1:0] output_pulse
+    output wire output_pulse_0,
+    output wire output_pulse_1,
+    output wire output_pulse_2,
+    output wire output_pulse_3,
+    output wire output_pulse_4,
+    output wire output_pulse_5,
+    output wire output_pulse_6,
+    output wire output_pulse_7
 );
 
 //////////////////////////////////////////////////////////////////////////////////  
@@ -78,16 +83,25 @@ GPO_Core0(
 //////////////////////////////////////////////////////////////////////////////////  
 // TTL
 //////////////////////////////////////////////////////////////////////////////////
-reg [OUTPUT_NUM - 1:0] last_input_pulse;
+reg [7:0] last_input_pulse;
+
+assign output_pulse_0 = last_input_pulse[0];
+assign output_pulse_1 = last_input_pulse[1];
+assign output_pulse_2 = last_input_pulse[2];
+assign output_pulse_3 = last_input_pulse[3];
+assign output_pulse_4 = last_input_pulse[4];
+assign output_pulse_5 = last_input_pulse[5];
+assign output_pulse_6 = last_input_pulse[6];
+assign output_pulse_7 = last_input_pulse[7];
 
 always @(posedge clk) begin
     if( reset == 1'b1 ) begin
-        last_input_pulse[OUTPUT_NUM-1:0] <= {OUTPUT_NUM{1'b0}};
+        last_input_pulse[7:0] <= {8{1'b0}};
     end
 
     else begin
         if( selected == 1'b1 ) begin
-            last_input_pulse[OUTPUT_NUM - 1:0] <= gpo_out[OUTPUT_NUM - 1:0];
+            last_input_pulse[7:0] <= gpo_out[7:0];
         end
     end
 end

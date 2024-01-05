@@ -98,7 +98,7 @@ reg [ADDR_LEN - 1:0] input_top;
 reg [ADDR_LEN - 1:0] output_top;
 reg [63:0] last_input_timestamp;
 
-rtob_fifo_generator_0 RTOB_Core_timestamp_FIFO0(
+rtob_fifo_generator_1 RTOB_Core_timestamp_FIFO0(
     .clk(clk),
     .srst(flush_fifo),  // rst -> srst in Vivado 2020.2
     .din(fifo_din[127:64]),

@@ -37,7 +37,7 @@ module TTLx8_out#(
     parameter AXIS_DATA_WIDTH               = 256,
     parameter THRESHOLD                     = 1000,
     parameter DEPTH                         = 1024, //data number = 1024
-    parameter DATA_LEN                      = 8,
+    parameter DATA_LEN                      = 64,
     parameter ADDR_LEN                      = 10
 
 )
@@ -106,7 +106,22 @@ module TTLx8_out#(
     //////////////////////////////////////////////////////////////////////////////////  
     // Port for TTL Module
     //////////////////////////////////////////////////////////////////////////////////
-    output wire output_pulse,
+    output wire output_pulse_0_p,
+    output wire output_pulse_0_n,
+    output wire output_pulse_1_p,
+    output wire output_pulse_1_n,
+    output wire output_pulse_2_p,
+    output wire output_pulse_2_n,
+    output wire output_pulse_3_p,
+    output wire output_pulse_3_n,
+    output wire output_pulse_4_p,
+    output wire output_pulse_4_n,
+    output wire output_pulse_5_p,
+    output wire output_pulse_5_n,
+    output wire output_pulse_6_p,
+    output wire output_pulse_6_n,
+    output wire output_pulse_7_p,
+    output wire output_pulse_7_n,
     
     input wire clk_x4,
     
@@ -280,7 +295,22 @@ ttlx8_controller_0
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
     .clk_x4(clk_x4),
-    .output_pulse(output_pulse)
+    .output_pulse_0_p(output_pulse_0_p),
+    .output_pulse_0_n(output_pulse_0_n),
+    .output_pulse_1_p(output_pulse_1_p),
+    .output_pulse_1_n(output_pulse_1_n),
+    .output_pulse_2_p(output_pulse_2_p),
+    .output_pulse_2_n(output_pulse_2_n),
+    .output_pulse_3_p(output_pulse_3_p),
+    .output_pulse_3_n(output_pulse_3_n),
+    .output_pulse_4_p(output_pulse_4_p),
+    .output_pulse_4_n(output_pulse_4_n),
+    .output_pulse_5_p(output_pulse_5_p),
+    .output_pulse_5_n(output_pulse_5_n),
+    .output_pulse_6_p(output_pulse_6_p),
+    .output_pulse_6_n(output_pulse_6_n),
+    .output_pulse_7_p(output_pulse_7_p),
+    .output_pulse_7_n(output_pulse_7_n)
 );
 
 endmodule

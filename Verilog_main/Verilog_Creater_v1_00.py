@@ -20,20 +20,22 @@ POSSIBLE_FIFO_DEPTH = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072]
 class Verilog_maker:
     def __init__(self):
         print('make verilog code...')
+        self.git_dir = 'E:\RFSoC\GIT'
+        self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_01'
+        self.cpu_type = 'Zynq_APU_0_125MHz.tcl'
+        self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
+        self.board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
+        self.part_name = "xczu28dr-ffvg1517-2-e"
+        self.board_name = "xilinx.com:zcu111:part0:1.4"
         
         self.fifo_generator_list = []
         self.dds_compiler_list = []
         self.rf_converter_list = []
         
-        self.git_dir = 'E:\RFSoC\GIT'
-        self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_01'
-        
-        self.cpu_type = 'Zynq_APU_0_125MHz.tcl'
-        
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core']
         #Number of total dac controller number
-        self.total_dac_num = 1
+        self.total_dac_num = 8
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -47,36 +49,90 @@ class Verilog_maker:
         
         self.TTL_out_dir = os.path.join(self.target_dir,'TTL_out')
         
-        self.TTLx8_ports = ['PMOD1_0_LS']
+        self.TTLx8_ports = ['FMCP_HSPC_LA00_CC',\
+        'FMCP_HSPC_LA01_CC',\
+        'FMCP_HSPC_LA02',\
+        'FMCP_HSPC_LA03',\
+        'FMCP_HSPC_LA04',\
+        'FMCP_HSPC_LA05',\
+        'FMCP_HSPC_LA06',\
+        'FMCP_HSPC_LA07',\
+        'FMCP_HSPC_LA08',\
+        'FMCP_HSPC_LA09',\
+        'FMCP_HSPC_LA10',\
+        'FMCP_HSPC_LA11',\
+        'FMCP_HSPC_LA12',\
+        'FMCP_HSPC_LA13',\
+        'FMCP_HSPC_LA14',\
+        'FMCP_HSPC_LA15',\
+        'FMCP_HSPC_LA16',\
+        'FMCP_HSPC_LA17_CC',\
+        'FMCP_HSPC_LA18_CC',\
+        'FMCP_HSPC_LA19',\
+        'FMCP_HSPC_LA20',\
+        'FMCP_HSPC_LA21',\
+        'FMCP_HSPC_LA22',\
+        'FMCP_HSPC_LA23',\
+        'FMCP_HSPC_LA24',\
+        'FMCP_HSPC_LA25',\
+        'FMCP_HSPC_LA26',\
+        'FMCP_HSPC_LA27',\
+        'FMCP_HSPC_LA28',\
+        'FMCP_HSPC_LA29',\
+        'FMCP_HSPC_LA30',\
+        'FMCP_HSPC_LA31',\
+        'FMCP_HSPC_LA32']
         
-        self.total_ttlx8_num = len(self.TTLx8_ports)
+        # self.TTLx8_ports = ['FMCP_HSPC_LA00_CC',\
+        # 'FMCP_HSPC_LA01_CC',\
+        # 'FMCP_HSPC_LA02',\
+        # 'FMCP_HSPC_LA03',\
+        # 'FMCP_HSPC_LA04',\
+        # 'FMCP_HSPC_LA05',\
+        # 'FMCP_HSPC_LA06',\
+        # 'FMCP_HSPC_LA07']
         
-        self.TTL_ports = ['GPIO_LED_0_LS', 'GPIO_LED_1_LS','DACIO_00','PMOD0_0_LS']
+        self.total_ttlx8_num = ( len(self.TTLx8_ports) // 8 ) + (not len(self.TTLx8_ports) % 8 == 0)
+        self.ttlx8_pin_num = len(self.TTLx8_ports)
         
-        self.total_ttl_num = len(self.TTL_ports)
+        self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04',\
+                        'DACIO_05','DACIO_06','DACIO_07','DACIO_08','DACIO_09',\
+                        'DACIO_10', 'DACIO_11', 'DACIO_12', 'DACIO_13',\
+                        'DACIO_14', 'DACIO_15', 'DACIO_16', 'DACIO_17', \
+                        'DACIO_18', 'DACIO_19', 'ADCIO_00', 'ADCIO_01', \
+                        'ADCIO_02', 'ADCIO_03', 'ADCIO_04', 'ADCIO_05', \
+                        'ADCIO_06', 'ADCIO_07', 'ADCIO_08', 'ADCIO_09', \
+                        'ADCIO_10', 'ADCIO_11', 'ADCIO_12', 'ADCIO_13', \
+                        'ADCIO_14', 'ADCIO_15', 'ADCIO_16', 'ADCIO_17', \
+                        'ADCIO_18', 'ADCIO_19']
+        # self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04', 'DACIO_05','DACIO_06','DACIO_07']
+        
+        self.total_ttl_num = ( len(self.TTL_ports) // 8 ) + (not len(self.TTL_ports) % 8 == 0)
+        self.ttl_pin_num = len(self.TTL_ports)
+        
+        self.ttl_fifo_depth = 256
+        self.ttl_fifo_threshold = self.ttl_fifo_depth - 8
+        self.ttl_fifo_data_len = 8
+        self.ttl_fifo_addr_len = len(bin(self.ttl_fifo_depth - 1)) - 2 
+        
+        self.ttlx8_fifo_depth = 256
+        self.ttlx8_fifo_threshold = self.ttlx8_fifo_depth - 8
+        self.ttlx8_fifo_data_len = 64
+        self.ttlx8_fifo_addr_len = len(bin(self.ttlx8_fifo_depth - 1)) - 2 
         
         self.rtob_fifo_depth = 256
         self.rtob_fifo_threshold = self.rtob_fifo_depth - 8
         self.rtob_fifo_data_len = 8
         self.rtob_fifo_addr_len = len(bin(self.rtob_fifo_depth - 1)) - 2 
         
-        self.rtoc_fifo_depth = 512
-        self.rtoc_fifo_threshold = self.rtoc_fifo_depth - 8
-        self.rtoc_fifo_addr_len = len(bin(self.rtoc_fifo_depth - 1)) - 2
-        self.rtoc_fifo_data_len = 1
-        
         self.total_rfdc_num = 1
         
         self.total_AXI_ports = self.total_dac_num + 1 + self.total_ttlx8_num + self.total_ttl_num + self.total_rfdc_num
         
-        self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
-        self.board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
-        self.part_name = "xczu28dr-ffvg1517-2-e"
-        self.board_name = "xilinx.com:zcu111:part0:1.4"
         self.tcl_commands = ''
         self.customized_ip_list = []
         self.do_sim = False
-        self.make_bit_stream = (True and (not self.do_sim))
+        self.make_bit_stream = (False and (not self.do_sim))
         
     def run_vivado_tcl(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
@@ -246,9 +302,9 @@ class Verilog_maker:
         
         return tcl_code
     
-    def generate_xilinx_rtob_fifo(self, folder_directory, fifo_name):
+    def generate_xilinx_rtob_fifo(self, folder_directory, fifo_name, threshold):
         i__ = 0
-        while POSSIBLE_FIFO_DEPTH[i__] <= self.rtob_fifo_threshold:
+        while POSSIBLE_FIFO_DEPTH[i__] <= threshold:
             i__ += 1
             if i__ >= len(POSSIBLE_FIFO_DEPTH):
                 raise Exception('rtob fifo depth is too big')
@@ -261,34 +317,8 @@ class Verilog_maker:
         tcl_code += f' CONFIG.Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}} CONFIG.Write_Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}}'
         tcl_code += f' CONFIG.Read_Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}} CONFIG.Programmable_Full_Type'
         tcl_code += f' {{Single_Programmable_Full_Threshold_Constant}}'
-        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{{self.rtob_fifo_threshold}}}'
-        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{{self.rtob_fifo_threshold-1}}}'
-        tcl_code += f' CONFIG.Empty_Threshold_Assert_Value {{4}}'
-        tcl_code += f' CONFIG.Empty_Threshold_Negate_Value {{5}}]'
-        tcl_code += f' [get_ips {fifo_name}]\n'
-        
-        #using '\' makes error in vivado.bat. this should be replaced in '/'
-        tcl_code = tcl_code.replace("\\","/")
-        
-        return tcl_code
-    
-    def generate_xilinx_rtoc_fifo(self, folder_directory, fifo_name):
-        i__ = 0
-        while POSSIBLE_FIFO_DEPTH[i__] <= self.rtoc_fifo_threshold:
-            i__ += 1
-            if i__ >= len(POSSIBLE_FIFO_DEPTH):
-                raise Exception('rtoc fifo depth is too big')
-        tcl_code = ''
-        tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name {fifo_name}\n'
-        tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
-        tcl_code += f' CONFIG.Input_Data_Width {{{self.rtoc_fifo_data_len + 64}}} CONFIG.Input_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'
-        tcl_code += f' CONFIG.Output_Data_Width {{{self.rtoc_fifo_data_len + 64}}} CONFIG.Output_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'
-        tcl_code += f' CONFIG.Underflow_Flag {{true}} CONFIG.Overflow_Flag {{true}}'
-        tcl_code += f' CONFIG.Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}} CONFIG.Write_Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}}'
-        tcl_code += f' CONFIG.Read_Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}} CONFIG.Programmable_Full_Type'
-        tcl_code += f' {{Single_Programmable_Full_Threshold_Constant}}'
-        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{{self.rtoc_fifo_threshold}}}'
-        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{{self.rtoc_fifo_threshold-1}}}'
+        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{{threshold}}}'
+        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{{threshold-1}}}'
         tcl_code += f' CONFIG.Empty_Threshold_Assert_Value {{4}}'
         tcl_code += f' CONFIG.Empty_Threshold_Negate_Value {{5}}]'
         tcl_code += f' [get_ips {fifo_name}]\n'
@@ -562,7 +592,7 @@ class Verilog_maker:
         self.add_src(src_folder_directory,file_type)
         self.set_board(board_path, board_name)
         
-        self.tcl_commands += self.generate_xilinx_rtob_fifo(folder_directory, 'rtob_fifo_generator_0')
+        self.tcl_commands += self.generate_xilinx_rtob_fifo(folder_directory, 'rtob_fifo_generator_0', self.ttlx8_fifo_depth)
         
         # Save the TCL code to the .tcl file
         
@@ -625,7 +655,7 @@ class Verilog_maker:
         self.add_src(src_folder_directory,file_type)
         self.set_board(board_path, board_name)
 
-        self.tcl_commands += self.generate_xilinx_rtoc_fifo(folder_directory, 'rtoc_fifo_generator_0')
+        self.tcl_commands += self.generate_xilinx_rtob_fifo(folder_directory, 'rtob_fifo_generator_1', self.ttl_fifo_depth)
 
         # Save the TCL code to the .tcl file
 
@@ -854,19 +884,31 @@ set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 2000000000 RF3
         #######################################################################
         # TTLx8_out
         #######################################################################
+        neg = '_N'
+        pos = '_P'
         i__ = 0
         for comp in self.TTLx8_ports:
-            tcl_code += f'set {comp} [ create_bd_port -dir O {comp} ]\n'
+            tcl_code += f'set {comp + neg} [ create_bd_port -dir O {comp + neg} ]\n'
+            tcl_code += f'set {comp + pos} [ create_bd_port -dir O {comp + pos} ]\n'
             if self.do_sim:
-                tcl_code += f'set output_pulse_x8_{i__} [ create_bd_port -dir O output_pulse_x8_{i__} ]\n'
-            tcl_code += f'set TTLx8_out_{i__} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTLx8_out TTLx8_out_{i__} ]\n'
-            tcl_code += f'set_property -dict [list CONFIG.THRESHOLD {{{self.rtob_fifo_threshold}}} CONFIG.DEPTH {{{self.rtob_fifo_depth}}}\
- CONFIG.DATA_LEN {{{self.rtob_fifo_data_len}}} CONFIG.ADDR_LEN {{{self.rtob_fifo_addr_len}}} ] [get_bd_cells TTLx8_out_{i__}]\n'
-            tcl_code += f'connect_bd_net -net TTLx8_out_{i__}_output_pulse [get_bd_ports {comp}] [get_bd_pins TTLx8_out_{i__}/output_pulse]'
-            if self.do_sim:
-                tcl_code += f' [get_bd_ports output_pulse_x8_{i__}]'
-            tcl_code += '\n'
+                tcl_code += f'set output_pulse_x8_{i__}_p [ create_bd_port -dir O output_pulse_x8_{i__}_p ]\n'
+                tcl_code += f'set output_pulse_x8_{i__}_n [ create_bd_port -dir O output_pulse_x8_{i__}_n ]\n'
             i__ += 1
+            
+        for module_index in range(self.total_ttlx8_num):
+            tcl_code += f'set TTLx8_out_{module_index} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTLx8_out TTLx8_out_{module_index} ]\n'
+            tcl_code += f'set_property -dict [list CONFIG.THRESHOLD {{{self.ttlx8_fifo_threshold}}} CONFIG.DEPTH {{{self.ttlx8_fifo_depth}}}\
+ CONFIG.DATA_LEN {{{self.ttlx8_fifo_data_len}}} CONFIG.ADDR_LEN {{{self.ttlx8_fifo_addr_len}}} ] [get_bd_cells TTLx8_out_{module_index}]\n'
+            if self.ttlx8_pin_num - module_index * 8 < 8:        
+                pin_number = self.ttlx8_pin_num - module_index * 8
+            else:
+                pin_number = 8
+            for i__ in range(pin_number):
+                tcl_code += f'connect_bd_net -net TTLx8_out_{module_index}_output_pulse_{i__}_p \
+[get_bd_ports {self.TTLx8_ports[module_index * 8 + i__] + pos}] [get_bd_pins TTLx8_out_{module_index}/output_pulse_{i__}_p]\n'
+                tcl_code += f'connect_bd_net -net TTLx8_out_{module_index}_output_pulse_{i__}_n \
+[get_bd_ports {self.TTLx8_ports[module_index * 8 + i__] + neg}] [get_bd_pins TTLx8_out_{module_index}/output_pulse_{i__}_n]'
+                tcl_code += '\n'
             
         #######################################################################
         # TTL_out
@@ -876,14 +918,22 @@ set RF3_CLKO_A_C_P_229 [ create_bd_port -dir I -type clk -freq_hz 2000000000 RF3
             tcl_code += f'set {comp} [ create_bd_port -dir O {comp} ]\n'
             if self.do_sim:
                 tcl_code += f'set output_pulse_x1_{i__} [ create_bd_port -dir O output_pulse_x1_{i__} ]\n'
-            tcl_code += f'set TTL_out_{i__} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTL_out TTL_out_{i__} ]\n'
-            tcl_code += f'set_property -dict [list CONFIG.THRESHOLD {{{self.rtoc_fifo_threshold}}} CONFIG.DEPTH {{{self.rtoc_fifo_depth}}}\
- CONFIG.ADDR_LEN {{{self.rtoc_fifo_addr_len}}} CONFIG.DATA_LEN {{{self.rtoc_fifo_data_len}}} ] [get_bd_cells TTL_out_{i__}]\n'
-            tcl_code += f'connect_bd_net -net TTL_out_{i__}_output_pulse [get_bd_ports {comp}] [get_bd_pins TTL_out_{i__}/output_pulse]'
-            if self.do_sim:
-                tcl_code += f' [get_bd_ports output_pulse_x1_{i__}]'
-            tcl_code += '\n'
             i__ += 1
+            
+        for module_index in range(self.total_ttl_num):
+            tcl_code += f'set TTL_out_{module_index} [ create_bd_cell -type ip -vlnv xilinx.com:user:TTL_out TTL_out_{module_index} ]\n'
+            tcl_code += f'set_property -dict [list CONFIG.THRESHOLD {{{self.ttl_fifo_threshold}}} CONFIG.DEPTH {{{self.ttl_fifo_depth}}}\
+ CONFIG.ADDR_LEN {{{self.ttl_fifo_addr_len}}} CONFIG.DATA_LEN {{{self.ttl_fifo_data_len}}} ] [get_bd_cells TTL_out_{module_index}]\n'
+            if self.ttl_pin_num - module_index * 8 < 8:        
+                pin_number = self.ttl_pin_num - module_index * 8
+            else:
+                pin_number = 8
+            for i__ in range(pin_number):
+                tcl_code += f'connect_bd_net -net TTL_out_{module_index}_output_pulse_{i__} [get_bd_ports {self.TTL_ports[module_index * 8 + i__]}] \
+[get_bd_pins TTL_out_{module_index}/output_pulse_{i__}]'
+                if self.do_sim:
+                    tcl_code += f' [get_bd_ports output_pulse_x1_{i__}]'
+                tcl_code += '\n'
         
         #######################################################################
         # DAC output port
@@ -1188,10 +1238,16 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
         #######################################################################
         for i in range(self.total_dac_num):
             tcl_code += f'assign_bd_address -offset 0xA000{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs DAC_Controller_{i}/s_axi/reg0] -force\n'
+        addr_ = 0xA0010000
         for i in range(self.total_ttlx8_num):
-            tcl_code += f'assign_bd_address -offset 0xA001{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TTLx8_out_{i}/s_axi/reg0] -force\n'
+            addr_str = hex(addr_).upper()
+            tcl_code += f'assign_bd_address -offset {addr_str} -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TTLx8_out_{i}/s_axi/reg0] -force\n'
+            addr_ = addr_ + 0x00001000
+            
         for i in range(self.total_ttl_num):
-            tcl_code += f'assign_bd_address -offset 0xA002{i}000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TTL_out_{i}/s_axi/reg0] -force\n'
+            addr_str = hex(addr_).upper()
+            tcl_code += f'assign_bd_address -offset {addr_str} -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TTL_out_{i}/s_axi/reg0] -force\n'
+            addr_ = addr_ + 0x00001000
         
         tcl_code += """
 assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force

@@ -134,14 +134,19 @@ class DAC{
 class TTL_out{
     public:
         uint64_t addr           = (uint64_t) XPAR_TTL_OUT_0_BASEADDR;
-        uint64_t last_pulse     = 0;
+        uint64_t channel         = (uint64_t) 0;
+        uint64_t * last_pulse   = NULL;
     public:
-        TTL_out(uint64_t addr =  ( (uint64_t) XPAR_TTL_OUT_0_BASEADDR ) ){
+        TTL_out(uint64_t addr =  ( (uint64_t) XPAR_TTL_OUT_0_BASEADDR ), uint64_t * last_pulse_ptr = NULL, uint64_t channel = 0 ){
             this->addr          = addr;
+            this->channel       = channel;
+            this->last_pulse    = last_pulse_ptr;
         };
         void set(uint64_t pulse);
         void set_ch(const char * pulse_ch);
         uint64_t get_last_pulse();
+        void set_last_pulse(uint64_t pulse);
+        uint64_t get_channel();
         void flush_fifo();
 };
 

@@ -329,57 +329,57 @@ set_property PACKAGE_PIN N20      [get_ports "PL_DDR4_DM7_B"] ;# Bank  67 VCCO -
 set_property IOSTANDARD  POD12    [get_ports "PL_DDR4_DM7_B"] ;# Bank  67 VCCO - VCC1V2   - IO_L1P_T0L_N0_DBC_67
 #Other net   PACKAGE_PIN N18      - N21436724                 Bank  67 - VREF_67
 set_property PACKAGE_PIN AF19     [get_ports "FMCP_HSPC_LA32_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L24N_T3U_N11_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA32_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L24N_T3U_N11_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA32_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L24N_T3U_N11_66
 set_property PACKAGE_PIN AF20     [get_ports "FMCP_HSPC_LA32_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L24P_T3U_N10_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA32_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L24P_T3U_N10_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA32_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L24P_T3U_N10_66
 set_property PACKAGE_PIN AH18     [get_ports "FMCP_HSPC_LA33_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L23N_T3U_N9_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA33_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L23N_T3U_N9_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA33_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L23N_T3U_N9_66
 set_property PACKAGE_PIN AG18     [get_ports "FMCP_HSPC_LA33_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L23P_T3U_N8_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA33_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L23P_T3U_N8_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA33_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L23P_T3U_N8_66
 set_property PACKAGE_PIN AH20     [get_ports "FMCP_HSPC_LA30_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L22N_T3U_N7_DBC_AD0N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA30_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L22N_T3U_N7_DBC_AD0N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA30_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L22N_T3U_N7_DBC_AD0N_66
 set_property PACKAGE_PIN AG20     [get_ports "FMCP_HSPC_LA30_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L22P_T3U_N6_DBC_AD0P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA30_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L22P_T3U_N6_DBC_AD0P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA30_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L22P_T3U_N6_DBC_AD0P_66
 set_property PACKAGE_PIN AJ19     [get_ports "FMCP_HSPC_LA31_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L21N_T3L_N5_AD8N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA31_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L21N_T3L_N5_AD8N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA31_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L21N_T3L_N5_AD8N_66
 set_property PACKAGE_PIN AJ20     [get_ports "FMCP_HSPC_LA31_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L21P_T3L_N4_AD8P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA31_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L21P_T3L_N4_AD8P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA31_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L21P_T3L_N4_AD8P_66
 set_property PACKAGE_PIN AK21     [get_ports "FMCP_HSPC_LA29_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L20N_T3L_N3_AD1N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA29_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L20N_T3L_N3_AD1N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA29_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L20N_T3L_N3_AD1N_66
 set_property PACKAGE_PIN AK22     [get_ports "FMCP_HSPC_LA29_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L20P_T3L_N2_AD1P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA29_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L20P_T3L_N2_AD1P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA29_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L20P_T3L_N2_AD1P_66
 set_property PACKAGE_PIN AK18     [get_ports "FMCP_HSPC_LA28_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L19N_T3L_N1_DBC_AD9N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA28_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L19N_T3L_N1_DBC_AD9N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA28_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L19N_T3L_N1_DBC_AD9N_66
 set_property PACKAGE_PIN AJ18     [get_ports "FMCP_HSPC_LA28_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L19P_T3L_N0_DBC_AD9P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA28_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L19P_T3L_N0_DBC_AD9P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA28_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L19P_T3L_N0_DBC_AD9P_66
 set_property PACKAGE_PIN AK19     [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_T3U_N12_66
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_T3U_N12_66
 set_property PACKAGE_PIN AN22     [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_T2U_N12_66
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_T2U_N12_66
 set_property PACKAGE_PIN AL20     [get_ports "FMCP_HSPC_LA25_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L18N_T2U_N11_AD2N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA25_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L18N_T2U_N11_AD2N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA25_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L18N_T2U_N11_AD2N_66
 set_property PACKAGE_PIN AL21     [get_ports "FMCP_HSPC_LA25_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L18P_T2U_N10_AD2P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA25_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L18P_T2U_N10_AD2P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA25_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L18P_T2U_N10_AD2P_66
 set_property PACKAGE_PIN AM19     [get_ports "FMCP_HSPC_LA21_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L17N_T2U_N9_AD10N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA21_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L17N_T2U_N9_AD10N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA21_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L17N_T2U_N9_AD10N_66
 set_property PACKAGE_PIN AL19     [get_ports "FMCP_HSPC_LA21_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L17P_T2U_N8_AD10P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA21_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L17P_T2U_N8_AD10P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA21_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L17P_T2U_N8_AD10P_66
 set_property PACKAGE_PIN AM22     [get_ports "FMCP_HSPC_LA24_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L16N_T2U_N7_QBC_AD3N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA24_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L16N_T2U_N7_QBC_AD3N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA24_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L16N_T2U_N7_QBC_AD3N_66
 set_property PACKAGE_PIN AL22     [get_ports "FMCP_HSPC_LA24_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L16P_T2U_N6_QBC_AD3P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA24_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L16P_T2U_N6_QBC_AD3P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA24_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L16P_T2U_N6_QBC_AD3P_66
 set_property PACKAGE_PIN AN18     [get_ports "FMCP_HSPC_LA23_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L15N_T2L_N5_AD11N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA23_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L15N_T2L_N5_AD11N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA23_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L15N_T2L_N5_AD11N_66
 set_property PACKAGE_PIN AM18     [get_ports "FMCP_HSPC_LA23_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L15P_T2L_N4_AD11P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA23_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L15P_T2L_N4_AD11P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA23_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L15P_T2L_N4_AD11P_66
 set_property PACKAGE_PIN AP21     [get_ports "FMCP_HSPC_LA17_CC_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L14N_T2L_N3_GC_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA17_CC_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L14N_T2L_N3_GC_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA17_CC_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L14N_T2L_N3_GC_66
 set_property PACKAGE_PIN AN21     [get_ports "FMCP_HSPC_LA17_CC_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L14P_T2L_N2_GC_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA17_CC_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L14P_T2L_N2_GC_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA17_CC_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L14P_T2L_N2_GC_66
 set_property PACKAGE_PIN AN20     [get_ports "FMCP_HSPC_LA18_CC_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L13N_T2L_N1_GC_QBC_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA18_CC_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L13N_T2L_N1_GC_QBC_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA18_CC_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L13N_T2L_N1_GC_QBC_66
 set_property PACKAGE_PIN AM20     [get_ports "FMCP_HSPC_LA18_CC_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L13P_T2L_N0_GC_QBC_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA18_CC_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L13P_T2L_N0_GC_QBC_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA18_CC_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L13P_T2L_N0_GC_QBC_66
 set_property PACKAGE_PIN AP19     [get_ports "FMCP_HSPC_CLK1_M2C_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L12N_T1U_N11_GC_66
 set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_CLK1_M2C_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L12N_T1U_N11_GC_66
 set_property PACKAGE_PIN AP20     [get_ports "FMCP_HSPC_CLK1_M2C_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L12P_T1U_N10_GC_66
@@ -389,29 +389,29 @@ set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VA
 set_property PACKAGE_PIN AP18     [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_L11P_T1U_N8_GC_66
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_L11P_T1U_N8_GC_66
 set_property PACKAGE_PIN AT22     [get_ports "FMCP_HSPC_LA26_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L10N_T1U_N7_QBC_AD4N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA26_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L10N_T1U_N7_QBC_AD4N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA26_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L10N_T1U_N7_QBC_AD4N_66
 set_property PACKAGE_PIN AR22     [get_ports "FMCP_HSPC_LA26_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L10P_T1U_N6_QBC_AD4P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA26_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L10P_T1U_N6_QBC_AD4P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA26_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L10P_T1U_N6_QBC_AD4P_66
 set_property PACKAGE_PIN AT19     [get_ports "FMCP_HSPC_LA22_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L9N_T1L_N5_AD12N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA22_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L9N_T1L_N5_AD12N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA22_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L9N_T1L_N5_AD12N_66
 set_property PACKAGE_PIN AR19     [get_ports "FMCP_HSPC_LA22_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L9P_T1L_N4_AD12P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA22_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L9P_T1L_N4_AD12P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA22_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L9P_T1L_N4_AD12P_66
 set_property PACKAGE_PIN AT21     [get_ports "FMCP_HSPC_LA27_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L8N_T1L_N3_AD5N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA27_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L8N_T1L_N3_AD5N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA27_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L8N_T1L_N3_AD5N_66
 set_property PACKAGE_PIN AR21     [get_ports "FMCP_HSPC_LA27_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L8P_T1L_N2_AD5P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA27_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L8P_T1L_N2_AD5P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA27_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L8P_T1L_N2_AD5P_66
 set_property PACKAGE_PIN AT17     [get_ports "FMCP_HSPC_LA20_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L7N_T1L_N1_QBC_AD13N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA20_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L7N_T1L_N1_QBC_AD13N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA20_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L7N_T1L_N1_QBC_AD13N_66
 set_property PACKAGE_PIN AR17     [get_ports "FMCP_HSPC_LA20_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L7P_T1L_N0_QBC_AD13P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA20_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L7P_T1L_N0_QBC_AD13P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA20_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L7P_T1L_N0_QBC_AD13P_66
 set_property PACKAGE_PIN AT20     [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_T1U_N12_66
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_T1U_N12_66
 set_property PACKAGE_PIN AU22     [get_ports "VRP_66"] ;# Bank  66 VCCO - VADJ_FMC - IO_T0U_N12_VRP_66
 set_property IOSTANDARD  LVCMOSxx [get_ports "VRP_66"] ;# Bank  66 VCCO - VADJ_FMC - IO_T0U_N12_VRP_66
 set_property PACKAGE_PIN AU19     [get_ports "FMCP_HSPC_LA19_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L6N_T0U_N11_AD6N_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA19_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L6N_T0U_N11_AD6N_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA19_N"] ;# Bank  66 VCCO - VADJ_FMC - IO_L6N_T0U_N11_AD6N_66
 set_property PACKAGE_PIN AU20     [get_ports "FMCP_HSPC_LA19_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L6P_T0U_N10_AD6P_66
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA19_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L6P_T0U_N10_AD6P_66
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA19_P"] ;# Bank  66 VCCO - VADJ_FMC - IO_L6P_T0U_N10_AD6P_66
 set_property PACKAGE_PIN AV18     [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_L5N_T0U_N9_AD14N_66
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_L5N_T0U_N9_AD14N_66
 set_property PACKAGE_PIN AU18     [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_L5P_T0U_N8_AD14P_66
@@ -434,49 +434,49 @@ set_property PACKAGE_PIN AW19     [get_ports "No Connect"] ;# Bank  66 VCCO - VA
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  66 VCCO - VADJ_FMC - IO_L1P_T0L_N0_DBC_66
 #Other net   PACKAGE_PIN AG19     - N21116918                 Bank  66 - VREF_66
 set_property PACKAGE_PIN AJ13     [get_ports "FMCP_HSPC_LA02_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L24N_T3U_N11_PERSTN0_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA02_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L24N_T3U_N11_PERSTN0_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA02_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L24N_T3U_N11_PERSTN0_65
 set_property PACKAGE_PIN AH13     [get_ports "FMCP_HSPC_LA02_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L24P_T3U_N10_PERSTN1_I2C_SDA_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA02_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L24P_T3U_N10_PERSTN1_I2C_SDA_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA02_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L24P_T3U_N10_PERSTN1_I2C_SDA_65
 set_property PACKAGE_PIN AH12     [get_ports "FMCP_HSPC_LA04_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L23N_T3U_N9_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA04_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L23N_T3U_N9_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA04_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L23N_T3U_N9_65
 set_property PACKAGE_PIN AG12     [get_ports "FMCP_HSPC_LA04_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L23P_T3U_N8_I2C_SCLK_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA04_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L23P_T3U_N8_I2C_SCLK_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA04_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L23P_T3U_N8_I2C_SCLK_65
 set_property PACKAGE_PIN AK14     [get_ports "FMCP_HSPC_LA15_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L22N_T3U_N7_DBC_AD0N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA15_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L22N_T3U_N7_DBC_AD0N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA15_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L22N_T3U_N7_DBC_AD0N_65
 set_property PACKAGE_PIN AJ14     [get_ports "FMCP_HSPC_LA15_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L22P_T3U_N6_DBC_AD0P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA15_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L22P_T3U_N6_DBC_AD0P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA15_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L22P_T3U_N6_DBC_AD0P_65
 set_property PACKAGE_PIN AK12     [get_ports "FMCP_HSPC_LA03_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L21N_T3L_N5_AD8N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA03_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L21N_T3L_N5_AD8N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA03_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L21N_T3L_N5_AD8N_65
 set_property PACKAGE_PIN AJ12     [get_ports "FMCP_HSPC_LA03_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L21P_T3L_N4_AD8P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA03_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L21P_T3L_N4_AD8P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA03_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L21P_T3L_N4_AD8P_65
 set_property PACKAGE_PIN AM14     [get_ports "FMCP_HSPC_LA14_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L20N_T3L_N3_AD1N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA14_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L20N_T3L_N3_AD1N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA14_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L20N_T3L_N3_AD1N_65
 set_property PACKAGE_PIN AL14     [get_ports "FMCP_HSPC_LA14_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L20P_T3L_N2_AD1P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA14_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L20P_T3L_N2_AD1P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA14_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L20P_T3L_N2_AD1P_65
 set_property PACKAGE_PIN AL12     [get_ports "FMCP_HSPC_LA07_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L19N_T3L_N1_DBC_AD9N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA07_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L19N_T3L_N1_DBC_AD9N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA07_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L19N_T3L_N1_DBC_AD9N_65
 set_property PACKAGE_PIN AK13     [get_ports "FMCP_HSPC_LA07_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L19P_T3L_N0_DBC_AD9P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA07_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L19P_T3L_N0_DBC_AD9P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA07_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L19P_T3L_N0_DBC_AD9P_65
 set_property PACKAGE_PIN AG14     [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_T3U_N12_65
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_T3U_N12_65
 set_property PACKAGE_PIN AT9      [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_T2U_N12_65
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_T2U_N12_65
 set_property PACKAGE_PIN AL7      [get_ports "FMCP_HSPC_LA06_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L18N_T2U_N11_AD2N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA06_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L18N_T2U_N11_AD2N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA06_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L18N_T2U_N11_AD2N_65
 set_property PACKAGE_PIN AL8      [get_ports "FMCP_HSPC_LA06_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L18P_T2U_N10_AD2P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA06_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L18P_T2U_N10_AD2P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA06_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L18P_T2U_N10_AD2P_65
 set_property PACKAGE_PIN AM9      [get_ports "FMCP_HSPC_LA08_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L17N_T2U_N9_AD10N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA08_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L17N_T2U_N9_AD10N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA08_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L17N_T2U_N9_AD10N_65
 set_property PACKAGE_PIN AL9      [get_ports "FMCP_HSPC_LA08_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L17P_T2U_N8_AD10P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA08_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L17P_T2U_N8_AD10P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA08_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L17P_T2U_N8_AD10P_65
 set_property PACKAGE_PIN AN7      [get_ports "FMCP_HSPC_LA09_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L16N_T2U_N7_QBC_AD3N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA09_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L16N_T2U_N7_QBC_AD3N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA09_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L16N_T2U_N7_QBC_AD3N_65
 set_property PACKAGE_PIN AN8      [get_ports "FMCP_HSPC_LA09_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L16P_T2U_N6_QBC_AD3P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA09_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L16P_T2U_N6_QBC_AD3P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA09_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L16P_T2U_N6_QBC_AD3P_65
 set_property PACKAGE_PIN AM7      [get_ports "FMCP_HSPC_LA05_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L15N_T2L_N5_AD11N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA05_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L15N_T2L_N5_AD11N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA05_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L15N_T2L_N5_AD11N_65
 set_property PACKAGE_PIN AM8      [get_ports "FMCP_HSPC_LA05_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L15P_T2L_N4_AD11P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA05_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L15P_T2L_N4_AD11P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA05_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L15P_T2L_N4_AD11P_65
 set_property PACKAGE_PIN AR9      [get_ports "FMCP_HSPC_LA00_CC_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L14N_T2L_N3_GC_65
 set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA00_CC_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L14N_T2L_N3_GC_65
 set_property PACKAGE_PIN AP9      [get_ports "FMCP_HSPC_LA00_CC_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L14P_T2L_N2_GC_65
@@ -494,29 +494,29 @@ set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_REFCLK_M2C_N"] ;# Bank  
 set_property PACKAGE_PIN AN11     [get_ports "FMCP_HSPC_REFCLK_M2C_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L11P_T1U_N8_GC_65
 set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_REFCLK_M2C_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L11P_T1U_N8_GC_65
 set_property PACKAGE_PIN AN13     [get_ports "FMCP_HSPC_LA13_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L10N_T1U_N7_QBC_AD4N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA13_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L10N_T1U_N7_QBC_AD4N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA13_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L10N_T1U_N7_QBC_AD4N_65
 set_property PACKAGE_PIN AM13     [get_ports "FMCP_HSPC_LA13_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L10P_T1U_N6_QBC_AD4P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA13_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L10P_T1U_N6_QBC_AD4P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA13_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L10P_T1U_N6_QBC_AD4P_65
 set_property PACKAGE_PIN AM10     [get_ports "FMCP_HSPC_LA12_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L9N_T1L_N5_AD12N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA12_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L9N_T1L_N5_AD12N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA12_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L9N_T1L_N5_AD12N_65
 set_property PACKAGE_PIN AL10     [get_ports "FMCP_HSPC_LA12_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L9P_T1L_N4_AD12P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA12_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L9P_T1L_N4_AD12P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA12_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L9P_T1L_N4_AD12P_65
 set_property PACKAGE_PIN AR11     [get_ports "FMCP_HSPC_LA16_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L8N_T1L_N3_AD5N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA16_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L8N_T1L_N3_AD5N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA16_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L8N_T1L_N3_AD5N_65
 set_property PACKAGE_PIN AR12     [get_ports "FMCP_HSPC_LA16_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L8P_T1L_N2_AD5P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA16_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L8P_T1L_N2_AD5P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA16_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L8P_T1L_N2_AD5P_65
 set_property PACKAGE_PIN AN12     [get_ports "FMCP_HSPC_LA10_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L7N_T1L_N1_QBC_AD13N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA10_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L7N_T1L_N1_QBC_AD13N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA10_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L7N_T1L_N1_QBC_AD13N_65
 set_property PACKAGE_PIN AM12     [get_ports "FMCP_HSPC_LA10_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L7P_T1L_N0_QBC_AD13P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA10_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L7P_T1L_N0_QBC_AD13P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA10_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L7P_T1L_N0_QBC_AD13P_65
 set_property PACKAGE_PIN AL11     [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_T1U_N12_65
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_T1U_N12_65
 set_property PACKAGE_PIN AU9      [get_ports "VRP_65"] ;# Bank  65 VCCO - VADJ_FMC - IO_T0U_N12_VRP_65
 set_property IOSTANDARD  LVCMOSxx [get_ports "VRP_65"] ;# Bank  65 VCCO - VADJ_FMC - IO_T0U_N12_VRP_65
 set_property PACKAGE_PIN AU10     [get_ports "FMCP_HSPC_LA11_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L6N_T0U_N11_AD6N_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA11_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L6N_T0U_N11_AD6N_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA11_N"] ;# Bank  65 VCCO - VADJ_FMC - IO_L6N_T0U_N11_AD6N_65
 set_property PACKAGE_PIN AT10     [get_ports "FMCP_HSPC_LA11_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L6P_T0U_N10_AD6P_65
-set_property IOSTANDARD  LVCMOS18 [get_ports "FMCP_HSPC_LA11_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L6P_T0U_N10_AD6P_65
+set_property IOSTANDARD  LVDS     [get_ports "FMCP_HSPC_LA11_P"] ;# Bank  65 VCCO - VADJ_FMC - IO_L6P_T0U_N10_AD6P_65
 set_property PACKAGE_PIN AW8      [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_L5N_T0U_N9_AD14N_65
 set_property IOSTANDARD  LVCMOSxx [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_L5N_T0U_N9_AD14N_65
 set_property PACKAGE_PIN AW9      [get_ports "No Connect"] ;# Bank  65 VCCO - VADJ_FMC - IO_L5P_T0U_N8_AD14P_65

@@ -191,8 +191,10 @@ int main(){
                     skeleton_code += f'    dac_{match[1]}.flush_fifo();\n'
                     skeleton_code += '\n'
                 if match[0] == 'TTL_OUT':
-                    skeleton_code += f'    TTL_out ttl_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
-                    skeleton_code += f'    ttl_out_{match[1]}.flush_fifo();\n'
+                    skeleton_code += f'    uint64_t * ttl_set_{match[1]}_ptr = (uint64_t *) malloc(sizeof(uint64_t));\n'
+                    for i in range(8):
+                        skeleton_code += f'    TTL_out ttl_out_{ int(match[1]) * 8 + i }(XPAR_{match[0]}_{match[1]}_BASEADDR,ttl_set_{match[1]}_ptr,{i});\n'
+                    skeleton_code += f'    ttl_out_{ int(match[1]) }.flush_fifo();\n'
                     skeleton_code += '\n'
                 if match[0] == 'TTLX8_OUT':
                     skeleton_code += f'    TTLx8_out ttlx8_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'

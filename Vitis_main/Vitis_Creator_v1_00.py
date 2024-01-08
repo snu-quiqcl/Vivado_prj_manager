@@ -181,6 +181,7 @@ importsources -name RFSoC_Firmware_app -path "{self.firmware_dir}" -soft-link
         skeleton_code_path = os.path.join(self.skeleton_dir,'skeleton_code.cpp')
         with open(skeleton_code_path,'w') as file:
             skeleton_code = """#include "RFSoC_Driver.h"
+#include "malloc.h"
 
 int main(){
 """

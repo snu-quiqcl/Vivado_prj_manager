@@ -45,6 +45,8 @@
 #define AXI_LEN 0x10;
 #define M_AXI_HPM0_FPD_ADDR XPAR_AXI_HPM0_FPD_0_S_AXI_BASEADDR
 #define M_AXI_HPM1_FPD_ADDR XPAR_AXI_HPM1_FPD_0_S_AXI_BASEADDR
+#define CPU_BASEADDR		XPAR_SCUGIC_0_CPU_BASEADDR
+#define DIST_BASEADDR		XPAR_SCUGIC_0_DIST_BASEADDR
 
 //Memory address
 #define DRAM_BASE_ADDRESS 0xf00000
@@ -147,4 +149,8 @@ void tcp_slowtmr(void);
 
 /* missing declaration in lwIP */
 void lwip_init();
+
+/*Interrupt Maker*/
+int ScuGicLowLevelExample(u32 CpuBaseAddress, u32 DistBaseAddress);
+
 #endif

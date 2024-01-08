@@ -100,6 +100,13 @@ int main()
 	set_clock(2000000);
 	/* set binary mode false*/
 	set_current_binary_mode(0);
+
+	/*print CPU ID for multiprocessing*/
+	uint32_t mpidr, cpu_id;
+	asm volatile ("mrs %0, MPIDR_EL1" : "=r" (mpidr));
+	cpu_id = mpidr & 0xFF;
+	xil_printf("CPU0 ID : %d\r\n",cpu_id);
+	ScuGicLowLevelExample(CPU_BASEADDR, DIST_BASEADDR);
 	/* receive and process packets */
 	xil_printf("############################################################\r\n");
 	while (1) {

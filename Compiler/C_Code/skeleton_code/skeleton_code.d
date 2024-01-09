@@ -13,8 +13,7 @@
  ../Xilinx_Include/bspinclude/include/xil_assert.h \
  ../Xilinx_Include/bspinclude/include/xpseudo_asm.h \
  ../Xilinx_Include/bspinclude/include/xreg_cortexa53.h \
- ../Xilinx_Include/bspinclude/include/xpseudo_asm_gcc.h \
- ../Xilinx_Include/bspinclude/include/xil_printf.h
+ ../Xilinx_Include/bspinclude/include/xpseudo_asm_gcc.h
 E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:
 ../Xilinx_Include/bspinclude/include/xparameters.h:
 ../Xilinx_Include/bspinclude/include/xparameters_ps.h:
@@ -28,4 +27,3 @@ E:\RFSoC\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Drive
 ../Xilinx_Include/bspinclude/include/xpseudo_asm.h:
 ../Xilinx_Include/bspinclude/include/xreg_cortexa53.h:
 ../Xilinx_Include/bspinclude/include/xpseudo_asm_gcc.h:
-../Xilinx_Include/bspinclude/include/xil_printf.h:

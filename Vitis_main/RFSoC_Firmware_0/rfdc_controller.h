@@ -47,14 +47,15 @@
 #define M_AXI_HPM1_FPD_ADDR XPAR_AXI_HPM1_FPD_0_S_AXI_BASEADDR
 #define CPU_BASEADDR		XPAR_SCUGIC_0_CPU_BASEADDR
 #define DIST_BASEADDR		XPAR_SCUGIC_0_DIST_BASEADDR
+#define GIC_DEVICE_INT_MASK        0x00020000
 
 //Memory address
-#define DRAM_BASE_ADDRESS 0xf00000
-#define STACK_START_PTR_ADDR 0x700010
-#define STACK_END_PTR_ADDR 0x700020
-#define HEAP_START_PTR_ADDR 0x700030
-#define HEAP_END_PTR_ADDR 0x700040
-#define ENTRY_PTR_ADDR 0x700050
+#define DRAM_BASE_ADDRESS 	0x800f00000
+#define STACK_START_PTR_ADDR 0x800700010
+#define STACK_END_PTR_ADDR 	0x800700020
+#define HEAP_START_PTR_ADDR 0x800700030
+#define HEAP_END_PTR_ADDR 	0x800700040
+#define ENTRY_PTR_ADDR 		0x800700050
 
 #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
 
@@ -63,7 +64,7 @@
 #endif
 
 #define MODULE_NUM 4
-#define FNCT_NUM 5
+#define FNCT_NUM 6
 
 struct module_tuple{
 	int64_t  num;
@@ -151,6 +152,7 @@ void tcp_slowtmr(void);
 void lwip_init();
 
 /*Interrupt Maker*/
-int ScuGicLowLevelExample(u32 CpuBaseAddress, u32 DistBaseAddress);
+void ELF_run_interrupt();
+void ELF_stop_interrupt();
 
 #endif

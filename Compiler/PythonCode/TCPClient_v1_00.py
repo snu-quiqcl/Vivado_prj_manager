@@ -108,6 +108,9 @@ class RFSoC:
             self.tcp.write(data_list[i])
             a = self.tcp.read()
     
+    def stop_bin(self):
+        self.tcp.send('#BIN#stop_binary#!EOL#');
+    
 
 if __name__ == "__main__": 
     RFSoC = RFSoC()

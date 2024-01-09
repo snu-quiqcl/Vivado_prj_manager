@@ -7,6 +7,7 @@ Created on Wed Aug  2 18:01:13 2023
 import TCPClient_v1_00 as TCP
 import C_compiler as elf_maker
 import python2C as interpreter
+import time
 
 class RFSoC_Mgr(TCP.RFSoC):
     def __init__(self):
@@ -37,6 +38,9 @@ class RFSoC_Mgr(TCP.RFSoC):
         
     def set_file_name(self, file_name):
         self.file_name = file_name.replace('.cpp', '').replace('.c', '')
+        
+    def stopRFSoC(self):
+        self.tcp.write("#BIN#stop_binary#!EOL#");
         
 if __name__ == "__main__":
     file_name = 'skeleton_code'

@@ -1,6 +1,5 @@
 #include "RFSoC_Driver.h"
 #include "malloc.h"
-#include "xil_printf.h"
 
 int main(){
     DAC dac_0;
@@ -109,5 +108,11 @@ int main(){
     tc_0.auto_stop();
     tc_0.reset();
 
-    xil_printf("hello\r\n");
+    xil_printf("running\r\n");
+
+    while(1){
+        xil_printf("aasdf");
+        xil_printf("asd");
+    }
+    xil_printf("???");
 }

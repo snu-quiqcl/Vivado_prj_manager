@@ -32,7 +32,8 @@ const struct fnct_tuple FNCT[FNCT_NUM] = {
 	{1,"set_clock"},					//CPU
 	{2,"read_sampling_freq"},			//CPU
 	{3,"save_binary"},					//BIN
-	{4,"run_binary"}					//BIN
+	{4,"run_binary"},					//BIN
+	{5,"stop_binary"}					//BIN
 };
 
 unsigned int LMK04208_CKin[1][26] = {
@@ -132,16 +133,19 @@ int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_po
 		case 3:
 			xil_printf("SAVE BINARY\r\n");
 			xil_printf("BIN %d\r\n",fnct_num);
-			xil_printf("BIN ENT %d\r\n",entry_point);
-			xil_printf("BIN STACK START %d\r\n",stack_start);
-			xil_printf("BIN %d\r\n",stack_end);
-			xil_printf("BIN %d\r\n",heap_start);
-			xil_printf("BIN %d\r\n",heap_end);
-			xil_printf("BIN %d\r\n",packet_number);
+			xil_printf("BIN ENT %llx\r\n",entry_point);
+			xil_printf("BIN STACK START %llx\r\n",stack_start);
+			xil_printf("BIN %llx\r\n",stack_end);
+			xil_printf("BIN %llx\r\n",heap_start);
+			xil_printf("BIN %llx\r\n",heap_end);
+			xil_printf("BIN %llx\r\n",packet_number);
 			save_binary(tpcb, entry_point, stack_start, stack_end, heap_start, heap_end, packet_number);
 			break;
 		case 4:
-			run_binary();
+			ELF_run_interrupt();
+			break;
+		case 5:
+			ELF_stop_interrupt();
 			break;
 		default:
 			xil_printf("No matching function\r\n");

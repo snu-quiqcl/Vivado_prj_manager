@@ -106,7 +106,7 @@ int main()
 	asm volatile ("mrs %0, MPIDR_EL1" : "=r" (mpidr));
 	cpu_id = mpidr & 0xFF;
 	xil_printf("CPU0 ID : %d\r\n",cpu_id);
-	ScuGicLowLevelExample(CPU_BASEADDR, DIST_BASEADDR);
+
 	/* receive and process packets */
 	xil_printf("############################################################\r\n");
 	while (1) {

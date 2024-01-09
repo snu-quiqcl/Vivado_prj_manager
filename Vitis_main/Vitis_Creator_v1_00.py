@@ -20,14 +20,10 @@ class Vitis_maker:
         self.bsp_include_dir = os.path.join(self.git_dir,r'RFSoC\RFSoC_Design_V1_1\VITIS\RFSoC_Firmware_plt\export\RFSoC_Firmware_plt\sw\RFSoC_Firmware_plt\standalone_domain\bspinclude')
         self.xilinx_include_dir = os.path.join(self.git_dir,r'Vivado_prj_manager\Compiler\Xilinx_Include')
         self.skeleton_dir = os.path.join(self.git_dir,r'Vivado_prj_manager\Compiler\C_Code\skeleton_code')
-        self.lang = 'C'
-        
-        if self.lang == 'C++': # LWIP -> need extern "C"...
-            self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware_CPP')
-            self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS_CPP')
-        else:
-            self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware')
-            self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS')
+        self.TCP_firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware_0')
+        self.realtime_firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware_1')
+        self.realtime_linker_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware_1_linker')
+        self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS')
             
         self.ensure_directory_exists(self.target_dir)
     
@@ -93,7 +89,10 @@ class Vitis_maker:
 platform create -name "RFSoC_Firmware_plt" -hw "{self.xsa_dir}" -proc psu_cortexa53_0 -os standalone -arch 64-bit -fsbl-target psu_cortexa53_0
 platform read {os.path.join(self.target_dir,'RFSoC_Firmware_plt','platform.spr')}
 platform active {{RFSoC_Firmware_plt}}
+domain create -name {{psu_cortexa53_1}} -os {{standalone}} -proc {{psu_cortexa53_1}} -arch {{64-bit}} -display-name {{psu_cortexa53_1}} -desc {{}} -runtime {{cpp}}
+platform generate -domains psu_cortexa53_1 
 domain active standalone_domain
+domain active psu_cortexa53_1
 
 platform write
 platform generate -domains 
@@ -131,15 +130,12 @@ platform generate -domains
         return file_list
     
     def make_vitis_application(self):
-        if self.lang == 'C++':
-            self.tcl_commands += f"""
-app create -name RFSoC_Firmware_app -platform RFSoC_Firmware_plt -proc psu_cortexa53_0 -os standalone -lang C++ -template {{Empty Application (C++)}} -domain standalone_domain
-importsources -name RFSoC_Firmware_app -path "{self.firmware_dir}" -soft-link
-            """
-        else:
-            self.tcl_commands += f"""
+        self.tcl_commands += f"""
 app create -name RFSoC_Firmware_app -platform RFSoC_Firmware_plt -proc psu_cortexa53_0 -os standalone -lang C -template {{Empty Application}} -domain standalone_domain
-importsources -name RFSoC_Firmware_app -path "{self.firmware_dir}" -soft-link
+app create -name RealTime_Firmware_app -sysproj RFSoC_Firmware_app_system -proc psu_cortexa53_1 -os standalone -lang C -template {{Empty Application}} -domain psu_cortexa53_1
+importsources -name RFSoC_Firmware_app -path "{self.TCP_firmware_dir}" -soft-link
+importsources -name RealTime_Firmware_app -path "{self.realtime_firmware_dir}" -soft-link
+importsources -name RealTime_Firmware_app -path "{self.realtime_linker_dir}\lscript.ld"
             """
         
         self.tcl_commands += '\n'
@@ -147,17 +143,6 @@ importsources -name RFSoC_Firmware_app -path "{self.firmware_dir}" -soft-link
     def set_workspace(self):
         self.tcl_commands += f'setws \"{self.target_dir}\"'
         self.tcl_commands += '\n'
-    
-    def set_lang(self, lang):
-        self.lang = lang
-        if self.lang == 'C++': # LWIP -> need extern "C"...
-            self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware_CPP')
-            self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS_CPP')
-        else:
-            self.firmware_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Firmware')
-            self.target_dir = os.path.join(self.git_dir,'RFSoC','RFSoC_Design_V1_1','VITIS')
-            
-        self.ensure_directory_exists(self.target_dir)
         
     def make_skeleton_code(self):
         # XPAR_DAC_CONTROLLER_0_BASEADDR

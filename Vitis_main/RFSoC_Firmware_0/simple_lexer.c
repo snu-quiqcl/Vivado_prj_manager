@@ -41,7 +41,7 @@ int64_t simple_lexer(struct tcp_pcb *tpcb, char * inst){
 					current_addr = (volatile unsigned char *)DRAM_BASE_ADDRESS;
 					current_packet_num = 0;
 				}
-				else if( fnct_num == 4 ){
+				else if( fnct_num == 4 || fnct_num == 5 ){
 					run_bin_process(tpcb, fnct_num, 0, 0, 0, 0, 0, 0);
 				}
 			}
@@ -54,19 +54,6 @@ int64_t simple_lexer(struct tcp_pcb *tpcb, char * inst){
 					i++;
 				}
 				current_packet_num++;
-				//STATUS BAR...
-				/*
-for i in range(20):
-    a = f"""else if( current_packet_num == {i} * packet_number / 20 ){{
-    xil_printf("\\r");
-    xil_printf("TCP DATA STATUS ["""
-    for j in range(i+1):
-        a += '##'
-    for j in range(19-i):
-        a += '--'
-    a +=']");\n}'
-    print(a)
-				 */
 				if( current_packet_num == 0 * packet_number / 20 ){
 				    xil_printf("\r");
 				    xil_printf("TCP DATA STATUS [##--------------------------------------]");

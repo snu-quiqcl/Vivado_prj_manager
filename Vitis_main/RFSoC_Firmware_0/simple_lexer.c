@@ -19,16 +19,17 @@ int64_t simple_lexer(struct tcp_pcb *tpcb, char * inst){
 	module_num = get_module(inst);
 
 	switch(module_num){
-		case 0: // CPU
+		case CPU_MODULE_NUM: // CPU
 			fnct_num = get_fnct(inst);
+			xil_printf("%d\r\n",fnct_num);
 			param_num = get_param(inst,3,4);
 			run_cpu_process(tpcb,fnct_num,param_num);
 			break;
 
-		case 1: // Binary
+		case BIN_MODULE_NUM: // Binary
 			if(binary_mode == 0){
 				fnct_num = get_fnct(inst);
-				if( fnct_num == 3 ){
+				if( fnct_num == SAVE_BIN_FNCT_NUM ){
 					xil_printf("SAVE DATA\r\n");
 					entry_point = get_param(inst,3,4);
 					stack_start = get_param(inst,4,5);
@@ -41,7 +42,7 @@ int64_t simple_lexer(struct tcp_pcb *tpcb, char * inst){
 					current_addr = (volatile unsigned char *)DRAM_BASE_ADDRESS;
 					current_packet_num = 0;
 				}
-				else if( fnct_num == 4 || fnct_num == 5 ){
+				else if( fnct_num == RUN_BIN_FNCT_NUM || fnct_num == STOP_BIN_FNCT_NUM ){
 					run_bin_process(tpcb, fnct_num, 0, 0, 0, 0, 0, 0);
 				}
 			}

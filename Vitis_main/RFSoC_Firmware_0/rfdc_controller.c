@@ -21,19 +21,20 @@
 static int64_t sampling_freq = 0;
 
 const struct module_tuple MODULE[MODULE_NUM] = {
-	{0,"CPU",0},
-	{1,"BIN",0},
-	{2,"DAC00",XPAR_DAC_CONTROLLER_0_BASEADDR},
-	{3,"TIME_CONT",XPAR_TIMECONTROLLER_0_BASEADDR}
+	{CPU_MODULE_NUM,"CPU",0},
+	{BIN_MODULE_NUM,"BIN",0},
+	{DAC00_MODULE_NUM,"DAC00",XPAR_DAC_CONTROLLER_0_BASEADDR},
+	{TIME_CONT_NUM,"TIME_CONT",XPAR_TIMECONTROLLER_0_BASEADDR}
 };
 
 const struct fnct_tuple FNCT[FNCT_NUM] = {
-	{0,"write_fifo"},					//RTIO
-	{1,"set_clock"},					//CPU
-	{2,"read_sampling_freq"},			//CPU
-	{3,"save_binary"},					//BIN
-	{4,"run_binary"},					//BIN
-	{5,"stop_binary"}					//BIN
+	{WRITE_FIFO_FNCT_NUM,"write_fifo"},					//RTIO
+	{SET_CLK_FNCT_NUM,"set_clock"},					//CPU
+	{READ_SMPL_FNCT_NUM,"read_sampling_freq"},			//CPU
+	{SAVE_BIN_FNCT_NUM,"save_binary"},					//BIN
+	{RUN_BIN_FNCT_NUM,"run_binary"},					//BIN
+	{STOP_BIN_FNCT_NUM,"stop_binary"},					//BIN
+	{TRANS_CALLBACK_FNCT_NUM,"trans_callback"}
 };
 
 unsigned int LMK04208_CKin[1][26] = {
@@ -56,17 +57,12 @@ static INLINE void Xil_Out128(UINTPTR Addr, __uint128_t Value)
  */
 
 void set_clock(int64_t freq){
-	print("\n Configuring the Clock \r\n");
+	print("\n Configuring the Clock... \r\n");
 	LMK04208ClockConfig(I2CBUS, LMK04208_CKin);
 	LMX2594ClockConfig(I2CBUS, freq);
 	//temporarily
 	sampling_freq = freq * 1000;
-	print("Clock Config Done\n\r");
-#ifdef XPAR_DAC_CONTROLLER_0_BASEADDR
-	xil_printf("DAC CONTROLLER BASE ADDRESS : %I64d\r\n",XPAR_DAC_CONTROLLER_0_BASEADDR);
-#else
-	xil_printf("NO DAC CONTROLLER BASE ADDRESS ERROR\r\n");
-#endif
+	xil_printf("Clock Config Done with %d Hz\n\r",sampling_freq);
 	return;
 }
 
@@ -77,9 +73,6 @@ void write_fifo(int64_t module_num, int64_t timestamp, int64_t instruction){
 int64_t read_sampling_freq(struct tcp_pcb *tpcb){
 	char str[1024];
 	int642str(sampling_freq,str);
-#ifdef DEBUG_RFDC
-	xil_printf("str_len : %d\r\n",strlen(str));
-#endif
 	if (tcp_sndbuf(tpcb) > strlen(str)) {
 		tcp_write(tpcb, str, strlen(str), 1);
 	}
@@ -99,15 +92,15 @@ int64_t inst_process(struct tcp_pcb *tpcb, char * TCP_data){
 }
 
 int64_t run_cpu_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t param_num){
-#ifdef DEBUG_RFDC
-	xil_printf("CPU %d %d\r\n", fnct_num, param_num);
-#endif
 	switch(fnct_num){
-		case 1:
+		case SET_CLK_FNCT_NUM:
 			set_clock(param_num);
 			break;
-		case 2:
+		case READ_SMPL_FNCT_NUM:
 			read_sampling_freq(tpcb);
+			break;
+		case TRANS_CALLBACK_FNCT_NUM:
+			trans_callback();
 			break;
 		default:
 			xil_printf("No matching function\r\n");
@@ -118,7 +111,7 @@ int64_t run_cpu_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t param_nu
 
 int64_t run_rtio_process(struct tcp_pcb *tpcb, int64_t module_num, int64_t fnct_num, int64_t timestamp_num, int64_t param_num){
 	switch(fnct_num){
-		case 0:
+		case WRITE_FIFO_FNCT_NUM:
 			write_fifo(module_num, timestamp_num, param_num);
 			break;
 		default:
@@ -130,7 +123,7 @@ int64_t run_rtio_process(struct tcp_pcb *tpcb, int64_t module_num, int64_t fnct_
 
 int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_point, int64_t stack_start, int64_t stack_end, int64_t heap_start, int64_t heap_end, int64_t packet_number){
 	switch(fnct_num){
-		case 3:
+		case SAVE_BIN_FNCT_NUM:
 			xil_printf("SAVE BINARY\r\n");
 			xil_printf("BIN %d\r\n",fnct_num);
 			xil_printf("BIN ENT %llx\r\n",entry_point);
@@ -141,10 +134,10 @@ int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_po
 			xil_printf("BIN %llx\r\n",packet_number);
 			save_binary(tpcb, entry_point, stack_start, stack_end, heap_start, heap_end, packet_number);
 			break;
-		case 4:
+		case RUN_BIN_FNCT_NUM:
 			ELF_run_interrupt();
 			break;
-		case 5:
+		case STOP_BIN_FNCT_NUM:
 			ELF_stop_interrupt();
 			break;
 		default:

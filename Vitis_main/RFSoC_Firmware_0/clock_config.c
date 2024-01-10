@@ -700,7 +700,7 @@ void LMX2594ClockConfig(int XIicBus, int XFrequency)
 	for(XFreqIndex=0 ; XFreqIndex<MAX_FREQ; XFreqIndex++) {
 		if (ClockingLmx[XFreqIndex].XFrequency == XFrequency) {
 			freq_index =XFreqIndex;
-			xil_printf("LMX configured to frequency %d \n", XFrequency);
+			xil_printf("LMX configured to frequency %d \r\n", XFrequency);
 		}
 	}
 

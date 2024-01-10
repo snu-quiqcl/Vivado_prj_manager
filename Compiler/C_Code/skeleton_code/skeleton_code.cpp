@@ -1,5 +1,6 @@
 #include "RFSoC_Driver.h"
 #include "malloc.h"
+#define EXP_DATA_ADDR 0x700000
 
 int main(){
     DAC dac_0;
@@ -110,9 +111,31 @@ int main(){
 
     xil_printf("running\r\n");
 
-    while(1){
-        xil_printf("aasdf");
-        xil_printf("asd");
+    volatile int64_t * reg_addr;
+
+    reg_addr = (volatile int64_t *)EXP_DATA_ADDR;
+
+    while(reg_addr[0] != 0){
+        xil_printf("curr : %d\r\n",reg_addr[0]);
     }
-    xil_printf("???");
+
+    volatile char * reg_char_addr = (volatile char *)EXP_DATA_ADDR;
+    for( int64_t i = 0 ; i < 128; i++ ){
+        //*(reg_char_addr+i+8) = (char)i;
+    }
+
+    for( int64_t i = 0 ; i < 16; i++){
+        *(reg_addr+i+1) = i + 0x010203040506;
+    }
+    reg_addr[0] = 16;
+
+    while(reg_addr[0] !=0 ){
+
+    }
+    xil_printf("new data set\r\n");
+    *(reg_addr+1) = (int64_t) 0x0000;
+    *(reg_addr+2) = (int64_t) 0x2222;
+    reg_addr[0] = 2;
+
+    while(1){}
 }

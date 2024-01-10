@@ -96,16 +96,17 @@ int main()
 	print_ip_settings(&ipaddr, &netmask, &gw);
 
 	/* start the application (web server, rxtest, txtest, etc..) */
-	start_application();
+	struct tcp_pcb *pcb = start_application();
 	set_clock(2000000);
 	/* set binary mode false*/
 	set_current_binary_mode(0);
+	set_exp_data_mask(0);
 
 	/*print CPU ID for multiprocessing*/
 	uint32_t mpidr, cpu_id;
 	asm volatile ("mrs %0, MPIDR_EL1" : "=r" (mpidr));
 	cpu_id = mpidr & 0xFF;
-	xil_printf("CPU0 ID : %d\r\n",cpu_id);
+	xil_printf("CPU0 ID : %d and %llx\r\n",cpu_id,pcb);
 
 	/* receive and process packets */
 	xil_printf("############################################################\r\n");
@@ -117,6 +118,9 @@ int main()
 		if (TcpSlowTmrFlag) {
 			tcp_slowtmr();
 			TcpSlowTmrFlag = 0;
+		}
+		if( check_exp_data_mask() ){
+			send_exp_data(pcb);
 		}
 		xemacif_input(echo_netif);
 		transfer_data();

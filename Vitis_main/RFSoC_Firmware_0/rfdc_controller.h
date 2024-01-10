@@ -56,6 +56,7 @@
 #define HEAP_START_PTR_ADDR 0x800700030
 #define HEAP_END_PTR_ADDR 	0x800700040
 #define ENTRY_PTR_ADDR 		0x800700050
+#define EXP_DATA_ADDR		0x700000
 
 #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
 
@@ -63,8 +64,23 @@
 #define DEBUG_RFDC
 #endif
 
+//Module number definition
+#define CPU_MODULE_NUM 		0
+#define BIN_MODULE_NUM 		1
+#define DAC00_MODULE_NUM 	2
+#define TIME_CONT_NUM 		3
+
+//function number definition
+#define WRITE_FIFO_FNCT_NUM 0
+#define SET_CLK_FNCT_NUM	1
+#define READ_SMPL_FNCT_NUM	2
+#define SAVE_BIN_FNCT_NUM	3
+#define RUN_BIN_FNCT_NUM	4
+#define STOP_BIN_FNCT_NUM	5
+#define TRANS_CALLBACK_FNCT_NUM 6
+
 #define MODULE_NUM 4
-#define FNCT_NUM 6
+#define FNCT_NUM 7
 
 struct module_tuple{
 	int64_t  num;
@@ -120,11 +136,15 @@ int64_t save_binary(struct tcp_pcb *tpcb, int64_t entry_point, int64_t stack_sta
 /*
  * Echo
  */
-int start_application();
+struct tcp_pcb * start_application();
 err_t accept_callback(void *arg, struct tcp_pcb *newpcb, err_t err);
 err_t recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err);
 void print_app_header();
 int transfer_data();
+void set_exp_data_mask(int64_t data);
+int64_t check_exp_data_mask();
+void send_exp_data(struct tcp_pcb *pcb);
+void trans_callback();
 
 /*
  * RFDC Controller
@@ -143,7 +163,6 @@ int64_t run_bin_process(struct tcp_pcb *tpcb, int64_t fnct_num, int64_t entry_po
 
 /* defined by each RAW mode application */
 void print_app_header();
-int start_application();
 int transfer_data();
 void tcp_fasttmr(void);
 void tcp_slowtmr(void);

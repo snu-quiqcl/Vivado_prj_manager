@@ -25,6 +25,7 @@
 #define M_AXI_HPM1_FPD_ADDR XPAR_AXI_HPM1_FPD_0_S_AXI_BASEADDR
 #define CPU_BASEADDR		XPAR_SCUGIC_0_CPU_BASEADDR
 #define DIST_BASEADDR		XPAR_SCUGIC_0_DIST_BASEADDR
+#define GIC_DEVICE_INT_MASK        0x00010000
 
 //Memory address
 #define DRAM_BASE_ADDRESS 	0x800f00000
@@ -149,11 +150,8 @@ void stop_binary(){
 		:
 		:
 	);
+	xil_printf("\r\nSTOP ELF DONE\r\n");
 	clear_DRAM();
-
-	Xil_DCacheFlush();
-	Xil_ICacheInvalidate();
-
 	return 0;
 }
 int64_t run_binary(){
@@ -260,6 +258,7 @@ int64_t run_binary(){
 		:
 		:
 	);
+	sleep(1);
 	xil_printf("\r\nELF DONE\r\n");
 	clear_DRAM();
 
@@ -290,11 +289,6 @@ void LowInterruptHandler(u32 CallbackRef)
 	}
 
 	/*
-	 * If the interrupt is shared, do some locking here if there are
-	 * multiple processors.
-	 */
-
-	/*
 	 * Execute the ISR. For this example set the global to 1.
 	 * The software trigger is cleared by the ACK.
 	 */
@@ -305,35 +299,39 @@ void LowInterruptHandler(u32 CallbackRef)
 	 * Let this function return, the boot code will restore the stack.
 	 */
 	XScuGic_WriteReg(BaseAddress, XSCUGIC_EOI_OFFSET, IntID);
-	xil_printf("CPU 1 \r\n");
 
 	if( IntID == INT_ID_RUN_BIN ){
-		xil_printf("run start\r\n");
 		interrupt_run_binary = 1;
 	}
 
 	else if( IntID == INT_ID_STOP_BIN){
-		volatile int64_t * reg_addr;
+		if( interrupt_run_binary == 1){
+			volatile int64_t * reg_addr;
 
-		reg_addr = (volatile int64_t *)EXIT_PTR_ADDR;
-		*(reg_addr) = (volatile int64_t)(stop_binary);
-		interrupt_run_binary = 0;
+			reg_addr = (volatile int64_t *)EXIT_PTR_ADDR;
+			*(reg_addr) = (volatile int64_t)(stop_binary);
+			interrupt_run_binary = 0;
 
-		__asm__ __volatile__ (
-			"movz x2, #0x0060\n\t"
-			"movk x2, #0x0070, lsl 16\n\t"
-			"movk x2, #0x0008, lsl 32\n\t"
-			"movk x2, #0x0000, lsl 48\n\t"
-			"ldr x0, [x2]\n\t"
-			"msr elr_el1, x0\n\t"
-			"msr elr_el2, x0\n\t"
-			"msr elr_el3, x0\n\t"
-			"eret\n\t"
-			:                // No output operands
-			:
-			:
-		);
+			__asm__ __volatile__ (
+				"movz x2, #0x0060\n\t"
+				"movk x2, #0x0070, lsl 16\n\t"
+				"movk x2, #0x0008, lsl 32\n\t"
+				"movk x2, #0x0000, lsl 48\n\t"
+				"ldr x0, [x2]\n\t"
+				"msr elr_el1, x0\n\t"
+				"msr elr_el2, x0\n\t"
+				"msr elr_el3, x0\n\t"
+				"eret\n\t"
+				:                // No output operands
+				:
+				:
+			);
+		}
 	}
+}
+
+void make_interrupt(){
+	XScuGic_WriteReg(DIST_BASEADDR, XSCUGIC_SFI_TRIG_OFFSET, GIC_DEVICE_INT_MASK);
 }
 
 int main(void)
@@ -349,9 +347,7 @@ int main(void)
 	xil_printf("Waiting for command...\r\n");
 	while(1){
 		if( interrupt_run_binary == 1){
-			xil_printf("run start in main\r\n");
 			run_binary();
-			xil_printf("\r\nELF DONE\r\n");
 			interrupt_run_binary = 0;
 		}
 	}

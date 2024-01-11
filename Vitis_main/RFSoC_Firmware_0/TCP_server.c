@@ -152,7 +152,7 @@ void send_exp_data(struct tcp_pcb *pcb){
 	char * payload = (char *) malloc(sizeof(char)*(len+1));
 
 
-	if (1) {
+	if (len < 8001) {
 		for( int i = 0 ; i < len; i++){
 			*(payload+i) = *(reg_addr_char+i+8);
 		}

@@ -83,28 +83,6 @@ void SetupInterruptSystem(void)
 	Xil_ExceptionEnable();
 }
 
-/*****************************************************************************/
-/**
-*
-* This function is designed to look like an interrupt handler in a device
-* driver. This is typically a 2nd level handler that is called from the
-* interrupt controller interrupt handler.  This handler would typically
-* perform device specific processing such as reading and writing the registers
-* of the device to clear the interrupt condition and pass any data to an
-* application using the device driver.
-*
-* @param    CallbackRef is passed back to the device driver's interrupt handler
-*           by the XScuGic driver.  It was given to the XScuGic driver in the
-*           XScuGic_Connect() function call.  It is typically a pointer to the
-*           device driver instance variable if using the Xilinx Level 1 device
-*           drivers.  In this example, we are passing it as scugic cpu
-*           interface base address to access ack and EOI registers.
-*
-* @return   None.
-*
-* @note     None.
-*
-******************************************************************************/
 void stop_binary(){
 	__asm__ __volatile__ (
 		"movz x2, #0x0000\n\t"

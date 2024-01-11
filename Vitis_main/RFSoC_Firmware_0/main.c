@@ -52,13 +52,8 @@ print_ip_settings(ip_addr_t *ip, ip_addr_t *mask, ip_addr_t *gw)
 	print_ip("Gateway : ", gw);
 }
 
-
-int main()
-{
-#if LWIP_IPV6==0
+void initialization(){
 	ip_addr_t ipaddr, netmask, gw;
-
-#endif
 	/* the mac address of the board. this should be unique per board { 0x00, 0x0a, 0x35, 0x00, 0x01, 0x02 }*/
 	unsigned char mac_ethernet_address[] =
 	{ 0x00, 0x0a, 0x35, 0x07, 0x8B, 0x5E };
@@ -94,6 +89,11 @@ int main()
 	/* specify that the network if is up */
 	netif_set_up(echo_netif);
 	print_ip_settings(&ipaddr, &netmask, &gw);
+}
+
+int main()
+{
+	initialization();
 
 	/* start the application (web server, rxtest, txtest, etc..) */
 	struct tcp_pcb *pcb = start_application();
@@ -102,13 +102,9 @@ int main()
 	set_current_binary_mode(0);
 	set_exp_data_mask(0);
 
-	/*print CPU ID for multiprocessing*/
-	uint32_t mpidr, cpu_id;
-	asm volatile ("mrs %0, MPIDR_EL1" : "=r" (mpidr));
-	cpu_id = mpidr & 0xFF;
-	xil_printf("CPU0 ID : %d and %llx\r\n",cpu_id,pcb);
-
 	/* receive and process packets */
+	xil_printf("############################################################\r\n");
+	xil_printf("###            QuIQCL RFSoC Firmware V1_00               ###\r\n");
 	xil_printf("############################################################\r\n");
 	while (1) {
 		if (TcpFastTmrFlag) {

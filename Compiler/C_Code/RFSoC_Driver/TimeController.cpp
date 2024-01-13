@@ -1,5 +1,9 @@
 #include "RFSoC_Driver.h"
 
+void TimeController::set_addr(uint64_t addr){
+    this->addr = addr;
+}
+
 void TimeController::reset(){
     Xil_Out128(this-> addr, MAKE128CONST((uint64_t)0,(uint64_t)2));
 }

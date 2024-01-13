@@ -1,5 +1,11 @@
 #include "RFSoC_Driver.h"
 
+void TTLx8_out::set_addr(uint64_t addr, uint64_t * last_pulse_ptr, uint64_t channel){
+    this->addr          = addr;
+    //this->channel       = channel;
+    //this->last_pulse    = last_pulse_ptr;
+}
+
 void TTLx8_out::set(uint64_t pulse){
     xil_printf("timestamp %d timestamp corase %d last pulse %d\r\n",get_timestamp(), get_timestamp_coarse(), this->last_output_time);
 

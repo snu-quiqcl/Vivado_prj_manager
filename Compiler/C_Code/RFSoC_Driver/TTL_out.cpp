@@ -1,5 +1,11 @@
 #include "RFSoC_Driver.h"
 
+void TTL_out::set_addr(uint64_t addr, uint64_t * last_pulse_ptr, uint64_t channel){
+    this->addr          = addr;
+    this->channel       = channel;
+    this->last_pulse    = last_pulse_ptr;
+}
+
 void TTL_out::set(uint64_t pulse){
     uint64_t last_pulse = TTL_out::get_last_pulse();
     uint64_t channel = TTL_out::get_channel();

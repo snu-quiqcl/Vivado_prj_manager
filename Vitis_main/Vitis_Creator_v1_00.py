@@ -164,45 +164,51 @@ importsources -name RealTime_Firmware_app -path "{self.realtime_linker_dir}\lscr
         
         self.ensure_directory_exists(self.skeleton_dir)
         skeleton_code_path = os.path.join(self.skeleton_dir,'skeleton_code.cpp')
+        initialization_code = "void init_rfsoc(){\n"
         with open(skeleton_code_path,'w') as file:
             skeleton_code = """#include "RFSoC_Driver.h"
 #include "malloc.h"
 
-int main(){
 """
             for match in matches:
                 if match[0] == 'DAC_CONTROLLER':
-                    skeleton_code += f'    DAC dac_{match[1]};\n'
-                    skeleton_code += f'    dac_{match[1]}.set_addr(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
-                    skeleton_code += f'    dac_{match[1]}.flush_fifo();\n'
-                    skeleton_code += '\n'
+                    skeleton_code += f'DAC dac_{match[1]};\n'
+                    initialization_code += f'    dac_{match[1]}.set_addr(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    initialization_code += f'    dac_{match[1]}.flush_fifo();\n'
+                    
                 if match[0] == 'TTL_OUT':
-                    skeleton_code += f'    uint64_t * ttl_set_{match[1]}_ptr = (uint64_t *) malloc(sizeof(uint64_t));\n'
+                    initialization_code += f'    uint64_t * ttl_set_{match[1]}_ptr = (uint64_t *) malloc(sizeof(uint64_t));\n'
                     for i in range(8):
-                        skeleton_code += f'    TTL_out ttl_out_{ int(match[1]) * 8 + i }(XPAR_{match[0]}_{match[1]}_BASEADDR,ttl_set_{match[1]}_ptr,{i});\n'
-                    skeleton_code += f'    ttl_out_{ int(match[1]) }.flush_fifo();\n'
-                    skeleton_code += '\n'
+                        skeleton_code += f'TTL_out ttl_out_{ int(match[1]) * 8 + i };\n'
+                        initialization_code += f'    ttl_out_{ int(match[1]) * 8 + i }.set_addr(XPAR_{match[0]}_{match[1]}_BASEADDR,ttl_set_{match[1]}_ptr,{i});\n'
+                    initialization_code += f'    ttl_out_{ int(match[1]) * 8 }.flush_fifo();\n'
+                    
                 if match[0] == 'TTLX8_OUT':
-                    skeleton_code += f'    TTLx8_out ttlx8_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
-                    skeleton_code += f'    ttlx8_out_{match[1]}.flush_fifo();\n'
-                    skeleton_code += '\n'
+                    skeleton_code += f'TTLx8_out ttlx8_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    initialization_code += f'    ttlx8_out_{match[1]}.flush_fifo();\n'
+                    
                 if match[0] == 'TIMECONTROLLER':
-                    skeleton_code += f'    TimeController tc_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
-                    skeleton_code += f'    tc_{match[1]}.auto_stop();\n'
-                    skeleton_code += f'    tc_{match[1]}.reset();\n'
-                    skeleton_code += '\n'
-            skeleton_code += '}'
+                    skeleton_code += f'TimeController tc_{match[1]};\n'
+                    initialization_code += f'    tc_{match[1]}.set_addr(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    initialization_code += f'    tc_{match[1]}.auto_stop();\n'
+                    initialization_code += f'    tc_{match[1]}.reset();\n'
+                
+            initialization_code += '}\n\n'
+            skeleton_code += initialization_code
+            skeleton_code += """int main(){
+    init_rfsoc();
+}"""
             file.write(skeleton_code)
 
             
 if __name__ == "__main__":
     vtm = Vitis_maker()
     
-    vtm.set_workspace()
-    vtm.make_vitis_platform()
-    vtm.make_vitis_application()
-    vtm.run_vitis_tcl()
+    # vtm.set_workspace()
+    # vtm.make_vitis_platform()
+    # vtm.make_vitis_application()
+    # vtm.run_vitis_tcl()
     
-    vtm.copy_bsp_include()
-    vtm.copy_bsp_lib()
+    # vtm.copy_bsp_include()
+    # vtm.copy_bsp_lib()
     vtm.make_skeleton_code()

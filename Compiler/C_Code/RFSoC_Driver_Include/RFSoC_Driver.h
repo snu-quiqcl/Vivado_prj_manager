@@ -144,6 +144,7 @@ class TTL_out{
             this->channel       = channel;
             this->last_pulse    = last_pulse_ptr;
         };
+        void set_addr(uint64_t addr, uint64_t * last_pulse_ptr, uint64_t channel);
         void set(uint64_t pulse);
         void set_ch(const char * pulse_ch);
         uint64_t get_last_pulse();
@@ -165,6 +166,7 @@ class TTLx8_out{
         TTLx8_out(uint64_t addr = ( (uint64_t) XPAR_TTLX8_OUT_0_BASEADDR ) ){
             this->addr          = addr;
         };
+        void set_addr(uint64_t addr, uint64_t * last_pulse_ptr, uint64_t channel);
         void set(uint64_t pulse);
         void set_ch(const char * pulse_ch);
         uint64_t get_last_pulse();
@@ -182,6 +184,7 @@ class TimeController{
         TimeController(uint64_t addr = (uint64_t) XPAR_TIMECONTROLLER_0_BASEADDR){
             this-> addr         = addr;
         };
+        void set_addr(uint64_t addr);
         void reset();
         void auto_start();
         void auto_stop();

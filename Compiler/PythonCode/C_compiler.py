@@ -3,9 +3,6 @@
 Created on Tue Aug  1 23:27:53 2023
 
 @author: QC109_4
-aarch64-none-elf-gcc -march=armv8-a -mcpu=cortex-a53 -nostartfiles -T../MALLOC_EXP.ld -I../include mallocr.c ../_sbrk.c ../close.c ../write.c ../lseek.c ../read.c ../inbyte.c ../lib/libxil.a -o mallocr.o
-aarch64-none-elf-gcc -march=armv8-a -mcpu=cortex-a53 -nostartfiles -T../MALLOC_EXP.ld -I../include ../init/start_custom.S mallocr.c ../_sbrk.c ../close.c ../write.c ../lseek.c ../read.c ../inbyte.c ../lib/libxil.a -o mallocr.o
--> this works -> dependency problem...
 """
 import subprocess
 import os
@@ -15,31 +12,56 @@ from capstone import * #pip install capstone
 class Compiler:
     def __init__(self):
         print('compiler')
+        # elf file object
         self.elf_data = None
+        # Compiler Object will not compile C Code if do_compile is set to False
         self.do_compile = False
+        # Save the entry point of the ELF file
         self.entry_point = 0x00
+        # Save the stack pointer address of the ELF file
         self.stack_start = 0x00
+        # Save the end of stack pointer address of the ELF file.
         self.stack_end = 0x00
+        # Save the head pointer address of the ELF file
         self.heap_start = 0x00
+        # Save the end of the heap pointer address of the ELF file
         self.heap_end = 0x00
-        self.elf_data = None
-        self.use_make = False
+        # If is_cpp is set to False, you use gcc compiler to compile your C Code.
+        # On the other side, if you set this to True, you will use g++ compiler to compile
+        # your code. Note that two compilers work differently when you compile 
+        # C and C++ files together
         self.is_cpp = True
+        # total_command is used temporaliry save gnu compiler command
         self.total_command = ''
+        # total_log save the compiler output
         self.total_log = ''
         
-        # self.git_dir = r'C:\Jeonghyun\GIT'
+        # Directory of your GIT
         self.git_dir = r'E:\RFSoC\GIT'
+        # Compiler use Xilinx bsp libraries. So, you have to set xilinx include diretory
+        # In this program, default xilinx library direcotry is set already, so you
+        # don't need to modify this variable.
         self.xilinx_include_dir = r'Vivado_prj_manager\Compiler\Xilinx_Include\bspinclude\include'
+        # Directory of RFSoC Driver C programs. In RFSoC Driver, there is DAC Controller driver, or TTL 
+        # driver etc. 
         self.rfsoc_driver_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver'
+        # Directory of RFSoC Driver header.
         self.rfsoc_driver_include_dir = r'Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include'
-        # self.clang = r'C:\Program Files\LLVM\bin\clang.exe' # You need to specify exact clang directory
-        self.clang = r'E:\LLVM\bin\clang.exe'
+        # full_* has full directory of each relative directories.
         self.full_rfsoc_driver_dir = os.path.join(self.git_dir,self.rfsoc_driver_dir)
         self.full_rfsoc_driver_include_dir = os.path.join(self.git_dir,self.rfsoc_driver_include_dir)
         self.full_xilinx_include_dir = os.path.join(self.git_dir, self.xilinx_include_dir)
     
-    def get_all_files_in_directory(self, directory,file_type):
+    def getAllFilesInDirectory(self, directory,file_type):
+        """
+        get all files which are in directory
+        Args:
+            directory : directory where you want to search
+            file_type : list of file types which you want to serach
+        
+        Returns:
+            list of files which are in directory and has type of file_type
+        """
         file_list = []
         is_filetype = False
         
@@ -53,7 +75,17 @@ class Compiler:
                 is_filetype = False
         return file_list
         
-    def read_elf_file(self, file_name):
+    def readELFfile(self, file_name):
+        """
+        read ELF file and get stack start, end, heap start, end address. In addition 
+        it gets entry point address where PC register has to jump to start 
+        program on CPU.
+        Args:
+            file_name : name of file
+        
+        Returns:
+            elf file 
+        """
         elf_file_name = f'../C_Code/{file_name}/' + file_name + '.elf'
         with open(elf_file_name, 'rb') as f:
             self.elf_data = f.read()
@@ -66,19 +98,7 @@ class Compiler:
             print(f"  Number of segments: {elf_file.num_segments()}")
             print(f"ENTRY POINT: \t0x{elf_file.header.e_entry:x}")
 
-            # Iterate over the sections and print information about each section
-            # print("\nSections:")
-            # for section in elf_file.iter_sections():
-            #     print(f"  {section.name} (type: {section['sh_type']}, size: {section['sh_size']})")
-            
             self.entry_point = elf_file.header.e_entry
-            
-            # output_file = "../C_Code/ELF_BIN.txt"
-            # with open(output_file, 'w') as output_f:
-            #     output_f.write("Contents of ELF file:\n")
-            #     hex_dump = [" ".join(f"{b:02X}" for b in self.elf_data[i:i+16]) for i in range(0, len(self.elf_data), 16)]
-            #     for line in hex_dump:
-            #         output_f.write(line + "\n")
             
             for section in elf_file.iter_sections():
                 # Check if the section is of type SHT_SYMTAB (symbol table)
@@ -98,402 +118,208 @@ class Compiler:
                         elif symbol.name == '_heap_end':
                             self.heap_end = symbol.entry.st_value
                             print(f'HEAP_END : \t\t{hex(self.heap_end)}')
-                            
-
-            # # You can also access the symbol table and print information about symbols
-            # if '.symtab' in elf_file:
-            #     print("\nSymbol table:")
-            #     for symbol in elf_file.get_section_by_name('.symtab').iter_symbols():
-            #         print(f"  {symbol.name} (value: 0x{symbol['st_value']:x}, size: {symbol['st_size']})")
-            
             
         return self.elf_data
     
-    def create_c_code_array(self, data):
-        c_code_array = []
-        for byte in data:
-            c_code_array.append(hex(byte))
-    
-        # Group the bytes into 16 bytes per line for better readability
-        c_code_lines = [', '.join(c_code_array[i:i+16]) for i in range(16*4096, len(c_code_array), 16)]
-        
-        # Join the lines with newlines and add C code array syntax
-        c_code = "const unsigned char elf_data[] = {\n"
-        c_code += ",\n".join(c_code_lines)
-        c_code += "\n};\n"
-        
-        return c_code
-    
-    def save_c_code_to_file(self, c_code, file_name):
-        output_filename = f'../C_Code/{file_name}/' + file_name + '_array.txt'
-        with open(output_filename, 'w') as f:
-            f.write(c_code)
             
-    def compile_ll_file(self,file_name):
-        cmd_conc = ''
-        filename, file_extension = os.path.splitext(file_name)
-        cmd = [
-                f'{self.clang}',
-                '--target=aarch64-none-unknown-elf',
-                '-mcpu=cortex-a53',
-                '-c',
-                '-Wall',
-                '-O2',
-                f'{filename}.ll',
-                '-o',
-                f'\"../C_Code/{filename}/{filename}.o\"'
-            ]
-        for line in cmd:
-            cmd_conc += (line + ' ')
-            
-        print(cmd_conc)
-        process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        stdout, stderr = process.communicate()
-        print(stderr)
-        self.total_command += cmd_conc + '\n'
-        self.total_log += stderr
+    def compileCode(self, file_name):
+        """
+        Compile the C Code to ELF file
+        Args:
+            file_name : directory and name of file. If should be same
         
-        ###############################################################
-        ## startup.S
-        ###############################################################
-        cmd = [
-                    'aarch64-none-elf-g++',                             #g++ also works
-                    '-Wall',
-                    '-O2',
-                    '-c',
-                    '-fmessage-length=0',
-                    f'-MT\"../C_Code/init/startup.o\"',
-                    '-D',
-                    '__BAREMETAL__',
-                    f'-I{self.full_rfsoc_driver_include_dir}',
-                    '-I../Xilinx_Include/bspinclude/include',
-                    '-MMD',
-                    '-MP',
-                    f'-MF\"../C_Code/init/startup.d\"',
-                    f'-MT\"../C_Code/init/startup.o\"',
-                    '-o',
-                    f'\"../C_Code/init/startup.o\"',
-                    '\"../C_Code/init/startup.S\"'
-                ]
-        #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
-        cmd_conc = ''
-        for line in cmd:
-            cmd_conc += (line + ' ')
-            
-        # Execute the command
-        process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        stdout, stderr = process.communicate()
-        print(stderr)
-        self.total_command += cmd_conc + '\n'
-        self.total_log += stderr
-        
-        ###############################################################
-        ## main.elf
-        ###############################################################
-        cmd = [
-                    'aarch64-none-elf-g++',
-                    f'-Wl,-T -Wl,../C_Code/linker/linker.ld',
-                    f'-L../Xilinx_Include/bsplib/lib',
-                    '-o',
-                    f'\"../C_Code/{file_name}/{file_name}.elf\"',
-                    f'../C_Code/{file_name}/{file_name}.o',
-                    f'{self.full_rfsoc_driver_dir}/RFSoC_lib.a',
-                    f'../C_Code/init/startup.o',
-                    '-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group',
-                    '-Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group',
-                    '-Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group',
-                    '-Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group',
-                    '-Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group'
-            ]
-        
-        cmd_conc =''
-        
-        for line in cmd:
-            cmd_conc += (line + ' ')
-            
-        print(cmd_conc)
-        process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        stdout, stderr = process.communicate()
-        print(stderr)
-        self.total_command += cmd_conc + '\n'
-        self.total_log += stderr
-        
-        current_file_dir, dump_ = os.path.split(os.path.realpath(__file__))
-        with open(os.path.join(current_file_dir,'LOG.txt'), 'w') as f:
-            f.write(self.total_log)
-        with open(os.path.join(current_file_dir,'CMD.txt'), 'w') as f:
-            f.write(self.total_command)
-            
-        log_dir = os.path.join(current_file_dir,'LOG.txt')
-        
-
-        # Check the return code
-        if 'error:' in self.total_log:
-            raise Exception(f'Compile error. Check {log_dir}')
-        else:
-            print("Compilation successful.")
-            
-    def compile_code(self, file_name):
+        Returns:
+            None
+        """
         if self.do_compile == True:
             driver_list = []
-            if self.use_make == False:
-                ###############################################################
-                ## RFSoC Driver
-                ###############################################################
-                driver_files = self.get_all_files_in_directory(self.full_rfsoc_driver_dir,['cpp','c'])
-                for file_ in driver_files:
-                    compile_file_dir_, compile_file_ = os.path.split(file_)
-                    base_name, extension = os.path.splitext(compile_file_)
-                    cmd = [
-                                'aarch64-none-elf-g++',                             #g++ also works
-                                '-Wall',
-                                '-O2',
-                                '-c',
-                                '-fmessage-length=0',
-                                f'-MT\"{os.path.join(compile_file_dir_,base_name)}.o\"',
-                                '-D',
-                                '__BAREMETAL__',
-                                f'-I{self.full_rfsoc_driver_include_dir}',
-                                f'-I{self.full_xilinx_include_dir}',
-                                '-MMD',
-                                '-MP',
-                                f'-MF\"{os.path.join(compile_file_dir_,base_name)}.d\"',
-                                f'-MT\"{os.path.join(compile_file_dir_,base_name)}.o\"',
-                                '-o',
-                                f'\"{os.path.join(compile_file_dir_,base_name)}.o\"',
-                                f'\"{file_}\"'
-                            ]
-                    
-                    driver_list += [f'{os.path.join(compile_file_dir_,base_name)}.o']
-                    cmd_conc = ''
-                    for line in cmd:
-                        cmd_conc += (line + ' ')
-                        
-                    print(cmd_conc)
-                    
-                    process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                    stdout, stderr = process.communicate()
-                    print(stderr)
-                    self.total_command += cmd_conc + '\n'
-                    self.total_log += stderr
-                    
-                
-                ###############################################################
-                ## RFSoC Driver Library
-                ###############################################################
-                rfsoc_lib_name = 'RFSoC_lib'
-                cmd_conc = f'ar rcus {os.path.join(compile_file_dir_,rfsoc_lib_name)}.a '
-                for line in driver_list:
-                    cmd_conc += (line + ' ')
-                print(cmd_conc)
-                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                stdout, stderr = process.communicate()
-                print(stderr)
-                self.total_command += cmd_conc + '\n'
-                self.total_log += stderr
-                    
-                ###############################################################
-                ## main.cpp
-                ###############################################################
-                # Define the command to be executed
+            ###############################################################
+            ## RFSoC Driver
+            ###############################################################
+            driver_files = self.getAllFilesInDirectory(self.full_rfsoc_driver_dir,['cpp','c'])
+            for file_ in driver_files:
+                compile_file_dir_, compile_file_ = os.path.split(file_)
+                base_name, extension = os.path.splitext(compile_file_)
                 cmd = [
                             'aarch64-none-elf-g++',                             #g++ also works
                             '-Wall',
                             '-O2',
                             '-c',
                             '-fmessage-length=0',
-                            f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
+                            f'-MT\"{os.path.join(compile_file_dir_,base_name)}.o\"',
                             '-D',
                             '__BAREMETAL__',
                             f'-I{self.full_rfsoc_driver_include_dir}',
-                            '-I../Xilinx_Include/bspinclude/include',
+                            f'-I{self.full_xilinx_include_dir}',
                             '-MMD',
                             '-MP',
-                            f'-MF\"../C_Code/{file_name}/{file_name}.d\"',
-                            f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
+                            f'-MF\"{os.path.join(compile_file_dir_,base_name)}.d\"',
+                            f'-MT\"{os.path.join(compile_file_dir_,base_name)}.o\"',
                             '-o',
-                            f'\"../C_Code/{file_name}/{file_name}.o\"'
+                            f'\"{os.path.join(compile_file_dir_,base_name)}.o\"',
+                            f'\"{file_}\"'
                         ]
-                #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
-                if self.is_cpp == True:
-                    cmd += [f'\"../C_Code/{file_name}/{file_name}.cpp\"']
-                else:
-                    cmd += [f'../C_Code/{file_name}/{file_name}.c']
                 
+                driver_list += [f'{os.path.join(compile_file_dir_,base_name)}.o']
                 cmd_conc = ''
                 for line in cmd:
                     cmd_conc += (line + ' ')
                     
                 print(cmd_conc)
-                    
-                # Execute the command
+                
                 process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 stdout, stderr = process.communicate()
                 print(stderr)
                 self.total_command += cmd_conc + '\n'
                 self.total_log += stderr
                 
-                ###############################################################
-                ## startup.S
-                ###############################################################
-                cmd = [
-                            'aarch64-none-elf-g++',                             #g++ also works
-                            '-Wall',
-                            '-O2',
-                            '-c',
-                            '-fmessage-length=0',
-                            f'-MT\"../C_Code/init/startup.o\"',
-                            '-D',
-                            '__BAREMETAL__',
-                            f'-I{self.full_rfsoc_driver_include_dir}',
-                            '-I../Xilinx_Include/bspinclude/include',
-                            '-MMD',
-                            '-MP',
-                            f'-MF\"../C_Code/init/startup.d\"',
-                            f'-MT\"../C_Code/init/startup.o\"',
-                            '-o',
-                            f'\"../C_Code/init/startup.o\"',
-                            '\"../C_Code/init/startup.S\"'
-                        ]
-                #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
-                cmd_conc = ''
-                for line in cmd:
-                    cmd_conc += (line + ' ')
-                    
-                # Execute the command
-                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                stdout, stderr = process.communicate()
-                print(stderr)
-                self.total_command += cmd_conc + '\n'
-                self.total_log += stderr
+            
+            ###############################################################
+            ## RFSoC Driver Library
+            ###############################################################
+            rfsoc_lib_name = 'RFSoC_lib'
+            cmd_conc = f'ar rcus {os.path.join(compile_file_dir_,rfsoc_lib_name)}.a '
+            for line in driver_list:
+                cmd_conc += (line + ' ')
+            print(cmd_conc)
+            process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate()
+            print(stderr)
+            self.total_command += cmd_conc + '\n'
+            self.total_log += stderr
                 
-                ###############################################################
-                ## main.elf
-                ###############################################################
-                cmd = [
-                            'aarch64-none-elf-g++',
-                            f'-Wl,-T -Wl,../C_Code/linker/linker.ld',
-                            f'-L../Xilinx_Include/bsplib/lib',
-                            '-o',
-                            f'\"../C_Code/{file_name}/{file_name}.elf\"',
-                            f'../C_Code/{file_name}/{file_name}.o',
-                            f'{self.full_rfsoc_driver_dir}/RFSoC_lib.a',
-                            f'../C_Code/init/startup.o',
-                            '-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group',
-                            '-Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group',
-                            '-Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group',
-                            '-Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group',
-                            '-Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group'
+            ###############################################################
+            ## main.cpp
+            ###############################################################
+            # Define the command to be executed
+            cmd = [
+                        'aarch64-none-elf-g++',                             #g++ also works
+                        '-Wall',
+                        '-O2',
+                        '-c',
+                        '-fmessage-length=0',
+                        f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
+                        '-D',
+                        '__BAREMETAL__',
+                        f'-I{self.full_rfsoc_driver_include_dir}',
+                        '-I../Xilinx_Include/bspinclude/include',
+                        '-MMD',
+                        '-MP',
+                        f'-MF\"../C_Code/{file_name}/{file_name}.d\"',
+                        f'-MT\"../C_Code/{file_name}/{file_name}.o\"',
+                        '-o',
+                        f'\"../C_Code/{file_name}/{file_name}.o\"'
                     ]
+            #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
+            if self.is_cpp == True:
+                cmd += [f'\"../C_Code/{file_name}/{file_name}.cpp\"']
+            else:
+                cmd += [f'../C_Code/{file_name}/{file_name}.c']
+            
+            cmd_conc = ''
+            for line in cmd:
+                cmd_conc += (line + ' ')
                 
-                cmd_conc =''
+            print(cmd_conc)
                 
-                for line in cmd:
-                    cmd_conc += (line + ' ')
-                    
-                print(cmd_conc)
-                process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                stdout, stderr = process.communicate()
-                print(stderr)
-                self.total_command += cmd_conc + '\n'
-                self.total_log += stderr
+            # Execute the command
+            process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate()
+            print(stderr)
+            self.total_command += cmd_conc + '\n'
+            self.total_log += stderr
+            
+            ###############################################################
+            ## startup.S
+            ###############################################################
+            cmd = [
+                        'aarch64-none-elf-g++',                             #g++ also works
+                        '-Wall',
+                        '-O2',
+                        '-c',
+                        '-fmessage-length=0',
+                        f'-MT\"../C_Code/init/startup.o\"',
+                        '-D',
+                        '__BAREMETAL__',
+                        f'-I{self.full_rfsoc_driver_include_dir}',
+                        '-I../Xilinx_Include/bspinclude/include',
+                        '-MMD',
+                        '-MP',
+                        f'-MF\"../C_Code/init/startup.d\"',
+                        f'-MT\"../C_Code/init/startup.o\"',
+                        '-o',
+                        f'\"../C_Code/init/startup.o\"',
+                        '\"../C_Code/init/startup.S\"'
+                    ]
+            #aarch64-none-elf-g++ -Wall -O2 -c -fmessage-length=0 -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -D __BAREMETAL__ -IE:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/VITIS_CPP/RFSoC_Firmware_plt/export/RFSoC_Firmware_plt/sw/RFSoC_Firmware_plt/standalone_domain/bspinclude/include -MMD -MP -MF"../C_Code/VECTOR_EXP/VECTOR_EXP.d" -MT"../C_Code/VECTOR_EXP/VECTOR_EXP.o" -o "../C_Code/VECTOR_EXP/VECTOR_EXP.o" "../C_Code/VECTOR_EXP/VECTOR_EXP.cpp"
+            cmd_conc = ''
+            for line in cmd:
+                cmd_conc += (line + ' ')
                 
-                current_file_dir, dump_ = os.path.split(os.path.realpath(__file__))
-                with open(os.path.join(current_file_dir,'LOG.txt'), 'w') as f:
-                    f.write(self.total_log)
-                with open(os.path.join(current_file_dir,'CMD.txt'), 'w') as f:
-                    f.write(self.total_command)
-                    
-                log_dir = os.path.join(current_file_dir,'LOG.txt')
-                
-        
-                # Check the return code
-                if 'error:' in self.total_log:
-                    raise Exception(f'Compile error. Check {log_dir}')
-                else:
-                    print("Compilation successful.")
-            else: # this is old version... code revision is required
-                Makefile_code = f"""
-# Define the compiler and compiler flags
-CC = aarch64-none-elf-gcc
-CFLAGS = -march=armv8-a -mcpu=cortex-a53 -nostartfiles -I ../include
-
-# Define the linker and linker flags
-LD = aarch64-none-elf-gcc
-LDFLAGS = -march=armv8-a -mcpu=cortex-a53 -nostartfiles -T {file_name}.ld  -I ../include
-ADD_LIB =../lib/libxil.a
-
-# List all source files (cpp files) in the current folder
-SRCS := $(wildcard *.c *.cpp)
-
-# List all assembly files in the current folder
-ASMS := ../init/startup.S
-
-# List all object files corresponding to the source files
-OBJS = $(SRCS:.c=.o) $(ASMS:.S=.o)
-
-# Define the final target executable
-TARGET = {file_name}.elf
-
-# Default rule: build the executable
-all: $(TARGET)
-
-# Rule to compile each source file into object files
-%.o: %.cpp
-	$(CC) $(CFLAGS) -c $< $(ADD_LIB) -o $@
-
-# Rule to compile each source file into object files2
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< $(ADD_LIB) -o $@
-
-# Rule to assemble each assembly source file into object files
-%.o: %.S
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Rule to build the target executable
-$(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $^ $(ADD_LIB)
-
-# Clean rule: remove generated files
-clean:
-	del {file_name}.elf
-	del $(OBJS)
-	del $(TARGET)
-
-#print all dirs
-get-dir:
-	$(ALL_DIRS)
-                """
-                current_directory = os.getcwd()
-                  
-                # Construct the desired directory path relative to the current directory
-                directory_path = os.path.join(current_directory, "..", "C_Code", file_name)
-                
-                # Normalize the path (resolve "..", "." etc.)
-                directory_path = os.path.normpath(directory_path)
-                  
-                # Check if the directory exists
-                if not os.path.exists(directory_path):
-                    # If not, create the directory
-                    os.makedirs(directory_path)
-                  
-                # Change the current working directory
-                os.chdir(directory_path)
-                with open('Makefile', 'w') as f:
-                    f.write(Makefile_code)
-                cmd = [
-                'make'
+            # Execute the command
+            process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate()
+            print(stderr)
+            self.total_command += cmd_conc + '\n'
+            self.total_log += stderr
+            
+            ###############################################################
+            ## main.elf
+            ###############################################################
+            cmd = [
+                        'aarch64-none-elf-g++',
+                        f'-Wl,-T -Wl,../C_Code/linker/linker.ld',
+                        f'-L../Xilinx_Include/bsplib/lib',
+                        '-o',
+                        f'\"../C_Code/{file_name}/{file_name}.elf\"',
+                        f'../C_Code/{file_name}/{file_name}.o',
+                        f'{self.full_rfsoc_driver_dir}/RFSoC_lib.a',
+                        f'../C_Code/init/startup.o',
+                        '-Wl,--start-group,-lxil,-lgcc,-lc,-lstdc++,--end-group',
+                        '-Wl,--start-group,-lxil,-lmetal,-lgcc,-lc,--end-group',
+                        '-Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group',
+                        '-Wl,--start-group,-lxilpm,-lxil,-lgcc,-lc,--end-group',
+                        '-Wl,--start-group,-lxil,-lgcc,-lc,-lmetal,--end-group'
                 ]
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                stdout, stderr = process.communicate()
-                if stderr:
-                    print("Error Code")
-                    raise Exception(stderr)
-                else:
-                    print("Compilation successful.")
+            
+            cmd_conc =''
+            
+            for line in cmd:
+                cmd_conc += (line + ' ')
+                
+            print(cmd_conc)
+            process = subprocess.Popen(cmd_conc, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate()
+            print(stderr)
+            self.total_command += cmd_conc + '\n'
+            self.total_log += stderr
+            
+            current_file_dir, dump_ = os.path.split(os.path.realpath(__file__))
+            with open(os.path.join(current_file_dir,'LOG.txt'), 'w') as f:
+                f.write(self.total_log)
+            with open(os.path.join(current_file_dir,'CMD.txt'), 'w') as f:
+                f.write(self.total_command)
+                
+            log_dir = os.path.join(current_file_dir,'LOG.txt')
+            
+    
+            # Check the return code
+            if 'error:' in self.total_log:
+                raise Exception(f'Compile error. Check {log_dir}')
+            else:
+                print("Compilation successful.")
+            
         else:
             print("No Compile")
-    def create_TCP_packet(self):
+    def createTCPpacket(self):
+        """
+        Create TCP data packet to send to RFSoC
+        Args:
+            None
+        
+        Returns:
+            list of data which you want to send to RFSoC
+        """
         data_packets = []
         
         elf_list = []
@@ -528,14 +354,8 @@ if __name__ == "__main__":
     file_name = "skeleton_code"
     #Compile C Code
     comp.do_compile = do_compile
-    # comp.compile_code(file_name)
-    comp.compile_ll_file('output')
+    comp.compileCode(file_name)
+    # comp.compile_ll_file('output')
     
     # Read the ELF file
-    elf_data = comp.read_elf_file(file_name)
-
-    # Convert to C code array representation
-    c_code = comp.create_c_code_array(elf_data)
-
-    # Save the C code to a file
-    comp.save_c_code_to_file(c_code, file_name)
+    elf_data = comp.readELFfile(file_name)

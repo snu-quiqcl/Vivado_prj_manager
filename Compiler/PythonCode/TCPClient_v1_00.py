@@ -82,9 +82,9 @@ class RFSoC:
         
     def connect(self):
         self.tcp.connect()
-        print("Done")
+        print("RFSoC is connected with TCP")
         
-    def auto_start(self):
+    def autoStart(self):
         #TimeController
         self.tcp.write("#TIME_CONT#write_fifo#0#2#!EOL#")
         a = self.tcp.read()
@@ -93,7 +93,7 @@ class RFSoC:
         self.tcp.write("#TIME_CONT#write_fifo#0#9#!EOL#")
         a = self.tcp.read()
         print(a)
-    def auto_end(self):
+    def autoEnd(self):
         #TimeController
         self.tcp.write("#TIME_CONT#write_fifo#0#0#!EOL#")
         a = self.tcp.read()
@@ -103,13 +103,26 @@ class RFSoC:
         a = self.tcp.read()
         print(a)
     
-    def send_bin(self, data_list):
+    def sendBin(self, data_list):
         for i in range(len(data_list)):
             self.tcp.write(data_list[i])
             a = self.tcp.read()
+    
+    def stopBin(self):
+        self.tcp.send('#BIN#stop_binary#!EOL#')
+        a = self.tcp.read()
+        print(a)
+        
+    def recvCallback(self):
+        self.tcp.write('#CPU#trans_callback#0#!EOL#')
+        a = self.tcp.read()
+        print(a)
+        
+    def disconnect(self):
+        self.tcp.disconnect()
     
 
 if __name__ == "__main__": 
     RFSoC = RFSoC()
     RFSoC.connect()
-    RFSoC.auto_end()
+    RFSoC.autoEnd()

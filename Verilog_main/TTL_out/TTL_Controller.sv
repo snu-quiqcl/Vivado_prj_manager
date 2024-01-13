@@ -5,7 +5,7 @@
 // 
 // Create Date: 2023/09/09 20:00:35
 // Design Name: 
-// Module Name: TTLx8_output
+// Module Name: TTL_output
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -44,7 +44,14 @@ module TTL_Controller
     //////////////////////////////////////////////////////////////////////////////////
     // Port for TTL
     //////////////////////////////////////////////////////////////////////////////////
-    output wire output_pulse
+    output wire output_pulse_0,
+    output wire output_pulse_1,
+    output wire output_pulse_2,
+    output wire output_pulse_3,
+    output wire output_pulse_4,
+    output wire output_pulse_5,
+    output wire output_pulse_6,
+    output wire output_pulse_7
 );
 
 //////////////////////////////////////////////////////////////////////////////////  
@@ -76,17 +83,25 @@ GPO_Core0(
 //////////////////////////////////////////////////////////////////////////////////  
 // TTL
 //////////////////////////////////////////////////////////////////////////////////
-reg last_input_pulse;
-assign output_pulse             = last_input_pulse;
+reg [7:0] last_input_pulse;
+
+assign output_pulse_0 = last_input_pulse[0];
+assign output_pulse_1 = last_input_pulse[1];
+assign output_pulse_2 = last_input_pulse[2];
+assign output_pulse_3 = last_input_pulse[3];
+assign output_pulse_4 = last_input_pulse[4];
+assign output_pulse_5 = last_input_pulse[5];
+assign output_pulse_6 = last_input_pulse[6];
+assign output_pulse_7 = last_input_pulse[7];
 
 always @(posedge clk) begin
     if( reset == 1'b1 ) begin
-        last_input_pulse        <= 1'b0;
+        last_input_pulse[7:0] <= {8{1'b0}};
     end
 
     else begin
         if( selected == 1'b1 ) begin
-            last_input_pulse    <= gpo_out[0];
+            last_input_pulse[7:0] <= gpo_out[7:0];
         end
     end
 end

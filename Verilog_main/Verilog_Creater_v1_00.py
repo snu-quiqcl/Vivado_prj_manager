@@ -105,7 +105,7 @@ class Verilog_maker:
                         'ADCIO_10', 'ADCIO_11', 'ADCIO_12', 'ADCIO_13', \
                         'ADCIO_14', 'ADCIO_15', 'ADCIO_16', 'ADCIO_17', \
                         'ADCIO_18', 'ADCIO_19']
-        # self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04', 'DACIO_05','DACIO_06','DACIO_07']
+        self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04', 'DACIO_05','DACIO_06','DACIO_07']
         
         self.total_ttl_num = ( len(self.TTL_ports) // 8 ) + (not len(self.TTL_ports) % 8 == 0)
         self.ttl_pin_num = len(self.TTL_ports)
@@ -1028,7 +1028,7 @@ set_property -dict [ list \
                 else:
                     tcl_code += f' CONFIG.DAC_Mixer_Type1{j-4} {{0}} '
                     
-            tcl_code += '   CONFIG.DAC_Output_Current {1} '
+            tcl_code += '   CONFIG.DAC_Output_Current {0} '
             
             for j in range(self.total_dac_num):
                 if j < 4:

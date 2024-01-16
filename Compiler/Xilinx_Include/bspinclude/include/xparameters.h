@@ -431,26 +431,6 @@
 #define XPAR_TTL_OUT_0_HIGHADDR 0xA0015FFF
 
 
-/* Definitions for peripheral TTL_OUT_1 */
-#define XPAR_TTL_OUT_1_BASEADDR 0xA0016000
-#define XPAR_TTL_OUT_1_HIGHADDR 0xA0016FFF
-
-
-/* Definitions for peripheral TTL_OUT_2 */
-#define XPAR_TTL_OUT_2_BASEADDR 0xA0017000
-#define XPAR_TTL_OUT_2_HIGHADDR 0xA0017FFF
-
-
-/* Definitions for peripheral TTL_OUT_3 */
-#define XPAR_TTL_OUT_3_BASEADDR 0xA0018000
-#define XPAR_TTL_OUT_3_HIGHADDR 0xA0018FFF
-
-
-/* Definitions for peripheral TTL_OUT_4 */
-#define XPAR_TTL_OUT_4_BASEADDR 0xA0019000
-#define XPAR_TTL_OUT_4_HIGHADDR 0xA0019FFF
-
-
 /* Definitions for peripheral TTLX8_OUT_0 */
 #define XPAR_TTLX8_OUT_0_BASEADDR 0xA0010000
 #define XPAR_TTLX8_OUT_0_HIGHADDR 0xA0010FFF

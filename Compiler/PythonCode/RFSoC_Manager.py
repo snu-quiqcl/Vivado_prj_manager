@@ -139,8 +139,8 @@ if __name__ == "__main__":
     rfsocMgr.connect()
     rfsocMgr.stopRFSoC()
     rfsocMgr.runRFSoC()
-    rfsocMgr.read64bitData()
-    rfsocMgr.read64bitData()
+    # rfsocMgr.read64bitData()
+    # rfsocMgr.read64bitData()
     
     # rfsocMgr.stopRFSoC()
     rfsocMgr.close()

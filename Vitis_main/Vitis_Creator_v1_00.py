@@ -12,8 +12,10 @@ import subprocess
 class Vitis_maker:
     def __init__(self):
         print('make vitis project...')
-        self.vitis_dir = r'E:\Xilinx\Vitis\2020.2\bin\xsct.bat'
-        self.git_dir = r'E:\RFSoC\GIT'
+        # self.vitis_dir = r'E:\Xilinx\Vitis\2020.2\bin\xsct.bat'
+        # self.git_dir = r'E:\RFSoC\GIT'
+        self.vitis_dir = r'C:\Xilinx\Vitis\2020.2\bin\xsct.bat'
+        self.git_dir = r'C:\Jeonghyun\GIT'
         self.tcl_commands = ''
         self.xsa_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Main_blk_wrapper.xsa')
         self.bsp_lib_dir = os.path.join(self.git_dir,r'RFSoC\RFSoC_Design_V1_1\VITIS\RFSoC_Firmware_plt\export\RFSoC_Firmware_plt\sw\RFSoC_Firmware_plt\standalone_domain\bsplib')
@@ -204,11 +206,11 @@ importsources -name RealTime_Firmware_app -path "{self.realtime_linker_dir}\lscr
 if __name__ == "__main__":
     vtm = Vitis_maker()
     
-    # vtm.set_workspace()
-    # vtm.make_vitis_platform()
-    # vtm.make_vitis_application()
-    # vtm.run_vitis_tcl()
+    vtm.set_workspace()
+    vtm.make_vitis_platform()
+    vtm.make_vitis_application()
+    vtm.run_vitis_tcl()
     
-    # vtm.copy_bsp_include()
-    # vtm.copy_bsp_lib()
+    vtm.copy_bsp_include()
+    vtm.copy_bsp_lib()
     vtm.make_skeleton_code()

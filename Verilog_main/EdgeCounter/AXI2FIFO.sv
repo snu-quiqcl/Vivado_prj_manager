@@ -114,8 +114,7 @@ module AXI2FIFO
     input wire [127:0] rti_core_fifo_dout,
     input wire rti_core_full,
     input wire rti_core_empty,
-    input wire [FIFO_DEPTH - 1:0] data_num,
-
+    input wire [FIFO_DEPTH - 1:0] data_num
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -338,7 +337,7 @@ always @(posedge s_axi_aclk) begin
                         rto_core_flush <= 1'b1;
                     end
                     if( s_axi_wdata[1] == 1'b1 ) begin
-                        rti_core_flsuh <= 1'b1;
+                        rti_core_flush <= 1'b1;
                     end
                     if( s_axi_wlast == 1'b1 ) begin
                         axi_state_write <= WRITE_RESPONSE;
@@ -456,7 +455,7 @@ always @(posedge s_axi_aclk) begin
                             axi_state_read <= READ_ERROR_STATE;
                         end
                         else begin                            
-                            rti_rd_en <= 1'b1;
+                            rti_core_rd_en <= 1'b1;
                             axi_state_read <= READ_DATA;
                         end
 
@@ -476,14 +475,14 @@ always @(posedge s_axi_aclk) begin
                     axi_arlen <= axi_arlen - 1;
                     if( axi_arlen == 0 ) begin
                         axi_state_read <= IDLE;
-                        rti_rd_en <= 1'b0;
+                        rti_core_rd_en <= 1'b0;
                     end
                 end
             end
 
             READ_LEN: begin
                 if( s_axi_rready == 1'b1 ) begin 
-                    s_axi_rdate <= {AXI_DATA_WIDTH{1'b0}}|data_num;
+                    s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}}|data_num;
                     s_axi_rresp <= 2'b0;
                     s_axi_rvalid <= 1'b1;
                     s_axi_rlast <= 1'b1;

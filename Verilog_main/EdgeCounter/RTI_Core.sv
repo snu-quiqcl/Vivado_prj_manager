@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module rti_core
+module RTI_Core
 #(
     parameter FIFO_DEPTH = 10
 )
@@ -36,13 +36,13 @@ module rti_core
     output wire overflow_error,
     output wire underflow_error,
     output wire full,
-    output wire empty
+    output wire empty,
+    output reg [FIFO_DEPTH - 1:0]data_num
     );
    
 reg [127:0] overflow_error_data_buffer;
 reg overflow_error_state;
 reg underflow_error_state;
-reg [FIFO_DEPTH - 1:0]data_num;
 
 wire flush_fifo;
 wire full_wire;

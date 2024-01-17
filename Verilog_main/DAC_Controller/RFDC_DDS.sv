@@ -91,7 +91,7 @@ assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_ch
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][28:13] + {1'b0,amp_offset_buffer4[13:0],1'b0};
+        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][27:12] + {1'b0,amp_offset_buffer4[13:0],1'b0};
     end
 endgenerate
 

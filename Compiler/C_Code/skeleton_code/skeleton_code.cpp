@@ -64,9 +64,10 @@ int main(){
     init_rfsoc();
     xil_printf("RFSoC Start\r\n");
 
-    dac_0.set_amp(1.0);
+    dac_0.set_amp(0.1);
     delay(16);
     dac_0.set_freq(1000);
+    delay(16);
 
     tc_0.auto_start();
 }

@@ -251,8 +251,8 @@ rti_core_0
     .overflow_error_data(),
     .overflow_error(),
     .underflow_error(),
-    .full,
-    .empty,
+    .full(),
+    .empty(),
     .data_num(data_num)
     );
     
@@ -274,7 +274,7 @@ GPO_Core gpo_core_0
     .busy(1'b0),
     .selected(seleceted),
     .error_data(),
-    .overrided(1'b0),
+    .overrided(),
     .busy_error(),
     .gpo_out(gpo_out)
     );
@@ -288,6 +288,7 @@ EdgeCounter_Controller
 #(
     .DATA_WIDTH(DATA_WIDTH)
 )
+edgecounter_controller_0
 (
     .clk(s_axi_aclk),
     .input_sig(input_sig),

@@ -69,7 +69,7 @@ assign overflow_error_data[127:0] = overflow_error_data_buffer[127:0];
 assign full = full_wire;
 assign empty = empty_wire;
     
-fifo_generator_0 rti_core_FIFO(
+fifo_generator_0 RTI_Core_FIFO(
     .clk(clk),
     .srst(flush_fifo),
     .din(fifo_din),

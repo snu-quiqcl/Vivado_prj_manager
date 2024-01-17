@@ -43,7 +43,7 @@ reg [DATA_WIDTH-1:0] measured_count;
 reg internal_reset;
 reg count_en;
 
-assign inc_count = clk & input_sig & count_en;
+assign inc_count = input_sig & count_en;
 assign count_out = 128'h0|measured_count|(counter << 64);
 
 always @(posedge clk) begin

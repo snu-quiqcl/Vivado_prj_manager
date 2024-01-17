@@ -133,7 +133,7 @@ class rfsocMgr(TCP.RFSoC):
         self.disconnect()
         
 if __name__ == "__main__":
-    file_name = 'skeleton_code'
+    file_name = 'skeleton_code_1'
     rfsocMgr = rfsocMgr()
     rfsocMgr.setFileName(file_name)
     rfsocMgr.connect()

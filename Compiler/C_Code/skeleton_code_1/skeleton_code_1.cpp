@@ -1,17 +1,18 @@
 #include "RFSoC_Driver.h"
 #include "malloc.h"
 
-DAC Raman_CH1;
-DAC Raman_CH2;
-DAC Raman_CH3;
+int main(){
+    DAC Raman_CH1;
+    DAC Raman_CH2;
+    DAC Raman_CH3;
 
-TTL_out AOM_369;
-TTL_out EOM_14_7;
-TTL_out EOM_2_1;
-TTL_out Raman_Global;
+    TTL_out AOM_369;
+    TTL_out EOM_14_7;
+    TTL_out EOM_2_1;
+    TTL_out Raman_Global;
 
-TimeController tc_0;
-void init_rfsoc(){
+    TimeController tc_0;
+
     Raman_CH1.set_addr(XPAR_DAC_CONTROLLER_0_BASEADDR);
     Raman_CH1.flush_fifo();
     Raman_CH2.set_addr(XPAR_DAC_CONTROLLER_1_BASEADDR);
@@ -28,29 +29,29 @@ void init_rfsoc(){
     tc_0.set_addr(XPAR_TIMECONTROLLER_0_BASEADDR);
     tc_0.auto_stop();
     tc_0.reset();
-}
 
-int main(){
-    init_rfsoc();
     xil_printf("RFSoC Start\r\n");
 
     AOM_369.set(1);
     EOM_14_7.set(1);
-    EOM_2_1.set(1);
 
-    int64_t t_5ms = 1000;
+    int64_t t_5ms = 50000;
     int64_t t_20us = 20000;
     int64_t t_30us = 30000;
+    int64_t t_1us = 1000;
 
     //delay 5ms -> 1000ns
 
     for(int j = 0 ; j < 100 ; j++){
+        AOM_369.set(1);
+        EOM_14_7.set(1);
+        
         delay(t_5ms);
+        
         AOM_369.set(0);
         EOM_14_7.set(0);
-        EOM_2_1.set(0);
 
-        for( int i = 0 ; i < 30; i++){
+        for( int i = 0 ; i < 2; i++){
             Raman_CH1.set_freq(201643000);
             Raman_CH2.set_freq(201643000);
             Raman_CH3.set_freq(201643000);
@@ -146,9 +147,15 @@ int main(){
 
         //Recooling 
         AOM_369.set(1);
-        EOM_2_1.set(1);
+        EOM_14_7.set(1);
 
+        delay(t_1us);
+        AOM_369.set(0);
+        EOM_2_1.set(0);
+        EOM_14_7.set(0);
+        Raman_Global.set(0);
         tc_0.auto_start();
+        delay(t_5ms);
     }
 
 }

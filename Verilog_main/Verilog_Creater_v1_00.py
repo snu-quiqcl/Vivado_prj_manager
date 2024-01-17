@@ -105,7 +105,7 @@ class Verilog_maker:
                         'ADCIO_10', 'ADCIO_11', 'ADCIO_12', 'ADCIO_13', \
                         'ADCIO_14', 'ADCIO_15', 'ADCIO_16', 'ADCIO_17', \
                         'ADCIO_18', 'ADCIO_19']
-        self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04', 'DACIO_05','DACIO_06','DACIO_07']
+        # self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04', 'DACIO_05','DACIO_06','DACIO_07']
         
         self.total_ttl_num = ( len(self.TTL_ports) // 8 ) + (not len(self.TTL_ports) % 8 == 0)
         self.ttl_pin_num = len(self.TTL_ports)

@@ -22,4 +22,4 @@ C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:2
 C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:30:14: warning: statement has no effect [-Wunused-value]
    30 |         for( i ; i < 8 ; i++){
       |              ^
-c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/skeleton_code/skeleton_code.elf has a LOAD segment with RWX permissions
+c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/skeleton_code_1/skeleton_code_1.elf has a LOAD segment with RWX permissions

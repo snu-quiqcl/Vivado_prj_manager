@@ -28,6 +28,7 @@ module EdgeCounter_Controller
     input wire reset,
     input wire [63:0] cmd_in,
     input wire [63:0] counter,
+    input wire valid,
     output reg write,
     output wire [127:0] count_out
     );
@@ -55,16 +56,16 @@ always @(posedge clk) begin
     else begin
         internal_reset <= 1'b0;
         write <= 1'b0;
-        if( cmd_in[0] == 1'b1 ) begin
+        if( cmd_in[0] == 1'b1 && valid == 1'b1) begin
             count_en <= 1'b1;
         end
-        else if(cmd_in[1] == 1'b1) begin
+        else if(cmd_in[1] == 1'b1 && valid == 1'b1) begin
             count_en <= 1'b0;
         end
-        if( cmd_in[2] == 1'b1) begin
+        if( cmd_in[2] == 1'b1 && valid == 1'b1) begin
             write <= 1'b1;
         end
-        if( cmd_in[3] == 1'b1) begin
+        if( cmd_in[3] == 1'b1 && valid == 1'b1) begin
             internal_reset <= 1'b1;
         end
     end

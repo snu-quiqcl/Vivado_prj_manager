@@ -260,7 +260,7 @@ rti_core_0
 // GPO Core Declaration
 //////////////////////////////////////////////////////////////////////////////////
 wire[127:0] gpo_out;
-wire seleceted;
+wire selected;
 
 GPO_Core gpo_core_0
 (
@@ -272,7 +272,7 @@ GPO_Core gpo_core_0
     .counter_matched(counter_matched),
     .gpo_in(rto_out),
     .busy(1'b0),
-    .selected(seleceted),
+    .selected(selected),
     .error_data(),
     .overrided(),
     .busy_error(),
@@ -294,6 +294,7 @@ edgecounter_controller_0
     .input_sig(input_sig),
     .reset(rto_core_reset),
     .cmd_in(gpo_out[63:0]),
+    .valid(selected),
     .counter(counter),
     .write(write),
     .count_out(rti_in)

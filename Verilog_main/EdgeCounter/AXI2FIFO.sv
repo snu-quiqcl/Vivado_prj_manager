@@ -397,26 +397,6 @@ always @(posedge s_axi_aclk) begin
     end
     
     else begin
-        s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}};
-        s_axi_rresp <= 2'b0;
-        s_axi_rvalid <= 1'b0;
-        s_axi_rlast <= 1'b0;
-        s_axi_rid <= 16'h0; // id value
-
-        axi_arid <= 16'h0;
-        axi_aruser <= 16'h0;
-        axi_arburst <= 2'b0;
-        axi_arlen <= 8'b0;
-        axi_araddr <= {AXI_ADDR_WIDTH{1'b0}};
-        axi_arsize <= 3'b0;
-        axi_arid <= 16'b0;
-        axi_aruser <= 16'b0;
-
-        rti_core_rd_en <= 1'b0;
-
-        axi_state_read <= IDLE;
-
-        
         case(axi_state_read)
             IDLE: begin
                 s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}};
@@ -466,29 +446,25 @@ always @(posedge s_axi_aclk) begin
                 end
             end
             READ_DATA: begin
-                if( s_axi_rready == 1'b1 ) begin
-                    s_axi_rdata <= rti_core_fifo_dout;
-                    s_axi_rresp <= 2'b0;
-                    s_axi_rvalid <= 1'b1;
+                s_axi_rdata <= rti_core_fifo_dout;
+                s_axi_rresp <= 2'b0;
+                s_axi_rvalid <= 1'b1;
+                s_axi_rid <= axi_arid;
+                axi_arlen <= axi_arlen - 1;
+                if( axi_arlen == 1 ) begin
+                    axi_state_read <= IDLE;
+                    rti_core_rd_en <= 1'b0;
                     s_axi_rlast <= 1'b1;
-                    s_axi_rid <= axi_arid;
-                    axi_arlen <= axi_arlen - 1;
-                    if( axi_arlen == 0 ) begin
-                        axi_state_read <= IDLE;
-                        rti_core_rd_en <= 1'b0;
-                    end
                 end
             end
 
             READ_LEN: begin
-                if( s_axi_rready == 1'b1 ) begin 
-                    s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}}|data_num;
-                    s_axi_rresp <= 2'b0;
-                    s_axi_rvalid <= 1'b1;
-                    s_axi_rlast <= 1'b1;
-                    s_axi_rid <= axi_arid;
-                    axi_state_read <= IDLE;
-                end
+                s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}}|data_num;
+                s_axi_rresp <= 2'b0;
+                s_axi_rvalid <= 1'b1;
+                s_axi_rlast <= 1'b1;
+                s_axi_rid <= axi_arid;
+                axi_state_read <= IDLE;
             end
 
             READ_ERROR_STATE: begin

@@ -1,9 +1,9 @@
 #include "RFSoC_Driver.h"
 #include "malloc.h"
 
-int main(){
+int a = 30;
+int b;
 DAC dac_0;
-DAC dac_1;
 DAC dac_2;
 DAC dac_3;
 DAC dac_4;
@@ -56,10 +56,9 @@ TTLx8_out ttlx8_out_2(XPAR_TTLX8_OUT_2_BASEADDR);
 TTLx8_out ttlx8_out_3(XPAR_TTLX8_OUT_3_BASEADDR);
 TTLx8_out ttlx8_out_4(XPAR_TTLX8_OUT_4_BASEADDR);
 TimeController tc_0;
+void init_rfsoc(){
     dac_0.set_addr(XPAR_DAC_CONTROLLER_0_BASEADDR);
     dac_0.flush_fifo();
-    dac_1.set_addr(XPAR_DAC_CONTROLLER_1_BASEADDR);
-    dac_1.flush_fifo();
     dac_2.set_addr(XPAR_DAC_CONTROLLER_2_BASEADDR);
     dac_2.flush_fifo();
     dac_3.set_addr(XPAR_DAC_CONTROLLER_3_BASEADDR);
@@ -130,13 +129,25 @@ TimeController tc_0;
     tc_0.set_addr(XPAR_TIMECONTROLLER_0_BASEADDR);
     tc_0.auto_stop();
     tc_0.reset();
+}
+
+int main(){
+    init_rfsoc();
+    DAC dac_1;
 
 
+    dac_1.set_addr(XPAR_DAC_CONTROLLER_1_BASEADDR);
+    dac_1.flush_fifo();
 
-    delay(16);
-    dac_0.set_amp(1.0);
-    delay(16);
+    dac_0.print_addr();
+    dac_1.print_addr();
+
     dac_0.set_freq(1000);
+    dac_1.set_freq(1000);
+    delay(8);
+    dac_0.set_amp(1.0);
+    dac_1.set_amp(1.0);
 
     tc_0.auto_start();
+    xil_printf("dac0 : %d, dac1 : %d\r\n",dac_0.sample_freq,dac_1.sample_freq);
 }

@@ -127,6 +127,7 @@ class DAC{
         void set_amp(long double amp);
 	void set_config(long double amp, uint64_t freq, long double phase, uint64_t shift);
     void flush_fifo();
+    void print_addr();
 };
 
 /////////////////////////////////////////////////////////////

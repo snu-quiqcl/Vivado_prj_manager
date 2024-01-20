@@ -20,9 +20,33 @@ ENTRY(_start_custom_)
 SECTIONS
 {
 .text : {
+   *(.boot)
    *(.text)
    *(.text.*)
-   _etext = .;
+   *(.gnu.linkonce.t.*)
+   *(.plt)
+   *(.gnu_warning)
+   *(.gcc_execpt_table)
+   *(.glue_7)
+   *(.glue_7t)
+   *(.ARM.extab)
+   *(.gnu.linkonce.armextab.*)
+} > psu_ddr_1_MEM_0
+
+.init (ALIGN(64)) : {
+   KEEP (*(.init))
+} > psu_ddr_1_MEM_0
+
+.fini (ALIGN(64)) : {
+   KEEP (*(.fini))
+} > psu_ddr_1_MEM_0
+
+.interp : {
+   KEEP (*(.interp))
+} > psu_ddr_1_MEM_0
+
+.note-ABI-tag : {
+   KEEP (*(.note-ABI-tag))
 } > psu_ddr_1_MEM_0
 
 .rodata : {
@@ -30,15 +54,161 @@ SECTIONS
    __rodata_start = .;
    *(.rodata)
    *(.rodata.*)
+   *(.gnu.linkonce.r.*)
    __rodata_end = .;
+} > psu_ddr_1_MEM_0
+
+.rodata1 : {
+   . = ALIGN(64);
+   __rodata1_start = .;
+   *(.rodata1)
+   *(.rodata1.*)
+   __rodata1_end = .;
+} > psu_ddr_1_MEM_0
+
+.sdata2 : {
+   . = ALIGN(64);
+   __sdata2_start = .;
+   *(.sdata2)
+   *(.sdata2.*)
+   *(.gnu.linkonce.s2.*)
+   __sdata2_end = .;
+} > psu_ddr_1_MEM_0
+
+.sbss2 : {
+   . = ALIGN(64);
+   __sbss2_start = .;
+   *(.sbss2)
+   *(.sbss2.*)
+   *(.gnu.linkonce.sb2.*)
+   __sbss2_end = .;
 } > psu_ddr_1_MEM_0
 
 .data : {
    . = ALIGN(64);
-   __data_start__ = .;
+   __data_start = .;
    *(.data)
    *(.data.*)
-   __data_end__ = .;
+   *(.gnu.linkonce.d.*)
+   *(.jcr)
+   *(.got)
+   *(.got.plt)
+   __data_end = .;
+} > psu_ddr_1_MEM_0
+
+.data1 : {
+   . = ALIGN(64);
+   __data1_start = .;
+   *(.data1)
+   *(.data1.*)
+   __data1_end = .;
+} > psu_ddr_1_MEM_0
+
+.got : {
+   *(.got)
+} > psu_ddr_1_MEM_0
+
+.got1 : {
+   *(.got1)
+} > psu_ddr_1_MEM_0
+
+.got2 : {
+   *(.got2)
+} > psu_ddr_1_MEM_0
+
+.note.gnu.build-id : {
+   KEEP (*(.note.gnu.build-id))
+} > psu_ddr_1_MEM_0
+
+.ctors : {
+   . = ALIGN(64);
+   __CTOR_LIST__ = .;
+   ___CTORS_LIST___ = .;
+   KEEP (*crtbegin.o(.ctors))
+   KEEP (*(EXCLUDE_FILE(*crtend.o) .ctors))
+   KEEP (*(SORT(.ctors.*)))
+   KEEP (*(.ctors))
+   __CTOR_END__ = .;
+   ___CTORS_END___ = .;
+} > psu_ddr_1_MEM_0
+
+.dtors : {
+   . = ALIGN(64);
+   __DTOR_LIST__ = .;
+   ___DTORS_LIST___ = .;
+   KEEP (*crtbegin.o(.dtors))
+   KEEP (*(EXCLUDE_FILE(*crtend.o) .dtors))
+   KEEP (*(SORT(.dtors.*)))
+   KEEP (*(.dtors))
+   __DTOR_END__ = .;
+   ___DTORS_END___ = .;
+} > psu_ddr_1_MEM_0
+
+.preinit_array : {
+   . = ALIGN(64);
+   __preinit_array_start = .;
+   KEEP (*(SORT(.preinit_array.*)))
+   KEEP (*(.preinit_array))
+   __preinit_array_end = .;
+} > psu_ddr_1_MEM_0
+
+.init_array : {
+   . = ALIGN(64);
+   __init_array_start = .;
+   KEEP (*(SORT(.init_array.*)))
+   KEEP (*(.init_array))
+   __init_array_end = .;
+} > psu_ddr_1_MEM_0
+
+.fini_array : {
+   . = ALIGN(64);
+   __fini_array_start = .;
+   KEEP (*(SORT(.fini_array.*)))
+   KEEP (*(.fini_array))
+   __fini_array_end = .;
+} > psu_ddr_1_MEM_0
+
+.ARM.attributes : {
+   __ARM.attributes_start = .;
+   *(.ARM.attributes)
+   __ARM.attributes_end = .;
+} > psu_ddr_1_MEM_0
+
+.sdata : {
+   . = ALIGN(64);
+   __sdata_start = .;
+   *(.sdata)
+   *(.sdata.*)
+   *(.gnu.linkonce.s.*)
+   __sdata_end = .;
+} > psu_ddr_1_MEM_0
+
+.sbss (NOLOAD) : {
+   . = ALIGN(64);
+   __sbss_start = .;
+   *(.sbss)
+   *(.sbss.*)
+   *(.gnu.linkonce.sb.*)
+   . = ALIGN(64);
+   __sbss_end = .;
+} > psu_ddr_1_MEM_0
+
+.tdata : {
+   . = ALIGN(64);
+   __tdata_start = .;
+   *(.tdata)
+   *(.tdata.*)
+   *(.gnu.linkonce.td.*)
+   __tdata_end = .;
+} > psu_ddr_1_MEM_0
+
+.tbss : {
+   . = ALIGN(64);
+   __tbss_start = .;
+   *(.tbss)
+   *(.tbss.*)
+   *(.gnu.linkonce.tb.*)
+   __tbss_end = .;
 } > psu_ddr_1_MEM_0
 
 .bss (NOLOAD) : {
@@ -46,9 +216,15 @@ SECTIONS
    __bss_start__ = .;
    *(.bss)
    *(.bss.*)
+   *(.gnu.linkonce.b.*)
+   *(COMMON)
    . = ALIGN(64);
    __bss_end__ = .;
 } > psu_ddr_1_MEM_0
+
+_SDA_BASE_ = __sdata_start + ((__sbss_end - __sdata_start) / 2 );
+
+_SDA2_BASE_ = __sdata2_start + ((__sbss2_end - __sdata2_start) / 2 );
 
 /* Generate Stack and Heap definitions */
 

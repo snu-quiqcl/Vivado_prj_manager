@@ -129,3 +129,7 @@ void DAC::set_config(long double amp, uint64_t freq, long double phase, uint64_t
 void DAC::flush_fifo(){
     Xil_Out128((this->addr | 0x10),MAKE128CONST(0,1));
 }
+
+void DAC::print_addr(){
+    xil_printf("addr : %llx\r\n",this->addr);
+}

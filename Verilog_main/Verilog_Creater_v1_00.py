@@ -20,11 +20,15 @@ POSSIBLE_FIFO_DEPTH = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072]
 class Verilog_maker:
     def __init__(self):
         print('make verilog code...')
-        self.git_dir = 'E:\RFSoC\GIT'
+        # self.git_dir = 'E:\RFSoC\GIT'
+        self.git_dir = 'C:\Jeonghyun\GIT'
         self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_01'
         self.cpu_type = 'Zynq_APU_0_125MHz.tcl'
-        self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
-        self.board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
+        # self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
+        self.vivado_path = r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat"
+        
+        # self.board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
+        self.board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
         self.part_name = "xczu28dr-ffvg1517-2-e"
         self.board_name = "xilinx.com:zcu111:part0:1.4"
         
@@ -48,6 +52,8 @@ class Verilog_maker:
         self.TTLx8_out_dir = os.path.join(self.target_dir,'TTLx8_out')
         
         self.TTL_out_dir = os.path.join(self.target_dir,'TTL_out')
+        
+        self.EdgeCounter_dir = os.path.join(self.target_dir,'EdgeCounter')
         
         self.TTLx8_ports = ['FMCP_HSPC_LA00_CC',\
         'FMCP_HSPC_LA01_CC',\
@@ -682,6 +688,71 @@ class Verilog_maker:
 
         self.runVivadoTCL(self.vivado_path, tcl_path)
         
+    ###########################################################################
+    ##EdgeCounter
+    ###########################################################################
+    def generateEdgeCounter(self, current_dir = None):
+        if current_dir == None:
+            source_dir = './EdgeCounter'
+        else:
+            source_dir = f'{current_dir}/EdgeCounter'
+
+        full_dir = os.path.join(self.git_dir, self.EdgeCounter_dir.lstrip('/').lstrip('\\'))
+        base_dir = os.path.dirname(full_dir)
+        base_name = os.path.basename(full_dir)
+        new_full_dir = os.path.join(base_dir,base_name)
+        new_output_full_dir =os.path.join(base_dir,base_name + '_output')
+        self.ensureDirectoryExists(new_full_dir)
+
+        for filename in os.listdir(source_dir):
+            source_path = os.path.join(source_dir, filename)
+            file_root, file_extension = os.path.splitext(filename)
+            new_filename = file_root + file_extension
+            destination_path = os.path.join(new_full_dir, new_filename)
+
+            # Open the source file and read its contents
+            verilog_code = ''
+            with open(source_path, 'r') as source_file:
+                verilog_code = source_file.read()
+
+            # Write the modified content to the destination file
+            with open(destination_path, 'w') as destination_file:
+                destination_file.write(verilog_code)
+
+        self.makeEdgeCounterTCL(new_output_full_dir, 'EdgeCounter', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
+
+    def makeEdgeCounterTCL(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
+        file_name = prj_name+".tcl"
+        print(file_name)
+        # Combine the file name and folder directory to create the full file path
+        file_path = folder_directory + '/' + file_name
+        print(file_path)
+
+        self.ensureDirectoryExists(folder_directory)
+        self.ensureDirectoryExists(src_folder_directory)
+        #add src files
+        self.setProject(folder_directory, prj_name)
+        self.createProject(part_name)
+        self.addSrc(src_folder_directory,file_type)
+        self.setBoard(board_path, board_name)
+
+        self.tcl_commands += self.generateXilinxFifoGenerator(folder_directory, 'fifo_generator_0')
+
+        # Save the TCL code to the .tcl file
+
+        self.tcl_commands += self.generateCustomizedIp(folder_directory)
+
+        self.tcl_commands += f'set_property top EdgeCounter [current_fileset]\n'.replace("\\","/")
+        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/EdgeCounter.sv }} [current_fileset]\n'.replace("\\","/")
+        with open(file_path, 'w') as tcl_file:
+            tcl_file.write(self.tcl_commands)
+
+        self.tcl_commands = ''
+
+        tcl_path = folder_directory + '\\' + prj_name + '.tcl'
+
+        self.runVivadoTCL(self.vivado_path, tcl_path)
+        
     def generateRFSoCmain(self, current_dir = None):
         if current_dir == None:
             source_dir = './RFSoC_Main'
@@ -1277,6 +1348,7 @@ write_hw_platform -fixed -include_bit -force -file {bit_addr}
         self.generateTimeController()
         self.generateTTLx8Out()
         self.generateTTLOut()
+        self.generateEdgeCounter()
         self.generateRFSoCmain()
         self.generateXSA()
         

@@ -451,7 +451,7 @@ always @(posedge s_axi_aclk) begin
                 s_axi_rvalid <= 1'b1;
                 s_axi_rid <= axi_arid;
                 axi_arlen <= axi_arlen - 1;
-                if( axi_arlen == 1 ) begin
+                if( axi_arlen == 0 ) begin
                     axi_state_read <= IDLE;
                     rti_core_rd_en <= 1'b0;
                     s_axi_rlast <= 1'b1;

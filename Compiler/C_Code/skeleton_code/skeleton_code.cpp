@@ -142,8 +142,8 @@ int main(){
     dac_0.print_addr();
     dac_1.print_addr();
 
-    dac_0.set_freq(1000);
-    dac_1.set_freq(1000);
+    dac_0.set_freq(1);
+    dac_1.set_freq(1);
     delay(8);
     dac_0.set_amp(1.0);
     dac_1.set_amp(1.0);

@@ -92,9 +92,10 @@ assign vout7 = m00_axis_07_tdata[255:224];
 
 
 RFSoC_Main_blk_wrapper tb(
-    .m00_axis_0_tdata(m00_axis_00_tdata),
-    .m00_axis_0_tready(m00_axis_00_tready),
-    .m00_axis_0_tvalid(m00_axis_00_tvalid),/*,
+    //.m00_axis_0_tdata(m00_axis_00_tdata),
+    //.m00_axis_0_tready(m00_axis_00_tready),
+    //.m00_axis_0_tvalid(m00_axis_00_tvalid),
+    /*,
     .m00_axis_01_tdata(m00_axis_01_tdata),
     .m00_axis_01_tready(m00_axis_01_tready),
     .m00_axis_01_tvalid(m00_axis_01_tvalid),
@@ -118,7 +119,8 @@ RFSoC_Main_blk_wrapper tb(
     .m00_axis_07_tvalid(m00_axis_07_tvalid)*/
     
     .FMCP_HSPC_LA01_CC_P(output_pulse_x8_0_p),
-    .FMCP_HSPC_LA01_CC_N(output_pulse_x8_0_n)
+    .FMCP_HSPC_LA01_CC_N(output_pulse_x8_0_n),
+    .input_sig_0(input_sig)
 );
 
 /*
@@ -189,6 +191,10 @@ reg[1:0] resp9;
 reg[1:0] resp10;
 reg[1:0] resp11;
 
+reg [127:0] read_data;
+
+reg input_sig;
+    
 initial begin
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.por_srstb_reset(1'b1);
     #2000000;
@@ -210,6 +216,11 @@ initial begin
     
     #10000000;
     
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    // DDS
+    ///////////////////////////////////////////////////////////////////////////////////
+    /*
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h01001210, resp1);
     #10000000;
@@ -221,8 +232,9 @@ initial begin
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000004000 << 64) + (14'h0000 << 46) + (14'h0000 << 32) + 32'h00006210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000005000 << 64) + (14'h3fff << 46) + (14'h1000 << 32) + 32'h00000000, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000005000 << 64) + (14'h3fff << 46) + (14'h1000 << 32) + 32'h01523921, resp1);
     #10000000;
+    */
     
     ///////////////////////////////////////////////////////////////////////////////////
     // TTLx8 Signal
@@ -262,6 +274,19 @@ initial begin
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0010000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000012 << 64) + 8'b10101010, resp10);
     #10000000;
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    // Edge Counter
+    ///////////////////////////////////////////////////////////////////////////////////
+    input_sig <= 1'b0;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000010 << 64) + 4'b0001, resp10);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000400 << 64) + 4'b0010, resp10);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000410 << 64) + 4'b0100, resp10);
+    #10000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0020000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000420 << 64) + 4'b1000, resp10);
+    
     
     ///////////////////////////////////////////////////////////////////////////////////
     // TTL Signal
@@ -391,6 +416,25 @@ initial begin
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0008000, 8'h10, 128'h00000000000000000000000000000000 + 4'b0010, resp9);
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0008000, 8'h10, 128'h00000000000000000000000000000000 + 4'b1001, resp9);
+    
+    
+    #2000000;
+    input_sig <= 1'b1;
+    #100000;
+    input_sig <= 1'b0;
+    
+    #1000000;
+    input_sig <= 1'b1;
+    #100000;
+    input_sig <= 1'b0;
+    
+    #1000000;
+    input_sig <= 1'b1;
+    #100000;
+    input_sig <= 1'b0;
+    //READ
+    #100000000;
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.read_data(32'ha0020000, 8'h10, read_data, resp10);
 end
 
 endmodule

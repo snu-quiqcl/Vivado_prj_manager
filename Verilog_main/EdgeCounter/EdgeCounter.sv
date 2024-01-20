@@ -183,6 +183,7 @@ axi2_fifo_0
     .s_axi_rresp(s_axi_rresp),
     .s_axi_rvalid(s_axi_rvalid),
     .s_axi_rlast(s_axi_rlast),
+    .s_axi_rid(s_axi_rid),
 
     // AXI4 Clock and Reset
     .s_axi_aclk(s_axi_aclk),

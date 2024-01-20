@@ -2,13 +2,19 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Thu Jan 18 14:17:57 2024
-# Process ID: 36992
+# Start of session at: Thu Jan 18 14:14:32 2024
+# Process ID: 12452
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
 # Journal file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main\vivado.jou
 #-----------------------------------------------------------
 source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl}
-update_compile_order -fileset sources_1
-open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd}
+# set project_name "RFSoC_Main"
+# set project_dir "E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/RFSoC_Main_output"
+# createProject ${project_name} ${project_dir}/${project_name} -part xczu28dr-ffvg1517-2-e
+invalid command name "createProject"
+    while executing
+"createProject ${project_name} ${project_dir}/${project_name} -part xczu28dr-ffvg1517-2-e"
+    (file "E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl" line 6)
+INFO: [Common 17-206] Exiting Vivado at Thu Jan 18 14:14:36 2024...

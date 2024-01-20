@@ -134,7 +134,7 @@ class Verilog_maker:
         self.do_sim = False
         self.make_bit_stream = (False and (not self.do_sim))
         
-    def run_vivado_tcl(self, vivado_bat, tcl_path):
+    def runVivadoTCL(self, vivado_bat, tcl_path):
         self.vivado_executable = vivado_bat# Replace with the actual path to vivado.bat
     
         # Start Vivado in batch mode and pass the TCL commands as input
@@ -152,7 +152,7 @@ class Verilog_maker:
         # print(stdout)
         print(stderr)
     
-    def get_all_files_in_directory(self, directory,file_type):
+    def getAllFilesInDirectory(self, directory,file_type):
         file_list = []
         is_filetype = False
         
@@ -167,23 +167,23 @@ class Verilog_maker:
         return file_list
     
     # Function to generate the "add_files" string for a given file
-    def generate_add_files_string(self, file_path):
+    def generateAddFilesString(self, file_path):
         return f'add_files -norecurse {{{file_path}}}\n'
     
-    def generate_add_constraints_string(self, file_path):
+    def generateAddConstraintsString(self, file_path):
         file_path_ = file_path.replace("\\","/")
         return f'add_files -fileset constrs_1 -norecurse {file_path_}'
     
-    def generate_set_prj_string(self, folder_directory,prj_name):
+    def generateSetPrjString(self, folder_directory,prj_name):
         return f'set project_name \"{prj_name}\"\n' + f'set project_dir \"{folder_directory}\"\n'
     
-    def generate_create_prj_string(self, part_name):
+    def generateCreatePrjString(self, part_name):
         return f'create_project ${{project_name}} ${{project_dir}}/${{project_name}} -part {part_name}\n'
     
-    def generate_set_board(self, board_path, board_name):
+    def generateSetBoard(self, board_path, board_name):
         return f'set boardpath {{{board_path}}}\n' + 'set_param board.repoPaths [list $boardpath]\n' + f'set_property BOARD_PART {board_name} [current_project]\n'
     
-    def generate_xilinx_dds_ip(self, folder_directory, dds_name):
+    def generateXilinxDdsIp(self, folder_directory, dds_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name dds_compiler -vendor xilinx.com -library ip -version 6.0 -module_name {dds_name}\n'
         #one line command
@@ -201,7 +201,7 @@ class Verilog_maker:
         
         return tcl_code
     
-    def generate_xilinx_fifo_generator(self, folder_directory, fifo_name):
+    def generateXilinxFifoGenerator(self, folder_directory, fifo_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name {fifo_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
@@ -222,7 +222,7 @@ class Verilog_maker:
         
         return tcl_code
     
-    def generate_xilinx_dsp_mul(self, folder_directory, dsp_name):
+    def generateXilinxDspMul(self, folder_directory, dsp_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.instruction1 {{A*B}}'
@@ -241,7 +241,7 @@ class Verilog_maker:
         
         return tcl_code
         
-    def generate_xilinx_dsp_sum(self, folder_directory, dsp_name):
+    def generateXilinxDspSum(self, folder_directory, dsp_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.instruction1 {{(A+D)+C}}'
@@ -263,7 +263,7 @@ class Verilog_maker:
         
         return tcl_code
     
-    def generate_xilinx_dsp_sub(self, folder_directory, dsp_name):
+    def generateXilinxDspSub(self, folder_directory, dsp_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.instruction1 {{CONCAT-C}}'
@@ -285,7 +285,7 @@ class Verilog_maker:
         
         return tcl_code
     
-    def generate_xilinx_bram(self, folder_directory, bram_name):
+    def generateXilinxBram(self, folder_directory, bram_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name {bram_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.Memory_Type {{True_Dual_Port_RAM}}'
@@ -302,7 +302,7 @@ class Verilog_maker:
         
         return tcl_code
     
-    def generate_xilinx_rtob_fifo(self, folder_directory, fifo_name, threshold):
+    def generateXilinxRtobFifo(self, folder_directory, fifo_name, threshold):
         i__ = 0
         while POSSIBLE_FIFO_DEPTH[i__] <= threshold:
             i__ += 1
@@ -329,7 +329,7 @@ class Verilog_maker:
         return tcl_code
 
     
-    def generate_customized_ip(self, folder_directory):
+    def generateCustomizedIp(self, folder_directory):
         tcl_code = ''
         tcl_code += f'ipx::package_project -root_dir {folder_directory}'
         tcl_code += f' -vendor xilinx.com -library user -taxonomy /UserIP\n'
@@ -344,7 +344,7 @@ class Verilog_maker:
         
         return tcl_code
     
-    def add_customized_ip(self, folder_directory):
+    def addCustomizedIp(self, folder_directory):
         tcl_code = ''
         tcl_code += r'set_property  ip_repo_paths {'
         for ip_dir in self.customized_ip_list:
@@ -359,7 +359,7 @@ class Verilog_maker:
         
         return tcl_code
         
-    def ensure_directory_exists(self, directory_path):
+    def ensureDirectoryExists(self, directory_path):
         if not os.path.exists(directory_path):
             try:
                 os.makedirs(directory_path)
@@ -369,10 +369,13 @@ class Verilog_maker:
         else:
             print(f"Directory {directory_path} already exists.")
             
-    def remove_duplicates_set(self, lst):
+    def removeDuplicatesSet(self, lst):
         return list(set(lst))
         
-    def generate_dac_controller(self, current_dir = None):
+    ###########################################################################
+    ##DAC
+    ###########################################################################
+    def generateDacController(self, current_dir = None):
         fifo_list = []
         dds_list = []
         dsp_mul_list = []
@@ -388,7 +391,7 @@ class Verilog_maker:
         base_name = os.path.basename(full_dir)
         new_full_dir = os.path.join(base_dir,base_name.lstrip('/').lstrip('\\'))
         new_output_full_dir =os.path.join(base_dir,base_name.lstrip('/').lstrip('\\') + f'_output')
-        self.ensure_directory_exists(new_full_dir)
+        self.ensureDirectoryExists(new_full_dir)
             
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
@@ -434,47 +437,47 @@ class Verilog_maker:
                 destination_file.write(verilog_code)
                 
             
-        fifo_list = self.remove_duplicates_set(fifo_list)
-        dds_list = self.remove_duplicates_set(dds_list)
-        dsp_mul_list = self.remove_duplicates_set(dsp_mul_list)
-        dsp_sum_list = self.remove_duplicates_set(dsp_sum_list)
-        self.make_dac_controller_tcl(new_output_full_dir, f'DAC_Controller',self.part_name,\
+        fifo_list = self.removeDuplicatesSet(fifo_list)
+        dds_list = self.removeDuplicatesSet(dds_list)
+        dsp_mul_list = self.removeDuplicatesSet(dsp_mul_list)
+        dsp_sum_list = self.removeDuplicatesSet(dsp_sum_list)
+        self.makeDacControllerTCL(new_output_full_dir, f'DAC_Controller',self.part_name,\
                                     self.board_path,self.board_name,new_full_dir, ['.sv', '.v','.xic'], \
                                     dds_list, fifo_list, dsp_mul_list, dsp_sum_list, dsp_sub_list)
         
-    def make_dac_controller_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type, dds_list, fifo_list, dsp_mul_list, dsp_sum_list, dsp_sub_list):
+    def makeDacControllerTCL(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type, dds_list, fifo_list, dsp_mul_list, dsp_sum_list, dsp_sub_list):
         file_name = prj_name+".tcl"
         print(file_name)
         # Combine the file name and folder directory to create the full file path
         file_path = folder_directory + '\\' + file_name
         print(file_path)
         
-        self.ensure_directory_exists(folder_directory)
+        self.ensureDirectoryExists(folder_directory)
         #add src files
-        self.set_project(folder_directory, prj_name)
-        self.create_project(part_name)
-        self.add_src(src_folder_directory,file_type)
-        self.set_board(board_path, board_name)
+        self.setProject(folder_directory, prj_name)
+        self.createProject(part_name)
+        self.addSrc(src_folder_directory,file_type)
+        self.setBoard(board_path, board_name)
         
         for dds_ in dds_list:
-            self.tcl_commands += self.generate_xilinx_dds_ip(folder_directory,dds_)
+            self.tcl_commands += self.generateXilinxDdsIp(folder_directory,dds_)
         
         for fifo_ in fifo_list:
-            self.tcl_commands += self.generate_xilinx_fifo_generator(folder_directory,fifo_)
+            self.tcl_commands += self.generateXilinxFifoGenerator(folder_directory,fifo_)
             
         for dsp_ in dsp_mul_list:
-            self.tcl_commands += self.generate_xilinx_dsp_mul(folder_directory, dsp_)
+            self.tcl_commands += self.generateXilinxDspMul(folder_directory, dsp_)
             
         for dsp_ in dsp_sum_list:
-            self.tcl_commands += self.generate_xilinx_dsp_sum(folder_directory, dsp_)
+            self.tcl_commands += self.generateXilinxDspSum(folder_directory, dsp_)
             
         for dsp_ in dsp_sub_list:
-            self.tcl_commands += self.generate_xilinx_dsp_sub(folder_directory, dsp_)
+            self.tcl_commands += self.generateXilinxDspSub(folder_directory, dsp_)
         
         # Save the TCL code to the .tcl file
         
-        self.tcl_commands += self.generate_customized_ip(folder_directory)
-        # self.open_vivado(folder_directory,prj_name)
+        self.tcl_commands += self.generateCustomizedIp(folder_directory)
+        # self.openVivado(folder_directory,prj_name)
         
         self.tcl_commands += f'set_property top {prj_name} [current_fileset]\n'.replace("\\","/")
         self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/{prj_name}.sv }} [current_fileset]\n'.replace("\\","/")
@@ -484,9 +487,12 @@ class Verilog_maker:
         self.tcl_commands = ''
         tcl_path = folder_directory + '\\' + prj_name + '.tcl'
         
-        self.run_vivado_tcl(self.vivado_path, tcl_path)
+        self.runVivadoTCL(self.vivado_path, tcl_path)
         
-    def generate_time_controller(self, current_dir = None):
+    ###########################################################################
+    ##TimeController
+    ###########################################################################
+    def generateTimeController(self, current_dir = None):
         if current_dir == None:
             source_dir = './TimeController'
         else:
@@ -497,7 +503,7 @@ class Verilog_maker:
         base_name = os.path.basename(full_dir)
         new_full_dir = os.path.join(base_dir,base_name)
         new_output_full_dir =os.path.join(base_dir,base_name.lstrip('/').lstrip('\\') + '_output')
-        self.ensure_directory_exists(new_full_dir)
+        self.ensureDirectoryExists(new_full_dir)
             
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
@@ -514,26 +520,26 @@ class Verilog_maker:
             with open(destination_path, 'w') as destination_file:
                 destination_file.write(verilog_code)
 
-        self.make_time_controller_tcl(new_output_full_dir, 'TimeController', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
+        self.makeTimeControllerTCL(new_output_full_dir, 'TimeController', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
         
-    def make_time_controller_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
+    def makeTimeControllerTCL(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
         file_name = prj_name+".tcl"
         print(file_name)
         # Combine the file name and folder directory to create the full file path
         file_path = folder_directory + '\\' + file_name
         print(file_path)
         
-        self.ensure_directory_exists(folder_directory)
-        self.ensure_directory_exists(src_folder_directory)
+        self.ensureDirectoryExists(folder_directory)
+        self.ensureDirectoryExists(src_folder_directory)
         #add src files
-        self.set_project(folder_directory, prj_name)
-        self.create_project(part_name)
-        self.add_src(src_folder_directory,file_type)
-        self.set_board(board_path, board_name)
+        self.setProject(folder_directory, prj_name)
+        self.createProject(part_name)
+        self.addSrc(src_folder_directory,file_type)
+        self.setBoard(board_path, board_name)
         
         # Save the TCL code to the .tcl file
         
-        self.tcl_commands += self.generate_customized_ip(folder_directory)
+        self.tcl_commands += self.generateCustomizedIp(folder_directory)
         
         self.tcl_commands += f'set_property top TimeController [current_fileset]\n'.replace("\\","/")
         self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TimeController.sv }} [current_fileset]\n'.replace("\\","/")
@@ -544,10 +550,12 @@ class Verilog_maker:
         
         tcl_path = folder_directory + '\\' + prj_name + '.tcl'
         
-        self.run_vivado_tcl(self.vivado_path, tcl_path)
+        self.runVivadoTCL(self.vivado_path, tcl_path)
         
+    ###########################################################################
     ##TTLx8
-    def generate_ttlx8_out(self, current_dir = None):
+    ###########################################################################
+    def generateTTLx8Out(self, current_dir = None):
         if current_dir == None:
             source_dir = './TTLx8_out'
         else:
@@ -558,7 +566,7 @@ class Verilog_maker:
         base_name = os.path.basename(full_dir)
         new_full_dir = os.path.join(base_dir,base_name)
         new_output_full_dir =os.path.join(base_dir,base_name + '_output')
-        self.ensure_directory_exists(new_full_dir)
+        self.ensureDirectoryExists(new_full_dir)
             
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
@@ -575,28 +583,28 @@ class Verilog_maker:
             with open(destination_path, 'w') as destination_file:
                 destination_file.write(verilog_code)
 
-        self.make_ttlx8_out_tcl(new_output_full_dir, 'TTLx8_out', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
+        self.makeTTLx8OutTCL(new_output_full_dir, 'TTLx8_out', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
         
-    def make_ttlx8_out_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
+    def makeTTLx8OutTCL(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
         file_name = prj_name+".tcl"
         print(file_name)
         # Combine the file name and folder directory to create the full file path
         file_path = folder_directory + '\\' + file_name
         print(file_path)
         
-        self.ensure_directory_exists(folder_directory)
-        self.ensure_directory_exists(src_folder_directory)
+        self.ensureDirectoryExists(folder_directory)
+        self.ensureDirectoryExists(src_folder_directory)
         #add src files
-        self.set_project(folder_directory, prj_name)
-        self.create_project(part_name)
-        self.add_src(src_folder_directory,file_type)
-        self.set_board(board_path, board_name)
+        self.setProject(folder_directory, prj_name)
+        self.createProject(part_name)
+        self.addSrc(src_folder_directory,file_type)
+        self.setBoard(board_path, board_name)
         
-        self.tcl_commands += self.generate_xilinx_rtob_fifo(folder_directory, 'rtob_fifo_generator_0', self.ttlx8_fifo_depth)
+        self.tcl_commands += self.generateXilinxRtobFifo(folder_directory, 'rtob_fifo_generator_0', self.ttlx8_fifo_depth)
         
         # Save the TCL code to the .tcl file
         
-        self.tcl_commands += self.generate_customized_ip(folder_directory)
+        self.tcl_commands += self.generateCustomizedIp(folder_directory)
         
         self.tcl_commands += f'set_property top TTLx8_out [current_fileset]\n'.replace("\\","/")
         self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TTLx8_out.sv }} [current_fileset]\n'.replace("\\","/")
@@ -607,10 +615,12 @@ class Verilog_maker:
         
         tcl_path = folder_directory + '\\' + prj_name + '.tcl'
         
-        self.run_vivado_tcl(self.vivado_path, tcl_path)
+        self.runVivadoTCL(self.vivado_path, tcl_path)
         
+    ###########################################################################
     ##TTL
-    def generate_ttl_out(self, current_dir = None):
+    ###########################################################################
+    def generateTTLOut(self, current_dir = None):
         if current_dir == None:
             source_dir = './TTL_out'
         else:
@@ -621,7 +631,7 @@ class Verilog_maker:
         base_name = os.path.basename(full_dir)
         new_full_dir = os.path.join(base_dir,base_name)
         new_output_full_dir =os.path.join(base_dir,base_name + '_output')
-        self.ensure_directory_exists(new_full_dir)
+        self.ensureDirectoryExists(new_full_dir)
 
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
@@ -638,28 +648,28 @@ class Verilog_maker:
             with open(destination_path, 'w') as destination_file:
                 destination_file.write(verilog_code)
 
-        self.make_ttl_out_tcl(new_output_full_dir, 'TTL_out', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
+        self.makeTTLOutTCL(new_output_full_dir, 'TTL_out', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
 
-    def make_ttl_out_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
+    def makeTTLOutTCL(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
         file_name = prj_name+".tcl"
         print(file_name)
         # Combine the file name and folder directory to create the full file path
         file_path = folder_directory + '/' + file_name
         print(file_path)
 
-        self.ensure_directory_exists(folder_directory)
-        self.ensure_directory_exists(src_folder_directory)
+        self.ensureDirectoryExists(folder_directory)
+        self.ensureDirectoryExists(src_folder_directory)
         #add src files
-        self.set_project(folder_directory, prj_name)
-        self.create_project(part_name)
-        self.add_src(src_folder_directory,file_type)
-        self.set_board(board_path, board_name)
+        self.setProject(folder_directory, prj_name)
+        self.createProject(part_name)
+        self.addSrc(src_folder_directory,file_type)
+        self.setBoard(board_path, board_name)
 
-        self.tcl_commands += self.generate_xilinx_rtob_fifo(folder_directory, 'rtob_fifo_generator_1', self.ttl_fifo_depth)
+        self.tcl_commands += self.generateXilinxRtobFifo(folder_directory, 'rtob_fifo_generator_1', self.ttl_fifo_depth)
 
         # Save the TCL code to the .tcl file
 
-        self.tcl_commands += self.generate_customized_ip(folder_directory)
+        self.tcl_commands += self.generateCustomizedIp(folder_directory)
 
         self.tcl_commands += f'set_property top TTL_out [current_fileset]\n'.replace("\\","/")
         self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/TTL_out.sv }} [current_fileset]\n'.replace("\\","/")
@@ -670,70 +680,9 @@ class Verilog_maker:
 
         tcl_path = folder_directory + '\\' + prj_name + '.tcl'
 
-        self.run_vivado_tcl(self.vivado_path, tcl_path)
+        self.runVivadoTCL(self.vivado_path, tcl_path)
         
-    ##buffer
-    def generate_axi_buffer(self, current_dir = None):
-        if current_dir == None:
-            source_dir = './AXI_Buffer'
-        else:
-            source_dir = f'{current_dir}/AXI_Buffer'
-        
-        full_dir = os.path.join(self.git_dir, self.AXI_Buffer_dir.lstrip('/').lstrip('\\'))
-        base_dir = os.path.dirname(full_dir)
-        base_name = os.path.basename(full_dir)
-        new_full_dir = os.path.join(base_dir,base_name)
-        new_output_full_dir =os.path.join(base_dir,base_name + '_output')
-        self.ensure_directory_exists(new_full_dir)
-            
-        for filename in os.listdir(source_dir):
-            source_path = os.path.join(source_dir, filename)
-            file_root, file_extension = os.path.splitext(filename)
-            new_filename = file_root + file_extension
-            destination_path = os.path.join(new_full_dir, new_filename)
-        
-            # Open the source file and read its contents
-            verilog_code = ''
-            with open(source_path, 'r') as source_file:
-                verilog_code = source_file.read()
-                
-            # Write the modified content to the destination file
-            with open(destination_path, 'w') as destination_file:
-                destination_file.write(verilog_code)
-
-        self.make_axi_buffer_tcl(new_output_full_dir, 'AXI_Buffer', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic'])
-        
-    def make_axi_buffer_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type):
-        file_name = prj_name+".tcl"
-        print(file_name)
-        # Combine the file name and folder directory to create the full file path
-        file_path = folder_directory + '\\' + file_name
-        print(file_path)
-        
-        self.ensure_directory_exists(folder_directory)
-        self.ensure_directory_exists(src_folder_directory)
-        #add src files
-        self.set_project(folder_directory, prj_name)
-        self.create_project(part_name)
-        self.add_src(src_folder_directory,file_type)
-        self.set_board(board_path, board_name)
-        
-        # Save the TCL code to the .tcl file
-        
-        self.tcl_commands += self.generate_customized_ip(folder_directory)
-        
-        self.tcl_commands += f'set_property top AXI_Buffer [current_fileset]\n'.replace("\\","/")
-        self.tcl_commands += f'set_property top_file {{ {src_folder_directory}/AXI_Buffer.sv }} [current_fileset]\n'.replace("\\","/")
-        with open(file_path, 'w') as tcl_file:
-            tcl_file.write(self.tcl_commands)
-            
-        self.tcl_commands = ''
-        
-        tcl_path = folder_directory + '\\' + prj_name + '.tcl'
-        
-        self.run_vivado_tcl(self.vivado_path, tcl_path)
-        
-    def generate_RFSoC_main(self, current_dir = None):
+    def generateRFSoCmain(self, current_dir = None):
         if current_dir == None:
             source_dir = './RFSoC_Main'
         else:
@@ -744,7 +693,7 @@ class Verilog_maker:
         base_name = os.path.basename(full_dir)
         new_full_dir = os.path.join(base_dir,base_name)
         new_output_full_dir =os.path.join(base_dir,base_name + '_output')
-        self.ensure_directory_exists(new_full_dir)
+        self.ensureDirectoryExists(new_full_dir)
             
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
@@ -761,78 +710,39 @@ class Verilog_maker:
             with open(destination_path, 'w') as destination_file:
                 destination_file.write(verilog_code)
 
-        self.make_RFSoC_main_tcl(new_output_full_dir, 'RFSoC_Main', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic', '.xdc'],'block')
+        self.makeRFSoCmainTCL(new_output_full_dir, 'RFSoC_Main', self.part_name, self.board_path, self.board_name, new_full_dir, ['.sv', '.v','.xic', '.xdc'],'block')
         
-    def make_RFSoC_main_tcl(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type,version = 'block'):
-        if version == 'block':
-            file_name = prj_name+".tcl"
-            print(file_name)
-            # Combine the file name and folder directory to create the full file path
-            file_path = folder_directory + '\\' + file_name
-            print(file_path)
+    def makeRFSoCmainTCL(self, folder_directory,prj_name,part_name,board_path,board_name,src_folder_directory,file_type,version = 'block'):
+        file_name = prj_name+".tcl"
+        print(file_name)
+        # Combine the file name and folder directory to create the full file path
+        file_path = folder_directory + '\\' + file_name
+        print(file_path)
+        
+        self.ensureDirectoryExists(folder_directory)
+        self.ensureDirectoryExists(src_folder_directory)
+        #add src files
+        self.setProject(folder_directory, prj_name)
+        self.createProject(part_name)
+        self.addSrc(src_folder_directory,file_type)
+        self.setBoard(board_path, board_name)
+        
+        # Save the TCL code to the .tcl file
+        
+        self.tcl_commands += self.addCustomizedIp(folder_directory)
+        self.tcl_commands += self.generateXilinxBlockDesign(folder_directory, prj_name)
+        if self.make_bit_stream == False:
+            self.openVivado(folder_directory,prj_name)
+        with open(file_path, 'w') as tcl_file:
+            tcl_file.write(self.tcl_commands)
             
-            self.ensure_directory_exists(folder_directory)
-            self.ensure_directory_exists(src_folder_directory)
-            #add src files
-            self.set_project(folder_directory, prj_name)
-            self.create_project(part_name)
-            self.add_src(src_folder_directory,file_type)
-            self.set_board(board_path, board_name)
+        self.tcl_commands = ''
+        
+        tcl_path = folder_directory + '\\' + prj_name + '.tcl'
+        
+        self.runVivadoTCL(self.vivado_path, tcl_path)
             
-            # Save the TCL code to the .tcl file
-            
-            self.tcl_commands += self.add_customized_ip(folder_directory)
-            self.tcl_commands += self.generate_xilinx_block_design(folder_directory, prj_name)
-            if self.make_bit_stream == False:
-                self.open_vivado(folder_directory,prj_name)
-            with open(file_path, 'w') as tcl_file:
-                tcl_file.write(self.tcl_commands)
-                
-            self.tcl_commands = ''
-            
-            tcl_path = folder_directory + '\\' + prj_name + '.tcl'
-            
-            self.run_vivado_tcl(self.vivado_path, tcl_path)
-            
-        #Only possible in TCL_Creater
-        elif version == 'code':
-            file_name = prj_name+".tcl"
-            print(file_name)
-            # Combine the file name and folder directory to create the full file path
-            file_path = folder_directory + '\\' + file_name
-            print(file_path)
-            
-            self.ensure_directory_exists(folder_directory)
-            self.ensure_directory_exists(src_folder_directory)
-            #add src files
-            self.set_project(folder_directory, prj_name)
-            self.create_project(part_name)
-            self.add_src(src_folder_directory,file_type)
-            self.set_board(board_path, board_name)
-            
-            # Save the TCL code to the .tcl file
-            
-            self.tcl_commands += self.add_customized_ip(folder_directory)
-            
-            for i in range(self.total_dac_num):
-                self.tcl_commands += self.generate_custom_dac_controller(folder_directory, i)
-                
-            self.tcl_commands += self.generate_custom_time_controller(folder_directory)
-            self.tcl_commands += self.generate_xilinx_Zynq(folder_directory)
-            
-            # set simulation length
-            self.tcl_commands += 'set_property -name {xsim.simulate.runtime} -value {1ms} -objects [get_filesets sim_1]\n'
-            self.open_vivado(folder_directory,prj_name)
-            with open(file_path, 'w') as tcl_file:
-                tcl_file.write(self.tcl_commands)
-                
-            self.tcl_commands = ''
-            
-            tcl_path = folder_directory + '\\' + prj_name + '.tcl'
-            
-            self.run_vivado_tcl(self.vivado_path, tcl_path)
-            
-    def generate_xilinx_block_design(self, folder_directory, prj_name):
+    def generateXilinxBlockDesign(self, folder_directory, prj_name):
         print(f'folder dir : {folder_directory}')
         print(f'current python dir : {os.path.abspath(__file__)}')
         tcl_code = ''
@@ -1293,60 +1203,33 @@ launch_runs impl_1 -to_step write_bitstream -jobs 6
         tcl_code = tcl_code.replace("\\","/")
         
         return tcl_code
-            
-    def generate_custom_dac_controller(self, folder_directory, num):
-        tcl_code = ''
-        tcl_code += f'create_ip -dir {folder_directory} -name DAC_Controller -vendor xilinx.com -library user -version 1.0 -module_name DAC_Controller_{num}\n'
         
-        #using '\' makes error in vivado.bat. this should be replaced in '/'
-        tcl_code = tcl_code.replace("\\","/")
-        
-        return tcl_code
-    
-    def generate_custom_time_controller(self,folder_directory):
-        tcl_code = ''
-        tcl_code += f'create_ip -dir {folder_directory} -name TimeController -vendor xilinx.com -library user -version 1.0 -module_name TimeController\n'
-        
-        #using '\' makes error in vivado.bat. this should be replaced in '/'
-        tcl_code = tcl_code.replace("\\","/")
-        
-        return tcl_code
-    
-    def generate_custom_axi_buffer(self,folder_directory):
-        tcl_code = ''
-        tcl_code += f'create_ip -dir {folder_directory} -name AxiBuffer -vendor xilinx.com -library user -version 1.0 -module_name AxiBuffer\n'
-        
-        #using '\' makes error in vivado.bat. this should be replaced in '/'
-        tcl_code = tcl_code.replace("\\","/")
-        
-        return tcl_code
-        
-    def set_project(self, folder_directory, prj_name):
+    def setProject(self, folder_directory, prj_name):
         tcl_code = "# Set the project name and working directory\n"
-        tcl_code += self.generate_set_prj_string(folder_directory,prj_name)
+        tcl_code += self.generateSetPrjString(folder_directory,prj_name)
         tcl_code = tcl_code.replace("\\","/")
         tcl_code += '\n'
         
         self.tcl_commands += tcl_code
     
-    def create_project(self, part_name):
+    def createProject(self, part_name):
         tcl_code = "# Create a new project\n"
-        tcl_code += self.generate_create_prj_string(part_name)
+        tcl_code += self.generateCreatePrjString(part_name)
         tcl_code = tcl_code.replace("\\","/")
         tcl_code += '\n'
         
         self.tcl_commands += tcl_code
     
-    def add_src(self, folder_directory,file_type):
+    def addSrc(self, folder_directory,file_type):
         # Get all files in the directory
-        all_files = self.get_all_files_in_directory(folder_directory,file_type)
+        all_files = self.getAllFilesInDirectory(folder_directory,file_type)
         tcl_code = "# Add the FIFO IP file to the project\n"
         for all_file_path in all_files:
             root, ext = os.path.splitext(all_file_path)
             if ext == '.xdc':
-                tcl_code += self.generate_add_constraints_string(all_file_path)
+                tcl_code += self.generateAddConstraintsString(all_file_path)
             else:
-                tcl_code += self.generate_add_files_string(all_file_path)
+                tcl_code += self.generateAddFilesString(all_file_path)
             
         #using '\' makes error in vivado.bat. this should be replaced in '/'
         tcl_code = tcl_code.replace("\\","/")
@@ -1354,15 +1237,15 @@ launch_runs impl_1 -to_step write_bitstream -jobs 6
         
         self.tcl_commands += tcl_code
     
-    def set_board(self, board_path, board_name):
+    def setBoard(self, board_path, board_name):
         tcl_code = "# Set the target board\n"
-        tcl_code += self.generate_set_board(board_path, board_name)
+        tcl_code += self.generateSetBoard(board_path, board_name)
         tcl_code = tcl_code.replace("\\","/")
         tcl_code += '\n'
         
         self.tcl_commands += tcl_code
         
-    def open_vivado(self, folder_directory,prj_name):
+    def openVivado(self, folder_directory,prj_name):
         tcl_code = ''
         tcl_code += 'start_gui\n'
         # tcl_code += f'open_project {folder_directory}/{prj_name}/{prj_name}.xpr\n'
@@ -1371,7 +1254,7 @@ launch_runs impl_1 -to_step write_bitstream -jobs 6
         
         self.tcl_commands += tcl_code
     
-    def generate_xsa(self):
+    def generateXSA(self):
         tcl_code = ''
         file_path = os.path.join(self.git_dir, self.target_dir,'make_xsa.tcl')
         if self.make_bit_stream == True:
@@ -1387,15 +1270,15 @@ write_hw_platform -fixed -include_bit -force -file {bit_addr}
             with open(file_path, 'w') as tcl_file:
                 tcl_file.write(self.tcl_commands)
 
-            self.run_vivado_tcl(self.vivado_path, file_path)
+            self.runVivadoTCL(self.vivado_path, file_path)
             
     def run(self):
-        self.generate_dac_controller()
-        self.generate_time_controller()
-        self.generate_ttlx8_out()
-        self.generate_ttl_out()
-        self.generate_RFSoC_main()
-        self.generate_xsa()
+        self.generateDacController()
+        self.generateTimeController()
+        self.generateTTLx8Out()
+        self.generateTTLOut()
+        self.generateRFSoCmain()
+        self.generateXSA()
         
     
             

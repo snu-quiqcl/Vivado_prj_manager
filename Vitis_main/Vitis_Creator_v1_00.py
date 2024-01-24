@@ -206,11 +206,11 @@ importsources -name RealTime_Firmware_app -path "{self.realtime_linker_dir}\lscr
 if __name__ == "__main__":
     vtm = Vitis_maker()
     
-    # vtm.set_workspace()
-    # vtm.make_vitis_platform()
-    # vtm.make_vitis_application()
-    # vtm.run_vitis_tcl()
+    vtm.set_workspace()
+    vtm.make_vitis_platform()
+    vtm.make_vitis_application()
+    vtm.run_vitis_tcl()
     
-    # vtm.copy_bsp_include()
-    # vtm.copy_bsp_lib()
+    vtm.copy_bsp_include()
+    vtm.copy_bsp_lib()
     vtm.make_skeleton_code()

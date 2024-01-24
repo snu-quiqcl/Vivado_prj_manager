@@ -11,20 +11,6 @@ import time
 import socket
 import numpy as np
 
-S00_AXIS_TDATA=0x0
-S00_AXIS_TVALID=0x1
-DAC00_FAST_SHUTDOWN=0x2
-DAC00_PL_EVENT=0x3
-DAC00_NCO_FREQ=0x4
-DAC00_NCO_PHASE=0x5
-DAC00_NCO_PHASE_RST=0x6
-DAC00_NCO_UPDATE_EN=0x7
-DAC0_NCO_UPDATE_REQ=0x8
-DAC0_SYSREF_INT_GATING=0x9
-DAC0_SYSREF_INT_REENABLE=0xA
-UPDATE=0xF
-
-
 class TCP_Client:
     def __init__(self, defaultIPAddress = '192.168.1.10', defaultTCPPort = 7):
         self.IPAddress = defaultIPAddress

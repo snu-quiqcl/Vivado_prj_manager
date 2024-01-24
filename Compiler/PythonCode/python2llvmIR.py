@@ -73,6 +73,16 @@ type_table['NO_TYPE'] = 0 # Type is not defined yet
 MALLOC          = 'malloc'
 FREE            = 'free'
 
+#######################################################################
+#Struct type
+#######################################################################
+pycobject_type = ir.LiteralStructType([
+    ir.IntType(32),  # Corresponds to C 'int'
+    ir.FloatType(),  # Corresponds to C 'float'
+    ir.DoubleType()  # Corresponds to C 'double'
+])
+module.context.get_identified_type('ABC')
+
 
 class LLVMIR_Statement:
     def __init__(self):

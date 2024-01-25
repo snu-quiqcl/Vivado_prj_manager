@@ -81,17 +81,16 @@ pycobject_type = ir.LiteralStructType([
     ir.FloatType(),  # Corresponds to C 'float'
     ir.DoubleType()  # Corresponds to C 'double'
 ])
-module.context.get_identified_type('ABC')
 
 
-class LLVMIR_Statement:
+class LLVMIRStatement:
     def __init__(self):
         self.classes_id = []
     
-    def translate_python2llvmir(self,code):
+    def translatePython2llvmir(self,code):
         tree = ast.parse(python_code)
         
-        classes = self.collect_classes(tree)
+        classes = self.collectClasses(tree)
         # string constant initializer
         for node in ast.walk(tree):
             if isinstance(node, ast.Constant) and type(node.value) == str:
@@ -110,12 +109,12 @@ class LLVMIR_Statement:
             if isinstance(node, ast.FunctionDef) and node not in (func_node for class_node in classes for func_node in class_node.body):
                 print(ast.dump(node, indent=4))
                 temp_func_maker = Func_Maker()
-                temp_func_maker.translate_function(node)
+                temp_func_maker.translateFunction(node)
                 
             if isinstance(node, ast.ClassDef):
-                print(ast.dump(node, indent=4))
+                # print(ast.dump(node, indent=4))
                 temp_class_maker = Class_Maker()
-                temp_class_maker.translate_class(node)
+                temp_class_maker.translateClass(node)
                 
         print('Converted LLVM IR')
         print('#################################################################')
@@ -126,9 +125,9 @@ class LLVMIR_Statement:
         #######################################################################
         #Make .ll FIle
         #######################################################################
-        self.write_file('./output.ll')
+        self.writeFile('./output.ll')
             
-    def translate_BinOp(self, node):
+    def translateBinOp(self, node):
         left = self.translate_node(node.left)
         right = self.translate_node(node.right)
 
@@ -142,11 +141,11 @@ class LLVMIR_Statement:
             raise NotImplemented(f'{node.op} is not implemented')
         # ... other binary operators
 
-    def translate_Constant(self, node):
+    def translateConstant(self, node):
         # https://stackoverflow.com/questions/58674264/llvmlite-hello-world-example-produces-wrong-output
         global str_num
         if type(node.value) == int:
-            # self.function.variables['const.{str(node.value)}'] = self.make_new_var('const.{str(node.value)}',node.value)
+            # self.function.variables['const.{str(node.value)}'] = self.makeNewVar('const.{str(node.value)}',node.value)
             # return self.function.variables['const.{str(node.value)}']
             return ir.Constant(ir.IntType(64),node.value)
         elif type(node.value) == str:
@@ -167,18 +166,15 @@ class LLVMIR_Statement:
                 self.function.variables[str_var.name] = ptr_var
                 
             str_ptr = self.builder.bitcast(str_var, ir.PointerType(ir.IntType(8)))
-            print(str_ptr)
-            print(ptr_var)
 
             # Store the string pointer into the pointer variable
             self.builder.store(str_ptr, ptr_var)
             return self.builder.load(ptr_var)
 
-    def translate_Name(self, node):
+    def translateName(self, node):
         if hasattr(node, 'func') and ('class.' + node.func.id) in classes:
-            print(ast.dump(node, indent=4))
+            # print(ast.dump(node, indent=4))
             class_instance = self.builder.alloca(classes[('class.' + node.func.id)])
-            print(class_instance)
             return class_instance
         else:
             var_name = node.id
@@ -186,11 +182,11 @@ class LLVMIR_Statement:
                 if var_name == arg.name:
                     return arg
               
-            if self.is_self(node):
+            if self.isSelf(node):
                 if node.attr in self.declared_self_vars:
                     var_ptr = self.builder.gep(self.function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), len(self.declared_self_vars))],'self_'+node.target.attr) ###///
                 else:
-                    var_ptr = self.builder.alloca(self.translate_Name(node.value).type, name='self_'+node.attr)
+                    var_ptr = self.builder.alloca(self.translateName(node.value).type, name='self_'+node.attr)
                     self.declared_self_vars[var_ptr.name] = var_ptr
                     
             elif var_name in self.function.variables:
@@ -204,24 +200,24 @@ class LLVMIR_Statement:
                 
             return self.builder.load(var_ptr, var_name)
     
-    def get_ptr(self,target):
+    def getPtr(self,target):
         try:
             return self.function.variables[target.id]
         except:
             raise Exception(f'{target} this variable is not declatred')
         
-    def translate_Return(self, node):
+    def translateReturn(self, node):
         if node.value:
             return_value = self.translate_node(node.value)
             self.builder.ret(return_value)
         else:
-            self.builder.ret(self.function.ret.as_pointer(), None)
-    def translate_Call(self, node):
+            self.builder.ret_void()
+    def translateCall(self, node):
         ######################################################################
         # Call Function
         ######################################################################
         if hasattr(node,'func'):
-            if self.is_self(node.func):
+            if self.isSelf(node.func):
                 arg_list = [self.function.variables[node.func.value.id]]
                 if hasattr(node, 'args'):
                     for arg in node.args:
@@ -236,7 +232,7 @@ class LLVMIR_Statement:
                 return self.builder.call(functions[node.func.id], arg_list)
         else:
             raise TypeError('Not a function')
-    def translate_Assign(self, node):
+    def translateAssign(self, node):
         if len(node.targets) != 1:
             raise NotImplementedError("Assignment to multiple targets is not supported")
     
@@ -245,8 +241,9 @@ class LLVMIR_Statement:
         # target var 
         ###
         if isinstance(node.value, ast.List):
-            print('helo')
-        if self.is_self(target):
+            pass
+            # print('helo')
+        if self.isSelf(target):
             if ('self_' + target.attr) in self.declared_self_vars:
                 var_ptr = self.declared_self_vars['self_'+target.attr] ###///
                 value = self.translate_node(node.value)
@@ -269,22 +266,21 @@ class LLVMIR_Statement:
             
             else:            
                 # Allocate space for the variable on the stack
-                var_ptr = self.make_new_var(target.id, node.value)
+                var_ptr = self.makeNewVar(target.id, node.value)
                 
             return var_ptr
             
         else:
-            print(ast.dump(node, indent=4))
             var_ptr = self.function.variables[target.id]
             value = self.translate_node(node.value)
             self.builder.store(value, var_ptr)
             
-    def translate_AnnAssign(self, node):
+    def translateAnnAssign(self, node):
         # Assuming all types are integer for simplicity
         if not isinstance(node.annotation, ast.Name) or node.annotation.id != 'int':
             raise NotImplementedError("Only integer types are supported")
             
-        if self.is_self(node.target):
+        if self.isSelf(node.target):
             if ('self_'+ node.target.attr) in self.declared_self_vars:
                 var_ptr = self.declared_self_vars['self_'+node.target.attr] ###///
             else:
@@ -296,11 +292,11 @@ class LLVMIR_Statement:
                 self.declared_self_vars['self_'+node.target.attr] = var_ptr
         else: 
             # Allocate space for the variable on the stack
-            var_ptr = self.make_new_var(node.target.id, node.value)
+            var_ptr = self.makeNewVar(node.target.id, node.value)
         
         return var_ptr
     
-    def make_new_var(self, var_name, node_value):
+    def makeNewVar(self, var_name, node_value):
         if node_value is not None:
             value = self.translate_node(node_value)
             var_type = value.type
@@ -317,7 +313,7 @@ class LLVMIR_Statement:
         
         return var_ptr
         
-    def translate_For(self,node):
+    def translateFor(self,node):
         # Basic blocks for loop start, body, and end
         loop_start_block = self.builder.append_basic_block('loop_start')
         loop_body_block = self.builder.append_basic_block('loop_body')
@@ -328,7 +324,7 @@ class LLVMIR_Statement:
         
         # Initialize the loop variable 'i'
         index = self.translate_node(node.target)
-        index_ptr = self.get_ptr(node.target)
+        index_ptr = self.getPtr(node.target)
         
         ####################################################################### 
         # Case using range
@@ -362,7 +358,7 @@ class LLVMIR_Statement:
         # Loop end block
         self.builder.position_at_end(loop_end_block)
     
-    def translate_Attribute(self, node):
+    def translateAttribute(self, node):
         if hasattr(node,'value'):
             if ('self_'+ node.attr) in self.declared_self_vars:
                 var_ptr = self.declared_self_vars['self_'+node.attr] ###///
@@ -370,10 +366,9 @@ class LLVMIR_Statement:
                 var_ptr = self.builder.gep(self.function.variables['self'],[ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), len(self.declared_self_vars))],'self_'+node.target.attr)
                 self.declared_self_vars['self_'+node.attr] = var_ptr
         
-        print(ast.dump(node, indent=4))
         return self.builder.load(var_ptr)
     
-    def translate_If(self, node):
+    def translateIf(self, node):
         condition = self.translate_node(node.test)
 
         # Create basic blocks for the 'then' and 'else' parts and for continuation
@@ -394,14 +389,13 @@ class LLVMIR_Statement:
         if node.orelse != None:
             for stmt in node.orelse:
                 self.builder.position_at_end(else_block)
-                print(ast.dump(stmt, indent=4))
                 self.translate_node(stmt)
                 self.builder.branch(continue_block)
 
         # Continue with the rest of the code
         self.builder.position_at_end(continue_block)
         
-    def translate_Compare(self, node):
+    def translateCompare(self, node):
         if len(node.ops) != 1 or len(node.comparators) != 1:
             raise NotImplementedError("Complex comparison not implemented")
 
@@ -424,7 +418,7 @@ class LLVMIR_Statement:
         else:
             raise NotImplementedError("Unsupported comparison operation")
             
-    def translate_BoolOp(self, node):
+    def translateBoolOp(self, node):
         if isinstance(node.op, ast.And):
             values = [self.translate_node(v) for v in node.values]
             result = values[0]
@@ -440,68 +434,66 @@ class LLVMIR_Statement:
         else:
             raise NotImplementedError("Only 'And' BoolOps are implemented")
             
-    def translate_List(self,node):
+    def translateList(self,node):
         # To do
         ir.ArrayType(element_type, len(array_values))
     
     def translate_Expr(self,node):
-        print(ast.dump(node, indent=4))
         return self.translate_node(node.value)
         
     def translate_node(self, node):
         if isinstance(node, ast.BinOp):
-            return self.translate_BinOp(node)
+            return self.translateBinOp(node)
         elif isinstance(node, ast.Constant):
-            return self.translate_Constant(node)
+            return self.translateConstant(node)
         elif isinstance(node, ast.Name):
-            return self.translate_Name(node)
+            return self.translateName(node)
         elif isinstance(node, ast.Assign):
-            return self.translate_Assign(node)
+            return self.translateAssign(node)
         elif isinstance(node, ast.Return):
-            return self.translate_Return(node)
+            return self.translateReturn(node)
         elif isinstance(node, ast.Call):
-            return self.translate_Call(node)
+            return self.translateCall(node)
         elif isinstance(node,ast.AnnAssign):
-            return self.translate_AnnAssign(node)
+            return self.translateAnnAssign(node)
         elif isinstance(node,ast.For):
-            return self.translate_For(node)
+            return self.translateFor(node)
         elif isinstance(node,ast.Attribute):
-            return self.translate_Attribute(node)
+            return self.translateAttribute(node)
         elif isinstance(node,ast.If):
-            return self.translate_If(node)
+            return self.translateIf(node)
         elif isinstance(node, ast.Compare):
-            return self.translate_Compare(node)
+            return self.translateCompare(node)
         elif isinstance(node,ast.BoolOp):
-            return self.translate_BoolOp(node)
+            return self.translateBoolOp(node)
         elif isinstance(node,ast.List):
-            return self.translate_List(node)
+            return self.translateList(node)
         elif isinstance(node, ast.Expr):
             return self.translate_Expr(node)
         # Add more node types here as needed
         else:
-            print(ast.dump(node, indent=4))
             raise NotImplementedError(f"Node type \n{ast.dump(node, indent=4)}\n not implemented")
     
-    def collect_classes(self, node):
+    def collectClasses(self, node):
         classes = []
         for item in ast.walk(node):
             if isinstance(item, ast.ClassDef):
                 classes.append(item)
         return classes
     
-    def get_ir_type(self, node):
+    def getIrType(self, node):
         if hasattr(node,'annotation') and node.annotation != None and node.annotation.id == 'int':
             return ir.IntType(64)
         elif hasattr(node, 'id') and node.id != None and (type(node.id) == 'int' or node.id == 'int'):
             return ir.IntType(64)
         
-    def is_self(self,node):
+    def isSelf(self,node):
         if isinstance(node,ast.Attribute):
             return True
         else:
             return False
         
-    def get_size_of_type(self, var_type):
+    def getSizeOfType(self, var_type):
         """
         Calculate the size of the given LLVM type using getelementptr
         """
@@ -512,18 +504,17 @@ class LLVMIR_Statement:
         
         return size_int
         
-    def find_key_by_value(self, my_dict, search_value):
+    def findKeyByValue(self, my_dict, search_value):
         for key, value in my_dict.items():
-            print(search_value)
             if value == search_value:
                 return key
         return None 
     
-    def write_file(self, filename):
+    def writeFile(self, filename):
         with open(filename, "w") as f:
             f.write(str(module))
             
-class Class_Maker(LLVMIR_Statement):
+class Class_Maker(LLVMIRStatement):
     def __init__(self):
         self.declared_method = dict()
         self.declared_self_vars = dict()
@@ -534,7 +525,7 @@ class Class_Maker(LLVMIR_Statement):
         self.field_types =[]
         self.undefined_function = dict()
         
-    def translate_class(self,node):
+    def translateClass(self,node):
         if isinstance(node,ast.ClassDef):
             # Create a struct to represent the class data
             class_name = 'class.' + node.name
@@ -553,7 +544,7 @@ class Class_Maker(LLVMIR_Statement):
                         if not arg.target.attr in self.fields:
                             if hasattr(arg,'annotation'):
                                 self.fields.add(arg.target.attr)
-                                self.field_types.append(self.get_ir_type(arg))
+                                self.field_types.append(self.getIrType(arg))
                                     
                     
             self.class_type = module.context.get_identified_type(self.class_name)
@@ -563,17 +554,16 @@ class Class_Maker(LLVMIR_Statement):
             # class_struct.initializer = ir.Constant(class_struct, field_types)
             for stmt in node.body:
                 if isinstance(stmt, ast.FunctionDef):
-                    self.translate_method(stmt, self.class_type, node.name)
+                    self.translateMethod(stmt, self.class_type, node.name)
                                               
-    def translate_method(self,node, class_type, node_name):
+    def translateMethod(self,node, class_type, node_name):
         if isinstance(node, ast.FunctionDef):            
             arg_types = []
             for arg in node.args.args:
                 if arg.arg != 'self':
-                    print(arg.arg)
-                    arg_types.append(self.get_ir_type(arg))
+                    arg_types.append(self.getIrType(arg))
             
-            ret_type = self.get_ir_type(node.returns)
+            ret_type = self.getIrType(node.returns)
             method_type = ir.FunctionType(ir.IntType(64), [ ir.PointerType(self.class_type) ] + arg_types)
             method = ir.Function(module, method_type, name=f"class.{node_name}.{node.name}")
             
@@ -598,7 +588,6 @@ class Class_Maker(LLVMIR_Statement):
             for i in range(len(self.function.args)):
                 self.function.variables[self.function.args[i].name] = self.function.args[i]
                 
-            print(self.function.name)
             functions[self.function.name] = self.function
             
             # self.function.variables[] 
@@ -608,7 +597,7 @@ class Class_Maker(LLVMIR_Statement):
 
             # Simplified: assuming function ends with return
 
-class Func_Maker(LLVMIR_Statement):
+class Func_Maker(LLVMIRStatement):
     def __init__(self):
         self.declared_class = {}
         self.declared_method = []
@@ -616,15 +605,17 @@ class Func_Maker(LLVMIR_Statement):
         self.undefined_function = dict()
         self.builder = None
         
-    def translate_function(self, node):
+    def translateFunction(self, node):
         if isinstance(node, ast.FunctionDef):
             # Simplified: assuming function returns int and takes int arguments
             
             arg_types = []
             for arg in node.args.args:
-                arg_types.append(self.get_ir_type(arg))
+                arg_types.append(self.getIrType(arg))
                     
-            ret_type = self.get_ir_type(node.returns)
+            if node.returns == None:
+                raise Exception(f'Function {node.name} must have return type')
+            ret_type = self.getIrType(node.returns)
             func_type = ir.FunctionType(ret_type, arg_types)
             function = ir.Function(module, func_type, name=node.name)
             
@@ -696,18 +687,18 @@ def foo( a:int = 10):
     print(a)
 """
     python_code = """
-# class goo:
-#     def __init__(self, d:int, e:int, f:int)->int:
-#         self.q:int
-#         self.d:int
-#         self.e:int
-#         self.e = e
-#         return
+class goo:
+    def __init__(self, d:int, e:int, f:int)->int:
+        self.q:int
+        self.d:int
+        self.e:int
+        self.e = e
+        return
     
-#     def mu(self):
-#         self.m:int
-#         self.m = 30 + (50+90)
-#         return self.m
+    def mu(self):
+        self.m:int
+        self.m = 30 + (50+90)
+        return self.m
         
 
 @kernel        
@@ -741,7 +732,8 @@ def main() -> int:
         
     print('c = %d',c)
     return 0
+
 """
     
-    ir_maker = LLVMIR_Statement()
-    ir_maker.translate_python2llvmir(python_code1)
+    ir_maker = LLVMIRStatement()
+    ir_maker.translatePython2llvmir(python_code1)

@@ -1,0 +1,117 @@
+/*
+
+Xilinx Vivado v2020.2 (64-bit) [Major: 2020, Minor: 2]
+SW Build: 3064766 on Wed Nov 18 09:12:45 MST 2020
+IP Build: 3064653 on Wed Nov 18 14:17:31 MST 2020
+
+Process ID (PID): 22912
+License: Customer
+Mode: GUI Mode
+
+Current time: 	Thu Jan 25 17:21:34 KST 2024
+Time zone: 	Korean Standard Time (Asia/Seoul)
+
+OS: Windows 10
+OS Version: 10.0
+OS Architecture: amd64
+Available processors (cores): 6
+
+Screen size: 1920x1080
+Screen resolution (DPI): 100
+Available screens: 1
+Default font: family=Dialog,name=Dialog,style=plain,size=12
+Scale size: 12
+
+Java version: 	11.0.2 64-bit
+Java home: 	E:/Xilinx/Vivado/2020.2/tps/win64/jre11.0.2
+Java executable location: 	E:/Xilinx/Vivado/2020.2/tps/win64/jre11.0.2/bin/java.exe
+Java initial memory (-Xms): 	128 MB
+Java maximum memory (-Xmx):	 3 GB
+
+
+User name: 	QC109_4
+User home directory: C:/Users/QC109_4
+User working directory: e:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
+User country: 	KR
+User language: 	ko
+User locale: 	ko_KR
+
+RDI_BASEROOT: E:/Xilinx/Vivado
+HDI_APPROOT: E:/Xilinx/Vivado/2020.2
+RDI_DATADIR: E:/Xilinx/Vivado/2020.2/data
+RDI_BINDIR: E:/Xilinx/Vivado/2020.2/bin
+
+Vivado preferences file location: C:/Users/QC109_4/AppData/Roaming/Xilinx/Vivado/2020.2/vivado.xml
+Vivado preferences directory: C:/Users/QC109_4/AppData/Roaming/Xilinx/Vivado/2020.2/
+Vivado layouts directory: C:/Users/QC109_4/AppData/Roaming/Xilinx/Vivado/2020.2/data/layouts
+PlanAhead jar file location: 	E:/Xilinx/Vivado/2020.2/lib/classes/planAhead.jar
+Vivado log file location: 	E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
+Vivado journal file location: 	E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.jou
+Engine tmp dir: 	E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/.Xil/Vivado-22912-DESKTOP-MCBJ7EB
+
+Xilinx Environment Variables
+----------------------------
+XILINX: E:/Xilinx/Vivado/2020.2/ids_lite/ISE
+XILINX_DSP: E:/Xilinx/Vivado/2020.2/ids_lite/ISE
+XILINX_HLS: E:/Xilinx/Vitis_HLS/2020.2
+XILINX_PLANAHEAD: E:/Xilinx/Vivado/2020.2
+XILINX_SDK: E:/Xilinx/Vitis/2020.2
+XILINX_VITIS: E:/Xilinx/Vitis/2020.2
+XILINX_VIVADO: E:/Xilinx/Vivado/2020.2
+XILINX_VIVADO_HLS: E:/Xilinx/Vivado/2020.2
+
+
+GUI allocated memory:	233 MB
+GUI max memory:		3,072 MB
+Engine allocated memory: 2,542 MB
+
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+*/
+
+// TclEventType: START_GUI
+// [GUI Memory]: 85 MB (+86545kb) [00:00:05]
+// [Engine Memory]: 2,221 MB (+2177702kb) [00:00:05]
+// [GUI Memory]: 176 MB (+91155kb) [00:00:15]
+// [Engine Memory]: 2,469 MB (+143418kb) [00:00:15]
+// TclEventType: START_PROGRESS_DIALOG
+// TclEventType: STOP_PROGRESS_DIALOG
+// [GUI Memory]: 186 MB (+1446kb) [00:00:18]
+// [GUI Memory]: 199 MB (+3837kb) [00:00:19]
+// bz (cr):  Sourcing Tcl script 'E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_03\RFSoC_Main_output\RFSoC_Main.tcl' : addNotify
+// TclEventType: STOP_PROGRESS_DIALOG
+// [GUI Memory]: 211 MB (+1582kb) [00:00:19]
+dismissDialog("Sourcing Tcl script 'E:\\RFSoC\\GIT\\RFSoC\\RFSoC_Design_V1_1\\IP_File_03\\RFSoC_Main_output\\RFSoC_Main.tcl'"); // bz
+// Tcl Command: 'rdi::info_commands {device::*}'
+// Tcl Command: 'rdi::info_commands {debug::*}'
+// Tcl Command: 'rdi::info_commands {*}'
+// Tcl Message: update_compile_order -fileset sources_1 
+// HMemoryUtils.trashcanNow. Engine heap size: 2,559 MB. GUI used memory: 166 MB. Current time: 1/25/24, 5:21:35 PM KST
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, RFSoC_Main_blk (RFSoC_Main_blk.bd)]", 1, false); // D
+// [Engine Memory]: 2,600 MB (+7399kb) [00:00:25]
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, RFSoC_Main_blk (RFSoC_Main_blk.bd)]", 1, false, false, false, false, false, true); // D - Double Click
+// bz (cr):  Open Block Design : addNotify
+// TclEventType: RSB_OPEN_DIAGRAM
+// [GUI Memory]: 223 MB (+1751kb) [00:00:25]
+// WARNING: HEventQueue.dispatchEvent() is taking  2611 ms.
+// Tcl Message: open_bd_design {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_03/RFSoC_Main_output/RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd} 
+closeView(PAResourceOtoP.PAViews_PROJECT_SUMMARY, "Project Summary"); // v
+dismissDialog("Open Block Design"); // bz
+// [GUI Memory]: 236 MB (+2181kb) [00:00:47]
+// Run Command: PAResourceCommand.PACommandNames_CUSTOMIZE_RSB_BLOC
+// [Engine Memory]: 2,731 MB (+912kb) [00:01:01]
+// r (cr): Re-customize IP: addNotify
+// HMemoryUtils.trashcanNow. Engine heap size: 2,737 MB. GUI used memory: 183 MB. Current time: 1/25/24, 5:22:15 PM KST
+// Elapsed time: 41 seconds
+setText("Fifo Depth", "8", true); // B
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a
+dismissDialog("Re-customize IP"); // r
+// Tcl Command: 'set_property -dict [list CONFIG.FIFO_DEPTH {8}] [get_bd_cells EdgeCounter_0]'
+// TclEventType: RSB_REMOVE_ADDRNETWORK
+// TclEventType: RSB_INSERT_ADDRNETWORK
+// TclEventType: RSB_SCRIPT_TASK
+// TclEventType: RSB_PROPERTY_CHANGE
+// Tcl Message: startgroup 
+// Tcl Message: set_property -dict [list CONFIG.FIFO_DEPTH {8}] [get_bd_cells EdgeCounter_0] 
+// Tcl Message: endgroup 
+// HMemoryUtils.trashcanNow. Engine heap size: 2,772 MB. GUI used memory: 184 MB. Current time: 1/25/24, 5:22:30 PM KST

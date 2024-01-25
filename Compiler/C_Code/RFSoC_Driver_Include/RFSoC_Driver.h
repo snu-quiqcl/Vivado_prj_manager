@@ -95,6 +95,12 @@ static INLINE void Xil_Out128(UINTPTR Addr, __uint128_t Value)
 	*LocalAddr = Value;
 }
 
+static INLINE __uint128_t Xil_In128(UINTPTR Addr)
+{
+	volatile __uint128_t *LocalAddr = (volatile __uint128_t *)Addr;
+	return *LocalAddr;
+}
+
 
 /////////////////////////////////////////////////////////////
 // RFSoC_Driver.cpp
@@ -173,6 +179,28 @@ class TTLx8_out{
         uint64_t get_last_pulse();
         void flush_fifo();
 };
+
+/////////////////////////////////////////////////////////////
+// EdgeCounter.cpp
+/////////////////////////////////////////////////////////////
+
+class EdgeCounter{
+    public:
+        uint64_t addr           = (uint64_t) XPAR_EDGECOUNTER_0_BASEADDR;
+    public:
+        TimeController(uint64_t addr = (uint64_t) XPAR_EDGECOUNTER_0_BASEADDR){
+            this-> addr         = addr;
+        };
+        void set_addr(uint64_t addr);
+        void flush_fifo();
+        void start_count();
+        void end_count();
+        void save_count();
+        void reset_count();
+        __uint128_t read_count();
+        __uint128_t read_len();
+};
+
 
 /////////////////////////////////////////////////////////////
 // TimeController.cpp

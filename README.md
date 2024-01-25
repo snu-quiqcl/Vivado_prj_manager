@@ -21,3 +21,6 @@ This python program requires GNU aarch64-none-elf-g++ compiler in window to comp
 you can download gnu compiler in here:
 https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 (aarch64-none-elf)
+
+## Rust
+Install RUST from https://www.rust-lang.org/tools/install .

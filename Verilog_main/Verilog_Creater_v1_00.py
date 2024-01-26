@@ -286,6 +286,23 @@ class Verilog_maker:
         
         return tcl_code
     
+    def generateXilinxDspFullSum(self, folder_directory, dsp_name):
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'
+        tcl_code += f'set_property -dict [list CONFIG.instruction1 {{CONCAT+C}}'
+        tcl_code += f' CONFIG.c_width {{48}} CONFIG.output_properties {{Full_Precision}}'
+        tcl_code += f' CONFIG.has_carryout {{false}} CONFIG.has_pcout {{false}}'
+        tcl_code += f' CONFIG.d_width {{17}} CONFIG.a_width {{17}} CONFIG.a_binarywidth {{0}}'
+        tcl_code += f' CONFIG.b_width {{18}} CONFIG.b_binarywidth {{0}} CONFIG.concat_width {{48}}'
+        tcl_code += f' CONFIG.concat_binarywidth {{0}} CONFIG.c_binarywidth {{0}} CONFIG.pcin_binarywidth {{0}}'
+        tcl_code += f' CONFIG.p_full_width {{48}} CONFIG.p_width {{48}} CONFIG.p_binarywidth {{0}}]'
+        tcl_code += f' [get_ips {dsp_name}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
     def generateXilinxDspSub(self, folder_directory, dsp_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name {dsp_name}\n'

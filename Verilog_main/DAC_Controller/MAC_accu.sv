@@ -20,14 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MAC(
+module MAC_sync(
     input wire clk,
     input wire resetn,
     input wire [47:0] A,        //timeoffset
     input wire [47:0] B,        //freq
     input wire [13:0] C,        //phase
     input wire [47:0] D,        //timestamp
-    output reg [15:0] mul_result
+    input wire [47:0] E,        //accumulated phase
+    output reg [47:0] mul_result
 );
 
 wire [47:0] sub_stage0_47_0_wire;
@@ -52,11 +53,13 @@ wire sum_stage2_carryout_wire;
 
 reg sum_stage2_carryout;
 
-wire [17:0] sum_stage2_47_32_0_wire;
+wire [17:0] sum_satge2_31_16_0_wire;
 wire [17:0] sum_stage2_47_32_1_wire;
 wire [17:0] sum_stage2_47_32_2_wire;
 
-wire [17:0] full_mul_result;
+wire [17:0] sum_stage3_47_32_0_wire;
+
+wire [47:0] full_mul_result;
 
 //////////////////////////////////////////////////////////
 // Pipeline 0
@@ -117,7 +120,7 @@ xbip_dsp48_sum_macro_0 dsp_stage_2_0(
     .A({1'b0,mul_stage1_31_0_0[31:16]}),
     .C({1'b0,mul_stage1_47_16_0[15:0]}),
     .D({1'b0,mul_stage1_47_16_1[15:0]}),
-    .P(sum_stage2_47_32_2_wire)
+    .P(sum_stage2_31_16_0_wire)
 );
 
 xbip_dsp48_sum_macro_0 dsp_stage_2_1(
@@ -141,9 +144,20 @@ xbip_dsp48_sum_macro_0 dsp_stage_2_2(
 xbip_dsp48_sum_macro_0 dsp_stage_3_0(
     .A({1'b0,sum_stage2_47_32_0_wire[15:0]}),
     .C({1'b0,sum_stage2_47_32_1_wire[15:0]}),
-    .D({16'b000000000000000, sum_stage2_47_32_2_wire[16]}),
+    .D({16'b000000000000000, sum_stage2_31_16_0_wire[16]}),
+    .P(sum_stage3_47_32_0_wire)
+);
+
+//////////////////////////////////////////////////////////
+// Pipeline 4
+//////////////////////////////////////////////////////////
+
+xbip_dsp48_sum_macro_0 dsp_stage_3_0(
+    .CONCAT(E),
+    .C({sum_stage3_47_32_0_wire[15:0],sum_staget2_31_16_0_wire[15:0],mul_stage_31_0_0[15:0]}),
     .P(full_mul_result)
 );
+
 
 
 always@(posedge clk) begin
@@ -179,7 +193,7 @@ always@(posedge clk) begin
         //////////////////////////////////////////////////////////
         // Pipeline 3
         //////////////////////////////////////////////////////////
-        mul_result[15:0]            <= {1'b0,full_mul_result[15:1]};
+        mul_result[47:0]            <= full_mul_result;
     end
 end
 endmodule

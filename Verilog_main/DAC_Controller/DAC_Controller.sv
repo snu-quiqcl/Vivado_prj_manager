@@ -308,6 +308,7 @@ dds_controller_0
 
 RFDC_DDS rfdc_dds(
     .clk(s_axi_aclk),
+    .reset(rto_core_flush)
     .freq(freq),
     .amp(amp),              // unsigned value
     .phase(phase),

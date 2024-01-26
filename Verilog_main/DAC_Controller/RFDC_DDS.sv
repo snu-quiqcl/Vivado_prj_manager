@@ -28,6 +28,8 @@
     input wire [63:0] timestamp,
     input wire [13:0] amp_offset,
     input wire [63:0] time_offset,
+    input wire sync_en,
+    input wire reset,
     output reg [255:0] m_axis_data_tdata,
     output reg m_axis_data_tvalid
 );
@@ -51,6 +53,8 @@ DSP : 27 * 18 two's complement
 Unsigned 72 *  Unsigned 48 bit -> 120 bit
 
 */
+
+// timestamp buffer is added since dds_controller consumes 3clock cycles
 reg [63:0]timestamp_buffer1;
 reg [63:0]timestamp_buffer2;
 reg [63:0]timestamp_buffer3;
@@ -60,19 +64,26 @@ wire [15:0] dds_output_valid;
 wire [3:0] dds_output_valid_chain;
 wire [120:0] phase_full_product[16];
 wire [33:0] amp_full_product[16];
-wire [15:0] phase_input_wire[16];
+wire [15:0] phase_sync_input_wire[16];
+wire phase_sync_full_wire;
+wire [47:0] phase_accu_input_wire[17];
 wire [255:0] m_axis_data_tdata_wire;
 
 wire m_axis_data_tvalid_wire;
 reg m_axis_data_tvalid_buffer3;
 
+// phase input to DDS
 reg [15:0] phase_input[16];
 
+reg [47:0] phase_accumulation;
+
+// amp buffer is added to match clock cycle consumed from pipelines in mac
 reg [13:0] amp_buffer1;
 reg [13:0] amp_buffer2;
 reg [13:0] amp_buffer3;
 reg [13:0] amp_buffer4;
 
+// same with amp buffer
 reg [13:0] amp_offset_buffer1;
 reg [13:0] amp_offset_buffer2;
 reg [13:0] amp_offset_buffer3;
@@ -91,7 +102,7 @@ assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_ch
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][29:14] + {2'b00,amp_offset_buffer4[13:0]};
+        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][28:13] + {1'b0,amp_offset_buffer4[13:0],1'b0};
     end
 endgenerate
 
@@ -207,201 +218,458 @@ xbip_dsp48_mul_macro_0 dsp_amp_mul_15(
 );
 
 always@(posedge clk) begin
-    timestamp_buffer1[63:0]         <= timestamp[63:0];
-    timestamp_buffer2[63:0]         <= timestamp_buffer1[63:0];
-    timestamp_buffer3[63:0]         <= timestamp_buffer2[63:0];
-    m_axis_data_tdata[255:0]        <= m_axis_data_tdata_wire[255:0];
-    phase_input[0]                  <= phase_input_wire[0];
-    phase_input[1]                  <= phase_input_wire[1];
-    phase_input[2]                  <= phase_input_wire[2];
-    phase_input[3]                  <= phase_input_wire[3];
-    phase_input[4]                  <= phase_input_wire[4];
-    phase_input[5]                  <= phase_input_wire[5];
-    phase_input[6]                  <= phase_input_wire[6];
-    phase_input[7]                  <= phase_input_wire[7];
-    phase_input[8]                  <= phase_input_wire[8];
-    phase_input[9]                  <= phase_input_wire[9];
-    phase_input[10]                 <= phase_input_wire[10];
-    phase_input[11]                 <= phase_input_wire[11];
-    phase_input[12]                 <= phase_input_wire[12];
-    phase_input[13]                 <= phase_input_wire[13];
-    phase_input[14]                 <= phase_input_wire[14];
-    phase_input[15]                 <= phase_input_wire[15];
+    if( reset == 1'b1 ) begin
+        timestamp_buffer1[63:0]         <= 64'h0;
+        timestamp_buffer2[63:0]         <= 64'h0;
+        timestamp_buffer3[63:0]         <= 64'h0;
+        m_axis_data_tdata[255:0]        <= 256'h0;
+        phase_input[0]                  <= 16'h0;
+        phase_input[1]                  <= 16'h0;
+        phase_input[2]                  <= 16'h0;
+        phase_input[3]                  <= 16'h0;
+        phase_input[4]                  <= 16'h0;
+        phase_input[5]                  <= 16'h0;
+        phase_input[6]                  <= 16'h0;
+        phase_input[7]                  <= 16'h0;
+        phase_input[8]                  <= 16'h0;
+        phase_input[9]                  <= 16'h0;
+        phase_input[10]                 <= 16'h0;
+        phase_input[11]                 <= 16'h0;
+        phase_input[12]                 <= 16'h0;
+        phase_input[13]                 <= 16'h0;
+        phase_input[14]                 <= 16'h0;
+        phase_input[15]                 <= 16'h0;
 
-    amp_buffer1[13:0]               <= amp[13:0];
-    amp_buffer2[13:0]               <= amp_buffer1[13:0];
-    amp_buffer3[13:0]               <= amp_buffer2[13:0];
-    amp_buffer4[13:0]               <= amp_buffer3[13:0];
+        amp_buffer1[13:0]               <= 14'h0;
+        amp_buffer2[13:0]               <= 14'h0;
+        amp_buffer3[13:0]               <= 14'h0;
+        amp_buffer4[13:0]               <= 14'h0;
 
-    amp_offset_buffer1[13:0]        <= amp_offset[13:0];
-    amp_offset_buffer2[13:0]        <= amp_offset_buffer1[13:0];
-    amp_offset_buffer3[13:0]        <= amp_offset_buffer2[13:0];
-    amp_offset_buffer4[13:0]        <= amp_offset_buffer3[13:0];
+        amp_offset_buffer1[13:0]        <= 14'h0;
+        amp_offset_buffer2[13:0]        <= 14'h0;
+        amp_offset_buffer3[13:0]        <= 14'h0;
+        amp_offset_buffer4[13:0]        <= 14'h0;
 
-    m_axis_data_tvalid_buffer3      <= m_axis_data_tvalid_wire;
-    m_axis_data_tvalid              <= m_axis_data_tvalid_buffer3;
+        m_axis_data_tvalid_buffer3      <= 1'b0;
+        m_axis_data_tvalid              <= 1'b0;
+    end
+    else begin
+        timestamp_buffer1[63:0]         <= timestamp[63:0];
+        timestamp_buffer2[63:0]         <= timestamp_buffer1[63:0];
+        timestamp_buffer3[63:0]         <= timestamp_buffer2[63:0];
+        m_axis_data_tdata[255:0]        <= m_axis_data_tdata_wire[255:0];
+        if( sync_en == 1'b1 ) begin
+            phase_input[0]                  <= phase_sync_input_wire[0];
+            phase_input[1]                  <= phase_sync_input_wire[1];
+            phase_input[2]                  <= phase_sync_input_wire[2];
+            phase_input[3]                  <= phase_sync_input_wire[3];
+            phase_input[4]                  <= phase_sync_input_wire[4];
+            phase_input[5]                  <= phase_sync_input_wire[5];
+            phase_input[6]                  <= phase_sync_input_wire[6];
+            phase_input[7]                  <= phase_sync_input_wire[7];
+            phase_input[8]                  <= phase_sync_input_wire[8];
+            phase_input[9]                  <= phase_sync_input_wire[9];
+            phase_input[10]                 <= phase_sync_input_wire[10];
+            phase_input[11]                 <= phase_sync_input_wire[11];
+            phase_input[12]                 <= phase_sync_input_wire[12];
+            phase_input[13]                 <= phase_sync_input_wire[13];
+            phase_input[14]                 <= phase_sync_input_wire[14];
+            phase_input[15]                 <= phase_sync_input_wire[15];
+            phase_accumulation              <= phase_sync_full_wire;
+        end
+        else begin
+            phase_input[0]                  <= {1'b0,phase_accu_input_wire[0][47:33]};
+            phase_input[1]                  <= {1'b0,phase_accu_input_wire[1][47:33]};
+            phase_input[2]                  <= {1'b0,phase_accu_input_wire[2][47:33]};
+            phase_input[3]                  <= {1'b0,phase_accu_input_wire[3][47:33]};
+            phase_input[4]                  <= {1'b0,phase_accu_input_wire[4][47:33]};
+            phase_input[5]                  <= {1'b0,phase_accu_input_wire[5][47:33]};
+            phase_input[6]                  <= {1'b0,phase_accu_input_wire[6][47:33]};
+            phase_input[7]                  <= {1'b0,phase_accu_input_wire[7][47:33]};
+            phase_input[8]                  <= {1'b0,phase_accu_input_wire[8][47:33]};
+            phase_input[9]                  <= {1'b0,phase_accu_input_wire[9][47:33]};
+            phase_input[10]                 <= {1'b0,phase_accu_input_wire[10][47:33]};
+            phase_input[11]                 <= {1'b0,phase_accu_input_wire[11][47:33]};
+            phase_input[12]                 <= {1'b0,phase_accu_input_wire[12][47:33]};
+            phase_input[13]                 <= {1'b0,phase_accu_input_wire[13][47:33]};
+            phase_input[14]                 <= {1'b0,phase_accu_input_wire[14][47:33]};
+            phase_input[15]                 <= {1'b0,phase_accu_input_wire[15][47:33]};
+            phase_accumulation              <= phase_accu_input_wire[16];
+        end
+
+        amp_buffer1[13:0]               <= amp[13:0];
+        amp_buffer2[13:0]               <= amp_buffer1[13:0];
+        amp_buffer3[13:0]               <= amp_buffer2[13:0];
+        amp_buffer4[13:0]               <= amp_buffer3[13:0];
+
+        amp_offset_buffer1[13:0]        <= amp_offset[13:0];
+        amp_offset_buffer2[13:0]        <= amp_offset_buffer1[13:0];
+        amp_offset_buffer3[13:0]        <= amp_offset_buffer2[13:0];
+        amp_offset_buffer4[13:0]        <= amp_offset_buffer3[13:0];
+
+        m_axis_data_tvalid_buffer3      <= m_axis_data_tvalid_wire;
+        m_axis_data_tvalid              <= m_axis_data_tvalid_buffer3;
+    end
 end
 
-MAC mac_0(
+MAC_sync mac_sync_0(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 0),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[0])
+    .mul_result(phase_sync_input_wire[0])
 );
 
-MAC mac_1(
+MAC_sync mac_sync_1(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 1),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[1])
+    .mul_result(phase_sync_input_wire[1])
 );
 
-MAC mac_2(
+MAC_sync mac_sync_2(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 2),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[2])
+    .mul_result(phase_sync_input_wire[2])
 );
 
-MAC mac_3(
+MAC_sync mac_sync_3(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 3),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[3])
+    .mul_result(phase_sync_input_wire[3])
 );
 
-MAC mac_4(
+MAC_sync mac_sync_4(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 4),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[4])
+    .mul_result(phase_sync_input_wire[4])
 );
 
-MAC mac_5(
+MAC_sync mac_sync_5(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 5),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[5])
+    .mul_result(phase_sync_input_wire[5])
 );
 
-MAC mac_6(
+MAC_sync mac_sync_6(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 6),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[6])
+    .mul_result(phase_sync_input_wire[6])
 );
 
-MAC mac_7(
+MAC_sync mac_sync_7(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 7),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[7])
+    .mul_result(phase_sync_input_wire[7])
 );
 
-MAC mac_8(
+MAC_sync mac_sync_8(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 8),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[8])
+    .mul_result(phase_sync_input_wire[8])
 );
 
-MAC mac_9(
+MAC_sync mac_sync_9(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 9),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[9])
+    .mul_result(phase_sync_input_wire[9])
 );
 
-MAC mac_10(
+MAC_sync mac_sync_10(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 10),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[10])
+    .mul_result(phase_sync_input_wire[10])
 );
 
-MAC mac_11(
+MAC_sync mac_sync_11(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 11),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[11])
+    .mul_result(phase_sync_input_wire[11])
 );
 
-MAC mac_12(
+MAC_sync mac_sync_12(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 12),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[12])
+    .mul_result(phase_sync_input_wire[12])
 );
 
-MAC mac_13(
+MAC_sync mac_sync_13(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 13),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[13])
+    .mul_result(phase_sync_input_wire[13])
 );
 
-MAC mac_14(
+MAC_sync mac_sync_14(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 14),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[14])
+    .mul_result(phase_sync_input_wire[14])
 );
 
-MAC mac_15(
+MAC_sync mac_sync_15(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 15),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .mul_result(phase_input_wire[15])
+    .mul_result(phase_sync_input_wire[15])
 );
 
+MAC_accu mac_sync_16(
+    .clk(clk),
+    .resetn(1'b1),
+    .D({timestamp_buffer3[43:0],4'b0000} + 16),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(48'h0),
+    .mul_result( phase_sync_full_wire )
+);
+
+//accu
+MAC_accu mac_accu_0(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(0),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[0])
+);
+
+MAC_accu mac_accu_1(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(1),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[1])
+);
+
+MAC_accu mac_accu_2(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(2),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[2])
+);
+
+MAC_accu mac_accu_3(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(3),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[3])
+);
+
+MAC_accu mac_accu_4(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(4),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[4])
+);
+
+MAC_accu mac_accu_5(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(5),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[5])
+);
+
+MAC_accu mac_accu_6(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(6),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[6])
+);
+
+MAC_accu mac_accu_7(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(7),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[7])
+);
+
+MAC_accu mac_accu_8(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(8),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[8])
+);
+
+MAC_accu mac_accu_9(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(9),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[9])
+);
+
+MAC_accu mac_accu_10(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(10),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[10])
+);
+
+MAC_accu mac_accu_11(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(11),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[11])
+);
+
+MAC_accu mac_accu_12(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(12),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[12])
+);
+
+MAC_accu mac_accu_13(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(13),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[13])
+);
+
+MAC_accu mac_accu_14(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(14),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[14])
+);
+
+MAC_accu mac_accu_15(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(15),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[15])
+);
+
+MAC_accu mac_accu_16(
+    .clk(clk),
+    .resetn(1'b1),
+    .D(16),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(phase_accumulation),
+    .mul_result(phase_accu_input_wire[16])
+);
 
 dds_compiler_0 dds_0(
     .s_axis_phase_tdata(phase_input[0]),

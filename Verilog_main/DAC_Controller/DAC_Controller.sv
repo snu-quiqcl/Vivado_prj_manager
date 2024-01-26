@@ -270,6 +270,7 @@ RTO_Core rto_core_0(
 //////////////////////////////////////////////////////////////////////////////////
 // RFDC_Controller Declaration
 //////////////////////////////////////////////////////////////////////////////////
+wire sync_en;
 
 DDS_Controller
 #(
@@ -303,12 +304,14 @@ dds_controller_0
     .phase(phase),
     .amp_offset(amp_offset),
     .time_offset(time_offset),
-    .timestamp(timestamp)
+    .timestamp(timestamp),
+    .sync_en(sync_en)
 );
 
 RFDC_DDS rfdc_dds(
     .clk(s_axi_aclk),
-    .reset(rto_core_flush)
+    .reset(rto_core_flush|rto_core_reset),
+    .sync_en(sync_en),
     .freq(freq),
     .amp(amp),              // unsigned value
     .phase(phase),

@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MAC_sync(
+module MAC_accu(
     input wire clk,
     input wire resetn,
     input wire [47:0] A,        //timeoffset
@@ -49,13 +49,11 @@ reg [33:0] mul_stage1_63_32_1;
 reg [33:0] mul_stage1_63_32_2;
 reg [16:0] stage1_C_buffer;
 
-wire sum_stage2_carryout_wire;
+reg [47:0] stage1_E_buffer;
 
-reg sum_stage2_carryout;
-
-wire [17:0] sum_satge2_31_16_0_wire;
+wire [17:0] sum_stage2_31_16_0_wire;
+wire [17:0] sum_stage2_47_32_0_wire;
 wire [17:0] sum_stage2_47_32_1_wire;
-wire [17:0] sum_stage2_47_32_2_wire;
 
 wire [17:0] sum_stage3_47_32_0_wire;
 
@@ -152,9 +150,12 @@ xbip_dsp48_sum_macro_0 dsp_stage_3_0(
 // Pipeline 4
 //////////////////////////////////////////////////////////
 
-xbip_dsp48_sum_macro_0 dsp_stage_3_0(
+wire [47:0] phase_addition;
+assign phase_addition = {sum_stage3_47_32_0_wire[15:0],sum_stage2_31_16_0_wire[15:0],mul_stage1_31_0_0[15:0]};
+
+xbip_dsp48_sum_macro_1 dsp_stage_4_0(
     .CONCAT(E),
-    .C({sum_stage3_47_32_0_wire[15:0],sum_staget2_31_16_0_wire[15:0],mul_stage_31_0_0[15:0]}),
+    .C(phase_addition),
     .P(full_mul_result)
 );
 
@@ -185,6 +186,7 @@ always@(posedge clk) begin
         mul_stage1_63_32_1[33:0]    <= mul_stage1_63_32_1_wire;
         mul_stage1_63_32_2[33:0]    <= mul_stage1_63_32_2_wire;
         stage1_C_buffer             <= {1'b0,C[13:0],2'b00};
+        stage1_E_buffer[47:0]       <= E[47:0];
 
         //////////////////////////////////////////////////////////
         // Pipeline 2

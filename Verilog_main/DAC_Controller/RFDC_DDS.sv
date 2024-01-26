@@ -59,6 +59,10 @@ reg [63:0]timestamp_buffer1;
 reg [63:0]timestamp_buffer2;
 reg [63:0]timestamp_buffer3;
 
+reg sync_en_buffer1;
+reg sync_en_buffer2;
+reg sync_en_buffer3;
+
 wire [15:0] dds_output_wire[16];
 wire [15:0] dds_output_valid; 
 wire [3:0] dds_output_valid_chain;
@@ -250,15 +254,25 @@ always@(posedge clk) begin
         amp_offset_buffer3[13:0]        <= 14'h0;
         amp_offset_buffer4[13:0]        <= 14'h0;
 
+        sync_en_buffer1                 <= 1'b0;
+        sync_en_buffer2                 <= 1'b0;
+        sync_en_buffer3                 <= 1'b0;
+
         m_axis_data_tvalid_buffer3      <= 1'b0;
         m_axis_data_tvalid              <= 1'b0;
+        phase_accumulation              <= 48'h0;
     end
     else begin
         timestamp_buffer1[63:0]         <= timestamp[63:0];
         timestamp_buffer2[63:0]         <= timestamp_buffer1[63:0];
         timestamp_buffer3[63:0]         <= timestamp_buffer2[63:0];
         m_axis_data_tdata[255:0]        <= m_axis_data_tdata_wire[255:0];
-        if( sync_en == 1'b1 ) begin
+        
+        sync_en_buffer1                 <= sync_en;
+        sync_en_buffer2                 <= sync_en_buffer1;
+        sync_en_buffer3                 <= sync_en_buffer2;
+
+        if( sync_en_buffer2 == 1'b1 ) begin
             phase_input[0]                  <= phase_sync_input_wire[0];
             phase_input[1]                  <= phase_sync_input_wire[1];
             phase_input[2]                  <= phase_sync_input_wire[2];

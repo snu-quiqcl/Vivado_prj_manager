@@ -50,7 +50,8 @@ module DDS_Controller
     output reg [13:0] phase,
     output reg [13:0] amp_offset,
     output reg [63:0] time_offset,
-    output reg [63:0] timestamp
+    output reg [63:0] timestamp,
+    output reg sync_en
     );
     
 //////////////////////////////////////////////////////////////////////////////////  
@@ -76,6 +77,7 @@ module DDS_Controller
 //
 // -Case 0001
 // Only change 48 bit frequency value
+// 48 bit - sync_en
 //
 // -Case 0010
 // 14 bit - amp  | 46 bit -upper freq ( [47:2] )
@@ -137,6 +139,7 @@ always @( posedge clk ) begin
     end
     
     else begin
+        sync_en <= 1'b0;
         if( selected == 1'b1 ) begin
             timestamp <= gpo_out[127:64];
             case( gpo_out[63:60] )
@@ -147,6 +150,7 @@ always @( posedge clk ) begin
                 end
                 
                 4'b0001: begin
+                    sync_en <= 1'b1;
                     freq[47:0] <= gpo_out[47:0];
                 end
                 

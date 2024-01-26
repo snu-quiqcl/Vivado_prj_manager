@@ -156,7 +156,7 @@ importsources -name RealTime_Firmware_app -path "{self.realtime_linker_dir}\lscr
             content = file.read()
 
         # Define the pattern
-        pattern = r"XPAR_(DAC_CONTROLLER|TTL_OUT|TTLX8_OUT|TIMECONTROLLER)_(\d+)_BASEADDR"
+        pattern = r"XPAR_(DAC_CONTROLLER|TTL_OUT|TTLX8_OUT|TIMECONTROLLER|EDGECOUNTER)_(\d+)_BASEADDR"
         
         # Find all matches in the content
         matches = re.findall(pattern, content)
@@ -188,6 +188,11 @@ importsources -name RealTime_Firmware_app -path "{self.realtime_linker_dir}\lscr
                 if match[0] == 'TTLX8_OUT':
                     skeleton_code += f'TTLx8_out ttlx8_out_{match[1]}(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
                     initialization_code += f'    ttlx8_out_{match[1]}.flush_fifo();\n'
+                
+                if match[0] == 'EDGECOUNTER':
+                    skeleton_code += f'EdgeCounter EdgeCounter_{match[1]};\n'
+                    initialization_code += f'    EdgeCounter_{match[1]}.set_addr(XPAR_{match[0]}_{match[1]}_BASEADDR);\n'
+                    initialization_code += f'    EdgeCounter_{match[1]}.flush_fifo();\n'
                     
                 if match[0] == 'TIMECONTROLLER':
                     skeleton_code += f'TimeController tc_{match[1]};\n'

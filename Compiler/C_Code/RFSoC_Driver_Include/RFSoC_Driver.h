@@ -190,13 +190,13 @@ class EdgeCounter{
     public:
         uint64_t addr           = (uint64_t) XPAR_EDGECOUNTER_0_BASEADDR;
     public:
-        TimeController(uint64_t addr = (uint64_t) XPAR_EDGECOUNTER_0_BASEADDR){
+        EdgeCounter(uint64_t addr = (uint64_t) XPAR_EDGECOUNTER_0_BASEADDR){
             this-> addr         = addr;
         };
         void set_addr(uint64_t addr);
         void flush_fifo();
         void start_count();
-        void end_count();
+        void stop_count();
         void save_count();
         void reset_count();
         __uint128_t read_count();

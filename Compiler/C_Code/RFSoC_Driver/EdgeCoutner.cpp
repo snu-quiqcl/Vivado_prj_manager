@@ -13,7 +13,7 @@ void EdgeCounter::start_count(){
     Xil_Out128((this->addr),MAKE128CONST(get_timestamp_coarse(),0b0001));
 }
 
-void EdgeCounter::end_count(){
+void EdgeCounter::stop_count(){
     Xil_Out128((this->addr),MAKE128CONST(get_timestamp_coarse(),0b0010));
 }
 

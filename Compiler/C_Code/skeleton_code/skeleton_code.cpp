@@ -1,15 +1,18 @@
 #include "RFSoC_Driver.h"
 #include "malloc.h"
 
-int a = 30;
-int b;
 DAC dac_0;
+DAC dac_1;
 DAC dac_2;
 DAC dac_3;
 DAC dac_4;
 DAC dac_5;
 DAC dac_6;
 DAC dac_7;
+EdgeCounter EdgeCounter_0;
+EdgeCounter EdgeCounter_1;
+EdgeCounter EdgeCounter_2;
+EdgeCounter EdgeCounter_3;
 TTL_out ttl_out_0;
 TTL_out ttl_out_1;
 TTL_out ttl_out_2;
@@ -59,6 +62,8 @@ TimeController tc_0;
 void init_rfsoc(){
     dac_0.set_addr(XPAR_DAC_CONTROLLER_0_BASEADDR);
     dac_0.flush_fifo();
+    dac_1.set_addr(XPAR_DAC_CONTROLLER_1_BASEADDR);
+    dac_1.flush_fifo();
     dac_2.set_addr(XPAR_DAC_CONTROLLER_2_BASEADDR);
     dac_2.flush_fifo();
     dac_3.set_addr(XPAR_DAC_CONTROLLER_3_BASEADDR);
@@ -71,6 +76,14 @@ void init_rfsoc(){
     dac_6.flush_fifo();
     dac_7.set_addr(XPAR_DAC_CONTROLLER_7_BASEADDR);
     dac_7.flush_fifo();
+    EdgeCounter_0.set_addr((XPAR_EDGECOUNTER_0_BASEADDR));
+    EdgeCounter_0.flush_fifo();
+    EdgeCounter_1.set_addr((XPAR_EDGECOUNTER_1_BASEADDR));
+    EdgeCounter_1.flush_fifo();
+    EdgeCounter_2.set_addr((XPAR_EDGECOUNTER_2_BASEADDR));
+    EdgeCounter_2.flush_fifo();
+    EdgeCounter_3.set_addr((XPAR_EDGECOUNTER_3_BASEADDR));
+    EdgeCounter_3.flush_fifo();
     uint64_t * ttl_set_0_ptr = (uint64_t *) malloc(sizeof(uint64_t));
     ttl_out_0.set_addr(XPAR_TTL_OUT_0_BASEADDR,ttl_set_0_ptr,0);
     ttl_out_1.set_addr(XPAR_TTL_OUT_0_BASEADDR,ttl_set_0_ptr,1);
@@ -133,21 +146,32 @@ void init_rfsoc(){
 
 int main(){
     init_rfsoc();
-    DAC dac_1;
 
-
-    dac_1.set_addr(XPAR_DAC_CONTROLLER_1_BASEADDR);
-    dac_1.flush_fifo();
-
-    dac_0.print_addr();
-    dac_1.print_addr();
-
-    dac_0.set_freq(1);
-    dac_1.set_freq(1);
-    delay(8);
-    dac_0.set_amp(1.0);
-    dac_1.set_amp(1.0);
-
+    EdgeCounter_3.reset_count();
+    ttl_out_0.set(0);
+    delay(100);
     tc_0.auto_start();
-    xil_printf("dac0 : %d, dac1 : %d\r\n",dac_0.sample_freq,dac_1.sample_freq);
+
+    EdgeCounter_3.start_count();
+
+    for( int64_t i = 0 ; i < 2000; i ++ ){
+        delay(100);
+        ttl_out_0.set(1);
+        delay(100);
+        ttl_out_0.set(0);
+    }
+
+    delay(1000);
+    EdgeCounter_3.stop_count();
+
+    delay(1000);
+    EdgeCounter_3.save_count();
+
+    while( 1 ){
+        int64_t len = LOWER(EdgeCounter_3.read_len());
+        xil_printf("LEN : %d\r\n", len);
+        if( len != 0 ) break;
+    }
+
+    xil_printf("%d\r\n",LOWER(EdgeCounter_3.read_count()));
 }

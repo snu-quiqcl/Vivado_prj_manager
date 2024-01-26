@@ -351,7 +351,7 @@ if __name__ == "__main__":
     do_compile = True
     
     comp = Compiler()
-    file_name = "skeleton_code_1"
+    file_name = "skeleton_code"
     #Compile C Code
     comp.do_compile = do_compile
     comp.compileCode(file_name)

@@ -25,7 +25,7 @@ class Verilog_maker:
         # self.git_dir = 'C:\Jeonghyun\GIT'
         
         # Directory which Vivado Project created.(Relative to Git directory)
-        self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_03'
+        self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_01'
         
         # CPU configuration TCL code.
         self.cpu_type = 'Zynq_APU_0_125MHz.tcl'

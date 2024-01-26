@@ -10,6 +10,8 @@
 // 128 bit write macro
 /////////////////////////////////////////////////////////////
 #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
+#define UPPER(x) (uint64_t)( ( (x) >> 64 ) & MASK64BIT)
+#define LOWER(x) (uint64_t)( (x) & MASK64BIT )
 
 /////////////////////////////////////////////////////////////
 // Constant 
@@ -83,6 +85,7 @@
 
 #define EXP_DATA_ADDR 0x700000
 
+
 /////////////////////////////////////////////////////////////
 // 128 bit write
 //
@@ -100,7 +103,6 @@ static INLINE __uint128_t Xil_In128(UINTPTR Addr)
 	volatile __uint128_t *LocalAddr = (volatile __uint128_t *)Addr;
 	return *LocalAddr;
 }
-
 
 /////////////////////////////////////////////////////////////
 // RFSoC_Driver.cpp

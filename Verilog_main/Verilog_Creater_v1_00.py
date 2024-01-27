@@ -21,8 +21,8 @@ class Verilog_maker:
     def __init__(self):
         print('make verilog code...')
         # Directory of Current GIT
-        self.git_dir = 'E:\RFSoC\GIT'
-        # self.git_dir = 'C:\Jeonghyun\GIT'
+        # self.git_dir = 'E:\RFSoC\GIT'
+        self.git_dir = 'C:\Jeonghyun\GIT'
         
         # Directory which Vivado Project created.(Relative to Git directory)
         self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_01'
@@ -31,12 +31,12 @@ class Verilog_maker:
         self.cpu_type = 'Zynq_APU_0_125MHz.tcl'
         
         # Path of Vivado
-        self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
-        # self.vivado_path = r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat"
+        # self.vivado_path = r"E:\Xilinx\Vivado\2020.2\bin\vivado.bat"
+        self.vivado_path = r"C:\Xilinx\Vivado\2020.2\bin\vivado.bat"
         
         # Path of Board files
-        self.board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
-        # self.board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
+        # self.board_path = "E:/Xilinx/Vivado/2020.2/data/boards/board_files"
+        self.board_path = "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
         
         # Chip name
         self.part_name = "xczu28dr-ffvg1517-2-e"
@@ -51,7 +51,7 @@ class Verilog_maker:
         self.dac_controller_dir =  os.path.join(self.target_dir, 'DAC_Controller')
         self.dac_controller_modules = ['DAC_Controller', 'AXI2FIFO', 'DDS_Controller', 'GPO_Core', 'RFDC_DDS', 'RTO_Core']
         #Number of total dac controller number
-        self.total_dac_num = 8
+        self.total_dac_num = 1
         
         self.time_controller_dir = os.path.join(self.target_dir,'TimeController')
         
@@ -67,61 +67,61 @@ class Verilog_maker:
         
         self.EdgeCounter_dir = os.path.join(self.target_dir,'EdgeCounter')
         
-        self.TTLx8_ports = ['FMCP_HSPC_LA00_CC',\
-        'FMCP_HSPC_LA01_CC',\
-        'FMCP_HSPC_LA02',\
-        'FMCP_HSPC_LA03',\
-        'FMCP_HSPC_LA04',\
-        'FMCP_HSPC_LA05',\
-        'FMCP_HSPC_LA06',\
-        'FMCP_HSPC_LA07',\
-        'FMCP_HSPC_LA08',\
-        'FMCP_HSPC_LA09',\
-        'FMCP_HSPC_LA10',\
-        'FMCP_HSPC_LA11',\
-        'FMCP_HSPC_LA12',\
-        'FMCP_HSPC_LA13',\
-        'FMCP_HSPC_LA14',\
-        'FMCP_HSPC_LA15',\
-        'FMCP_HSPC_LA16',\
-        'FMCP_HSPC_LA17_CC',\
-        'FMCP_HSPC_LA18_CC',\
-        'FMCP_HSPC_LA19',\
-        'FMCP_HSPC_LA20',\
-        'FMCP_HSPC_LA21',\
-        'FMCP_HSPC_LA22',\
-        'FMCP_HSPC_LA23',\
-        'FMCP_HSPC_LA24',\
-        'FMCP_HSPC_LA25',\
-        'FMCP_HSPC_LA26',\
-        'FMCP_HSPC_LA27',\
-        'FMCP_HSPC_LA28',\
-        'FMCP_HSPC_LA29',\
-        'FMCP_HSPC_LA30',\
-        'FMCP_HSPC_LA31',\
-        'FMCP_HSPC_LA32']
-        # self.TTLx8_ports = []
+        # self.TTLx8_ports = ['FMCP_HSPC_LA00_CC',\
+        # 'FMCP_HSPC_LA01_CC',\
+        # 'FMCP_HSPC_LA02',\
+        # 'FMCP_HSPC_LA03',\
+        # 'FMCP_HSPC_LA04',\
+        # 'FMCP_HSPC_LA05',\
+        # 'FMCP_HSPC_LA06',\
+        # 'FMCP_HSPC_LA07',\
+        # 'FMCP_HSPC_LA08',\
+        # 'FMCP_HSPC_LA09',\
+        # 'FMCP_HSPC_LA10',\
+        # 'FMCP_HSPC_LA11',\
+        # 'FMCP_HSPC_LA12',\
+        # 'FMCP_HSPC_LA13',\
+        # 'FMCP_HSPC_LA14',\
+        # 'FMCP_HSPC_LA15',\
+        # 'FMCP_HSPC_LA16',\
+        # 'FMCP_HSPC_LA17_CC',\
+        # 'FMCP_HSPC_LA18_CC',\
+        # 'FMCP_HSPC_LA19',\
+        # 'FMCP_HSPC_LA20',\
+        # 'FMCP_HSPC_LA21',\
+        # 'FMCP_HSPC_LA22',\
+        # 'FMCP_HSPC_LA23',\
+        # 'FMCP_HSPC_LA24',\
+        # 'FMCP_HSPC_LA25',\
+        # 'FMCP_HSPC_LA26',\
+        # 'FMCP_HSPC_LA27',\
+        # 'FMCP_HSPC_LA28',\
+        # 'FMCP_HSPC_LA29',\
+        # 'FMCP_HSPC_LA30',\
+        # 'FMCP_HSPC_LA31',\
+        # 'FMCP_HSPC_LA32']
+        self.TTLx8_ports = []
         
         self.total_ttlx8_num = ( len(self.TTLx8_ports) // 8 ) + (not len(self.TTLx8_ports) % 8 == 0)
         self.ttlx8_pin_num = len(self.TTLx8_ports)
         
-        self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04',\
-                        'DACIO_05','DACIO_06','DACIO_07','DACIO_08','DACIO_09',\
-                        'DACIO_10', 'DACIO_11', 'DACIO_12', 'DACIO_13',\
-                        'DACIO_14', 'DACIO_15', 'ADCIO_00', 'ADCIO_01', \
-                        'ADCIO_02', 'ADCIO_03', 'ADCIO_04', 'ADCIO_05', \
-                        'ADCIO_06', 'ADCIO_07', 'ADCIO_08', 'ADCIO_09', \
-                        'ADCIO_10', 'ADCIO_11', 'ADCIO_12', 'ADCIO_13', \
-                        'ADCIO_14', 'ADCIO_15', 'ADCIO_16', 'ADCIO_17', \
-                        'ADCIO_18', 'ADCIO_19']
-        # self.TTL_ports = []
+        # self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04',\
+        #                 'DACIO_05','DACIO_06','DACIO_07','DACIO_08','DACIO_09',\
+        #                 'DACIO_10', 'DACIO_11', 'DACIO_12', 'DACIO_13',\
+        #                 'DACIO_14', 'DACIO_15', 'ADCIO_00', 'ADCIO_01', \
+        #                 'ADCIO_02', 'ADCIO_03', 'ADCIO_04', 'ADCIO_05', \
+        #                 'ADCIO_06', 'ADCIO_07', 'ADCIO_08', 'ADCIO_09', \
+        #                 'ADCIO_10', 'ADCIO_11', 'ADCIO_12', 'ADCIO_13', \
+        #                 'ADCIO_14', 'ADCIO_15', 'ADCIO_16', 'ADCIO_17', \
+        #                 'ADCIO_18', 'ADCIO_19']
+        self.TTL_ports = []
             
         self.total_ttl_num = ( len(self.TTL_ports) // 8 ) + (not len(self.TTL_ports) % 8 == 0)
         self.ttl_pin_num = len(self.TTL_ports)
     
-        self.EdgeCounter_ports = [ 'DACIO_16' , 'DACIO_17', 'DACIO_18', 'DACIO_19']
+        # self.EdgeCounter_ports = [ 'DACIO_16' , 'DACIO_17', 'DACIO_18', 'DACIO_19']
         
-        # self.EdgeCounter_ports = []
+        self.EdgeCounter_ports = []
         
         self.total_EdgeCounter_num = len(self.EdgeCounter_ports)
 
@@ -153,7 +153,7 @@ class Verilog_maker:
         
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = False
+        self.do_sim = True
         self.make_bit_stream = (False and (not self.do_sim))
         
     def runVivadoTCL(self, vivado_bat, tcl_path):
@@ -1058,7 +1058,7 @@ connect_bd_intf_net -intf_net zynq_ultra_ps_e_0_M_AXI_HPM0_FPD [get_bd_intf_pins
         for i in range(self.total_dac_num):
             if self.do_sim == True:
                 tcl_code += f"""
-set m00_axis_0{i} [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m00_axis_0{i} ]
+set m00_axis_0{i} [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m00_axis_{i} ]
 set_property -dict [ list \
  CONFIG.FREQ_HZ {{124998749}} \
  ] $m00_axis_0{i}

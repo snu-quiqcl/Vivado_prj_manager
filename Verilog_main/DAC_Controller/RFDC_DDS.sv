@@ -95,8 +95,6 @@ reg [13:0] amp_offset_buffer2;
 reg [13:0] amp_offset_buffer3;
 reg [13:0] amp_offset_buffer4;
 
-reg [15:0] dds_output_wire[16];
-
 assign dds_output_valid_chain[0] = dds_output_valid[0] & dds_output_valid[1] & dds_output_valid[2] & dds_output_valid[3];
 assign dds_output_valid_chain[1] = dds_output_valid[4] & dds_output_valid[5] & dds_output_valid[6] & dds_output_valid[7];
 assign dds_output_valid_chain[2] = dds_output_valid[8] & dds_output_valid[9] & dds_output_valid[10] & dds_output_valid[11];
@@ -274,7 +272,7 @@ always@(posedge clk) begin
         sync_en_buffer2                 <= sync_en_buffer1;
         sync_en_buffer3                 <= sync_en_buffer2;
 
-        if( sync_en_buffer2 == 1'b1 ) begin
+        if( sync_en == 1'b1 ) begin
             phase_accumulation              <= phase_sync_full_wire;
         end
         else begin
@@ -316,6 +314,17 @@ xbip_dsp48_sum_macro_1 accu_phase_calculation(
     .CONCAT(freq),
     .C(phase_accumulation),
     .P(phase_accu_full_wire)
+);
+
+MAC_accu mac_sync_16(
+    .clk(clk),
+    .resetn(1'b1),
+    .D({timestamp_buffer3[43:0],4'b0000} + 16),
+    .B(freq),
+    .C(phase),
+    .A({time_offset[43:0],4'b0000}),
+    .E(48'h0),
+    .mul_result(phase_sync_full_wire)
 );
 
 MAC_accu mac_accu_0(

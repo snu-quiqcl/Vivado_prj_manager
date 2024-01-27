@@ -153,7 +153,7 @@ class Verilog_maker:
         
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = False
+        self.do_sim = True
         self.make_bit_stream = (False and (not self.do_sim))
         
     def runVivadoTCL(self, vivado_bat, tcl_path):
@@ -1063,7 +1063,7 @@ set_property -dict [ list \
  CONFIG.FREQ_HZ {{124998749}} \
  ] $m00_axis_0{i}
     
-connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_ports m00_axis_0{i}] [get_bd_intf_pins DAC_Controller_{i}/m00_axis]
+connect_bd_intf_net -intf_net DAC_Controller_{i}_m00_axis [get_bd_intf_ports m00_axis_{i}] [get_bd_intf_pins DAC_Controller_{i}/m00_axis]
                 """
             else:
                 if i < 4:
@@ -1234,12 +1234,12 @@ assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [ge
         """
         
         if self.do_sim == True:
-            sim_file = os.join(self.git_dir,r'Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv')
+            sim_file = os.path.join(self.git_dir,r'Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv')
             for i in range(self.total_dac_num):
                 tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_N]\n'
                 tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_P]\n'
-            tcl_code += r'set_property -name {xsim.simulate.runtime} -value {1000us} -objects [get_filesets sim_1]\n'
-            tcl_code += r'set_property SOURCE_SET sources_1 [get_filesets sim_1]\n'
+            tcl_code += 'set_property -name {xsim.simulate.runtime} -value {1000us} -objects [get_filesets sim_1]\n'
+            tcl_code += 'set_property SOURCE_SET sources_1 [get_filesets sim_1]\n'
             tcl_code += f'add_files -fileset sim_1 {{{sim_file}}}\n'
             tcl_code += f'update_compile_order -fileset sim_1\n'
         

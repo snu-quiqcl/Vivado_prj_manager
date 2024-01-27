@@ -1207,9 +1207,6 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
             tcl_code += f' [get_bd_pins TTLx8_out_{i}/clk_x4] '
         tcl_code += '\n'
         
-        if self.do_sim:
-            tcl_code += 'connect_bd_net -net clk_wiz_0_locked [get_bd_ports locked_0] [get_bd_pins clk_wiz_0/locked]\n'
-        
         #######################################################################
         # ADDRESS CONFIGURATION
         #######################################################################
@@ -1235,6 +1232,16 @@ connect_bd_net -net RF3_CLKO_A_C_P_2 [get_bd_ports RF3_CLKO_A_C_P_229] [get_bd_p
 assign_bd_address -offset 0xA0008000 -range 0x00001000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs TimeController_0/s_axi/reg0] -force
 assign_bd_address -offset 0xA00C0000 -range 0x00040000 -target_address_space [get_bd_addr_spaces zynq_ultra_ps_e_0/Data] [get_bd_addr_segs usp_rf_data_converter_0/s_axi/Reg] -force
         """
+        
+        if self.do_sim == True:
+            sim_file = os.join(self.git_dir,r'Vivado_prj_manager/Verilog_main/RFSoC_Main_Sim/RFSoC_Main_TB04.sv')
+            for i in range(self.total_dac_num):
+                tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_N]\n'
+                tcl_code += f'delete_bd_objs [get_bd_ports RFMC_DAC_0{i}_P]\n'
+            tcl_code += r'set_property -name {xsim.simulate.runtime} -value {1000us} -objects [get_filesets sim_1]\n'
+            tcl_code += r'set_property SOURCE_SET sources_1 [get_filesets sim_1]\n'
+            tcl_code += f'add_files -fileset sim_1 {{{sim_file}}}\n'
+            tcl_code += f'update_compile_order -fileset sim_1\n'
         
         if self.make_bit_stream == True:
             block_addr = os.path.join(folder_directory,'RFSoC_Main/RFSoC_Main.srcs/sources_1/bd/RFSoC_Main_blk/RFSoC_Main_blk.bd'.lstrip('/').lstrip('\\'))

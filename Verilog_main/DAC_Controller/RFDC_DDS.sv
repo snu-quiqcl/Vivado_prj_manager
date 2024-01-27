@@ -69,9 +69,11 @@ wire [3:0] dds_output_valid_chain;
 wire [120:0] phase_full_product[16];
 wire [33:0] amp_full_product[16];
 wire [15:0] phase_sync_input_wire[16];
-wire phase_sync_full_wire;
-wire [47:0] phase_accu_input_wire[17];
+wire [47:0] phase_accu_input_wire[16];
 wire [255:0] m_axis_data_tdata_wire;
+
+wire [47:0] phase_sync_full_wire;
+wire [47:0] phase_accu_full_wire;
 
 wire m_axis_data_tvalid_wire;
 reg m_axis_data_tvalid_buffer3;
@@ -273,43 +275,27 @@ always@(posedge clk) begin
         sync_en_buffer3                 <= sync_en_buffer2;
 
         if( sync_en_buffer2 == 1'b1 ) begin
-            phase_input[0]                  <= phase_sync_input_wire[0];
-            phase_input[1]                  <= phase_sync_input_wire[1];
-            phase_input[2]                  <= phase_sync_input_wire[2];
-            phase_input[3]                  <= phase_sync_input_wire[3];
-            phase_input[4]                  <= phase_sync_input_wire[4];
-            phase_input[5]                  <= phase_sync_input_wire[5];
-            phase_input[6]                  <= phase_sync_input_wire[6];
-            phase_input[7]                  <= phase_sync_input_wire[7];
-            phase_input[8]                  <= phase_sync_input_wire[8];
-            phase_input[9]                  <= phase_sync_input_wire[9];
-            phase_input[10]                 <= phase_sync_input_wire[10];
-            phase_input[11]                 <= phase_sync_input_wire[11];
-            phase_input[12]                 <= phase_sync_input_wire[12];
-            phase_input[13]                 <= phase_sync_input_wire[13];
-            phase_input[14]                 <= phase_sync_input_wire[14];
-            phase_input[15]                 <= phase_sync_input_wire[15];
             phase_accumulation              <= phase_sync_full_wire;
         end
         else begin
-            phase_input[0]                  <= {1'b0,phase_accu_input_wire[0][47:33]};
-            phase_input[1]                  <= {1'b0,phase_accu_input_wire[1][47:33]};
-            phase_input[2]                  <= {1'b0,phase_accu_input_wire[2][47:33]};
-            phase_input[3]                  <= {1'b0,phase_accu_input_wire[3][47:33]};
-            phase_input[4]                  <= {1'b0,phase_accu_input_wire[4][47:33]};
-            phase_input[5]                  <= {1'b0,phase_accu_input_wire[5][47:33]};
-            phase_input[6]                  <= {1'b0,phase_accu_input_wire[6][47:33]};
-            phase_input[7]                  <= {1'b0,phase_accu_input_wire[7][47:33]};
-            phase_input[8]                  <= {1'b0,phase_accu_input_wire[8][47:33]};
-            phase_input[9]                  <= {1'b0,phase_accu_input_wire[9][47:33]};
-            phase_input[10]                 <= {1'b0,phase_accu_input_wire[10][47:33]};
-            phase_input[11]                 <= {1'b0,phase_accu_input_wire[11][47:33]};
-            phase_input[12]                 <= {1'b0,phase_accu_input_wire[12][47:33]};
-            phase_input[13]                 <= {1'b0,phase_accu_input_wire[13][47:33]};
-            phase_input[14]                 <= {1'b0,phase_accu_input_wire[14][47:33]};
-            phase_input[15]                 <= {1'b0,phase_accu_input_wire[15][47:33]};
-            phase_accumulation              <= phase_accu_input_wire[16];
+            phase_accumulation              <= phase_accu_full_wire;
         end
+        phase_input[0]                  <= {1'b0,phase_accu_input_wire[0][47:33]};
+        phase_input[1]                  <= {1'b0,phase_accu_input_wire[1][47:33]};
+        phase_input[2]                  <= {1'b0,phase_accu_input_wire[2][47:33]};
+        phase_input[3]                  <= {1'b0,phase_accu_input_wire[3][47:33]};
+        phase_input[4]                  <= {1'b0,phase_accu_input_wire[4][47:33]};
+        phase_input[5]                  <= {1'b0,phase_accu_input_wire[5][47:33]};
+        phase_input[6]                  <= {1'b0,phase_accu_input_wire[6][47:33]};
+        phase_input[7]                  <= {1'b0,phase_accu_input_wire[7][47:33]};
+        phase_input[8]                  <= {1'b0,phase_accu_input_wire[8][47:33]};
+        phase_input[9]                  <= {1'b0,phase_accu_input_wire[9][47:33]};
+        phase_input[10]                 <= {1'b0,phase_accu_input_wire[10][47:33]};
+        phase_input[11]                 <= {1'b0,phase_accu_input_wire[11][47:33]};
+        phase_input[12]                 <= {1'b0,phase_accu_input_wire[12][47:33]};
+        phase_input[13]                 <= {1'b0,phase_accu_input_wire[13][47:33]};
+        phase_input[14]                 <= {1'b0,phase_accu_input_wire[14][47:33]};
+        phase_input[15]                 <= {1'b0,phase_accu_input_wire[15][47:33]};
 
         amp_buffer1[13:0]               <= amp[13:0];
         amp_buffer2[13:0]               <= amp_buffer1[13:0];
@@ -325,6 +311,12 @@ always@(posedge clk) begin
         m_axis_data_tvalid              <= m_axis_data_tvalid_buffer3;
     end
 end
+
+xbip_dsp48_sum_macro_1 accu_phase_calculation(
+    .CONCAT(freq),
+    .C(phase_accumulation),
+    .P(phase_accu_full_wire)
+);
 
 MAC_sync mac_sync_0(
     .clk(clk),
@@ -486,16 +478,17 @@ MAC_sync mac_sync_15(
     .mul_result(phase_sync_input_wire[15])
 );
 
-MAC_accu mac_sync_16(
+MAC_accu mac_accu_16(
     .clk(clk),
     .resetn(1'b1),
-    .D({timestamp_buffer3[43:0],4'b0000} + 16),
+    .D(16),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
     .E(48'h0),
-    .mul_result( phase_sync_full_wire )
+    .mul_result(phase_sync_full_wire)
 );
+
 
 //accu
 MAC_accu mac_accu_0(
@@ -672,17 +665,6 @@ MAC_accu mac_accu_15(
     .A({time_offset[43:0],4'b0000}),
     .E(phase_accumulation),
     .mul_result(phase_accu_input_wire[15])
-);
-
-MAC_accu mac_accu_16(
-    .clk(clk),
-    .resetn(1'b1),
-    .D(16),
-    .B(freq),
-    .C(phase),
-    .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
-    .mul_result(phase_accu_input_wire[16])
 );
 
 dds_compiler_0 dds_0(

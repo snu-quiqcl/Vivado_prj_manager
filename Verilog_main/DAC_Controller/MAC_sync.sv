@@ -55,6 +55,10 @@ reg sum_stage2_carryout;
 wire [17:0] sum_stage2_47_32_0_wire;
 wire [17:0] sum_stage2_47_32_1_wire;
 wire [17:0] sum_stage2_47_32_2_wire;
+wire [17:0] sum_stage2_63_48_0_wire;
+
+wire [17:0] sum_stage3_47_32_0_wire;
+wire [17:0] sum_stage3_63_48_0_wire;
 
 wire [17:0] full_mul_result;
 
@@ -134,6 +138,13 @@ xbip_dsp48_sum_macro_0 dsp_stage_2_2(
     .P(sum_stage2_47_32_1_wire)
 );
 
+xbip_dsp48_sum_macro_0 dsp_stage_2_3(
+    .A({1'b0,mul_stage1_63_32_0[31:16]}),
+    .C({1'b0,mul_stage1_63_32_1[31:16]}),
+    .D({1'b0,mul_stage1_63_32_2[31:16]}),
+    .P(sum_stage2_63_48_0_wire)
+);
+
 //////////////////////////////////////////////////////////
 // Pipeline 3
 //////////////////////////////////////////////////////////
@@ -142,9 +153,17 @@ xbip_dsp48_sum_macro_0 dsp_stage_3_0(
     .A({1'b0,sum_stage2_47_32_0_wire[15:0]}),
     .C({1'b0,sum_stage2_47_32_1_wire[15:0]}),
     .D({16'b000000000000000, sum_stage2_47_32_2_wire[16]}),
-    .P(full_mul_result)
+    .P(sum_stage3_47_32_0_wire)
 );
 
+xbip_dsp48_sum_macro_0 dsp_stage_3_1(
+    .A({1'b0,sum_stage2_63_48_0_wire[15:0]}),
+    .C(17'h0),
+    .D({16'b000000000000000, sum_stage3_47_32_0_wire[16]}),
+    .P(sum_stage3_63_48_0_wire)
+);
+
+assign full_mul_result = {sum_stage3_63_48_0_wire[3:0], sum_stage3_47_32_0_wire[11:0]};
 
 always@(posedge clk) begin
     if( resetn == 1'b0 ) begin

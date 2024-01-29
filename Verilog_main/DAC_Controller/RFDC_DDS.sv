@@ -88,12 +88,14 @@ reg [13:0] amp_buffer1;
 reg [13:0] amp_buffer2;
 reg [13:0] amp_buffer3;
 reg [13:0] amp_buffer4;
+reg [13:0] amp_buffer5;
 
 // same with amp buffer
 reg [13:0] amp_offset_buffer1;
 reg [13:0] amp_offset_buffer2;
 reg [13:0] amp_offset_buffer3;
 reg [13:0] amp_offset_buffer4;
+reg [13:0] amp_offset_buffer5;
 
 assign dds_output_valid_chain[0] = dds_output_valid[0] & dds_output_valid[1] & dds_output_valid[2] & dds_output_valid[3];
 assign dds_output_valid_chain[1] = dds_output_valid[4] & dds_output_valid[5] & dds_output_valid[6] & dds_output_valid[7];
@@ -106,117 +108,117 @@ assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_ch
 genvar i;
 generate
     for (i = 0; i < 16; i = i + 1) begin : ASSIGN_GEN
-        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][28:13] + {1'b0,amp_offset_buffer4[13:0],1'b0};
+        assign m_axis_data_tdata_wire[16*i +: 16] = amp_full_product[i][28:13] + {1'b0,amp_offset_buffer5[13:0],1'b0};
     end
 endgenerate
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_0(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[0][15]},dds_output_wire[0]}),
     .P(amp_full_product[0])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_1(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[1][15]},dds_output_wire[1]}),
     .P(amp_full_product[1])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_2(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[2][15]},dds_output_wire[2]}),
     .P(amp_full_product[2])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_3(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[3][15]},dds_output_wire[3]}),
     .P(amp_full_product[3])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_4(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[4][15]},dds_output_wire[4]}),
     .P(amp_full_product[4])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_5(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[5][15]},dds_output_wire[5]}),
     .P(amp_full_product[5])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_6(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[6][15]},dds_output_wire[6]}),
     .P(amp_full_product[6])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_7(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[7][15]},dds_output_wire[7]}),
     .P(amp_full_product[7])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_8(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[8][15]},dds_output_wire[8]}),
     .P(amp_full_product[8])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_9(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[9][15]},dds_output_wire[9]}),
     .P(amp_full_product[9])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_10(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[10][15]},dds_output_wire[10]}),
     .P(amp_full_product[10])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_11(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[11][15]},dds_output_wire[11]}),
     .P(amp_full_product[11])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_12(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[12][15]},dds_output_wire[12]}),
     .P(amp_full_product[12])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_13(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[13][15]},dds_output_wire[13]}),
     .P(amp_full_product[13])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_14(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[14][15]},dds_output_wire[14]}),
     .P(amp_full_product[14])
 );
 
 
 xbip_dsp48_mul_macro_0 dsp_amp_mul_15(
-    .B({3'b000, amp_buffer4}),
+    .B({3'b000, amp_buffer5}),
     .A({{dds_output_wire[15][15]},dds_output_wire[15]}),
     .P(amp_full_product[15])
 );
@@ -248,11 +250,13 @@ always@(posedge clk) begin
         amp_buffer2[13:0]               <= 14'h0;
         amp_buffer3[13:0]               <= 14'h0;
         amp_buffer4[13:0]               <= 14'h0;
+        amp_buffer5[13:0]               <= 14'h0;
 
         amp_offset_buffer1[13:0]        <= 14'h0;
         amp_offset_buffer2[13:0]        <= 14'h0;
         amp_offset_buffer3[13:0]        <= 14'h0;
         amp_offset_buffer4[13:0]        <= 14'h0;
+        amp_offset_buffer5[13:0]        <= 15'h0;
 
         sync_en_buffer1                 <= 1'b0;
         sync_en_buffer2                 <= 1'b0;
@@ -299,11 +303,13 @@ always@(posedge clk) begin
         amp_buffer2[13:0]               <= amp_buffer1[13:0];
         amp_buffer3[13:0]               <= amp_buffer2[13:0];
         amp_buffer4[13:0]               <= amp_buffer3[13:0];
+        amp_buffer5[13:0]               <= amp_buffer4[13:0];
 
         amp_offset_buffer1[13:0]        <= amp_offset[13:0];
         amp_offset_buffer2[13:0]        <= amp_offset_buffer1[13:0];
         amp_offset_buffer3[13:0]        <= amp_offset_buffer2[13:0];
         amp_offset_buffer4[13:0]        <= amp_offset_buffer3[13:0];
+        amp_offset_buffer5[13:0]        <= amp_offset_buffer4[13:0];
 
         m_axis_data_tvalid_buffer3      <= m_axis_data_tvalid_wire;
         m_axis_data_tvalid              <= m_axis_data_tvalid_buffer3;

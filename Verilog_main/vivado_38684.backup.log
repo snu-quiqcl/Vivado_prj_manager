@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Mon Jan 29 13:05:29 2024
-# Process ID: 24764
+# Start of session at: Mon Jan 29 15:06:04 2024
+# Process ID: 38684
 # Current directory: C:/Jeonghyun/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\EdgeCounter_output\EdgeCounter.tcl
 # Log file: C:/Jeonghyun/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -73,4 +73,4 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Jeonghyun/GIT/RFSoC/RFSoC_
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/EdgeCounter_output' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'c:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/EdgeCounter_output/EdgeCounter'.)
 # set_property top EdgeCounter [current_fileset]
 # set_property top_file { C:/Jeonghyun/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/EdgeCounter/EdgeCounter.sv } [current_fileset]
-INFO: [Common 17-206] Exiting Vivado at Mon Jan 29 13:05:39 2024...
+INFO: [Common 17-206] Exiting Vivado at Mon Jan 29 15:06:14 2024...

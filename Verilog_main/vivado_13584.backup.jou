@@ -2,12 +2,11 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Mon Jan 29 13:05:40 2024
-# Process ID: 30028
+# Start of session at: Mon Jan 29 13:04:55 2024
+# Process ID: 13584
 # Current directory: C:/Jeonghyun/GIT/Vivado_prj_manager/Verilog_main
-# Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl
+# Command line: vivado.exe -mode batch -source C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\TimeController_output\TimeController.tcl
 # Log file: C:/Jeonghyun/GIT/Vivado_prj_manager/Verilog_main/vivado.log
 # Journal file: C:/Jeonghyun/GIT/Vivado_prj_manager/Verilog_main\vivado.jou
 #-----------------------------------------------------------
-source {C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\RFSoC_Main_output\RFSoC_Main.tcl}
-update_compile_order -fileset sources_1
+source {C:\Jeonghyun\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\TimeController_output\TimeController.tcl}

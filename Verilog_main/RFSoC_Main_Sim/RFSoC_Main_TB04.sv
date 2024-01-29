@@ -23,18 +23,29 @@
 module RFSoC_Main_TB00;
 reg         dac0_clk_n;
 reg         dac0_clk_p;
+wire        RF3_CLKO_A_C_N_228;
+wire        RF3_CLKO_A_C_N_229;
+wire        RF3_CLKO_A_C_P_228;
+wire        RF3_CLKO_A_C_P_229;
+
+assign RF3_CLKO_A_C_N_228 = dac0_clk_n;
+assign RF3_CLKO_A_C_N_229 = dac0_clk_n;
+assign RF3_CLKO_A_C_P_228 = dac0_clk_p;
+assign RF3_CLKO_A_C_P_229 = dac0_clk_p;
 
 initial begin
     dac0_clk_n <= 1'b0;
     dac0_clk_p <= 1'b1;
 end
+
 /*
 always begin
-    #1250
+    #2500
     dac0_clk_n <= ~dac0_clk_n;
     dac0_clk_p <= ~dac0_clk_p;
 end
 */
+
 
 wire output_pulse_x8_0_n;
 wire output_pulse_x8_0_p;
@@ -92,10 +103,13 @@ assign vout7 = m00_axis_07_tdata[255:224];
 
 
 RFSoC_Main_blk_wrapper tb(
+    .RF3_CLKO_A_C_N_228(RF3_CLKO_A_C_N_228),
+    .RF3_CLKO_A_C_N_229(RF3_CLKO_A_C_N_229),
+    .RF3_CLKO_A_C_P_228(RF3_CLKO_A_C_P_228),
+    .RF3_CLKO_A_C_P_229(RF3_CLKO_A_C_P_229),
     .m00_axis_0_tdata(m00_axis_00_tdata),
     .m00_axis_0_tready(m00_axis_00_tready),
-    .m00_axis_0_tvalid(m00_axis_00_tvalid)
-    /*
+    .m00_axis_0_tvalid(m00_axis_00_tvalid)/*,
     .m00_axis_01_tdata(m00_axis_01_tdata),
     .m00_axis_01_tready(m00_axis_01_tready),
     .m00_axis_01_tvalid(m00_axis_01_tvalid),
@@ -177,7 +191,18 @@ print(transform_string(a))
 //////////////////////////////////////////////////////////////////////////////////
 // DAC output
 //////////////////////////////////////////////////////////////////////////////////
+real dac00_p;
+real dac00_n;
 
+reg[31:0] dac00_p_int;
+reg[31:0] dac00_n_int;
+
+always @ (*) begin
+   //dac00_p = tb.RFSoC_Main_blk_i.usp_rf_data_converter_0.inst.RFSoC_Main_blk_usp_rf_data_converter_0_0_rf_wrapper_i.tx0_u_dac.SIP_HSDAC_INST.VOUT0_P;
+   //dac00_n = tb.RFSoC_Main_blk_i.usp_rf_data_converter_0.inst.RFSoC_Main_blk_usp_rf_data_converter_0_0_rf_wrapper_i.tx0_u_dac.SIP_HSDAC_INST.VOUT0_N;
+   dac00_p_int = dac00_p * (2 ** 31 - 1);
+   dac00_n_int = dac00_n * (2 ** 31 - 1);
+end
 
 
 reg[1:0] resp1;
@@ -225,7 +250,7 @@ initial begin
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h01001210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000001000 << 64) + (14'h0000 << 46) + (14'h0000 << 32) + 32'h11006210, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000001000 << 64) + (14'h0000 << 46) + (14'h0000 << 32) + 32'h37006210, resp1);
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000002000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h01006210, resp1);
     #10000000;
@@ -235,7 +260,7 @@ initial begin
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000005000 << 64) + (14'h3fff << 46) + (14'h1000 << 32) + 32'h01523921, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000006000 << 64) + (4'b0001 << 60) + 32'h60923921, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000006000 << 64) + (4'b0001 << 60) + 32'h69923921, resp1);
     
     
     ///////////////////////////////////////////////////////////////////////////////////

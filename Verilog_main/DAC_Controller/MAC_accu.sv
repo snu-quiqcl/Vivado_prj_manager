@@ -56,16 +56,12 @@ wire [17:0] sum_stage2_47_32_0_wire;
 wire [17:0] sum_stage2_47_32_1_wire;
 wire [17:0] sum_stage2_47_32_2_wire;
 wire [17:0] sum_stage2_63_48_0_wire;
-wire [17:0] sum_stage2_63_38_1_wire;
 
-reg [17:0] sum_stage2_63_48_0;
 reg [17:0] sum_stage2_47_32_0;
 reg [33:0] sum_stage2_31_0_0;
 reg [17:0] sum_stage2_31_16_0;
 
 reg [47:0] stage2_E_buffer;
-
-wire [17:0] sum_stage3_63_48_0_wire;
 
 wire [47:0] full_mul_result;
 
@@ -147,38 +143,18 @@ xbip_dsp48_sum_macro_0 dsp_stage_2_2(
 );
 
 xbip_dsp48_sum_macro_0 dsp_stage_2_3(
-    .A({1'b0,mul_stage1_63_32_0[31:16]}),
-    .C({1'b0,mul_stage1_63_32_1[31:16]}),
-    .D({1'b0,mul_stage1_63_32_2[31:16]}),
-    .P(sum_stage2_63_48_0_wire)
-);
-
-xbip_dsp48_sum_macro_0 dsp_stage_2_4(
-    .A({1'b0,sum_stage2_63_48_0_wire[15:0]}),
-    .C({15'b0,sum_stage2_47_32_0_wire[17:16]}),
-    .D({15'b0,sum_stage2_47_32_1_wire[17:16]}),
-    .P(sum_stage2_63_48_1_wire)
-);
-
-xbip_dsp48_sum_macro_0 dsp_stage_2_5(
     .A({1'b0,sum_stage2_47_32_0_wire[15:0]}),
     .C({1'b0,sum_stage2_47_32_1_wire[15:0]}),
-    .D({15'b0, sum_stage2_31_16_0_wire[17:16]}),
+    .D({15'b0,sum_stage2_31_16_0_wire[17:16]}),
     .P(sum_stage2_47_32_2_wire)
 );
 
 //////////////////////////////////////////////////////////
 // Pipeline 3
 //////////////////////////////////////////////////////////
-xbip_dsp48_sum_macro_0 dsp_stage_3_0(
-    .A({1'b0,sum_stage2_63_48_0[15:0]}),
-    .C(17'h0),
-    .D({15'b0, sum_stage2_47_32_0[17:16]}),
-    .P(sum_stage3_63_48_0_wire)
-);
 
 wire [47:0] phase_addition;
-assign phase_addition = {sum_stage3_63_48_0_wire[3:0],sum_stage2_47_32_0[15:0],sum_stage2_31_16_0[15:0],sum_stage2_31_0_0[15:4]};
+assign phase_addition = {sum_stage2_47_32_0[15:0],sum_stage2_31_16_0[15:0],sum_stage2_31_0_0[15:0]};
 
 xbip_dsp48_sum_macro_1 dsp_stage_4_1(
     .CONCAT(stage2_E_buffer),
@@ -222,7 +198,6 @@ always@(posedge clk) begin
         sum_stage2_31_16_0          <= sum_stage2_31_16_0_wire;
         sum_stage2_47_32_0          <= sum_stage2_47_32_2_wire;
         sum_stage2_31_0_0           <= mul_stage1_31_0_0;
-        sum_stage2_63_48_0          <= sum_stage2_63_48_1_wire;
         stage2_E_buffer             <= stage1_E_buffer;
 
         //////////////////////////////////////////////////////////

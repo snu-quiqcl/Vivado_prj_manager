@@ -58,6 +58,7 @@ Unsigned 72 *  Unsigned 48 bit -> 120 bit
 reg [63:0]timestamp_buffer1;
 reg [63:0]timestamp_buffer2;
 reg [63:0]timestamp_buffer3;
+wire [47:0] timestamp_input;
 
 reg sync_en_buffer1;
 reg sync_en_buffer2;
@@ -82,6 +83,7 @@ reg m_axis_data_tvalid_buffer3;
 reg [15:0] phase_input[16];
 
 reg [47:0] phase_accumulation;
+wire [47:0] phase_accumulation_input;
 
 // amp buffer is added to match clock cycle consumed from pipelines in mac
 reg [13:0] amp_buffer1;
@@ -102,7 +104,8 @@ assign dds_output_valid_chain[1] = dds_output_valid[4] & dds_output_valid[5] & d
 assign dds_output_valid_chain[2] = dds_output_valid[8] & dds_output_valid[9] & dds_output_valid[10] & dds_output_valid[11];
 assign dds_output_valid_chain[3] = dds_output_valid[12] & dds_output_valid[13] & dds_output_valid[14] & dds_output_valid[15];
 assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_chain[1] & dds_output_valid_chain[2] & dds_output_valid_chain[3];
-
+assign timestamp_input = (sync_en == 1'b1 )? {timestamp_buffer3[43:0],4'b0000} :48'h0;
+assign phase_accumulation_input = (sync_en == 1'b1 )? 48'h0 : phase_accumulation;
 
 // Generate loop to assign dds_output_wire slices to m_axis_data_tdata
 genvar i;
@@ -276,7 +279,7 @@ always@(posedge clk) begin
         sync_en_buffer2                 <= sync_en_buffer1;
         sync_en_buffer3                 <= sync_en_buffer2;
 
-        if( sync_en == 1'b1 ) begin
+        if( sync_en_buffer3 == 1'b1 ) begin // buffer3 should be used since there is 3cycle delay with MAC_accu
             phase_accumulation              <= phase_sync_full_wire;
         end
         else begin
@@ -317,7 +320,7 @@ always@(posedge clk) begin
 end
 
 xbip_dsp48_sum_macro_1 accu_phase_calculation(
-    .CONCAT(freq),
+    .CONCAT({freq[43:0],4'b0000}),
     .C(phase_accumulation),
     .P(phase_accu_full_wire)
 );
@@ -336,176 +339,176 @@ MAC_accu mac_sync_16(
 MAC_accu mac_accu_0(
     .clk(clk),
     .resetn(1'b1),
-    .D(0),
+    .D(timestamp_input + 0),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[0])
 );
 
 MAC_accu mac_accu_1(
     .clk(clk),
     .resetn(1'b1),
-    .D(1),
+    .D(timestamp_input + 1),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[1])
 );
 
 MAC_accu mac_accu_2(
     .clk(clk),
     .resetn(1'b1),
-    .D(2),
+    .D(timestamp_input + 2),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[2])
 );
 
 MAC_accu mac_accu_3(
     .clk(clk),
     .resetn(1'b1),
-    .D(3),
+    .D(timestamp_input + 3),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[3])
 );
 
 MAC_accu mac_accu_4(
     .clk(clk),
     .resetn(1'b1),
-    .D(4),
+    .D(timestamp_input + 4),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[4])
 );
 
 MAC_accu mac_accu_5(
     .clk(clk),
     .resetn(1'b1),
-    .D(5),
+    .D(timestamp_input + 5),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[5])
 );
 
 MAC_accu mac_accu_6(
     .clk(clk),
     .resetn(1'b1),
-    .D(6),
+    .D(timestamp_input + 6),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[6])
 );
 
 MAC_accu mac_accu_7(
     .clk(clk),
     .resetn(1'b1),
-    .D(7),
+    .D(timestamp_input + 7),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[7])
 );
 
 MAC_accu mac_accu_8(
     .clk(clk),
     .resetn(1'b1),
-    .D(8),
+    .D(timestamp_input + 8),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[8])
 );
 
 MAC_accu mac_accu_9(
     .clk(clk),
     .resetn(1'b1),
-    .D(9),
+    .D(timestamp_input + 9),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[9])
 );
 
 MAC_accu mac_accu_10(
     .clk(clk),
     .resetn(1'b1),
-    .D(10),
+    .D(timestamp_input + 10),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[10])
 );
 
 MAC_accu mac_accu_11(
     .clk(clk),
     .resetn(1'b1),
-    .D(11),
+    .D(timestamp_input + 11),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[11])
 );
 
 MAC_accu mac_accu_12(
     .clk(clk),
     .resetn(1'b1),
-    .D(12),
+    .D(timestamp_input + 12),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[12])
 );
 
 MAC_accu mac_accu_13(
     .clk(clk),
     .resetn(1'b1),
-    .D(13),
+    .D(timestamp_input + 13),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[13])
 );
 
 MAC_accu mac_accu_14(
     .clk(clk),
     .resetn(1'b1),
-    .D(14),
+    .D(timestamp_input + 14),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[14])
 );
 
 MAC_accu mac_accu_15(
     .clk(clk),
     .resetn(1'b1),
-    .D(15),
+    .D(timestamp_input + 15),
     .B(freq),
     .C(phase),
     .A({time_offset[43:0],4'b0000}),
-    .E(phase_accumulation),
+    .E(phase_accumulation_input),
     .mul_result(phase_accu_input_wire[15])
 );
 

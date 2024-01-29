@@ -104,8 +104,8 @@ assign dds_output_valid_chain[1] = dds_output_valid[4] & dds_output_valid[5] & d
 assign dds_output_valid_chain[2] = dds_output_valid[8] & dds_output_valid[9] & dds_output_valid[10] & dds_output_valid[11];
 assign dds_output_valid_chain[3] = dds_output_valid[12] & dds_output_valid[13] & dds_output_valid[14] & dds_output_valid[15];
 assign m_axis_data_tvalid_wire = dds_output_valid_chain[0] & dds_output_valid_chain[1] & dds_output_valid_chain[2] & dds_output_valid_chain[3];
-assign timestamp_input = (sync_en == 1'b1 )? {timestamp_buffer3[43:0],4'b0000} :48'h0;
-assign phase_accumulation_input = (sync_en == 1'b1 )? 48'h0 : phase_accumulation;
+assign timestamp_input = (sync_en | sync_en_buffer1 | sync_en_buffer2 | sync_en_buffer3)? {timestamp_buffer3[43:0],4'b0000} :48'h0;
+assign phase_accumulation_input = (sync_en | sync_en_buffer1 | sync_en_buffer2 | sync_en_buffer3)? 48'h0 : phase_accumulation;
 
 // Generate loop to assign dds_output_wire slices to m_axis_data_tdata
 genvar i;
@@ -279,7 +279,7 @@ always@(posedge clk) begin
         sync_en_buffer2                 <= sync_en_buffer1;
         sync_en_buffer3                 <= sync_en_buffer2;
 
-        if( sync_en_buffer3 == 1'b1 ) begin // buffer3 should be used since there is 3cycle delay with MAC_accu
+        if( sync_en_buffer3 == 1'b1 ) begin
             phase_accumulation              <= phase_sync_full_wire;
         end
         else begin

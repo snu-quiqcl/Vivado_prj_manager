@@ -13,6 +13,7 @@ report_property [ lindex $net_delays 0 ]
 import os
 import re
 import subprocess
+from functools import reduce
 from pathlib import Path
 
 POSSIBLE_FIFO_DEPTH = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072]
@@ -107,8 +108,7 @@ class Verilog_maker:
         
         self.TTL_ports = ['DACIO_00','DACIO_01','DACIO_02','DACIO_03','DACIO_04',\
                         'DACIO_05','DACIO_06','DACIO_07','DACIO_08','DACIO_09',\
-                        'DACIO_10', 'DACIO_11', 'DACIO_12', 'DACIO_13',\
-                        'DACIO_14', 'DACIO_15', 'ADCIO_00', 'ADCIO_01', \
+                        'ADCIO_00', 'ADCIO_01', \
                         'ADCIO_02', 'ADCIO_03', 'ADCIO_04', 'ADCIO_05', \
                         'ADCIO_06', 'ADCIO_07', 'ADCIO_08', 'ADCIO_09', \
                         'ADCIO_10', 'ADCIO_11', 'ADCIO_12', 'ADCIO_13', \
@@ -119,28 +119,37 @@ class Verilog_maker:
         self.total_ttl_num = ( len(self.TTL_ports) // 8 ) + (not len(self.TTL_ports) % 8 == 0)
         self.ttl_pin_num = len(self.TTL_ports)
     
-        self.EdgeCounter_ports = [ 'DACIO_16' , 'DACIO_17', 'DACIO_18', 'DACIO_19']
+        self.EdgeCounter_ports = [ 'DACIO_10', 'DACIO_11', 'DACIO_12', 'DACIO_13',\
+                                  'DACIO_14', 'DACIO_15', 'DACIO_16' , 'DACIO_17',\
+                                  'DACIO_18', 'DACIO_19']
         
         # self.EdgeCounter_ports = []
         
         self.total_EdgeCounter_num = len(self.EdgeCounter_ports)
 
+        #check whether there is same component in each list
+        common_elements = reduce(lambda a, b: set(a).intersection(b), [self.TTLx8_ports, self.TTL_ports, self.EdgeCounter_ports])
+
+        if common_elements:
+            print("There is common elements:", common_elements)
+            raise Exception('Common element error')
+        else:
+            print("No common elements")
         
-        
-        self.dac_controller_fifo_depth = 512
+        self.dac_controller_fifo_depth = 1024
         self.dac_controller_fifo_threshold = self.dac_controller_fifo_depth - 8
         
-        self.ttl_fifo_depth = 256
+        self.ttl_fifo_depth = 1024
         self.ttl_fifo_threshold = self.ttl_fifo_depth - 8
         self.ttl_fifo_data_len = 8
         self.ttl_fifo_addr_len = len(bin(self.ttl_fifo_depth - 1)) - 2 
         
-        self.ttlx8_fifo_depth = 256
+        self.ttlx8_fifo_depth = 1024
         self.ttlx8_fifo_threshold = self.ttlx8_fifo_depth - 8
         self.ttlx8_fifo_data_len = 64
         self.ttlx8_fifo_addr_len = len(bin(self.ttlx8_fifo_depth - 1)) - 2 
         
-        self.EdgeCounter_fifo_depth = 256
+        self.EdgeCounter_fifo_depth = 1024
         self.EdgeCounter_fifo_threshold = self.EdgeCounter_fifo_depth - 8
         
         self.total_rfdc_num = 1

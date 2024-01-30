@@ -2,8 +2,8 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Mon Jan 29 21:39:18 2024
-# Process ID: 29440
+# Start of session at: Tue Jan 30 21:21:52 2024
+# Process ID: 24708
 # Current directory: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main
 # Command line: vivado.exe -mode batch -source E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output\DAC_Controller.tcl
 # Log file: E:/RFSoC/GIT/Vivado_prj_manager/Verilog_main/vivado.log
@@ -15,7 +15,7 @@ source {E:\RFSoC\GIT\RFSoC\RFSoC_Design_V1_1\IP_File_01\DAC_Controller_output\DA
 # create_project ${project_name} ${project_dir}/${project_name} -part xczu28dr-ffvg1517-2-e
 INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
 Current project path is 'E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output/DAC_Controller'
-create_project: Time (s): cpu = 00:00:02 ; elapsed = 00:00:07 . Memory (MB): peak = 1143.457 ; gain = 0.000
+create_project: Time (s): cpu = 00:00:02 ; elapsed = 00:00:08 . Memory (MB): peak = 1131.707 ; gain = 0.000
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller/AXI2FIFO.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller/DAC_Controller.sv}
 # add_files -norecurse {E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller/DDS_Controller.sv}
@@ -34,7 +34,7 @@ INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'E:/Xilinx/Vivado/2020.2/dat
 WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'Spurious_Free_Dynamic_Range' from '45' to '90' has been ignored for IP 'dds_compiler_0'
 WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'Frequency_Resolution' from '0.4' to '0.01' has been ignored for IP 'dds_compiler_0'
 # create_ip -dir E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name fifo_generator_0
-# set_property -dict [list CONFIG.Performance_Options {First_Word_Fall_Through} CONFIG.Input_Data_Width {128} CONFIG.Input_Depth {512} CONFIG.Output_Data_Width {128} CONFIG.Output_Depth {512} CONFIG.Underflow_Flag {true} CONFIG.Overflow_Flag {true} CONFIG.Data_Count_Width {9} CONFIG.Write_Data_Count_Width {9} CONFIG.Read_Data_Count_Width {9} CONFIG.Programmable_Full_Type {Single_Programmable_Full_Threshold_Constant} CONFIG.Full_Threshold_Assert_Value {504} CONFIG.Full_Threshold_Negate_Value {503} CONFIG.Empty_Threshold_Assert_Value {4} CONFIG.Empty_Threshold_Negate_Value {5}] [get_ips fifo_generator_0]
+# set_property -dict [list CONFIG.Performance_Options {First_Word_Fall_Through} CONFIG.Input_Data_Width {128} CONFIG.Input_Depth {1024} CONFIG.Output_Data_Width {128} CONFIG.Output_Depth {1024} CONFIG.Underflow_Flag {true} CONFIG.Overflow_Flag {true} CONFIG.Data_Count_Width {10} CONFIG.Write_Data_Count_Width {10} CONFIG.Read_Data_Count_Width {10} CONFIG.Programmable_Full_Type {Single_Programmable_Full_Threshold_Constant} CONFIG.Full_Threshold_Assert_Value {1016} CONFIG.Full_Threshold_Negate_Value {1015} CONFIG.Empty_Threshold_Assert_Value {4} CONFIG.Empty_Threshold_Negate_Value {5}] [get_ips fifo_generator_0]
 # create_ip -dir E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name xbip_dsp48_mul_macro_0
 # set_property -dict [list CONFIG.instruction1 {A*B} CONFIG.pipeline_options {Expert} CONFIG.areg_3 {false} CONFIG.areg_4 {false} CONFIG.breg_3 {false} CONFIG.breg_4 {false} CONFIG.mreg_5 {false} CONFIG.preg_6 {false} CONFIG.a_width {17} CONFIG.b_width {17} CONFIG.creg_3 {false} CONFIG.creg_4 {false} CONFIG.creg_5 {false} CONFIG.d_width {18} CONFIG.a_binarywidth {0} CONFIG.b_binarywidth {0} CONFIG.concat_width {48} CONFIG.concat_binarywidth {0} CONFIG.c_binarywidth {0} CONFIG.pcin_binarywidth {0} CONFIG.p_full_width {34} CONFIG.p_width {34} CONFIG.p_binarywidth {0}] [get_ips xbip_dsp48_mul_macro_0]
 # create_ip -dir E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output -name xbip_dsp48_macro -vendor xilinx.com -library ip -version 3.0 -module_name xbip_dsp48_sum_macro_0
@@ -97,4 +97,4 @@ INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Desi
 WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'e:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller_output/DAC_Controller'.)
 # set_property top DAC_Controller [current_fileset]
 # set_property top_file { E:/RFSoC/GIT/RFSoC/RFSoC_Design_V1_1/IP_File_01/DAC_Controller/DAC_Controller.sv } [current_fileset]
-INFO: [Common 17-206] Exiting Vivado at Mon Jan 29 21:39:52 2024...
+INFO: [Common 17-206] Exiting Vivado at Tue Jan 30 21:22:30 2024...

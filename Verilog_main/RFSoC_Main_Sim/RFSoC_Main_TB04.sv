@@ -38,13 +38,13 @@ initial begin
     dac0_clk_p <= 1'b1;
 end
 
-/*
+
 always begin
     #2500
     dac0_clk_n <= ~dac0_clk_n;
     dac0_clk_p <= ~dac0_clk_p;
 end
-*/
+
 
 
 wire output_pulse_x8_0_n;
@@ -106,10 +106,10 @@ RFSoC_Main_blk_wrapper tb(
     .RF3_CLKO_A_C_N_228(RF3_CLKO_A_C_N_228),
     .RF3_CLKO_A_C_N_229(RF3_CLKO_A_C_N_229),
     .RF3_CLKO_A_C_P_228(RF3_CLKO_A_C_P_228),
-    .RF3_CLKO_A_C_P_229(RF3_CLKO_A_C_P_229),
-    .m00_axis_0_tdata(m00_axis_00_tdata),
+    .RF3_CLKO_A_C_P_229(RF3_CLKO_A_C_P_229)
+    /*.m00_axis_0_tdata(m00_axis_00_tdata),
     .m00_axis_0_tready(m00_axis_00_tready),
-    .m00_axis_0_tvalid(m00_axis_00_tvalid)/*,
+    .m00_axis_0_tvalid(m00_axis_00_tvalid)*//*,
     .m00_axis_01_tdata(m00_axis_01_tdata),
     .m00_axis_01_tready(m00_axis_01_tready),
     .m00_axis_01_tvalid(m00_axis_01_tvalid),
@@ -198,8 +198,8 @@ reg[31:0] dac00_p_int;
 reg[31:0] dac00_n_int;
 
 always @ (*) begin
-   //dac00_p = tb.RFSoC_Main_blk_i.usp_rf_data_converter_0.inst.RFSoC_Main_blk_usp_rf_data_converter_0_0_rf_wrapper_i.tx0_u_dac.SIP_HSDAC_INST.VOUT0_P;
-   //dac00_n = tb.RFSoC_Main_blk_i.usp_rf_data_converter_0.inst.RFSoC_Main_blk_usp_rf_data_converter_0_0_rf_wrapper_i.tx0_u_dac.SIP_HSDAC_INST.VOUT0_N;
+   dac00_p = tb.RFSoC_Main_blk_i.usp_rf_data_converter_0.inst.RFSoC_Main_blk_usp_rf_data_converter_0_0_rf_wrapper_i.tx0_u_dac.SIP_HSDAC_INST.VOUT0_P;
+   dac00_n = tb.RFSoC_Main_blk_i.usp_rf_data_converter_0.inst.RFSoC_Main_blk_usp_rf_data_converter_0_0_rf_wrapper_i.tx0_u_dac.SIP_HSDAC_INST.VOUT0_N;
    dac00_p_int = dac00_p * (2 ** 31 - 1);
    dac00_n_int = dac00_n * (2 ** 31 - 1);
 end
@@ -260,7 +260,7 @@ initial begin
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000005000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h01523921, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000006000 << 64) + (4'b0001 << 60) + 48'h001f9923921, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000006000 << 64) + (4'b0001 << 60) + 48'h1eb851eb851e, resp1);
     
     
     ///////////////////////////////////////////////////////////////////////////////////

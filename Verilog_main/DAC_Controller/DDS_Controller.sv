@@ -150,7 +150,7 @@ always @( posedge clk ) begin
                 end
                 
                 4'b0001: begin
-                    sync_en <= 1'b1;
+                    //sync_en <= 1'b1;
                     freq[47:0] <= gpo_out[47:0];
                 end
                 

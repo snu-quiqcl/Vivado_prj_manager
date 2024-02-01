@@ -76,13 +76,13 @@ void init_rfsoc(){
     dac_6.flush_fifo();
     dac_7.set_addr(XPAR_DAC_CONTROLLER_7_BASEADDR);
     dac_7.flush_fifo();
-    EdgeCounter_0.set_addr((XPAR_EDGECOUNTER_0_BASEADDR));
+    EdgeCounter_0.set_addr(XPAR_EDGECOUNTER_0_BASEADDR);
     EdgeCounter_0.flush_fifo();
-    EdgeCounter_1.set_addr((XPAR_EDGECOUNTER_1_BASEADDR));
+    EdgeCounter_1.set_addr(XPAR_EDGECOUNTER_1_BASEADDR);
     EdgeCounter_1.flush_fifo();
-    EdgeCounter_2.set_addr((XPAR_EDGECOUNTER_2_BASEADDR));
+    EdgeCounter_2.set_addr(XPAR_EDGECOUNTER_2_BASEADDR);
     EdgeCounter_2.flush_fifo();
-    EdgeCounter_3.set_addr((XPAR_EDGECOUNTER_3_BASEADDR));
+    EdgeCounter_3.set_addr(XPAR_EDGECOUNTER_3_BASEADDR);
     EdgeCounter_3.flush_fifo();
     uint64_t * ttl_set_0_ptr = (uint64_t *) malloc(sizeof(uint64_t));
     ttl_out_0.set_addr(XPAR_TTL_OUT_0_BASEADDR,ttl_set_0_ptr,0);
@@ -146,32 +146,4 @@ void init_rfsoc(){
 
 int main(){
     init_rfsoc();
-
-    EdgeCounter_3.reset_count();
-    ttl_out_0.set(0);
-    delay(100);
-    tc_0.auto_start();
-
-    EdgeCounter_3.start_count();
-
-    for( int64_t i = 0 ; i < 2000; i ++ ){
-        delay(100);
-        ttl_out_0.set(1);
-        delay(100);
-        ttl_out_0.set(0);
-    }
-
-    delay(1000);
-    EdgeCounter_3.stop_count();
-
-    delay(1000);
-    EdgeCounter_3.save_count();
-
-    while( 1 ){
-        int64_t len = LOWER(EdgeCounter_3.read_len());
-        xil_printf("LEN : %d\r\n", len);
-        if( len != 0 ) break;
-    }
-
-    xil_printf("%d\r\n",LOWER(EdgeCounter_3.read_count()));
 }

@@ -32,9 +32,15 @@ int main(){
 
     xil_printf("RFSoC Start\r\n");
 
-    Raman_CH2.set_freq(4554321);
+    /*
+    Raman_CH2.set_freq(198000000);
     delay(8);
     Raman_CH2.set_amp(1.0);
-
+*/
     tc_0.auto_start();
+    delay(10000000000);
+    for(int i = 0 ; i < 1000; i++ ){
+        delay(1000);
+        AOM_369.set(i%2);
+    }
 }

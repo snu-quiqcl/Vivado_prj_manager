@@ -26,7 +26,7 @@ class Verilog_maker:
         self.git_dir = 'C:\Jeonghyun\GIT'
         
         # Directory which Vivado Project created.(Relative to Git directory)
-        self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_02'
+        self.target_dir = 'RFSoC\RFSoC_Design_V1_1\IP_File_03'
         
         # CPU configuration TCL code.
         self.cpu_type = 'Zynq_APU_0_125MHz.tcl'
@@ -162,7 +162,7 @@ class Verilog_maker:
         
         self.tcl_commands = ''
         self.customized_ip_list = []
-        self.do_sim = True
+        self.do_sim = False
         self.make_bit_stream = (False and (not self.do_sim))
         
     def runVivadoTCL(self, vivado_bat, tcl_path):
@@ -240,7 +240,8 @@ class Verilog_maker:
                 raise Exception('rtob fifo depth is too big')
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name {fifo_name}\n'
-        tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
+        tcl_code += f'set_property -dict [list CONFIG.Fifo_Implementation {{Independent_Clocks_Builtin_FIFO}} CONFIG.Read_Clock_Frequency {{125}} CONFIG.Write_Clock_Frequency {{125}}'
+        tcl_code += f' CONFIG.Performance_Options {{First_Word_Fall_Through}}'
         tcl_code += f' CONFIG.Input_Data_Width {{{fifo_width}}} CONFIG.Input_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'
         tcl_code += f' CONFIG.Output_Data_Width {{{fifo_width}}} CONFIG.Output_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'
         tcl_code += f' CONFIG.Underflow_Flag {{true}} CONFIG.Overflow_Flag {{true}}'

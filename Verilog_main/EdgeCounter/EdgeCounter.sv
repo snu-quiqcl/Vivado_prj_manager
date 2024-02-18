@@ -100,12 +100,9 @@ module EdgeCounter
     input wire auto_start,
     input wire [63:0] counter,
     
-    input wire input_sig,
-
-    //////////////////////////////////////////////////////////////////////////////////  
-    // rtio_clk
-    //////////////////////////////////////////////////////////////////////////////////
-    input wire rtio_clk
+    input wire input_sig
+    
+    
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -217,8 +214,7 @@ wire counter_matched;
 
 RTO_Core rto_core_0
 (
-    .wr_clk(s_axi_aclk),
-    .rd_clk(rtio_clk),
+    .clk(s_axi_aclk),
     .auto_start(auto_start),
     .reset(rto_core_reset),
     .flush(rto_core_flush),
@@ -246,8 +242,7 @@ RTI_Core
 )
 rti_core_0
 (
-    .rd_clk(s_axi_aclk),
-    .wr_clk(rtio_clk),
+    .clk(s_axi_aclk),
     .reset(rti_core_reset),
     .flush(rti_core_flush),
     .write(write),
@@ -270,7 +265,7 @@ wire selected;
 
 GPO_Core gpo_core_0
 (
-    .clk(rtio_clk),
+    .clk(s_axi_aclk),
     .reset(rto_core_reset),
     .override_en(1'b0),
     .selected_en(1'b1),
@@ -296,7 +291,7 @@ EdgeCounter_Controller
 )
 edgecounter_controller_0
 (
-    .clk(rtio_clk),
+    .clk(s_axi_aclk),
     .input_sig(input_sig),
     .reset(rto_core_reset),
     .cmd_in(gpo_out[63:0]),

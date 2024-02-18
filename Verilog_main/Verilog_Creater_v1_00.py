@@ -240,6 +240,32 @@ class Verilog_maker:
                 raise Exception('rtob fifo depth is too big')
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name {fifo_name}\n'
+        tcl_code += f'set_property -dict [list CONFIG.Performance_Options {{First_Word_Fall_Through}}'
+        tcl_code += f' CONFIG.Input_Data_Width {{{fifo_width}}} CONFIG.Input_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'
+        tcl_code += f' CONFIG.Output_Data_Width {{{fifo_width}}} CONFIG.Output_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'
+        tcl_code += f' CONFIG.Underflow_Flag {{true}} CONFIG.Overflow_Flag {{true}}'
+        tcl_code += f' CONFIG.Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}} CONFIG.Write_Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}}'
+        tcl_code += f' CONFIG.Read_Data_Count_Width {{{len(bin(POSSIBLE_FIFO_DEPTH[i__] - 1)) - 2}}} CONFIG.Programmable_Full_Type'
+        tcl_code += f' {{Single_Programmable_Full_Threshold_Constant}}'
+        tcl_code += f' CONFIG.Full_Threshold_Assert_Value {{{threshold}}}'
+        tcl_code += f' CONFIG.Full_Threshold_Negate_Value {{{threshold-1}}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Assert_Value {{4}}'
+        tcl_code += f' CONFIG.Empty_Threshold_Negate_Value {{5}}]'
+        tcl_code += f' [get_ips {fifo_name}]\n'
+        
+        #using '\' makes error in vivado.bat. this should be replaced in '/'
+        tcl_code = tcl_code.replace("\\","/")
+        
+        return tcl_code
+    
+    def generateXilinxDualPortFifoGenerator(self, folder_directory, fifo_name, threshold, fifo_width):
+        i__ = 0
+        while POSSIBLE_FIFO_DEPTH[i__] < threshold:
+            i__ += 1
+            if i__ >= len(POSSIBLE_FIFO_DEPTH):
+                raise Exception('rtob fifo depth is too big')
+        tcl_code = ''
+        tcl_code += f'create_ip -dir {folder_directory} -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name {fifo_name}\n'
         tcl_code += f'set_property -dict [list CONFIG.Fifo_Implementation {{Independent_Clocks_Builtin_FIFO}} CONFIG.Read_Clock_Frequency {{125}} CONFIG.Write_Clock_Frequency {{125}}'
         tcl_code += f' CONFIG.Performance_Options {{First_Word_Fall_Through}}'
         tcl_code += f' CONFIG.Input_Data_Width {{{fifo_width}}} CONFIG.Input_Depth {{{POSSIBLE_FIFO_DEPTH[i__]}}}'

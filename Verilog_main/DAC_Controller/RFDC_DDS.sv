@@ -325,7 +325,7 @@ xbip_dsp48_sum_macro_1 accu_phase_calculation(
     .P(phase_accu_full_wire)
 );
 
-MAC mac_16(
+MAC_accu mac_sync_16(
     .clk(clk),
     .resetn(1'b1),
     .D({timestamp_buffer3[43:0],4'b0000} + 16),
@@ -336,7 +336,7 @@ MAC mac_16(
     .mul_result(phase_sync_full_wire)
 );
 
-MAC mac_0(
+MAC_accu mac_accu_0(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 0),
@@ -347,7 +347,7 @@ MAC mac_0(
     .mul_result(phase_accu_input_wire[0])
 );
 
-MAC mac_1(
+MAC_accu mac_accu_1(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 1),
@@ -358,7 +358,7 @@ MAC mac_1(
     .mul_result(phase_accu_input_wire[1])
 );
 
-MAC mac_2(
+MAC_accu mac_accu_2(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 2),
@@ -369,7 +369,7 @@ MAC mac_2(
     .mul_result(phase_accu_input_wire[2])
 );
 
-MAC mac_3(
+MAC_accu mac_accu_3(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 3),
@@ -380,7 +380,7 @@ MAC mac_3(
     .mul_result(phase_accu_input_wire[3])
 );
 
-MAC mac_4(
+MAC_accu mac_accu_4(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 4),
@@ -391,7 +391,7 @@ MAC mac_4(
     .mul_result(phase_accu_input_wire[4])
 );
 
-MAC mac_5(
+MAC_accu mac_accu_5(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 5),
@@ -402,7 +402,7 @@ MAC mac_5(
     .mul_result(phase_accu_input_wire[5])
 );
 
-MAC mac_6(
+MAC_accu mac_accu_6(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 6),
@@ -413,7 +413,7 @@ MAC mac_6(
     .mul_result(phase_accu_input_wire[6])
 );
 
-MAC mac_7(
+MAC_accu mac_accu_7(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 7),
@@ -424,7 +424,7 @@ MAC mac_7(
     .mul_result(phase_accu_input_wire[7])
 );
 
-MAC mac_8(
+MAC_accu mac_accu_8(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 8),
@@ -435,7 +435,7 @@ MAC mac_8(
     .mul_result(phase_accu_input_wire[8])
 );
 
-MAC mac_9(
+MAC_accu mac_accu_9(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 9),
@@ -446,7 +446,7 @@ MAC mac_9(
     .mul_result(phase_accu_input_wire[9])
 );
 
-MAC mac_10(
+MAC_accu mac_accu_10(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 10),
@@ -457,7 +457,7 @@ MAC mac_10(
     .mul_result(phase_accu_input_wire[10])
 );
 
-MAC mac_11(
+MAC_accu mac_accu_11(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 11),
@@ -468,7 +468,7 @@ MAC mac_11(
     .mul_result(phase_accu_input_wire[11])
 );
 
-MAC mac_12(
+MAC_accu mac_accu_12(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 12),
@@ -479,7 +479,7 @@ MAC mac_12(
     .mul_result(phase_accu_input_wire[12])
 );
 
-MAC mac_13(
+MAC_accu mac_accu_13(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 13),
@@ -490,7 +490,7 @@ MAC mac_13(
     .mul_result(phase_accu_input_wire[13])
 );
 
-MAC mac_14(
+MAC_accu mac_accu_14(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 14),
@@ -501,7 +501,7 @@ MAC mac_14(
     .mul_result(phase_accu_input_wire[14])
 );
 
-MAC mac_15(
+MAC_accu mac_accu_15(
     .clk(clk),
     .resetn(1'b1),
     .D(timestamp_input + 15),

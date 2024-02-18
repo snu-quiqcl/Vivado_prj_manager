@@ -6,8 +6,7 @@ module adj_fifo
     parameter ADDR_LEN = 10
 )
 (
-    input wire wr_clk,
-    input wire rd_clk,
+    input wire clk,
     input wire rst,
     input wire wr_en,
     input wire [ADDR_LEN - 1:0] addr_in,
@@ -17,15 +16,10 @@ module adj_fifo
 );
 
 reg [DATA_LEN * DEPTH - 1:0] data;
-// For CDC, two stage of pipeline is implemented
-reg [DATA_LEN - 1:0] din_buffer1;
-reg [DATA_LEN - 1:0] din_buffer2;
-reg wr_en_buffer1;
-reg wr_en_buffer2;
 
 assign dout = data[DATA_LEN * addr_out +:DATA_LEN];
 
-always@(posedge rd_clk) begin
+always@(posedge clk) begin
     if( rst ) begin
         data <= {(DATA_LEN*DEPTH){1'b0}};
     end

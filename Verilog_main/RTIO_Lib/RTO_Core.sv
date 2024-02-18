@@ -22,8 +22,7 @@
 
 module RTO_Core
 (
-    input wire wr_clk,
-    input wire rd_clk,
+    input wire clk,
     input wire auto_start,
     input wire reset,
     input wire flush,
@@ -86,8 +85,7 @@ assign counter_matched = counter_match;
 
 
 fifo_generator_0 RTO_Core_FIFO0(
-    .wr_clk(wr_clk),
-    .rd_clk(rd_clk),
+    .clk(clk),
     .srst(flush_fifo),  // rst -> srst in Vivado 2020.2
     .din(fifo_din),
     .wr_en(wr_en),
@@ -99,7 +97,7 @@ fifo_generator_0 RTO_Core_FIFO0(
     .underflow(underflow_dummy_wire)
 );
 
-always @(posedge rd_clk) begin
+always @(posedge clk) begin
     if( flush_fifo ) begin
         counter_match <= 1'b0;
         overflow_error_state <= 1'b0;

@@ -98,8 +98,8 @@ module AXI2FIFO
     //////////////////////////////////////////////////////////////////////////////////
     output reg rto_core_reset,
     output reg rto_core_flush,
-    output reg rto_core_write,
-    output reg [127:0] rto_core_fifo_din,
+    output wire rto_core_write,
+    output wire [127:0] rto_core_fifo_din,
     
     input wire rto_core_full,
     input wire rto_core_empty,
@@ -108,13 +108,18 @@ module AXI2FIFO
     // RTI_Core interface
     //////////////////////////////////////////////////////////////////////////////////
     output reg rti_core_reset,
-    output reg rti_core_rd_en,
+    output wire rti_core_rd_en,
     output reg rti_core_flush,
 
     input wire [127:0] rti_core_fifo_dout,
     input wire rti_core_full,
     input wire rti_core_empty,
-    input wire [FIFO_DEPTH - 1:0] data_num
+    input wire [FIFO_DEPTH - 1:0] data_num,
+    
+    //////////////////////////////////////////////////////////////////////////////////
+    // Clock Domain Crossing Interface
+    //////////////////////////////////////////////////////////////////////////////////
+    input wire rtio_clk
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +131,7 @@ parameter AXI_FLUSH_FIFO        = {AXI_ADDR_WIDTH{1'b0}} + 6'h10;
 //////////////////////////////////////////////////////////////////////////////////
 // AXI4 READ Address Space
 //////////////////////////////////////////////////////////////////////////////////
-parameter AXI_READ_FIFO_LEN     = {AXI_ADDR_WIDTH{1'b0}} + 6'h10;
+parameter AXI_READ_ISEMPTY      = {AXI_ADDR_WIDTH{1'b0}} + 6'h10;
 parameter AXI_READ_FIFO         = {AXI_ADDR_WIDTH{1'b0}};
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +145,7 @@ parameter ERROR_STATE           = 4'h4;
 parameter WRITE_RESPONSE        = 4'h5;
 
 parameter READ_DATA             = 4'h2;
-parameter READ_LEN              = 4'h3;
+parameter READ_ISEMPTY              = 4'h3;
 parameter READ_ERROR_STATE      = 4'h5;
 
 reg[3:0] axi_state_write;
@@ -192,10 +197,84 @@ assign s_axi_awready = (axi_state_write == IDLE);
 assign s_axi_wready = ((axi_state_write == WRITE_DATA_WRITE_FIFO) && (rto_core_full == 1'b0)) || (axi_state_write == WRITE_DATA_FLUSH_FIFO);
 assign s_axi_arready = (axi_state_read == IDLE);
 
+
+//////////////////////////////////////////////////////////////////////////////////
+// Asyncrhonous fifo for CDC (s_aclk -> rtio_clk)
+//////////////////////////////////////////////////////////////////////////////////
+wire async_fifo_out_full;
+wire async_fifo_out_empty;
+wire [127:0] async_fifo_out_dout;
+reg [127:0] async_fifo_out_din;
+reg async_fifo_out_write;
+reg async_rto_core_flush;               // s_aclk region
+reg rto_core_flush_buffer1;             // rtio_clk region
+reg rto_core_flush_buffer2;             // rtio_clk region
+reg async_rto_core_reset;               // s_aclk region
+reg rto_core_reset_buffer1;             // rtio_clk region
+reg rto_core_reset_buffer2;             // rtio_clk region
+
+assign rto_core_write = (~rto_core_full) & async_fifo_out_empty;
+assign rto_core_fifo_din = async_fifo_out_dout;
+
+fifo_generator_1 async_fifo_out( // 32 depth, 16 program full
+    .wr_clk(s_axi_aclk),
+    .rd_clk(rtio_clk),
+    .srst(async_rto_core_flush | async_rto_core_reset),  // rst -> srst in Vivado 2020.2
+    .din(async_fifo_out_din),
+    .wr_en(async_fifo_out_write),
+    .rd_en((~rto_core_full) & async_fifo_out_empty),
+    .dout(async_fifo_out_dout),
+    .prog_full(async_fifo_out_full),  // full -> prog_full to deal with full delay signal
+    .overflow(),
+    .empty(async_fifo_out_empty),
+    .underflow()
+);
+
+always @(posedge rtio_clk) begin
+    {rto_core_flush, rto_core_flush_buffer2, rto_core_flush_buffer1} <= {rto_core_flush_buffer2, rto_core_flush_buffer1, async_rto_core_flush};
+    {rto_core_reset, rto_core_reset_buffer2, rto_core_reset_buffer1} <= {rto_core_reset_buffer2, rto_core_reset_buffer1, async_rto_core_reset};
+end
+
+//////////////////////////////////////////////////////////////////////////////////
+// Asyncrhonous fifo for CDC (rtio_clk -> s_aclk)
+//////////////////////////////////////////////////////////////////////////////////
+wire async_fifo_in_full;
+wire [127:0] async_fifo_in_dout;
+wire async_fifo_in_empty;
+reg async_fifo_in_rd_en;
+reg async_rti_core_reset;
+reg rti_core_reset_buffer1;
+reg rti_core_reset_buffer2;
+reg async_rti_core_flush;
+reg rti_core_flush_buffer1;
+reg rti_core_flush_buffer2;
+
+
+assign rti_core_rd_en = (~rti_core_empty) & async_fifo_in_full;
+
+fifo_generator_1 async_fifo_out( // 32 depth, 16 program full
+    .wr_clk(rtio_clk),
+    .rd_clk(s_axi_aclk),
+    .srst(rti_core_reset | rti_core_flush),  // rst -> srst in Vivado 2020.2
+    .din(rti_core_fifo_dout),
+    .wr_en((~rti_core_empty) & async_fifo_in_full),
+    .rd_en(async_fifo_in_rd_en),
+    .dout(async_fifo_in_dout),
+    .prog_full(async_fifo_in_full),  // full -> prog_full to deal with full delay signal
+    .overflow(),
+    .empty(async_fifo_in_empty),
+    .underflow()
+);
+
+always @(posedge rtio_clk) begin
+    {rti_core_flush, rti_core_flush_buffer2, rti_core_flush_buffer1} <= {rti_core_flush_buffer2, rti_core_flush_buffer1, async_rti_core_flush};
+    {rti_core_reset, rto_core_reset_buffer2, rti_core_reset_buffer1} <= {rti_core_reset_buffer2, rti_core_reset_buffer1, async_rti_core_reset};
+end
+
 //////////////////////////////////////////////////////////////////////////////////
 // AXI4 Write FSM
 // In AXI write, wlast signal has to be actived to end sending data. Only sending
-// length of AXI signal does not work.
+// length of AXI signal does not work in below code.
 //////////////////////////////////////////////////////////////////////////////////
 
 always @(posedge s_axi_aclk) begin
@@ -214,9 +293,9 @@ always @(posedge s_axi_aclk) begin
         axi_wshift_size <= 8'h0;
         axi_wshift_count <= 8'h0;
         s_axi_bid <= 16'h0; // id value
-        rto_core_fifo_din <= 128'h0;
-        rto_core_flush <= 1'b0;
-        rti_core_flush <= 1'b0;
+        async_fifo_out_din <= 128'h0;
+        async_rto_core_flush <= 1'b0;
+        async_rti_core_flush <= 1'b0;
         axi_awid <= 16'h0;
         axi_awuser <= 16'h0;
     end
@@ -225,10 +304,10 @@ always @(posedge s_axi_aclk) begin
         case(axi_state_write)
             IDLE: begin
                 s_axi_bid <= 16'h0; // id value
-                rto_core_write <= 1'b0;
-                rto_core_flush <= 1'b0;
-                rti_core_flush <= 1'b0;
-                rto_core_fifo_din <= 128'h0;
+                async_fifo_out_write <= 1'b0;
+                async_rto_core_flush <= 1'b0;
+                async_rti_core_flush <= 1'b0;
+                async_fifo_out_din <= 128'h0;
                 s_axi_bresp <= 2'b0;
                 s_axi_bvalid <= 1'b0;
                 axi_awuser <= 16'h0;
@@ -315,29 +394,29 @@ always @(posedge s_axi_aclk) begin
             WRITE_DATA_WRITE_FIFO: begin
                 if( rto_core_full == 1'b0 ) begin
                     if( s_axi_wvalid == 1'b1 ) begin
-                        rto_core_fifo_din <= s_axi_wdata;
-                        rto_core_write <= 1'b1;
+                        async_fifo_out_din <= s_axi_wdata;
+                        async_fifo_out_write <= 1'b1;
                         if( s_axi_wlast == 1'b1 ) begin
                             axi_state_write <= WRITE_RESPONSE;
                         end
                     end
                     else begin
-                        rto_core_fifo_din <= s_axi_wdata;
-                        rto_core_write <= 1'b0;
+                        async_fifo_out_din <= s_axi_wdata;
+                        async_fifo_out_write <= 1'b0;
                     end
                 end
                 else begin
-                    rto_core_fifo_din <= 128'h0;
-                    rto_core_write <= 1'b0;
+                    async_fifo_out_din <= 128'h0;
+                    async_fifo_out_write <= 1'b0;
                 end
             end
             WRITE_DATA_FLUSH_FIFO: begin
                 if( s_axi_wvalid == 1'b1 ) begin
                     if( s_axi_wdata[0] == 1'b1 ) begin
-                        rto_core_flush <= 1'b1;
+                        async_rto_core_flush <= 1'b1;
                     end
                     if( s_axi_wdata[1] == 1'b1 ) begin
-                        rti_core_flush <= 1'b1;
+                        async_rti_core_flush <= 1'b1;
                     end
                     if( s_axi_wlast == 1'b1 ) begin
                         axi_state_write <= WRITE_RESPONSE;
@@ -355,8 +434,8 @@ always @(posedge s_axi_aclk) begin
             end
             
             WRITE_RESPONSE: begin
-                rto_core_write <= 1'b0;
-                rto_core_fifo_din <= 128'h0;
+                async_fifo_out_write <= 1'b0;
+                async_fifo_out_din <= 128'h0;
                 if( s_axi_bready == 1'b1 ) begin
                     s_axi_bresp <= 2'b00;
                     s_axi_bvalid <= 1'b1;
@@ -393,7 +472,7 @@ always @(posedge s_axi_aclk) begin
         axi_arid <= 16'b0;
         axi_aruser <= 16'b0;
 
-        rti_core_rd_en <= 1'b0;
+        async_fifo_in_rd_en <= 1'b0;
     end
     
     else begin
@@ -414,7 +493,7 @@ always @(posedge s_axi_aclk) begin
                 axi_arid <= 16'b0;
                 axi_aruser <= 16'b0;
         
-                rti_core_rd_en <= 1'b0;
+                async_fifo_in_rd_en <= 1'b0;
 
 
                 if( s_axi_arvalid == 1'b1 ) begin
@@ -427,15 +506,15 @@ always @(posedge s_axi_aclk) begin
                     axi_arid <= s_axi_arid;
                     axi_aruser <= s_axi_aruser;
                     
-                    if( s_axi_araddr == AXI_READ_FIFO_LEN ) begin
-                        axi_state_read <= READ_LEN;
+                    if( s_axi_araddr == AXI_READ_ISEMPTY ) begin
+                        axi_state_read <= READ_ISEMPTY;
                     end
                     else if( s_axi_araddr == AXI_READ_FIFO ) begin
-                        if( rti_core_empty == 1'b1 ) begin
+                        if( async_fifo_in_empty == 1'b1 ) begin
                             axi_state_read <= READ_ERROR_STATE;
                         end
                         else begin                            
-                            rti_core_rd_en <= 1'b1;
+                            async_fifo_in_rd_en <= 1'b1;
                             axi_state_read <= READ_DATA;
                         end
 
@@ -446,20 +525,20 @@ always @(posedge s_axi_aclk) begin
                 end
             end
             READ_DATA: begin
-                s_axi_rdata <= rti_core_fifo_dout;
+                s_axi_rdata <= async_fifo_in_dout;
                 s_axi_rresp <= 2'b0;
                 s_axi_rvalid <= 1'b1;
                 s_axi_rid <= axi_arid;
                 axi_arlen <= axi_arlen - 1;
                 if( axi_arlen == 0 ) begin
                     axi_state_read <= IDLE;
-                    rti_core_rd_en <= 1'b0;
+                    async_fifo_in_rd_en <= 1'b0;
                     s_axi_rlast <= 1'b1;
                 end
             end
 
-            READ_LEN: begin
-                s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}}|data_num;
+            READ_ISEMPTY: begin
+                s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}}|(~async_fifo_in_empty);
                 s_axi_rresp <= 2'b0;
                 s_axi_rvalid <= 1'b1;
                 s_axi_rlast <= 1'b1;
@@ -486,12 +565,12 @@ end
 
 always @(posedge s_axi_aclk) begin
     if( s_axi_aresetn == 1'b0 ) begin
-        rto_core_reset <= 1'b1;
-        rti_core_reset <= 1'b1;
+        async_rto_core_reset <= 1'b1;
+        async_rti_core_reset <= 1'b1;
     end
     else begin
-        rto_core_reset <= 1'b0;
-        rti_core_reset <= 1'b0;
+        async_rto_core_reset <= 1'b0;
+        async_rti_core_reset <= 1'b0;
     end
 end
 

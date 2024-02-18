@@ -25,8 +25,7 @@ module RTI_Core
     parameter FIFO_DEPTH = 10
 )
 (
-    input wire wr_clk,
-    input wire rd_clk,
+    input wire clk,
     input wire reset,
     input wire flush,
     input wire write,
@@ -71,8 +70,7 @@ assign full = full_wire;
 assign empty = empty_wire;
     
 fifo_generator_0 RTI_Core_FIFO(
-    .wr_clk(wr_clk),
-    .rd_clk(rd_clk),
+    .clk(clk),
     .srst(flush_fifo),
     .din(fifo_din),
     .wr_en(wr_en),
@@ -84,7 +82,7 @@ fifo_generator_0 RTI_Core_FIFO(
     .underflow(underflow_dummy_wire)
 );
 
-always @(posedge wr_clk) begin
+always @(posedge clk) begin
     if( reset | flush_fifo ) begin
         overflow_error_data_buffer[127:0] <= 128'h0;
         overflow_error_state <= 1'b0;
@@ -111,4 +109,3 @@ always @(posedge wr_clk) begin
 end
     
 endmodule
-

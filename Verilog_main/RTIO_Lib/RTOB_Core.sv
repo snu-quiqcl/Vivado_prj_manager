@@ -28,22 +28,21 @@ module RTOB_Core
     parameter DATA_LEN  = 8
 )
 (
-    input wire wr_clk,
-    input wire rd_clk,
-    input wire auto_start,          // rd_clk domain
-    input wire reset,               // wr_clk domain
-    input wire flush,               // wr_clk domain
-    input wire write,               // wr_clk domain
-    input wire [127:0] fifo_din,    // wr_clk domain
-    input wire [63:0] counter,      // rd_clk domain
-    output wire counter_matched,    // rd_clk domain
-    output wire [127:0] rto_out,    // rd_clk domain
+    input wire clk,
+    input wire auto_start,
+    input wire reset,
+    input wire flush,
+    input wire write,
+    input wire [127:0] fifo_din,
+    input wire [63:0] counter,
+    output wire counter_matched,
+    output wire [127:0] rto_out,
     output wire [127:0] timestamp_error_data,
     output wire [127:0] overflow_error_data,
     output wire timestamp_error,
     output wire overflow_error,
-    output wire full,               // wr_clk domain
-    output wire empty               // wr_clk domain
+    output wire full,
+    output wire empty
     );
 
 reg counter_match;
@@ -100,8 +99,7 @@ reg [ADDR_LEN - 1:0] output_top;
 reg [63:0] last_input_timestamp;
 
 rtob_fifo_generator_1 RTOB_Core_timestamp_FIFO0(
-    .wr_clk(wr_clk),
-    .rd_clk(rd_clk),
+    .clk(clk),
     .srst(flush_fifo),  // rst -> srst in Vivado 2020.2
     .din(fifo_din[127:64]),
     .wr_en(new_bram_comp),
@@ -122,8 +120,7 @@ adj_fifo
 )
 RTOB_Core_data_FIFO0
 (
-    .wr_clk(wr_clk),
-    .rd_clk(rd_clk),
+    .clk(clk),
     .rst(flush_fifo),
     .wr_en(wr_en),
     .addr_in({10'h0,input_top_wire}),
@@ -132,7 +129,7 @@ RTOB_Core_data_FIFO0
     .dout(fifo_dout[DATA_LEN - 1:0])
 );
 
-always @(posedge rd_clk) begin
+always @(posedge clk) begin
     if( flush_fifo ) begin
         counter_match                           <= 1'b0;
         overflow_error_state                    <= 1'b0;

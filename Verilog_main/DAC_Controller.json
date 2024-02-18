@@ -1,0 +1,94 @@
+{
+    "verilog" : {
+        "name" : "DAC_Controller",
+        "part_name" : "xczu28dr-ffvg1517-2-e",
+        "board_name" : "xilinx.com:zcu111:part0:1.4",
+        "files" : [
+            "DAC_Controller/DAC_Controller.sv",
+            "DAC_Controller/DDS_Controller.sv",
+            "DAC_Controller/MAC.sv",
+            "DAC_Controller/RFDC_DDS.sv",
+            "RTIO_Lib/AXI2FIFO.sv",
+            "RTIO_Lib/GPO_Core.sv",
+            "RTIO_Lib/RTO_Core.sv"
+        ]
+    }
+    "xilinx_ip" : {
+        "fifo_generator_0" : {
+            "ip" : "fifo_generator",
+            "version" : "13.2",
+            "config" : {
+                "Performance_Options" : "First_Word_Fall_Through",
+                "Input_Data_Width" : "128",
+                "Input_Depth" : "256",
+                "Output_Data_Width" : "128",
+                "Output_Depth" : "256",
+                "Underflow_Flag" : "true",
+                "Overflow_Flag" : "true",
+                "Data_Count_Width" : "8",
+                "Write_Data_Count_Width" : "8",
+                "Read_Data_Count_Width" : "8",
+                "Programmable_Full_Type" : "Single_Programmable_Full_Threshold_Constant",
+                "Full_Threshold_Assert_Value" : "248",
+                "Full_Threshold_Negate_Value" : "248",
+                "Empty_Threshold_Assert_Value" : "4",
+                "Empty_Threshold_Negate_Value" : "5"
+            }
+        },
+        "fifo_generator_1" : {
+            "ip" : "fifo_generator",
+            "version" : "13.2",
+            "config" : {
+                "Fifo_Implementation" : "Independent_Clocks_Builtin_FIFO",
+                "Read_Clock_Frequency" : "125",
+                "Write_Clock_Frequency" : "125",
+                "Performance_Options" : "First_Word_Fall_Through",
+                "Input_Data_Width" : "128", 
+                "Input_Depth" : "32",
+                "Output_Data_Width" : "128", 
+                "Output_Depth" : "32",
+                "Underflow_Flag" : "true", 
+                "Overflow_Flag" : "true",
+                "Data_Count_Width" : "5",
+                "Write_Data_Count_Width" : "5",
+                "Read_Data_Count_Width" : "5", 
+                "Programmable_Full_Type" : "Single_Programmable_Full_Threshold_Constant",
+                "Full_Threshold_Assert_Value" : "threshold",
+                "Full_Threshold_Negate_Value" : "16",
+                "Empty_Threshold_Assert_Value" : "4",
+                "Empty_Threshold_Negate_Value" : "5"
+            }
+        },
+        "dds_compiler_0":{
+            "ip" : "dds_compiler",
+            "version" : "6.0",
+            "config" : {
+                "PartsPresent" : "SIN_COS_LUT_only",
+                "Spurious_Free_Dynamic_Range" : "90",
+                "Frequency_Resolution" : "0.01",
+                "Phase_Width" : "15",
+                "Output_Width" : "15", 
+                "Output_Selection" : "Sine", 
+                "Optimization_Goal" : "Speed",
+                "Latency_Configuration" : "Configurable",
+                "Latency" : "1",
+                "Parameter_Entry" : "Hardware_Parameters", 
+                "Noise_Shaping" : "None", 
+                "Has_Phase_Out" : "false", 
+                "DATA_Has_TLAST" : "Not_Required", 
+                "S_PHASE_Has_TUSER" : "Not_Required", 
+                "M_DATA_Has_TUSER" : "Not_Required", 
+                "Output_Frequency1" : "0", 
+                "PINC1" : "0"
+            }
+        },
+        "xbip_dsp48_mul_macro_0":{
+        },
+        "xbip_dsp48_sum_macro_0":{
+        },
+        "xbip_dsp48_sub_macro_0":{
+        },
+        "xbip_dsp48_sum_macro_1":{
+        }
+    }
+}

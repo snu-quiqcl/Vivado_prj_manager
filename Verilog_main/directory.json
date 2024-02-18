@@ -1,0 +1,6 @@
+{
+    "git_dir" : "C:\Jeonghyun\GIT",
+    "target_dir" : "RFSoC\RFSoC_Design_V1_1\IP_File_03",
+    "vivado_path" : "C:\Xilinx\Vivado\2020.2\bin\vivado.bat",
+    "board_path" : "C:/Xilinx/Vivado/2020.2/data/boards/board_files"
+}

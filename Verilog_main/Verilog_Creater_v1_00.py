@@ -217,7 +217,6 @@ class Verilog_maker:
     def generateXilinxDdsIp(self, folder_directory, dds_name):
         tcl_code = ''
         tcl_code += f'create_ip -dir {folder_directory} -name dds_compiler -vendor xilinx.com -library ip -version 6.0 -module_name {dds_name}\n'
-        #one line command
         tcl_code += f'set_property -dict [list CONFIG.PartsPresent {{SIN_COS_LUT_only}}'
         tcl_code += f' CONFIG.Spurious_Free_Dynamic_Range {{90}} CONFIG.Frequency_Resolution {{0.01}}'
         tcl_code += f' CONFIG.Phase_Width {{15}} CONFIG.Output_Width {{15}} CONFIG.Output_Selection'

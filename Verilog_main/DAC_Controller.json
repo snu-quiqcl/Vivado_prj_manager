@@ -1,6 +1,7 @@
 {
     "verilog" : {
         "name" : "DAC_Controller",
+        "top": "DAC_Controller.sv",
         "files" : [
             "DAC_Controller/DAC_Controller.sv",
             "DAC_Controller/DDS_Controller.sv",
@@ -16,6 +17,8 @@
             "name" : "fifo_generator",
             "version" : "13.2",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "Performance_Options" : "First_Word_Fall_Through",
                 "Input_Data_Width" : "128",
@@ -38,6 +41,8 @@
             "name" : "fifo_generator",
             "version" : "13.2",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "Fifo_Implementation" : "Independent_Clocks_Builtin_FIFO",
                 "Read_Clock_Frequency" : "125",
@@ -63,6 +68,8 @@
             "name" : "dds_compiler",
             "version" : "6.0",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "PartsPresent" : "SIN_COS_LUT_only",
                 "Spurious_Free_Dynamic_Range" : "90",
@@ -87,6 +94,8 @@
             "name" : "xbip_dsp48_macro",
             "version" : "3.0",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "instruction1" : "A*B", 
                 "pipeline_options" : "Expert", 
@@ -117,6 +126,8 @@
             "name" : "xbip_dsp48_macro",
             "version" : "3.0",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "instruction1" : "(A+D)+C", 
                 "pipeline_options" : "Expert", 
@@ -156,6 +167,8 @@
             "name" : "xbip_dsp48_macro",
             "version" : "3.0",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "instruction1"  : "CONCAT-C",
                 "pipeline_options"  : "Expert",
@@ -198,6 +211,8 @@
             "name" : "xbip_dsp48_macro",
             "version" : "3.0",
             "vendor" : "xilinx.com",
+            "library" : "ip",
+            "tcl_options" : ["name", "version", "vendor", "library", "module_name"],
             "config" : {
                 "instruction1"  : "CONCAT+C",
                 "pipeline_options"  : "Expert",

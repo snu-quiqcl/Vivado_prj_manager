@@ -82,9 +82,9 @@
             "DACIO_18",
             "DACIO_19"
         ],
-        "dac_controller_fifo_depth" : 256,
-        "ttl_fifo_depth" : 256,
-        "ttlx8_fifo_depth" : 256,
+        "DAC_Controller_fifo_depth" : 256,
+        "TTL_fifo_depth" : 256,
+        "TTLx8_fifo_depth" : 256,
         "EdgeCounter_fifo_depth" : 256
     },
     "bd_cell" : {

@@ -1,44 +1,35 @@
 {
-    "verilog" : {
-        "project_name " : "RFSoC_Main",
-        "version" : "2020.2",
-        "constraints" : "RFSoC_Main/ZCU111_Rev1.0.xdc",
-        "TTLx8_ports" : [
-            "FMCP_HSPC_LA00_CC",
-            "FMCP_HSPC_LA01_CC",
-            "FMCP_HSPC_LA02",
-            "FMCP_HSPC_LA03",
-            "FMCP_HSPC_LA04",
-            "FMCP_HSPC_LA05",
-            "FMCP_HSPC_LA06",
-            "FMCP_HSPC_LA07",
-            "FMCP_HSPC_LA08",
-            "FMCP_HSPC_LA09",
-            "FMCP_HSPC_LA10",
-            "FMCP_HSPC_LA11",
-            "FMCP_HSPC_LA12",
-            "FMCP_HSPC_LA13",
-            "FMCP_HSPC_LA14",
-            "FMCP_HSPC_LA15",
-            "FMCP_HSPC_LA16",
-            "FMCP_HSPC_LA17_CC",
-            "FMCP_HSPC_LA18_CC",
-            "FMCP_HSPC_LA19",
-            "FMCP_HSPC_LA20",
-            "FMCP_HSPC_LA21",
-            "FMCP_HSPC_LA22",
-            "FMCP_HSPC_LA23",
-            "FMCP_HSPC_LA24",
-            "FMCP_HSPC_LA25",
-            "FMCP_HSPC_LA26",
-            "FMCP_HSPC_LA27",
-            "FMCP_HSPC_LA28",
-            "FMCP_HSPC_LA29",
-            "FMCP_HSPC_LA30",
-            "FMCP_HSPC_LA31",
-            "FMCP_HSPC_LA32"
+    "block_diagram" : {
+        "project_name" : "RFSoC_Main",
+        "DAC_Controller_fifo_depth" : "512",
+        "TTL_out_fifo_depth" : "512",
+        "TTLx8_out_fifo_depth" : "512",
+        "EdgeCounter_fifo_depth" : "512",
+        "axi_offset" : "0xA0000000",
+        "json_path" : [
+            "DAC_Controller.json", 
+            "EdgeCounter.json", 
+            "TimeController.json", 
+            "TTL_out.json", 
+            "TTLx8_out.json"
         ],
-        "TTL_ports" : [
+        "output_ports" : [
+            "RFMC_DAC_00_N", 
+            "RFMC_DAC_00_P", 
+            "RFMC_DAC_01_N", 
+            "RFMC_DAC_01_P",
+            "RFMC_DAC_02_N",
+            "RFMC_DAC_02_P",
+            "RFMC_DAC_03_N",
+            "RFMC_DAC_03_P",
+            "RFMC_DAC_10_N",
+            "RFMC_DAC_10_P",
+            "RFMC_DAC_11_N",
+            "RFMC_DAC_11_P",
+            "RFMC_DAC_12_N",
+            "RFMC_DAC_12_P",
+            "RFMC_DAC_13_N",
+            "RFMC_DAC_13_P",
             "DACIO_00",
             "DACIO_01",
             "DACIO_02",
@@ -68,9 +59,75 @@
             "ADCIO_16",
             "ADCIO_17",
             "ADCIO_18",
-            "ADCIO_19"
+            "ADCIO_19",
+            "FMCP_HSPC_LA00_CC_P",
+            "FMCP_HSPC_LA00_CC_N",
+            "FMCP_HSPC_LA01_CC_P",
+            "FMCP_HSPC_LA01_CC_N",
+            "FMCP_HSPC_LA02_P",
+            "FMCP_HSPC_LA02_N",
+            "FMCP_HSPC_LA03_P",
+            "FMCP_HSPC_LA03_N",
+            "FMCP_HSPC_LA04_P",
+            "FMCP_HSPC_LA04_N",
+            "FMCP_HSPC_LA05_P",
+            "FMCP_HSPC_LA05_N",
+            "FMCP_HSPC_LA06_P",
+            "FMCP_HSPC_LA06_N",
+            "FMCP_HSPC_LA07_P",
+            "FMCP_HSPC_LA07_N",
+            "FMCP_HSPC_LA08_P",
+            "FMCP_HSPC_LA08_N",
+            "FMCP_HSPC_LA09_P",
+            "FMCP_HSPC_LA09_N",
+            "FMCP_HSPC_LA10_P",
+            "FMCP_HSPC_LA10_N",
+            "FMCP_HSPC_LA11_P",
+            "FMCP_HSPC_LA11_N",
+            "FMCP_HSPC_LA12_P",
+            "FMCP_HSPC_LA12_N",
+            "FMCP_HSPC_LA13_P",
+            "FMCP_HSPC_LA13_N",
+            "FMCP_HSPC_LA14_P",
+            "FMCP_HSPC_LA14_N",
+            "FMCP_HSPC_LA15_P",
+            "FMCP_HSPC_LA15_N",
+            "FMCP_HSPC_LA16_P",
+            "FMCP_HSPC_LA16_N",
+            "FMCP_HSPC_LA17_CC_P",
+            "FMCP_HSPC_LA17_CC_N",
+            "FMCP_HSPC_LA18_CC_P",
+            "FMCP_HSPC_LA18_CC_N",
+            "FMCP_HSPC_LA19_P",
+            "FMCP_HSPC_LA19_N",
+            "FMCP_HSPC_LA20_P",
+            "FMCP_HSPC_LA20_N",
+            "FMCP_HSPC_LA21_P",
+            "FMCP_HSPC_LA21_N",
+            "FMCP_HSPC_LA22_P",
+            "FMCP_HSPC_LA22_N",
+            "FMCP_HSPC_LA23_P",
+            "FMCP_HSPC_LA23_N",
+            "FMCP_HSPC_LA24_P",
+            "FMCP_HSPC_LA24_N",
+            "FMCP_HSPC_LA25_P",
+            "FMCP_HSPC_LA25_N",
+            "FMCP_HSPC_LA26_P",
+            "FMCP_HSPC_LA26_N",
+            "FMCP_HSPC_LA27_P",
+            "FMCP_HSPC_LA27_N",
+            "FMCP_HSPC_LA28_P",
+            "FMCP_HSPC_LA28_N",
+            "FMCP_HSPC_LA29_P",
+            "FMCP_HSPC_LA29_N",
+            "FMCP_HSPC_LA30_P",
+            "FMCP_HSPC_LA30_N",
+            "FMCP_HSPC_LA31_P",
+            "FMCP_HSPC_LA31_N",
+            "FMCP_HSPC_LA32_P",
+            "FMCP_HSPC_LA32_N"
         ],
-        "EdgeCounter_ports" : [
+        "input_ports" : [
             "DACIO_10",
             "DACIO_11",
             "DACIO_12",
@@ -82,16 +139,34 @@
             "DACIO_18",
             "DACIO_19"
         ],
-        "DAC_Controller_fifo_depth" : 256,
-        "TTL_fifo_depth" : 256,
-        "TTLx8_fifo_depth" : 256,
-        "EdgeCounter_fifo_depth" : 256
+        "clk" : {
+            "RF3_CLKO_A_C_N_228" : {
+                "dir" : "I",
+                "type" : "clk",
+                "freq_hz" : "2000000000"
+            },
+            "RF3_CLKO_A_C_N_229" : {
+                "dir" : "I",
+                "type" : "clk",
+                "freq_hz" : "2000000000"
+            },
+            "RF3_CLKO_A_C_P_228" : {
+                "dir" : "I",
+                "type" : "clk",
+                "freq_hz" : "2000000000"
+            },
+            "RF3_CLKO_A_C_P_229" : {
+                "dir" : "I",
+                "type" : "clk",
+                "freq_hz" : "2000000000"
+            }
+        }
     },
     "bd_cell" : {
         "clk_wiz_0" : {
             "type" : "ip",
             "vlnv" : "xilinx.com:ip:clk_wiz:6.0",
-            "is_custom" : "false",
+            "tcl_options" : ["type", "vlnv"],
             "config" : {
                 "CLKIN1_JITTER_PS" : "80.0",
                 "CLKOUT1_DRIVES" : "Buffer",
@@ -116,10 +191,606 @@
                 "RESET_TYPE" : "ACTIVE_LOW"
             }
         },
+        "axi_interconnect_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:ip:axi_interconnect",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "NUM_MI" : "29"
+            },
+            "interface" : {
+                "S00_AXI" : "zynq_ultra_ps_e_0/M_AXI_HPM0_FPD"
+            }
+        },
+        "TTL_out_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTL_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0" : "DACIO_00",
+                "output_pulse_1" : "DACIO_01",
+                "output_pulse_2" : "DACIO_02",
+                "output_pulse_3" : "DACIO_03",
+                "output_pulse_4" : "DACIO_04",
+                "output_pulse_5" : "DACIO_05",
+                "output_pulse_6" : "DACIO_06",
+                "output_pulse_7" : "DACIO_07"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTL_out_1" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTL_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0" : "DACIO_08",
+                "output_pulse_1" : "DACIO_09",
+                "output_pulse_2" : "ADCIO_00",
+                "output_pulse_3" : "ADCIO_01",
+                "output_pulse_4" : "ADCIO_02",
+                "output_pulse_5" : "ADCIO_03",
+                "output_pulse_6" : "ADCIO_04",
+                "output_pulse_7" : "ADCIO_05"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTL_out_2" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTL_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0" : "ADCIO_06",
+                "output_pulse_1" : "ADCIO_07",
+                "output_pulse_2" : "ADCIO_08",
+                "output_pulse_3" : "ADCIO_09",
+                "output_pulse_4" : "ADCIO_10",
+                "output_pulse_5" : "ADCIO_11",
+                "output_pulse_6" : "ADCIO_12",
+                "output_pulse_7" : "ADCIO_13"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTL_out_3" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTL_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0" : "ADCIO_14",
+                "output_pulse_1" : "ADCIO_15",
+                "output_pulse_2" : "ADCIO_16",
+                "output_pulse_3" : "ADCIO_17",
+                "output_pulse_4" : "ADCIO_18",
+                "output_pulse_5" : "ADCIO_19"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTLx8_out_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTLx8_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0_p" : "FMCP_HSPC_LA00_CC_P",
+                "output_pulse_0_n" : "FMCP_HSPC_LA00_CC_N",
+                "output_pulse_1_p" : "FMCP_HSPC_LA01_CC_P",
+                "output_pulse_1_n" : "FMCP_HSPC_LA01_CC_N",
+                "output_pulse_2_p" : "FMCP_HSPC_LA02_P",
+                "output_pulse_2_n" : "FMCP_HSPC_LA02_N",
+                "output_pulse_3_p" : "FMCP_HSPC_LA03_P",
+                "output_pulse_3_n" : "FMCP_HSPC_LA03_N",
+                "output_pulse_4_p" : "FMCP_HSPC_LA04_P",
+                "output_pulse_4_n" : "FMCP_HSPC_LA04_N",
+                "output_pulse_5_p" : "FMCP_HSPC_LA05_P",
+                "output_pulse_5_n" : "FMCP_HSPC_LA05_N",
+                "output_pulse_6_p" : "FMCP_HSPC_LA06_P",
+                "output_pulse_6_n" : "FMCP_HSPC_LA06_N",
+                "output_pulse_7_p" : "FMCP_HSPC_LA07_P",
+                "output_pulse_7_n" : "FMCP_HSPC_LA07_N"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTLx8_out_1" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTLx8_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0_p" : "FMCP_HSPC_LA08_P",
+                "output_pulse_0_n" : "FMCP_HSPC_LA08_N",
+                "output_pulse_1_p" : "FMCP_HSPC_LA09_P",
+                "output_pulse_1_n" : "FMCP_HSPC_LA09_N",
+                "output_pulse_2_p" : "FMCP_HSPC_LA10_P",
+                "output_pulse_2_n" : "FMCP_HSPC_LA10_N",
+                "output_pulse_3_p" : "FMCP_HSPC_LA11_P",
+                "output_pulse_3_n" : "FMCP_HSPC_LA11_N",
+                "output_pulse_4_p" : "FMCP_HSPC_LA12_P",
+                "output_pulse_4_n" : "FMCP_HSPC_LA12_N",
+                "output_pulse_5_p" : "FMCP_HSPC_LA13_P",
+                "output_pulse_5_n" : "FMCP_HSPC_LA13_N",
+                "output_pulse_6_p" : "FMCP_HSPC_LA14_P",
+                "output_pulse_6_n" : "FMCP_HSPC_LA14_N",
+                "output_pulse_7_p" : "FMCP_HSPC_LA15_P",
+                "output_pulse_7_n" : "FMCP_HSPC_LA15_N"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTLx8_out_2" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTLx8_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0_p" : "FMCP_HSPC_LA16_P",
+                "output_pulse_0_n" : "FMCP_HSPC_LA16_N",
+                "output_pulse_1_p" : "FMCP_HSPC_LA17_CC_P",
+                "output_pulse_1_n" : "FMCP_HSPC_LA17_CC_N",
+                "output_pulse_2_p" : "FMCP_HSPC_LA18_CC_P",
+                "output_pulse_2_n" : "FMCP_HSPC_LA18_CC_N",
+                "output_pulse_3_p" : "FMCP_HSPC_LA19_P",
+                "output_pulse_3_n" : "FMCP_HSPC_LA19_N",
+                "output_pulse_4_p" : "FMCP_HSPC_LA20_P",
+                "output_pulse_4_n" : "FMCP_HSPC_LA20_N",
+                "output_pulse_5_p" : "FMCP_HSPC_LA21_P",
+                "output_pulse_5_n" : "FMCP_HSPC_LA21_N",
+                "output_pulse_6_p" : "FMCP_HSPC_LA22_P",
+                "output_pulse_6_n" : "FMCP_HSPC_LA22_N",
+                "output_pulse_7_p" : "FMCP_HSPC_LA23_P",
+                "output_pulse_7_n" : "FMCP_HSPC_LA23_N"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTLx8_out_3" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTLx8_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0_p" : "FMCP_HSPC_LA24_P",
+                "output_pulse_0_n" : "FMCP_HSPC_LA24_N",
+                "output_pulse_1_p" : "FMCP_HSPC_LA25_P",
+                "output_pulse_1_n" : "FMCP_HSPC_LA25_N",
+                "output_pulse_2_p" : "FMCP_HSPC_LA26_P",
+                "output_pulse_2_n" : "FMCP_HSPC_LA26_N",
+                "output_pulse_3_p" : "FMCP_HSPC_LA27_P",
+                "output_pulse_3_n" : "FMCP_HSPC_LA27_N",
+                "output_pulse_4_p" : "FMCP_HSPC_LA28_P",
+                "output_pulse_4_n" : "FMCP_HSPC_LA28_N",
+                "output_pulse_5_p" : "FMCP_HSPC_LA29_P",
+                "output_pulse_5_n" : "FMCP_HSPC_LA29_N",
+                "output_pulse_6_p" : "FMCP_HSPC_LA30_P",
+                "output_pulse_6_n" : "FMCP_HSPC_LA30_N",
+                "output_pulse_7_p" : "FMCP_HSPC_LA31_P",
+                "output_pulse_7_n" : "FMCP_HSPC_LA31_N"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "TTLx8_out_4" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TTLx8_out",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "THRESHOLD" : "504",
+                "DEPTH" : "512", 
+                "ADDR_LEN" : "9",
+                "DATA_LEN" : "9"
+            },
+            "ports" : {
+                "output_pulse_0_p" : "FMCP_HSPC_LA32_P",
+                "output_pulse_0_n" : "FMCP_HSPC_LA32_N"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_10"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_1" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_11"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_2" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_12"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_3" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_13"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_4" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_14"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_5" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_15"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_6" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_16"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_7" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_17"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_8" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_18"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "EdgeCounter_9" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:EdgeCounter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "AXI_ADDR_WIDTH" : "6",
+                "AXI_DATA_WIDTH" : "128",
+                "AXI_STROBE_LEN" : "4", 
+                "FIFO_DEPTH" : "8", 
+                "DATA_WIDTH" : "16"
+            },
+            "ports" : {
+                "input_sig" : "DACIO_19"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s00_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_1" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s01_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_2" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s02_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_3" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s03_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_4" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s10_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_5" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s11_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_6" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s12_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "DAC_Controller_7" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:DAC_Controller",
+            "tcl_options" : ["type", "vlnv"],
+            "interface" : {
+                "m00_axis" : "usp_rf_data_converter_0/s13_axis"
+            },
+            "axi" : {
+                "range" : "0x00010000"
+            }
+        },
+        "usp_rf_data_converter_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:ip:usp_rf_data_converter",
+            "tcl_options" : ["type", "vlnv"],
+            "config" : {
+                "ADC0_Enable" : "0", 
+                "ADC0_Fabric_Freq" : "0.0", 
+                "ADC_Decimation_Mode00" : "0", 
+                "ADC_Decimation_Mode01" : "0", 
+                "ADC_Mixer_Type00" : "3", 
+                "ADC_Mixer_Type01" : "3", 
+                "ADC_OBS02" : "false", 
+                "ADC_RESERVED_1_00" : "false", 
+                "ADC_RESERVED_1_02" : "false", 
+                "ADC_Slice00_Enable" : "false", 
+                "ADC_Slice01_Enable" : "false", 
+                "Analog_Detection" : "0", 
+                "DAC0_Fabric_Freq" : "125.000", 
+                "DAC0_Outclk_Freq" : "125.000", 
+                "DAC0_PLL_Enable" : "false", 
+                "DAC0_Refclk_Div" : "2", 
+                "DAC0_Refclk_Freq" : "2000.000", 
+                "DAC0_Sampling_Rate" : "2", 
+                "DAC1_Fabric_Freq" : "125.000", 
+                "DAC1_Outclk_Freq" : "125.000", 
+                "DAC1_PLL_Enable" : "false", 
+                "DAC1_Refclk_Div" : "2", 
+                "DAC1_Refclk_Freq" : "2000.000", 
+                "DAC1_Sampling_Rate" : "2", 
+                "DAC_Interpolation_Mode00" : "1", 
+                "DAC_Interpolation_Mode01" : "1", 
+                "DAC_Interpolation_Mode02" : "1", 
+                "DAC_Interpolation_Mode03" : "1", 
+                "DAC_Interpolation_Mode10" : "1", 
+                "DAC_Interpolation_Mode11" : "1", 
+                "DAC_Interpolation_Mode12" : "1", 
+                "DAC_Interpolation_Mode13" : "1", 
+                "DAC_Mixer_Type00" : "0", 
+                "DAC_Mixer_Type01" : "0", 
+                "DAC_Mixer_Type02" : "0", 
+                "DAC_Mixer_Type03" : "0", 
+                "DAC_Mixer_Type10" : "0", 
+                "DAC_Mixer_Type11" : "0", 
+                "DAC_Mixer_Type12" : "0", 
+                "DAC_Mixer_Type13" : "0", 
+                "DAC_Mixer_Type00" : "0", 
+                "DAC_Mixer_Type01" : "0", 
+                "DAC_Mixer_Type02" : "0", 
+                "DAC_Mixer_Type03" : "0", 
+                "DAC_Mixer_Type10" : "0", 
+                "DAC_Mixer_Type11" : "0", 
+                "DAC_Mixer_Type12" : "0", 
+                "DAC_Mixer_Type13" : "0", 
+                "DAC_Output_Current" : "0", 
+                "DAC_RESERVED_1_00" : "false", 
+                "DAC_RESERVED_1_01" : "false", 
+                "DAC_RESERVED_1_02" : "false", 
+                "DAC_RESERVED_1_03" : "false", 
+                "DAC_RESERVED_1_10" : "false", 
+                "DAC_RESERVED_1_11" : "false", 
+                "DAC_RESERVED_1_12" : "false", 
+                "DAC_RESERVED_1_13" : "false", 
+                "DAC_Slice00_Enable" : "true", 
+                "DAC_Slice01_Enable" : "true", 
+                "DAC_Slice02_Enable" : "true", 
+                "DAC_Slice03_Enable" : "true", 
+                "DAC_Slice10_Enable" : "true", 
+                "DAC_Slice11_Enable" : "true", 
+                "DAC_Slice12_Enable" : "true", 
+                "DAC_Slice13_Enable" : "true", 
+                "Axiclk_Freq" : "125"
+            },
+            "axi" : {
+                "offset" : "0xA00C0000",
+                "range" : "0x00040000"
+            }
+        },
         "zynq_ultra_ps_e_0" : {
             "type" : "ip",
             "vlnv" : "xilinx.com:ip:zynq_ultra_ps_e",
-            "is_custom" : "false",
+            "tcl_options" : ["type", "vlnv"],
             "config" : {
                 "PSU_BANK_0_IO_STANDARD" : "LVCMOS18", 
                 "PSU_BANK_1_IO_STANDARD" : "LVCMOS18", 

@@ -252,7 +252,7 @@ reg rti_core_flush_buffer2;
 
 assign rti_core_rd_en = (~rti_core_empty) & async_fifo_in_full;
 
-fifo_generator_1 async_fifo_out( // 32 depth, 16 program full
+fifo_generator_1 async_fifo_in( // 32 depth, 16 program full
     .wr_clk(rtio_clk),
     .rd_clk(s_axi_aclk),
     .srst(rti_core_reset | rti_core_flush),  // rst -> srst in Vivado 2020.2

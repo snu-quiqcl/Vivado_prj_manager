@@ -163,6 +163,11 @@
         }
     },
     "bd_cell" : {
+        "proc_sys_reset_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:ip:proc_sys_reset",
+            "tcl_options" : ["type", "vlnv"]
+        },
         "clk_wiz_0" : {
             "type" : "ip",
             "vlnv" : "xilinx.com:ip:clk_wiz:6.0",
@@ -189,6 +194,14 @@
                 "PRIM_IN_FREQ" : "124.998749",
                 "RESET_PORT" : "resetn",
                 "RESET_TYPE" : "ACTIVE_LOW"
+            }
+        },
+        "TimeController_0" : {
+            "type" : "ip",
+            "vlnv" : "xilinx.com:user:TimeController",
+            "tcl_options" : ["type", "vlnv"],
+            "axi" : {
+                "range" : "0x00001000"
             }
         },
         "axi_interconnect_0" : {
@@ -223,7 +236,7 @@
                 "output_pulse_7" : "DACIO_07"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTL_out_1" : {
@@ -247,7 +260,7 @@
                 "output_pulse_7" : "ADCIO_05"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTL_out_2" : {
@@ -271,7 +284,7 @@
                 "output_pulse_7" : "ADCIO_13"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTL_out_3" : {
@@ -293,7 +306,7 @@
                 "output_pulse_5" : "ADCIO_19"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTLx8_out_0" : {
@@ -325,7 +338,7 @@
                 "output_pulse_7_n" : "FMCP_HSPC_LA07_N"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTLx8_out_1" : {
@@ -357,7 +370,7 @@
                 "output_pulse_7_n" : "FMCP_HSPC_LA15_N"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTLx8_out_2" : {
@@ -389,7 +402,7 @@
                 "output_pulse_7_n" : "FMCP_HSPC_LA23_N"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTLx8_out_3" : {
@@ -421,7 +434,7 @@
                 "output_pulse_7_n" : "FMCP_HSPC_LA31_N"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "TTLx8_out_4" : {
@@ -439,7 +452,7 @@
                 "output_pulse_0_n" : "FMCP_HSPC_LA32_N"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_0" : {
@@ -457,7 +470,7 @@
                 "input_sig" : "DACIO_10"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_1" : {
@@ -475,7 +488,7 @@
                 "input_sig" : "DACIO_11"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_2" : {
@@ -493,7 +506,7 @@
                 "input_sig" : "DACIO_12"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_3" : {
@@ -511,7 +524,7 @@
                 "input_sig" : "DACIO_13"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_4" : {
@@ -529,7 +542,7 @@
                 "input_sig" : "DACIO_14"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_5" : {
@@ -547,7 +560,7 @@
                 "input_sig" : "DACIO_15"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_6" : {
@@ -565,7 +578,7 @@
                 "input_sig" : "DACIO_16"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_7" : {
@@ -583,7 +596,7 @@
                 "input_sig" : "DACIO_17"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_8" : {
@@ -601,7 +614,7 @@
                 "input_sig" : "DACIO_18"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "EdgeCounter_9" : {
@@ -619,7 +632,7 @@
                 "input_sig" : "DACIO_19"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_0" : {
@@ -630,7 +643,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s00_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_1" : {
@@ -641,7 +654,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s01_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_2" : {
@@ -652,7 +665,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s02_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_3" : {
@@ -663,7 +676,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s03_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_4" : {
@@ -674,7 +687,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s10_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_5" : {
@@ -685,7 +698,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s11_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_6" : {
@@ -696,7 +709,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s12_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "DAC_Controller_7" : {
@@ -707,7 +720,7 @@
                 "m00_axis" : "usp_rf_data_converter_0/s13_axis"
             },
             "axi" : {
-                "range" : "0x00010000"
+                "range" : "0x00001000"
             }
         },
         "usp_rf_data_converter_0" : {
@@ -781,6 +794,24 @@
                 "DAC_Slice12_Enable" : "true", 
                 "DAC_Slice13_Enable" : "true", 
                 "Axiclk_Freq" : "125"
+            },
+            "ports" : {
+                "vout00_n" : "RFMC_DAC_00_N", 
+                "vout00_p" : "RFMC_DAC_00_P", 
+                "vout01_n" : "RFMC_DAC_01_N", 
+                "vout01_p" : "RFMC_DAC_01_P",
+                "vout02_n" : "RFMC_DAC_02_N",
+                "vout02_p" : "RFMC_DAC_02_P",
+                "vout03_n" : "RFMC_DAC_03_N",
+                "vout03_p" : "RFMC_DAC_03_P",
+                "vout10_n" : "RFMC_DAC_10_N",
+                "vout10_p" : "RFMC_DAC_10_P",
+                "vout11_n" : "RFMC_DAC_11_N",
+                "vout11_p" : "RFMC_DAC_11_P",
+                "vout12_n" : "RFMC_DAC_12_N",
+                "vout12_p" : "RFMC_DAC_12_P",
+                "vout13_n" : "RFMC_DAC_13_N",
+                "vout13_p" : "RFMC_DAC_13_P"
             },
             "axi" : {
                 "offset" : "0xA00C0000",

@@ -5,6 +5,7 @@ Created on Mon Feb 19 19:15:25 2024
 @author: alexi
 """
 import re
+import argparse
 from Verilog_Creator_v2_00 import *
 
 POSSIBLE_FIFO_DEPTH = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072]
@@ -21,11 +22,17 @@ class RFSoCMaker(TVM):
         self.bd_cell : list[BDCellMaker] = []
         self.verilog_maker : list[VerilogMaker] = []
         self.file : list[str] = []
+        
         self.axi_offset : str = None
+        self.axi_interconnect : str = ""
+        self.total_axi_number : int = 0
         self.input_ports : list[str] = []
         self.output_ports : list[str] = []
         self.clk : dict[str : dict[str : str]] = {}
-        self.total_axi_number : int = 0
+        self.CPU : str = ""
+        self.reset : str = ""
+        
+        self.timecontroller : str = ""
         
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -37,10 +44,9 @@ class RFSoCMaker(TVM):
             
         self.target_path = os.path.join(TVM.target_path,self.project_name).replace("\\","/")
         self.tcl_path = os.path.join(self.target_path,self.project_name+'.tcl')
-        self.OverrideParameter()
         self.SetPossibleFifoDepth()
         EnsureDirectoryExists(self.target_path)
-        
+        TVM.axi_offset = int(self.axi_offset,16)
     
     def OverrideParameter(self) -> None:
         for v in self.verilog_maker:
@@ -54,8 +60,11 @@ class RFSoCMaker(TVM):
             v.MakeTCL()
             
         for bd_cell in self.bd_cell:
-            if bd_cell.module_name == 'axi_interconnect_0':
+            if bd_cell.module_name == self.axi_interconnect:
                 bd_cell.config['NUM_MI'] = self.total_axi_number
+        TVM.CPU = self.CPU
+        TVM.axi_interconnect = self.axi_interconnect
+        TVM.total_axi_number = self.total_axi_number
     
     def SetPossibleFifoDepth(self) -> None:
         pattern = r'\b\w+_fifo_depth\b'
@@ -103,6 +112,24 @@ class RFSoCMaker(TVM):
     def ConnectPorts(self) -> None:
         TVM.tcl_code += TVM.connection_code
     
+    def SetAddress(self) -> None:
+        TVM.tcl_code += TVM.address_code
+    
+    def ConnectAXIinterface(self) -> None:
+        for bd_cell in self.bd_cell:
+            if hasattr(bd_cell,'axi'):
+                pass
+    
+    def ConnectRTIOinterface(self) -> None:
+        TVM.tcl_code += f'connect_bd_net -net {self.timecontroller}_auto_start'\
+                         + ''.join([f' [get_bd_pins {bd_cell.module_name}/auto_start]' 
+                        if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
+                        in self.bd_cell]) + '\n' if self.bd_cell else ''
+        TVM.tcl_code += f'connect_bd_net -net {self.timecontroller}_counter'\
+                         + ''.join([f' [get_bd_pins {bd_cell.module_name}/counter]' 
+                        if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
+                        in self.bd_cell]) + '\n' if self.bd_cell else ''
+    
     def StartGUI(self) -> None:
         TVM.tcl_code += 'start_gui\n'
     
@@ -116,11 +143,12 @@ class RFSoCMaker(TVM):
         self.MakeOutputPorts()
         self.MakeInputPorts()
         self.MakeClkPorts()
-                
         for bd_cell in self.bd_cell:
             bd_cell.SetConfig()
-        
         self.ConnectPorts()
+        self.ConnectAXIinterface()
+        self.ConnectRTIOinterface()
+        self.SetAddress()
         self.StartGUI()
         with open(os.path.join(self.target_path,self.project_name+'.tcl'), 'w') as file:
             file.write(TVM.tcl_code)
@@ -138,9 +166,34 @@ def CreateRFSoCMaker(json_file) -> RFSoCMaker:
         rm.bd_cell.append(bd_cell_maker)
         if hasattr(bd_cell_maker, "axi"):
             rm.total_axi_number += 1
+        if hasattr(bd_cell_maker,'vlnv'):
+            if 'xilinx.com:ip:zynq_ultra_ps_e' in getattr(bd_cell_maker,'vlnv'):
+                setattr(rm,'CPU',bd_cell_maker.module_name)
+            if 'xilinx.com:user:TimeController' in getattr(bd_cell_maker,'vlnv'):
+                setattr(rm,'timecontroller',bd_cell_maker.module_name)
+            if 'xilinx.com:ip:axi_interconnect' in getattr(bd_cell_maker,'vlnv'):
+                setattr(rm,'axi_interconnect',bd_cell_maker.module_name)
+            if 'xilinx.com:ip:proc_sys_reset' in getattr(bd_cell_maker,'vlnv'):
+                setattr(rm,'reset',bd_cell_maker.module_name)
+    rm.OverrideParameter()
     return rm
 
-if __name__ == "__main__":
-    SetGlobalNamespace('configuraiton.json')
-    RFSoC_Maker = CreateRFSoCMaker('RFSoC.json')
+def main(args):
+    # Use provided values or defaults
+    configuration = args.config if args.config else 'configuraiton.json'
+    soc_json = args.soc_json if args.soc_json else 'RFSoC.json'
+
+    SetGlobalNamespace(configuration)
+    RFSoC_Maker = CreateRFSoCMaker(soc_json)
     RFSoC_Maker.MakeTCL()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Make SoC Block diagram with\
+                                     json files. You need configuration file which\
+                                     set directory of vivado and common directory path\
+                                     and json files which specifies the SoC design")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Increase output verbosity")
+    parser.add_argument("-c", "--config", help="Configuration file name")
+    parser.add_argument("-f", "--soc_json", help="SoC JSON file name")
+    args = parser.parse_args()
+    main(args)

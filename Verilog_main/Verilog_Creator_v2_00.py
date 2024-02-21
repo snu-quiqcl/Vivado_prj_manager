@@ -20,8 +20,16 @@ class TVM:
     board_name : str = None
     version : str = None
     constraints : str = None
+    
     tcl_code : str = ""
     connection_code : str = ""
+    
+    CPU : str = ""
+    axi_interconnect : str = ""
+    axi_number : int = 0
+    axi_offset : int = 0
+    address_code : str = ""
+    total_axi_number : int = 0
     
     def __init__(self):
         pass
@@ -94,12 +102,24 @@ class BDCellMaker:
         TVM.tcl_code += '\n'
         TVM.tcl_code += "set_property -dict [list " + " ".join([f"CONFIG.{key} {{{value}}}" 
                         for key, value in self.config.items()]) + "]" if self.config else ""
+        reg = 'reg0' if 'xilinx.com:user' in self.vlnv else 'Reg'
         if 'xilinx.com:user' in self.vlnv and self.config:
             TVM.tcl_code += f' [get_bd_cells {self.module_name}]\n'
         elif self.config:
             TVM.tcl_code += f' ${self.module_name}\n'
         for victim, target in self.ports.items():
             TVM.connection_code += f'connect_bd_net -net {self.module_name}_{victim} [get_bd_ports {target}] [get_bd_pins {self.module_name}/{victim}]\n'
+        if hasattr(self,'axi'):
+            range_ = int(self.axi.get('range'),16)
+            TVM.connection_code += f'connect_bd_intf_net -intf_net {TVM.axi_interconnect}_M{str(TVM.axi_number).zfill(len(str(TVM.total_axi_number)))}_AXI [get_bd_intf_pins {self.module_name}/s_axi]'
+            TVM.connection_code += f' [get_bd_intf_pins {TVM.axi_interconnect}/M{str(TVM.axi_number).zfill(len(str(TVM.total_axi_number)))}_AXI]\n'
+            if 'offset' in self.axi:
+                offset = self.axi.get('offset')
+                TVM.address_code += f'assign_bd_address -offset {offset} -range {hex(range_).upper()} -target_address_space [get_bd_addr_spaces {TVM.CPU}/Data] [get_bd_addr_segs {self.module_name}/s_axi/{reg}] -force\n'
+            else:
+                TVM.address_code += f'assign_bd_address -offset {hex(TVM.axi_offset).upper()} -range {hex(range_).upper()} -target_address_space [get_bd_addr_spaces {TVM.CPU}/Data] [get_bd_addr_segs {self.module_name}/s_axi/{reg}] -force\n'
+                TVM.axi_offset += range_
+            TVM.axi_number += 1
             
 class VerilogMaker(TVM):
     def __init__(self, **kwargs):

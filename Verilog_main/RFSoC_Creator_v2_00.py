@@ -33,6 +33,7 @@ class RFSoCMaker(TVM):
         self.reset : str = ""
         
         self.timecontroller : str = ""
+        self.rfdc : str = ""
         
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -116,9 +117,23 @@ class RFSoCMaker(TVM):
         TVM.tcl_code += TVM.address_code
     
     def ConnectAXIinterface(self) -> None:
-        for bd_cell in self.bd_cell:
-            if hasattr(bd_cell,'axi'):
-                pass
+        TVM.tcl_code += f'connect_bd_net -net {self.reset}_peripheral_aresetn'\
+                        +f' [get_bd_pins {self.reset}/peripheral_aresetn]'\
+                        +''.join([f' [get_bd_pins {bd_cell}/s_axi_aresetn]' 
+                        if hasattr(bd_cell,'axi') else '' for bd_cell 
+                        in self.bd_cell]) + ''
+        TVM.tcl_code += f''
+        TVM.tcl_code += '\n'
+        TVM.tcl_code += f'connect_bd_net -net {self.CPU}_s_axi_aclk'\
+                        +f' [get_bd_pins {self.CPU}/maxihpm0_fpd_aclk]'\
+                        +f' [get_bd_pins {self.CPU}/pl_clk0]'\
+                        +''.join([f' [get_bd_pins {bd_cell}/s_axi_aclk]' 
+                        if hasattr(bd_cell,'axi') else '' for bd_cell 
+                        in self.bd_cell]) + ''
+        TVM.tcl_code += ''.join([f' [get_bd_pins {self.axi_interconnect}/M{str(i).zfill(len(str(TVM.total_axi_number)))}_ACLK]' 
+                        for i in range(self.total_axi_number)])
+        TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aclk] [get_bd_pins {self.rfdc}/s1_axis_aclk]'
+        TVM.tcl_code += '\n'
     
     def ConnectRTIOinterface(self) -> None:
         TVM.tcl_code += f'connect_bd_net -net {self.timecontroller}_auto_start'\
@@ -175,6 +190,8 @@ def CreateRFSoCMaker(json_file) -> RFSoCMaker:
                 setattr(rm,'axi_interconnect',bd_cell_maker.module_name)
             if 'xilinx.com:ip:proc_sys_reset' in getattr(bd_cell_maker,'vlnv'):
                 setattr(rm,'reset',bd_cell_maker.module_name)
+            if 'xilinx.com:ip:usp_rf_data_converter' in getattr(bd_cell_maker,'vlnv'):
+                setattr(rm,'rfdc',bd_cell_maker.module_name)
     rm.OverrideParameter()
     return rm
 

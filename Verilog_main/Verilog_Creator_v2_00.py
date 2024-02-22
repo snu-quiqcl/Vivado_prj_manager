@@ -89,6 +89,7 @@ class BDCellMaker:
         self.vlnv : str = None
         self.config : dict() = {}
         self.ports : dict() = {}
+        self.interface : dict() = {}
         self.module_name : str = None
         
         for key, value in kwargs.items():
@@ -109,10 +110,12 @@ class BDCellMaker:
             TVM.tcl_code += f' ${self.module_name}\n'
         for victim, target in self.ports.items():
             TVM.connection_code += f'connect_bd_net -net {self.module_name}_{victim} [get_bd_ports {target}] [get_bd_pins {self.module_name}/{victim}]\n'
+        for victim, target in self.interface.items():
+            TVM.connection_code += f'connect_bd_intf_net -intf_net {self.module_name}_{victim} [get_bd_intf_pins {target}] [get_bd_intf_pins {self.module_name}/{victim}]\n'
         if hasattr(self,'axi'):
             range_ = int(self.axi.get('range'),16)
-            TVM.connection_code += f'connect_bd_intf_net -intf_net {TVM.axi_interconnect}_M{str(TVM.axi_number).zfill(len(str(TVM.total_axi_number)))}_AXI [get_bd_intf_pins {self.module_name}/s_axi]'
-            TVM.connection_code += f' [get_bd_intf_pins {TVM.axi_interconnect}/M{str(TVM.axi_number).zfill(len(str(TVM.total_axi_number)))}_AXI]\n'
+            TVM.connection_code += f'connect_bd_intf_net -intf_net {TVM.axi_interconnect}_M{str(TVM.axi_number).zfill(2)}_AXI [get_bd_intf_pins {self.module_name}/s_axi]'
+            TVM.connection_code += f' [get_bd_intf_pins {TVM.axi_interconnect}/M{str(TVM.axi_number).zfill(2)}_AXI]\n'
             if 'offset' in self.axi:
                 offset = self.axi.get('offset')
                 TVM.address_code += f'assign_bd_address -offset {offset} -range {hex(range_).upper()} -target_address_space [get_bd_addr_spaces {TVM.CPU}/Data] [get_bd_addr_segs {self.module_name}/s_axi/{reg}] -force\n'
@@ -147,10 +150,10 @@ class VerilogMaker(TVM):
             
     def GenerateCustomizedIp(self) -> None:
         TVM.tcl_code += f'ipx::package_project -root_dir {self.target_path}'
-        TVM.tcl_code += f' -vendor xilinx.com -library user -taxonomy /UserIP\n'
-        TVM.tcl_code += f'ipx::save_core [ipx::current_core]\n'
+        TVM.tcl_code += ' -vendor xilinx.com -library user -taxonomy /UserIP\n'
+        TVM.tcl_code += 'ipx::save_core [ipx::current_core]\n'
         TVM.tcl_code += f'set_property  ip_repo_paths  {self.target_path} [current_project]\n'
-        TVM.tcl_code += f'update_ip_catalog\n'
+        TVM.tcl_code += 'update_ip_catalog\n'
             
     def CopyFiles(self) -> None:
         EnsureDirectoryExists(self.target_path)
@@ -220,7 +223,7 @@ def DeleteDump() -> None:
         print('vivado.log is deletd...')
     
 if __name__ == "__main__":
-    SetGlobalNamespace('configuraiton.json')
+    SetGlobalNamespace('configuration.json')
     
     DAC_Controller = CreateVerilogMaker('DAC_Controller.json')
     TTL_out = CreateVerilogMaker('TTL_out.json')

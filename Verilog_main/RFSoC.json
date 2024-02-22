@@ -166,7 +166,10 @@
         "proc_sys_reset_0" : {
             "type" : "ip",
             "vlnv" : "xilinx.com:ip:proc_sys_reset",
-            "tcl_options" : ["type", "vlnv"]
+            "tcl_options" : ["type", "vlnv"],
+            "ports" : {
+                "ext_reset_in" : "zynq_ultra_ps_e_0/pl_resetn0"
+            }
         },
         "clk_wiz_0" : {
             "type" : "ip",
@@ -210,9 +213,6 @@
             "tcl_options" : ["type", "vlnv"],
             "config" : {
                 "NUM_MI" : "29"
-            },
-            "interface" : {
-                "S00_AXI" : "zynq_ultra_ps_e_0/M_AXI_HPM0_FPD"
             }
         },
         "TTL_out_0" : {

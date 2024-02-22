@@ -12,6 +12,25 @@ POSSIBLE_FIFO_DEPTH = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072]
 
 class RFSoCMaker(TVM):
     def __init__(self, **kwargs):
+        """
+        
+        project_name : block design name
+        DAC_Controller_fifo_depth : DDS module fifo depth
+        TTL_out_fifo_depth : TTL_out module fifo depth
+        TTLx8_out_fifo_depth : high speed TTL output module fifo depth
+        EdgeCounter_fifo_depth : EdgeCounter output, input fifo depth
+        json_path : RFSoC json file path
+        bd_cell : list of block design cell names
+        verilog_maker : General verilog code creator
+        file : verilog file for block design
+        CPU : name of Zynq CPU
+        reset : reset module name
+        clk_wiz : PLL module name
+        timecontroller : timecontroller module name ( which makes 
+                                                     64 bit counter)
+        rfdc : RFDC module name(which includes DAC and ADC)
+
+        """
         super().__init__()
         self.project_name : str = None
         self.DAC_Controller_fifo_depth : str = None
@@ -31,6 +50,7 @@ class RFSoCMaker(TVM):
         self.clk : dict[str : dict[str : str]] = {}
         self.CPU : str = ""
         self.reset : str = ""
+        self.clk_wiz : str = ""
         
         self.timecontroller : str = ""
         self.rfdc : str = ""
@@ -50,6 +70,9 @@ class RFSoCMaker(TVM):
         TVM.axi_offset = int(self.axi_offset,16)
     
     def OverrideParameter(self) -> None:
+        """
+        override verilog code configuration from rfsoc configuration
+        """
         for v in self.verilog_maker:
             for ip in v.ip:
                 if ip.name == 'fifo_generator':
@@ -68,6 +91,13 @@ class RFSoCMaker(TVM):
         TVM.total_axi_number = self.total_axi_number
     
     def SetPossibleFifoDepth(self) -> None:
+        """
+        set possible fifo depth from given configuration file. This is 
+        specified in 
+        "block_diagram ": {
+            "{module name}_fifo_depth" : value of fifo_depth
+        }
+        """
         pattern = r'\b\w+_fifo_depth\b'
         attributes = dir(self)
         fifo_depths = [attr for attr in attributes if re.search(pattern, attr)]
@@ -81,14 +111,36 @@ class RFSoCMaker(TVM):
                 setattr(self,fifo_depth,str(POSSIBLE_FIFO_DEPTH[i]))
     
     def MakeOutputPorts(self) -> None:
+        """
+        Make output ports from configuration file. This is specified in 
+        "block_diagram" : { 
+            "output_ports" : [list of output ports]
+        }
+        """
         for port in self.output_ports:
             TVM.tcl_code += f'set {port} [ create_bd_port -dir O {port} ]\n'
             
-    def MakeInputPorts(self):
+    def MakeInputPorts(self) -> None:
+        """
+        Make input ports from configuration file. This is specified in 
+        "block_diagram" : {
+            "input_ports" : [list of input ports]
+        }
+        """
         for port in self.input_ports:
             TVM.tcl_code += f'set {port} [ create_bd_port -dir I {port} ]\n'
             
-    def MakeClkPorts(self):
+    def MakeClkPorts(self) -> None:
+        """
+        Make external clock ports from configuration file. This is specified in 
+        "block_diagram" : {
+            "clk" : {
+                "{clock_name}" : {
+                    configuration of clock ports
+                }
+            }
+        }
+        """
         for port, option in self.clk.items():
             TVM.tcl_code += f'set {port} [ create_bd_port '
             for key, val in option.items():
@@ -119,21 +171,28 @@ class RFSoCMaker(TVM):
     def ConnectAXIinterface(self) -> None:
         TVM.tcl_code += f'connect_bd_net -net {self.reset}_peripheral_aresetn'\
                         +f' [get_bd_pins {self.reset}/peripheral_aresetn]'\
-                        +''.join([f' [get_bd_pins {bd_cell}/s_axi_aresetn]' 
+                        +''.join([f' [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]' 
                         if hasattr(bd_cell,'axi') else '' for bd_cell 
                         in self.bd_cell]) + ''
-        TVM.tcl_code += f''
+        TVM.tcl_code += ''.join([f' [get_bd_pins {self.axi_interconnect}/M{str(i).zfill(2)}_ARESETN]' 
+                        for i in range(self.total_axi_number)])
+        TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aresetn] [get_bd_pins {self.rfdc}/s1_axis_aresetn]'
+        TVM.tcl_code += f' [get_bd_pins {self.axi_interconnect}/S00_ARESETN]'
+        TVM.tcl_code += f' [get_bd_pins {self.axi_interconnect}/ARESETN]'
         TVM.tcl_code += '\n'
         TVM.tcl_code += f'connect_bd_net -net {self.CPU}_s_axi_aclk'\
                         +f' [get_bd_pins {self.CPU}/maxihpm0_fpd_aclk]'\
                         +f' [get_bd_pins {self.CPU}/pl_clk0]'\
-                        +''.join([f' [get_bd_pins {bd_cell}/s_axi_aclk]' 
+                        +''.join([f' [get_bd_pins {bd_cell.module_name}/s_axi_aclk]' 
                         if hasattr(bd_cell,'axi') else '' for bd_cell 
                         in self.bd_cell]) + ''
-        TVM.tcl_code += ''.join([f' [get_bd_pins {self.axi_interconnect}/M{str(i).zfill(len(str(TVM.total_axi_number)))}_ACLK]' 
+        TVM.tcl_code += ''.join([f' [get_bd_pins {self.axi_interconnect}/M{str(i).zfill(2)}_ACLK]' 
                         for i in range(self.total_axi_number)])
-        TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aclk] [get_bd_pins {self.rfdc}/s1_axis_aclk]'
+        TVM.tcl_code += f' [get_bd_pins {self.reset}/slowest_sync_clk]'
+        TVM.tcl_code += f' [get_bd_pins {self.axi_interconnect}/ACLK]'
+        TVM.tcl_code += f' [get_bd_pins {self.axi_interconnect}/S00_ACLK]'
         TVM.tcl_code += '\n'
+        TVM.tcl_code += f'connect_bd_net -net {self.reset}_ext_reset_in [get_bd_pins {self.CPU}/pl_resetn0] [get_bd_pins {self.reset}/ext_reset_in]\n'
     
     def ConnectRTIOinterface(self) -> None:
         TVM.tcl_code += f'connect_bd_net -net {self.timecontroller}_auto_start'\
@@ -144,6 +203,9 @@ class RFSoCMaker(TVM):
                          + ''.join([f' [get_bd_pins {bd_cell.module_name}/counter]' 
                         if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
                         in self.bd_cell]) + '\n' if self.bd_cell else ''
+        TVM.tcl_code += f'connect_bd_net -net {self.rfdc}_clk_dac0 [get_bd_pins {self.rfdc}/clk_dac0]'
+        TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aclk] [get_bd_pins {self.rfdc}/s1_axis_aclk]'
+        TVM.tcl_code += '\n'
     
     def StartGUI(self) -> None:
         TVM.tcl_code += 'start_gui\n'
@@ -171,7 +233,7 @@ class RFSoCMaker(TVM):
         TVM.ClearTCLCode()
         DeleteDump()
     
-def CreateRFSoCMaker(json_file) -> RFSoCMaker:
+def CreateRFSoCMaker(json_file : str) -> RFSoCMaker:
     with open(json_file, 'r') as file:
         data = json.load(file)
     rm = RFSoCMaker(**data['block_diagram'])
@@ -192,12 +254,14 @@ def CreateRFSoCMaker(json_file) -> RFSoCMaker:
                 setattr(rm,'reset',bd_cell_maker.module_name)
             if 'xilinx.com:ip:usp_rf_data_converter' in getattr(bd_cell_maker,'vlnv'):
                 setattr(rm,'rfdc',bd_cell_maker.module_name)
+            if 'xilinx.com:ip:clk_wiz:6.0' in getattr(bd_cell_maker,'vlnv'):
+                setattr(rm,'clk_wiz',bd_cell_maker.module_name)
     rm.OverrideParameter()
     return rm
 
-def main(args):
+def main(args : argparse.Namespace) -> None:
     # Use provided values or defaults
-    configuration = args.config if args.config else 'configuraiton.json'
+    configuration = args.config if args.config else 'configuration.json'
     soc_json = args.soc_json if args.soc_json else 'RFSoC.json'
 
     SetGlobalNamespace(configuration)

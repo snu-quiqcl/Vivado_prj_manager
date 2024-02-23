@@ -210,23 +210,24 @@ class RFSoCMaker(TVM):
                          + ''.join([f' [get_bd_pins {bd_cell.module_name}/counter]' 
                         if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
                         in self.bd_cell]) + '\n' if self.bd_cell else ''
-        TVM.tcl_code += f'connect_bd_net -net {self.rfdc}_clk_dac0 [get_bd_pins {self.rfdc}/clk_dac0]'
-        TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aclk] [get_bd_pins {self.rfdc}/s1_axis_aclk]'
-        TVM.tcl_code += f' [get_bd_pins {self.clk_wiz}/clk_in1]'
-        TVM.tcl_code += ''.join([f' [get_bd_pins {bd_cell.module_name}/rtio_clk]' 
-                        if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
-                        in self.bd_cell]) if self.bd_cell else ''
-        TVM.tcl_code += ''.join([f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
-                        if bd_cell.vlnv == 'xilinx.com:user:DAC_Controller' else '' 
-                        for bd_cell in self.bd_cell])
-        TVM.tcl_code += '\n'
-        
-        TVM.tcl_code += f'connect_bd_net -net {self.clk_wiz}_clk_out1'\
-                        + f' [get_bd_pins {self.clk_wiz}/clk_out1]'\
-                        +''.join([f' [get_bd_pins {bd_cell.module_name}/clk_x4]' 
-                        if bd_cell.vlnv == 'xilinx.com:user:TTLx8_out' else '' 
-                        for bd_cell in self.bd_cell])
-        TVM.tcl_code += '\n'
+        if self.rfdc != '':
+            TVM.tcl_code += f'connect_bd_net -net {self.rfdc}_clk_dac0 [get_bd_pins {self.rfdc}/clk_dac0]'
+            TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aclk] [get_bd_pins {self.rfdc}/s1_axis_aclk]'
+            TVM.tcl_code += f' [get_bd_pins {self.clk_wiz}/clk_in1]'
+            TVM.tcl_code += ''.join([f' [get_bd_pins {bd_cell.module_name}/rtio_clk]' 
+                            if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
+                            in self.bd_cell]) if self.bd_cell else ''
+            TVM.tcl_code += ''.join([f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
+                            if bd_cell.vlnv == 'xilinx.com:user:DAC_Controller' else '' 
+                            for bd_cell in self.bd_cell])
+            TVM.tcl_code += '\n'
+        if self.clk_wiz != '':
+            TVM.tcl_code += f'connect_bd_net -net {self.clk_wiz}_clk_out1'\
+                            + f' [get_bd_pins {self.clk_wiz}/clk_out1]'\
+                            +''.join([f' [get_bd_pins {bd_cell.module_name}/clk_x4]' 
+                            if bd_cell.vlnv == 'xilinx.com:user:TTLx8_out' else '' 
+                            for bd_cell in self.bd_cell])
+            TVM.tcl_code += '\n'
     
     def StartGUI(self) -> None:
         TVM.tcl_code += 'start_gui\n'

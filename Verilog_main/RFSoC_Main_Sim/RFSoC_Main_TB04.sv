@@ -27,6 +27,7 @@ wire        RF3_CLKO_A_C_N_228;
 wire        RF3_CLKO_A_C_N_229;
 wire        RF3_CLKO_A_C_P_228;
 wire        RF3_CLKO_A_C_P_229;
+reg rtio_clk;
 
 assign RF3_CLKO_A_C_N_228 = dac0_clk_n;
 assign RF3_CLKO_A_C_N_229 = dac0_clk_n;
@@ -38,6 +39,13 @@ initial begin
     dac0_clk_p <= 1'b1;
 end
 
+initial begin
+    rtio_clk <= 1'b0;
+end
+always begin
+    #39800
+    rtio_clk <= ~rtio_clk;
+end
 
 always begin
     #2500
@@ -52,9 +60,9 @@ wire output_pulse_x8_0_p;
 wire output_pulse_x1_0;
 wire locked_0;
 
-wire [255:0] m00_axis_00_tdata;
-wire m00_axis_00_tready;
-wire m00_axis_00_tvalid;
+wire [255:0] m00_axis_0_tdata;
+wire m00_axis_0_tready;
+wire m00_axis_0_tvalid;
 wire [255:0] m00_axis_01_tdata;
 wire m00_axis_01_tready;
 wire m00_axis_01_tvalid;
@@ -85,7 +93,7 @@ assign vout{i} = m00_axis_0{i}_tdata[255:224];"""
 */
 
 wire [31:0] vout0;
-assign vout0 = m00_axis_00_tdata[255:224];
+assign vout0 = m00_axis_0_tdata[255:224];
 wire [31:0] vout1;
 assign vout1 = m00_axis_01_tdata[255:224];
 wire [31:0] vout2;
@@ -103,13 +111,13 @@ assign vout7 = m00_axis_07_tdata[255:224];
 
 
 RFSoC_Main_blk_wrapper tb(
-    .RF3_CLKO_A_C_N_228(RF3_CLKO_A_C_N_228),
+    /*.RF3_CLKO_A_C_N_228(RF3_CLKO_A_C_N_228),
     .RF3_CLKO_A_C_N_229(RF3_CLKO_A_C_N_229),
     .RF3_CLKO_A_C_P_228(RF3_CLKO_A_C_P_228),
-    .RF3_CLKO_A_C_P_229(RF3_CLKO_A_C_P_229)
-    /*.m00_axis_0_tdata(m00_axis_00_tdata),
-    .m00_axis_0_tready(m00_axis_00_tready),
-    .m00_axis_0_tvalid(m00_axis_00_tvalid)*//*,
+    .RF3_CLKO_A_C_P_229(RF3_CLKO_A_C_P_229)*/
+    .m00_axis_0_tdata(m00_axis_0_tdata),
+    .m00_axis_0_tready(m00_axis_0_tready),
+    .m00_axis_0_tvalid(m00_axis_0_tvalid),/*
     .m00_axis_01_tdata(m00_axis_01_tdata),
     .m00_axis_01_tready(m00_axis_01_tready),
     .m00_axis_01_tvalid(m00_axis_01_tvalid),
@@ -136,6 +144,7 @@ RFSoC_Main_blk_wrapper tb(
     .FMCP_HSPC_LA01_CC_N(output_pulse_x8_0_n),
     .input_sig_0(input_sig)
     */
+    .rtio_clk(rtio_clk)
 );
 
 /*
@@ -191,6 +200,7 @@ print(transform_string(a))
 //////////////////////////////////////////////////////////////////////////////////
 // DAC output
 //////////////////////////////////////////////////////////////////////////////////
+/*
 real dac00_p;
 real dac00_n;
 
@@ -203,6 +213,7 @@ always @ (*) begin
    dac00_p_int = dac00_p * (2 ** 31 - 1);
    dac00_n_int = dac00_n * (2 ** 31 - 1);
 end
+*/
 
 
 reg[1:0] resp1;
@@ -248,19 +259,19 @@ initial begin
     ///////////////////////////////////////////////////////////////////////////////////
     
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00101210, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000000001 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00101210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000001000 << 64) + (14'h0000 << 46) + (14'h0000 << 32) + 32'h37006210, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000001000 << 64) + (14'h0000 << 46) + (14'h0000 << 32) + 32'h37006210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000002000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00506210, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000002000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00506210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000003000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00006210, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000003000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00006210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000004000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00100210, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000004000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h00100210, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000005000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h01523921, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000005000 << 64) + (14'h3fff << 46) + (14'h0000 << 32) + 32'h01523921, resp1);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000006000 << 64) + (4'b0001 << 60) + 48'h1eb851eb851e, resp1);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + (64'h0000000000006000 << 64) + (4'b0001 << 60) + 48'h1eb851eb851e, resp1);
     
     
     ///////////////////////////////////////////////////////////////////////////////////
@@ -442,9 +453,9 @@ initial begin
     */
     //TimeController
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0008000, 8'h10, 128'h00000000000000000000000000000000 + 4'b0010, resp9);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + 4'b0010, resp9);
     #10000000;
-    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0008000, 8'h10, 128'h00000000000000000000000000000000 + 4'b1001, resp9);
+    tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + 4'b1001, resp9);
     
     /*
     #2000000;

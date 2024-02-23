@@ -112,21 +112,24 @@ wire offset_en;
 wire auto_start_wire;
 wire [63:0] counter_wire;
 
-reg auto_start_buffer;
+reg auto_start_buffer1;
+reg auto_start_buffer2;
 reg [63:0] counter_buffer;
 
-always@(posedge s_axi_aclk) begin
+always@(posedge rtio_clk) begin
+    // To accomodate clock domain crossing, flip flop buffer is used
+    {auto_start_buffer2, auto_start_buffer1} <= {auto_start_buffer1, auto_start_wire};
     if( s_axi_aresetn == 1'b0 ) begin
-        auto_start_buffer       <= 1'b0;
+        auto_start_buffer1       <= 1'b0;
+        auto_start_buffer2       <= 1'b0;
         counter_buffer          <= 64'h0;
     end
     else begin
-        auto_start_buffer       <= auto_start_wire;
         counter_buffer[63:0]    <= counter_wire[63:0];
     end
 end
 
-assign auto_start = auto_start_buffer;
+assign auto_start = auto_start_buffer2;
 assign counter[63:0] = counter_buffer[63:0];
 
 //////////////////////////////////////////////////////////////////////////////////

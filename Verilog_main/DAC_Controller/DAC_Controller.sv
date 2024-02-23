@@ -138,8 +138,8 @@ wire [255:0] m00_axis_tdata_dds;
 wire m00_axis_tvalid_direct;
 wire m00_axis_tvalid_dds;
 
-assign m00_axis_tdata = (dac_mode == 1'b1)? m00_axis_tdata_direct : m00_axis_tdata_dds;
-assign m00_axis_tvalid = (dac_mode == 1'b1)? m00_axis_tvalid_direct : m00_axis_tvalid_dds;
+assign m00_axis_tdata = m00_axis_tdata_dds;
+assign m00_axis_tvalid = m00_axis_tvalid_dds;
 
 //////////////////////////////////////////////////////////////////////////////////
 // DDS_Controller to RFDC_DDS

@@ -213,7 +213,7 @@ reg async_rto_core_reset;               // s_aclk region
 reg rto_core_reset_buffer1;             // rtio_clk region
 reg rto_core_reset_buffer2;             // rtio_clk region
 
-assign rto_core_write = (~rto_core_full) & async_fifo_out_empty;
+assign rto_core_write = (~rto_core_full) & (~async_fifo_out_empty);
 assign rto_core_fifo_din = async_fifo_out_dout;
 
 fifo_generator_1 async_fifo_out( // 512 depth, 504 program full
@@ -222,7 +222,7 @@ fifo_generator_1 async_fifo_out( // 512 depth, 504 program full
     .srst(async_rto_core_flush | async_rto_core_reset),  // rst -> srst in Vivado 2020.2
     .din(async_fifo_out_din),
     .wr_en(async_fifo_out_write),
-    .rd_en((~rto_core_full) & async_fifo_out_empty),
+    .rd_en((~rto_core_full) & (~async_fifo_out_empty)),
     .dout(async_fifo_out_dout),
     .prog_full(async_fifo_out_full),  // full -> prog_full to deal with full delay signal
     .overflow(),
@@ -250,14 +250,14 @@ reg rti_core_flush_buffer1;
 reg rti_core_flush_buffer2;
 
 
-assign rti_core_rd_en = (~rti_core_empty) & async_fifo_in_full;
+assign rti_core_rd_en = (~rti_core_empty) & (~async_fifo_in_full);
 
 fifo_generator_1 async_fifo_in( // 32 depth, 16 program full
     .wr_clk(rtio_clk),
     .rd_clk(s_axi_aclk),
     .srst(rti_core_reset | rti_core_flush),  // rst -> srst in Vivado 2020.2
     .din(rti_core_fifo_dout),
-    .wr_en((~rti_core_empty) & async_fifo_in_full),
+    .wr_en((~rti_core_empty) & (~async_fifo_in_full)),
     .rd_en(async_fifo_in_rd_en),
     .dout(async_fifo_in_dout),
     .prog_full(async_fifo_in_full),  // full -> prog_full to deal with full delay signal

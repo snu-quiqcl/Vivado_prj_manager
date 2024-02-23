@@ -100,7 +100,8 @@ module EdgeCounter
     input wire auto_start,
     input wire [63:0] counter,
     
-    input wire input_sig
+    input wire input_sig,
+    input wire rtio_clk
     
     
 );
@@ -204,7 +205,8 @@ axi2_fifo_0
     .rti_core_fifo_dout(rti_core_fifo_dout),
     .rti_core_full(rti_core_full),
     .rti_core_empty(rti_core_empty),
-    .data_num(data_num)
+    .data_num(data_num),
+    .rtio_clk(rtio_clk)
 );
 //////////////////////////////////////////////////////////////////////////////////
 // RTO Core Declaration
@@ -214,7 +216,7 @@ wire counter_matched;
 
 RTO_Core rto_core_0
 (
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .auto_start(auto_start),
     .reset(rto_core_reset),
     .flush(rto_core_flush),
@@ -242,7 +244,7 @@ RTI_Core
 )
 rti_core_0
 (
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .reset(rti_core_reset),
     .flush(rti_core_flush),
     .write(write),
@@ -265,7 +267,7 @@ wire selected;
 
 GPO_Core gpo_core_0
 (
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .reset(rto_core_reset),
     .override_en(1'b0),
     .selected_en(1'b1),
@@ -291,7 +293,7 @@ EdgeCounter_Controller
 )
 edgecounter_controller_0
 (
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .input_sig(input_sig),
     .reset(rto_core_reset),
     .cmd_in(gpo_out[63:0]),

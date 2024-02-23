@@ -9,6 +9,7 @@ import json
 import os
 import subprocess
 import shutil
+import argparse
 
 # This is Verilog Mother
 class TVM:
@@ -212,28 +213,33 @@ def RunVivadoTCL(tcl_path) -> None:
         out = process.stdout.readline()
         print(out, end='')
     stdout, stderr = process.communicate()
-    print(stderr)
+    print(stderr if stderr else 'Vivado ended with no error')
 
 def DeleteDump() -> None:
     if os.path.exists(os.path.join(os.path.dirname(__file__),'vivado.jou')):
         os.remove(os.path.join(os.path.dirname(__file__),'vivado.jou'))
-        print('vivado.jou is deletd...')
+        print('vivado.jou is deletd')
     if os.path.exists(os.path.join(os.path.dirname(__file__),'vivado.log')):
         os.remove(os.path.join(os.path.dirname(__file__),'vivado.log'))
-        print('vivado.log is deletd...')
-    
+        print('vivado.log is deletd')
+def main(args : argparse.Namespace) -> None:
+    # Use provided values or defaults
+    configuration = args.config if args.config else 'configuration.json'
+    verilog_json = args.verilog_json if args.verilog_json else 'verilog_json.json'
+
+    SetGlobalNamespace(configuration)
+    vm = CreateVerilogMaker(verilog_json)
+    vm.MakeTCL()
+
 if __name__ == "__main__":
-    SetGlobalNamespace('configuration.json')
+    parser = argparse.ArgumentParser(description="Make SoC Block diagram with\
+                                     json files. You need configuration file which\
+                                     set directory of vivado and common directory path\
+                                     and json files which specifies the SoC design")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Increase output verbosity")
+    parser.add_argument("-c", "--config", help="Configuration file name")
+    parser.add_argument("-f", "--verilog_json", help="verilog JSON file name")
+    args = parser.parse_args()
+    main(args)
     
-    DAC_Controller = CreateVerilogMaker('DAC_Controller.json')
-    TTL_out = CreateVerilogMaker('TTL_out.json')
-    TTLx8_out = CreateVerilogMaker('TTLx8_out.json')
-    TimeController = CreateVerilogMaker('TimeController.json')
-    EdgeCounter = CreateVerilogMaker('EdgeCounter.json')
-    
-    DAC_Controller.MakeTCL()
-    TTL_out.MakeTCL()
-    TTLx8_out.MakeTCL()
-    TimeController.MakeTCL()
-    EdgeCounter.MakeTCL()
     

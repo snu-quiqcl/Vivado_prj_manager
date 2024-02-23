@@ -111,7 +111,8 @@ module DAC_Controller#(
     // TimeController interface
     //////////////////////////////////////////////////////////////////////////////////
     input wire auto_start,
-    input wire [63:0] counter
+    input wire [63:0] counter,
+    input wire rtio_clk
 );
 //////////////////////////////////////////////////////////////////////////////////
 // AXI2FIFO to RTO_Core wire
@@ -236,11 +237,7 @@ axi2fifo_0
     
     .rto_core_full(rto_core_full),
     .rto_core_empty(rto_core_empty),
-    
-    //////////////////////////////////////////////////////////////////////////////////
-    // DAC_mode
-    //////////////////////////////////////////////////////////////////////////////////
-    .dac_mode(dac_mode)
+    .rtio_clk(rtio_clk)
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -250,7 +247,7 @@ wire counter_matched;
 wire [127:0] rto_out;
 
 RTO_Core rto_core_0(
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .auto_start(auto_start),// need to be connected
     .reset(rto_core_reset),
     .flush(rto_core_flush),
@@ -283,8 +280,8 @@ dds_controller_0
     //////////////////////////////////////////////////////////////////////////////////  
     // IO declaration for GPO_Core
     //////////////////////////////////////////////////////////////////////////////////
-    .clk(s_axi_aclk),
-    .m00_axis_aclk(m00_axis_aclk),
+    .clk(rtio_clk),
+    .m00_axis_aclk(rtio_clk),
     .reset(rto_core_reset),
     .override_en(1'b0),
     .selected_en(1'b1),
@@ -309,7 +306,7 @@ dds_controller_0
 );
 
 RFDC_DDS rfdc_dds(
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .reset(rto_core_flush|rto_core_reset),
     .sync_en(sync_en),
     .freq(freq),

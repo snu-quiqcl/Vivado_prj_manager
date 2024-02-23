@@ -96,7 +96,8 @@ module TimeController
     // Timestamp Interface
     //////////////////////////////////////////////////////////////////////////////////
     output wire auto_start,
-    output wire [63:0] counter
+    output wire [63:0] counter,
+    input wire rtio_clk
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +220,7 @@ axi2com_0(
 //////////////////////////////////////////////////////////////////////////////////
 
 Timestamp_Counter timestamp_counter_0(
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .reset(reset),
     .start(start),
     .counter_offset(counter_offset),

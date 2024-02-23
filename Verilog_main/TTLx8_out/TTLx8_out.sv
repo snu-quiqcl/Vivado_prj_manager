@@ -129,7 +129,8 @@ module TTLx8_out#(
     // TimeController interface
     //////////////////////////////////////////////////////////////////////////////////
     input wire auto_start,
-    input wire [63:0] counter
+    input wire [63:0] counter,
+    input wire rtio_clk
 );
 //////////////////////////////////////////////////////////////////////////////////
 // AXI2FIFO to RTO_Core wire
@@ -229,7 +230,8 @@ axi2fifo_0
     .rto_core_fifo_din(rto_core_fifo_din),
     
     .rto_core_full(rto_core_full),
-    .rto_core_empty(rto_core_empty)
+    .rto_core_empty(rto_core_empty),
+    .rtio_clk(rtio_clk)
 );
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -247,7 +249,7 @@ RTOB_Core
 )
 rtob_core_0
 (
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .auto_start(auto_start),// need to be connected
     .reset(rto_core_reset),
     .flush(rto_core_flush),
@@ -279,7 +281,7 @@ ttlx8_controller_0
     //////////////////////////////////////////////////////////////////////////////////  
     // IO declaration for GPO_Core
     //////////////////////////////////////////////////////////////////////////////////
-    .clk(s_axi_aclk),
+    .clk(rtio_clk),
     .reset(rto_core_reset),
     .override_en(1'b0),
     .selected_en(1'b1),

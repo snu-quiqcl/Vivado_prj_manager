@@ -29,19 +29,26 @@ module Timestamp_Counter(
     output wire [63:0] counter
     );
 reg [63:0] counter_reg;
+reg start_buffer1;
+reg start_buffer2;
+reg offset_en_buffer1;
+reg offset_en_buffer2;
 
 assign counter = counter_reg;
 
 always @(posedge clk) begin
+    // To accomodate clock domain crossing, flip flop buffer is used
+    {offset_en_buffer2, offset_en_buffer1} <= {offset_en_buffer1, offset_en};
+    {start_buffer2, start_buffer1} <= {start_buffer1, start};
     if( reset ) begin
         counter_reg[63:0] <= 64'h0;
     end
     
-    else if(offset_en) begin
+    else if(offset_en_buffer2) begin
         counter_reg[63:0] <= counter_offset[63:0];
     end
     
-    else if(start) begin
+    else if(start_buffer2) begin
         counter_reg[63:0] <= counter_reg[63:0] + 64'h1;
     end
 end

@@ -216,7 +216,7 @@ reg rto_core_reset_buffer2;             // rtio_clk region
 assign rto_core_write = (~rto_core_full) & async_fifo_out_empty;
 assign rto_core_fifo_din = async_fifo_out_dout;
 
-fifo_generator_1 async_fifo_out( // 32 depth, 16 program full
+fifo_generator_1 async_fifo_out( // 512 depth, 504 program full
     .wr_clk(s_axi_aclk),
     .rd_clk(rtio_clk),
     .srst(async_rto_core_flush | async_rto_core_reset),  // rst -> srst in Vivado 2020.2

@@ -811,7 +811,11 @@
                 "vout12_n" : "RFMC_DAC_12_N",
                 "vout12_p" : "RFMC_DAC_12_P",
                 "vout13_n" : "RFMC_DAC_13_N",
-                "vout13_p" : "RFMC_DAC_13_P"
+                "vout13_p" : "RFMC_DAC_13_P",
+                "dac0_clk_n" : "RF3_CLKO_A_C_N_228",
+                "dac0_clk_p" : "RF3_CLKO_A_C_P_228",
+                "dac1_clk_n" : "RF3_CLKO_A_C_N_229",
+                "dac1_clk_p" : "RF3_CLKO_A_C_P_229"
             },
             "axi" : {
                 "offset" : "0xA00C0000",

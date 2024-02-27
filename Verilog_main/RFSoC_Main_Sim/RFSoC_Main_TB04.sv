@@ -456,12 +456,16 @@ initial begin
     //TimeController
     #10000000;
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + 4'b0010, resp9);
-    #10000000;
+    
+    for( k = 0 ; k<490; k++)begin
+        //#10000000;
+        tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + ((64'h0000000000000570 + k * 16) << 64) + (4'b0001 << 60) + 48'h1eb851eb851e, resp1);
+    end
     tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0000000, 8'h10, 128'h00000000000000000000000000000000 + 4'b1001, resp9);
     
-    for( k = 0 ; k<50; k++)begin
+    for( k = 0 ; k<2000; k++)begin
         //#10000000;
-        tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + ((64'h0000000000000570 + k * 10000) << 64) + (4'b0001 << 60) + 48'h1eb851eb851e, resp1);
+        tb.RFSoC_Main_blk_i.zynq_ultra_ps_e_0.inst.write_data(32'ha0001000, 8'h10, 128'h00000000000000000000000000000000 + ((64'h0000000000000570 + k * 16) << 64) + (4'b0001 << 60) + 48'h1eb851eb851e, resp1);
     end
     
     #2000000;

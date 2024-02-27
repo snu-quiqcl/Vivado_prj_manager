@@ -194,7 +194,7 @@ end
 //////////////////////////////////////////////////////////////////////////////////
 
 assign s_axi_awready = (axi_state_write == IDLE);
-assign s_axi_wready = ((axi_state_write == WRITE_DATA_WRITE_FIFO) && (rto_core_full == 1'b0)) || (axi_state_write == WRITE_DATA_FLUSH_FIFO);
+assign s_axi_wready = ((axi_state_write == WRITE_DATA_WRITE_FIFO) && (async_fifo_out_full == 1'b0)) || (axi_state_write == WRITE_DATA_FLUSH_FIFO);
 assign s_axi_arready = (axi_state_read == IDLE);
 
 
@@ -337,7 +337,7 @@ always @(posedge s_axi_aclk) begin
                         axi_awuser <= s_axi_awuser;
                         axi_awid <= s_axi_awid;
                         
-                        if( rto_core_full == 1'b0 ) begin
+                        if( async_fifo_out_full == 1'b0 ) begin
                             axi_state_write <= WRITE_DATA_WRITE_FIFO;
                         end
                         
@@ -392,7 +392,7 @@ always @(posedge s_axi_aclk) begin
             end
             
             WRITE_DATA_WRITE_FIFO: begin
-                if( rto_core_full == 1'b0 ) begin
+                if( async_fifo_out_full == 1'b0 ) begin
                     if( s_axi_wvalid == 1'b1 ) begin
                         async_fifo_out_din <= s_axi_wdata;
                         async_fifo_out_write <= 1'b1;

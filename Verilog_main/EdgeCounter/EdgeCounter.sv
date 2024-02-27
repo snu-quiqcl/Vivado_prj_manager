@@ -254,8 +254,8 @@ rti_core_0
     .overflow_error_data(),
     .overflow_error(),
     .underflow_error(),
-    .full(),
-    .empty(),
+    .full(rti_core_full),
+    .empty(rti_core_empty),
     .data_num(data_num)
     );
     

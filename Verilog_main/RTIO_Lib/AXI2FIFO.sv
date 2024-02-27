@@ -252,7 +252,7 @@ reg rti_core_flush_buffer2;
 
 assign rti_core_rd_en = (~rti_core_empty) & (~async_fifo_in_full);
 
-fifo_generator_1 async_fifo_in( // 32 depth, 16 program full
+fifo_generator_1 async_fifo_in( // 512 depth, 504 program full
     .wr_clk(rtio_clk),
     .rd_clk(s_axi_aclk),
     .srst(rti_core_reset | rti_core_flush),  // rst -> srst in Vivado 2020.2
@@ -268,7 +268,7 @@ fifo_generator_1 async_fifo_in( // 32 depth, 16 program full
 
 always @(posedge rtio_clk) begin
     {rti_core_flush, rti_core_flush_buffer2, rti_core_flush_buffer1} <= {rti_core_flush_buffer2, rti_core_flush_buffer1, async_rti_core_flush};
-    {rti_core_reset, rto_core_reset_buffer2, rti_core_reset_buffer1} <= {rti_core_reset_buffer2, rti_core_reset_buffer1, async_rti_core_reset};
+    {rti_core_reset, rti_core_reset_buffer2, rti_core_reset_buffer1} <= {rti_core_reset_buffer2, rti_core_reset_buffer1, async_rti_core_reset};
 end
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -538,7 +538,7 @@ always @(posedge s_axi_aclk) begin
             end
 
             READ_ISEMPTY: begin
-                s_axi_rdata <= {AXI_DATA_WIDTH{1'b0}}|(~async_fifo_in_empty);
+                s_axi_rdata <= { {AXI_DATA_WIDTH-1{1'b0}}, async_fifo_in_empty };
                 s_axi_rresp <= 2'b0;
                 s_axi_rvalid <= 1'b1;
                 s_axi_rlast <= 1'b1;

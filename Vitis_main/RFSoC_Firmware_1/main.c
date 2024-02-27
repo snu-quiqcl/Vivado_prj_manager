@@ -84,6 +84,8 @@ void SetupInterruptSystem(void)
 }
 
 void stop_binary(){
+	Xil_DCacheFlush();
+	Xil_ICacheInvalidate();
 	__asm__ __volatile__ (
 		"movz x2, #0x0000\n\t"
 		"movk x2, #0x0070, lsl 16\n\t"
@@ -128,6 +130,8 @@ void stop_binary(){
 		:
 		:
 	);
+	Xil_DCacheFlush();
+	Xil_ICacheInvalidate();
 	xil_printf("\r\nSTOP ELF DONE\r\n");
 	clear_DRAM();
 	return 0;
@@ -236,6 +240,8 @@ int64_t run_binary(){
 		:
 		:
 	);
+	Xil_DCacheFlush();
+	Xil_ICacheInvalidate();
 	sleep(1);
 	xil_printf("\r\nELF DONE\r\n");
 	clear_DRAM();
@@ -289,7 +295,8 @@ void LowInterruptHandler(u32 CallbackRef)
 			reg_addr = (volatile int64_t *)EXIT_PTR_ADDR;
 			*(reg_addr) = (volatile int64_t)(stop_binary);
 			interrupt_run_binary = 0;
-
+			Xil_DCacheFlush();
+			Xil_ICacheInvalidate();
 			__asm__ __volatile__ (
 				"movz x2, #0x0060\n\t"
 				"movk x2, #0x0070, lsl 16\n\t"
@@ -304,6 +311,8 @@ void LowInterruptHandler(u32 CallbackRef)
 				:
 				:
 			);
+			Xil_DCacheFlush();
+			Xil_ICacheInvalidate();
 		}
 	}
 }

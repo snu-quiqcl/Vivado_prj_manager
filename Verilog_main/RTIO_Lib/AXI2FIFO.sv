@@ -538,7 +538,7 @@ always @(posedge s_axi_aclk) begin
             end
 
             READ_ISEMPTY: begin
-                s_axi_rdata <= { {AXI_DATA_WIDTH-1{1'b0}}, async_fifo_in_empty };
+                s_axi_rdata <= { {(AXI_DATA_WIDTH-1){1'b0}}, async_fifo_in_empty };
                 s_axi_rresp <= 2'b0;
                 s_axi_rvalid <= 1'b1;
                 s_axi_rlast <= 1'b1;

@@ -38,7 +38,7 @@ int main(){
 
     tc_0.auto_start();
     
-    delay(10000);
+    delay(10000000);
     
     int turn_off = 0;
     
@@ -49,20 +49,28 @@ int main(){
     else{
         Raman_CH1.set_amp(1.0);
         delay(8);
-        for( int i = 0 ; i < 800; i++ ){
-            Raman_CH1.set_freq((i)*271123);
-            delay(1000);
+        Raman_CH1.set_freq(271000123);
+        delay(80);
+        for( int i = 0 ; i < 1100; i++ ){
+            Raman_CH1.set_amp((i%2));
+            delay(80);
         }
-        EdgeCounter_0.reset_count();
-        delay(10000);
-        EdgeCounter_0.start_count();
-        delay(10000);
-        EdgeCounter_0.stop_count();
-        delay(10000);
-        EdgeCounter_0.save_count();
-        xil_printf("%d\r\n",EdgeCounter_0.read_len());
-        while( 1 ){
-            xil_printf("%d\r\n",EdgeCounter_0.read_len());
-        }
+        delay(80);
+        Raman_CH1.set_amp(0.0);
+        delay(1000000);
+        //EdgeCounter_0.reset_count();
+        delay(1000000);
+        //EdgeCounter_0.start_count();
+        delay(1000000);
+        //EdgeCounter_0.stop_count();
+        delay(1000000);
+        //EdgeCounter_0.save_count();
+        //xil_printf("%d\r\n",EdgeCounter_0.read_len());
+        //int k = 10;
+        //while(  k != 0 ){
+        //    k = LOWER(EdgeCounter_0.read_len());
+        //    xil_printf("%d\r\n",k);
+        //    
+        //}
     }
 }

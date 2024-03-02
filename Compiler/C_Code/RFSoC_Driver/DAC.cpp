@@ -104,6 +104,7 @@ void DAC::set_addr(uint64_t addr = (uint64_t) XPAR_DAC_CONTROLLER_0_BASEADDR ){
 void DAC::set_freq(uint64_t freq){
     this->freq          = ((uint64_t)(((long double)freq/(long double)(this->sample_freq))*(((uint64_t)1<<48)-(uint64_t)1))) & MASK48BIT;
     Xil_Out128(this-> addr,MAKE128CONST( get_timestamp_coarse() , (uint64_t)((uint64_t)1 << 60) | (uint64_t)(this->freq) ));
+    xil_printf("freq : %llx\r\n",(uint64_t)(this->freq));
     return;
 }
 

@@ -116,12 +116,19 @@ reg auto_start_buffer1;
 reg auto_start_buffer2;
 reg [63:0] counter_buffer;
 
+
+reg start_buffer1;
+reg start_buffer2;
+
+reg reset_buffer1;
+reg reset_buffer2;
+
 always@(posedge rtio_clk) begin
     // To accomodate clock domain crossing, flip flop buffer is used
     {auto_start_buffer2, auto_start_buffer1} <= {auto_start_buffer1, auto_start_wire};
-    if( s_axi_aresetn == 1'b0 ) begin
-        auto_start_buffer1       <= 1'b0;
-        auto_start_buffer2       <= 1'b0;
+    {start_buffer2, start_buffer1} <= {start_buffer1, start};
+    {reset_buffer2, reset_buffer1} <= {reset_buffer1, reset};
+    if( reset_buffer2 == 1'b1 ) begin
         counter_buffer          <= 64'h0;
     end
     else begin
@@ -224,10 +231,10 @@ axi2com_0(
 
 Timestamp_Counter timestamp_counter_0(
     .clk(rtio_clk),
-    .reset(reset),
-    .start(start),
-    .counter_offset(counter_offset),
-    .offset_en(offset_en),
+    .reset(reset_buffer2),
+    .start(start_buffer2),
+    .counter_offset(64'h0),
+    .offset_en(1'b0),
     .counter(counter_wire)
 );
 

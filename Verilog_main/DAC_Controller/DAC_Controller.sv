@@ -255,7 +255,7 @@ wire [127:0] rto_out;
 RTO_Core rto_core_0(
     .clk(rtio_clk),
     .auto_start(auto_start),// need to be connected
-    .reset(rto_core_reset),
+    .reset(rto_core_flush|rto_core_reset),
     .flush(rto_core_flush),
     .write(rto_core_write),
     .fifo_din(rto_core_fifo_din),
@@ -288,7 +288,7 @@ dds_controller_0
     //////////////////////////////////////////////////////////////////////////////////
     .clk(rtio_clk),
     .m00_axis_aclk(rtio_clk),
-    .reset(rto_core_reset),
+    .reset(rto_core_flush|rto_core_reset),
     .override_en(1'b0),
     .selected_en(1'b1),
     .override_value(64'h0),

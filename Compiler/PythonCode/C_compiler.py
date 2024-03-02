@@ -37,7 +37,7 @@ class Compiler:
         self.total_log = ''
         
         # Directory of your GIT
-        self.git_dir = r'C:\Jeonghyun\GIT'
+        self.git_dir = r'C:\Jeonghyun\SNU_GIT'
         # Compiler use Xilinx bsp libraries. So, you have to set xilinx include diretory
         # In this program, default xilinx library direcotry is set already, so you
         # don't need to modify this variable.

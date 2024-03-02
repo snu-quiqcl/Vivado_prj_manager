@@ -15,7 +15,7 @@ class Vitis_maker:
         # self.vitis_dir = r'E:\Xilinx\Vitis\2020.2\bin\xsct.bat'
         # self.git_dir = r'E:\RFSoC\GIT'
         self.vitis_dir = r'C:\Xilinx\Vitis\2020.2\bin\xsct.bat'
-        self.git_dir = r'C:\Jeonghyun\GIT'
+        self.git_dir = r'C:\Jeonghyun\SNU_GIT'
         self.tcl_commands = ''
         self.xsa_dir = os.path.join(self.git_dir,'Vivado_prj_manager','Vitis_main','RFSoC_Main_blk_wrapper.xsa')
         self.bsp_lib_dir = os.path.join(self.git_dir,r'RFSoC\RFSoC_Design_V1_1\VITIS\RFSoC_Firmware_plt\export\RFSoC_Firmware_plt\sw\RFSoC_Firmware_plt\standalone_domain\bsplib')

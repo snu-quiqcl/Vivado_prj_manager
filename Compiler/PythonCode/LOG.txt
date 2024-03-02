@@ -1,25 +1,25 @@
-In file included from C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:1:
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp: In member function 'void DAC::set_config(long double, uint64_t, long double, uint64_t)':
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:121:74: warning: left shift count >= width of type [-Wshift-count-overflow]
-  121 |         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x0 << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> 16) & MASK32BIT) ));
+In file included from C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:1:
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp: In member function 'void DAC::set_config(long double, uint64_t, long double, uint64_t)':
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:122:74: warning: left shift count >= width of type [-Wshift-count-overflow]
+  122 |         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x0 << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> 16) & MASK32BIT) ));
       |                                                                      ~~~~^~~~~
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
    12 | #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
       |                                                          ^~
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:124:74: warning: left shift count >= width of type [-Wshift-count-overflow]
-  124 |         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x1 << 63) | (((shift-1) & MASK3BIT) << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> ((8 - shift) * 2)) & MASK32BIT) ));
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\DAC.cpp:125:74: warning: left shift count >= width of type [-Wshift-count-overflow]
+  125 |         Xil_Out128(this-> addr,MAKE128CONST(get_timestamp_coarse(), (0x1 << 63) | (((shift-1) & MASK3BIT) << 60) | ((this->amp) << 46) | ((this->phase) << 32) | ( (this->freq >> ((8 - shift) * 2)) & MASK32BIT) ));
       |                                                                      ~~~~^~~~~
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver_Include/RFSoC_Driver.h:12:58: note: in definition of macro 'MAKE128CONST'
    12 | #define MAKE128CONST(hi,lo) ((((__uint128_t)hi << 64) | (lo)))
       |                                                          ^~
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp: In member function 'void TTLx8_out::set(uint64_t)':
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:12:46: warning: comparison of integer expressions of different signedness: 'uint64_t' {aka 'long unsigned int'} and 'int64_t' {aka 'long int'} [-Wsign-compare]
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp: In member function 'void TTLx8_out::set(uint64_t)':
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:12:46: warning: comparison of integer expressions of different signedness: 'uint64_t' {aka 'long unsigned int'} and 'int64_t' {aka 'long int'} [-Wsign-compare]
    12 |     if( ( ( this -> last_output_time ) >> 3) < get_timestamp_coarse() ){
       |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:22:14: warning: statement has no effect [-Wunused-value]
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:22:14: warning: statement has no effect [-Wunused-value]
    22 |         for( i ; i < 8; i++){
       |              ^
-C:\Jeonghyun\GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:30:14: warning: statement has no effect [-Wunused-value]
+C:\Jeonghyun\SNU_GIT\Vivado_prj_manager\Compiler\C_Code\RFSoC_Driver\TTLx8_out.cpp:30:14: warning: statement has no effect [-Wunused-value]
    30 |         for( i ; i < 8 ; i++){
       |              ^
 c:/program files (x86)/arm gnu toolchain aarch64-none-elf/12.3 rel1/bin/../lib/gcc/aarch64-none-elf/12.3.1/../../../../aarch64-none-elf/bin/ld.exe: warning: ../C_Code/skeleton_code_2/skeleton_code_2.elf has a LOAD segment with RWX permissions

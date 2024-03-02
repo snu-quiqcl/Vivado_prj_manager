@@ -176,7 +176,6 @@ class RFSoCMaker(TVM):
                         in self.bd_cell]) + ''
         TVM.tcl_code += ''.join([f' [get_bd_pins {self.axi_interconnect}/M{str(i).zfill(2)}_ARESETN]' 
                         for i in range(self.total_axi_number)])
-        TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aresetn] [get_bd_pins {self.rfdc}/s1_axis_aresetn]'
         TVM.tcl_code += f' [get_bd_pins {self.axi_interconnect}/S00_ARESETN]'
         TVM.tcl_code += f' [get_bd_pins {self.axi_interconnect}/ARESETN]'
         TVM.tcl_code += f' [get_bd_pins {self.clk_wiz}/resetn]'
@@ -220,6 +219,10 @@ class RFSoCMaker(TVM):
             TVM.tcl_code += ''.join([f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
                             if bd_cell.vlnv == 'xilinx.com:user:DAC_Controller' else '' 
                             for bd_cell in self.bd_cell])
+            TVM.tcl_code += '\n'
+            TVM.tcl_code += f'connect_bd_net -net {self.timecontroller}_rtio_resetn'
+            TVM.tcl_code += f' [get_bd_pins {self.timecontroller}/rtio_resetn]'
+            TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aresetn] [get_bd_pins {self.rfdc}/s1_axis_aresetn]'
             TVM.tcl_code += '\n'
         if self.clk_wiz != '':
             TVM.tcl_code += f'connect_bd_net -net {self.clk_wiz}_clk_out1'\

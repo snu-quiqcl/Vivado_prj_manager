@@ -96,13 +96,13 @@ module AXI2FIFO
     //////////////////////////////////////////////////////////////////////////////////
     // RTO_Core interface
     //////////////////////////////////////////////////////////////////////////////////
-    output reg rto_core_reset,
-    output reg rto_core_flush,
-    output wire rto_core_write,
-    output wire [127:0] rto_core_fifo_din,
+    output reg rto_core_reset,                      // rtio_clk region
+    output reg rto_core_flush,                      // rtio_clk region
+    output wire rto_core_write,                     // rtio_clk region
+    output wire [127:0] rto_core_fifo_din,          // rtio_clk region
     
-    input wire rto_core_full,
-    input wire rto_core_empty,
+    input wire rto_core_full,                       // rtio_clk region
+    input wire rto_core_empty,                      // rtio_clk region
    
     //////////////////////////////////////////////////////////////////////////////////
     // RTI_Core interface
@@ -201,11 +201,11 @@ assign s_axi_arready = (axi_state_read == IDLE);
 //////////////////////////////////////////////////////////////////////////////////
 // Asyncrhonous fifo for CDC (s_aclk -> rtio_clk)
 //////////////////////////////////////////////////////////////////////////////////
-wire async_fifo_out_full;
-wire async_fifo_out_empty;
-wire [127:0] async_fifo_out_dout;
-reg [127:0] async_fifo_out_din;
-reg async_fifo_out_write;
+wire async_fifo_out_full;               // s_aclk region
+wire async_fifo_out_empty;              // rtio_clk region
+wire [127:0] async_fifo_out_dout;       // rtio_clk region
+reg [127:0] async_fifo_out_din;         // s_aclk region
+reg async_fifo_out_write;               // s_aclk region
 reg async_rto_core_flush;               // s_aclk region
 reg rto_core_flush_buffer1;             // rtio_clk region
 reg rto_core_flush_buffer2;             // rtio_clk region

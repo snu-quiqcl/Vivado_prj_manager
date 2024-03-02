@@ -175,8 +175,8 @@ axi2fifo_0
     .s_axi_awsize(s_axi_awsize),
     .s_axi_awlen(s_axi_awlen),
     .s_axi_awvalid(s_axi_awvalid),
-    .s_axi_awuser(s_axi_awuser), // added to resolve wrapping error
-    .s_axi_awready(s_axi_awready),                                                        //Note that ready signal is wire
+    .s_axi_awuser(s_axi_awuser),                // added to resolve wrapping error
+    .s_axi_awready(s_axi_awready),              //Note that ready signal is wire
     
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Write Response
@@ -184,7 +184,7 @@ axi2fifo_0
     .s_axi_bready(s_axi_bready),
     .s_axi_bresp(s_axi_bresp),
     .s_axi_bvalid(s_axi_bvalid),
-    .s_axi_bid(s_axi_bid), // added to resolve wrapping error
+    .s_axi_bid(s_axi_bid),                      // added to resolve wrapping error
     
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Data Write
@@ -193,7 +193,7 @@ axi2fifo_0
     .s_axi_wstrb(s_axi_wstrb),
     .s_axi_wvalid(s_axi_wvalid),
     .s_axi_wlast(s_axi_wlast),
-    .s_axi_wready(s_axi_wready),                                                        //Note that ready signal is wire
+    .s_axi_wready(s_axi_wready),                //Note that ready signal is wire
     
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Address Read
@@ -203,10 +203,10 @@ axi2fifo_0
     .s_axi_araddr(s_axi_araddr),
     .s_axi_arsize(s_axi_arsize),
     .s_axi_arvalid(s_axi_arvalid),
-    .s_axi_arid(s_axi_arid), // added to resolve wrapping error
-    .s_axi_aruser(s_axi_aruser), // added to resolve wrapping error
+    .s_axi_arid(s_axi_arid),                    // added to resolve wrapping error
+    .s_axi_aruser(s_axi_aruser),                // added to resolve wrapping error
     .s_axi_arready(s_axi_arready),
-    .s_axi_rid(s_axi_rid), // added to resolve wrapping error
+    .s_axi_rid(s_axi_rid),                      // added to resolve wrapping error
     
     //////////////////////////////////////////////////////////////////////////////////
     // AXI4 Data Read
@@ -230,13 +230,13 @@ axi2fifo_0
     //////////////////////////////////////////////////////////////////////////////////
     // RTO_Core interface
     //////////////////////////////////////////////////////////////////////////////////
-    .rto_core_reset(rto_core_reset),
-    .rto_core_flush(rto_core_flush),
-    .rto_core_write(rto_core_write),
-    .rto_core_fifo_din(rto_core_fifo_din),
+    .rto_core_reset(rto_core_reset),            // rtio_clk region
+    .rto_core_flush(rto_core_flush),            // rtio_clk region
+    .rto_core_write(rto_core_write),            // rtio_clk region
+    .rto_core_fifo_din(rto_core_fifo_din),      // rtio_clk region
     
-    .rto_core_full(rto_core_full),
-    .rto_core_empty(rto_core_empty),
+    .rto_core_full(rto_core_full),              // rtio_clk region
+    .rto_core_empty(rto_core_empty),            // rtio_clk region
     
     //////////////////////////////////////////////////////////////////////////////////
     // Dummy RTI_Core interface
@@ -254,20 +254,20 @@ wire [127:0] rto_out;
 
 RTO_Core rto_core_0(
     .clk(rtio_clk),
-    .auto_start(auto_start),// need to be connected
-    .reset(rto_core_flush|rto_core_reset),
-    .flush(rto_core_flush),
-    .write(rto_core_write),
-    .fifo_din(rto_core_fifo_din),
-    .counter(counter), // need to be connected
-    .counter_matched(counter_matched),
-    .rto_out(rto_out), 
+    .auto_start(auto_start),                    // rtio_clk region
+    .reset(rto_core_flush|rto_core_reset),      // rtio_clk region
+    .flush(rto_core_flush),                     // rtio_clk region
+    .write(rto_core_write),                     // rtio_clk region
+    .fifo_din(rto_core_fifo_din),               // rtio_clk region
+    .counter(counter),                          // rtio_clk region
+    .counter_matched(counter_matched),          // rtio_clk region
+    .rto_out(rto_out),                          // rtio_clk region
     .timestamp_error_data(),
     .overflow_error_data(),
     .timestamp_error(),
     .overflow_error(),
-    .full(rto_core_full),
-    .empty(rto_core_empty)
+    .full(rto_core_full),                       // rtio_clk region
+    .empty(rto_core_empty)                      // rtio_clk region
 );
 
 //////////////////////////////////////////////////////////////////////////////////

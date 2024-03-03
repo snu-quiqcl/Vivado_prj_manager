@@ -9,7 +9,7 @@ import C_compiler as elf_maker
 import python2C as interpreter
 import time
 
-class rfsocMgr(TCP.RFSoC):
+class RFSoCManager(TCP.RFSoC):
     def __init__(self):
         super().__init__()
         # Interpreter object which convert code from python to C Code
@@ -133,14 +133,14 @@ class rfsocMgr(TCP.RFSoC):
         self.disconnect()
         
 if __name__ == "__main__":
-    file_name = 'skeleton_code_2'
-    rfsocMgr = rfsocMgr()
-    rfsocMgr.setFileName(file_name)
-    rfsocMgr.connect()
-    rfsocMgr.stopRFSoC()
-    rfsocMgr.runRFSoC()
-    # rfsocMgr.read64bitData()
-    # rfsocMgr.read64bitData()
+    file_name = 'test_code_1'
+    RFSoCManager = RFSoCManager()
+    RFSoCManager.setFileName(file_name)
+    RFSoCManager.connect()
+    RFSoCManager.stopRFSoC()
+    RFSoCManager.runRFSoC()
+    # RFSoCManager.read64bitData()
+    # RFSoCManager.read64bitData()
     
-    # rfsocMgr.stopRFSoC()
-    rfsocMgr.close()
+    # RFSoCManager.stopRFSoC()
+    RFSoCManager.close()

@@ -38,7 +38,7 @@ int main(){
 
     tc_0.auto_start();
     
-    delay(1000000);
+    delay(4000000);
     
     int turn_off = 0;
     
@@ -48,29 +48,29 @@ int main(){
     }
     else{
         Raman_CH1.set_amp(1.0);
-        delay(800);
-        Raman_CH1.set_freq(270000123);
-        delay(800);
-        /*for( int i = 0 ; i < 110; i++ ){
-            Raman_CH1.set_amp((i%2));
-            delay(80);
-        }
         delay(80);
-        Raman_CH1.set_amp(0.0);
-        delay(1000000);
-        EdgeCounter_0.reset_count();
-        delay(1000000);
-        EdgeCounter_0.start_count();
-        delay(1000000);
-        EdgeCounter_0.stop_count();
-        delay(1000000);
-        EdgeCounter_0.save_count();
-        xil_printf("%d\r\n",EdgeCounter_0.read_len());
-        int k = 10;
-        while(  k != 0 ){
-            k = LOWER(EdgeCounter_0.read_len());
-            xil_printf("%d\r\n",k);
-            
-        }*/
+        Raman_CH1.set_freq(201000000);
+        delay(80);
+//         for( int i = 0 ; i < 2000; i++ ){
+//             Raman_CH1.set_amp((i%2));
+//             delay(80);
+//         }
+//         delay(800);
+//         Raman_CH1.set_amp(0.0);
+//         delay(1000000);
+//         EdgeCounter_0.reset_count();
+//         delay(1000000);
+//         EdgeCounter_0.start_count();
+//         delay(1000000);
+//         EdgeCounter_0.stop_count();
+//         delay(1000000);
+//         EdgeCounter_0.save_count();
+//         xil_printf("%d\r\n",EdgeCounter_0.read_len());
+//         int k = 10;
+//         while(  k != 0 ){
+//             k = LOWER(EdgeCounter_0.read_len());
+//             xil_printf("%d\r\n",k);
+//             
+//         }
     }
 }

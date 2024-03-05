@@ -1,4 +1,0 @@
-pip install pyelftools
-pip install capstone
-pip install serial
-pip install pyserial

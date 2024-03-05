@@ -66,7 +66,9 @@ Below json file is example of verilog json file.
     }
 }
 ```
-###verilog section
+
+### verilog section
+
 In this section, you should write your vivado project information.
 + ```name``` : Your vivado project name
 
@@ -74,7 +76,8 @@ In this section, you should write your vivado project information.
 
 + ```files``` : List of yout verilog files. Note that its path is relateive path to ```common_path``` which is specified in configuration json file
 
-###ip section
+### ip section
+
 In this section, you should write configuration of IPs which is used in you vivado project. It will make ```.xic``` file automatically and include this IP to your vivado project. In this example, ```fifo_generator_0``` is instance name(module_name) which you used in verilog codes. And below is your IP configurations.
 + ```name``` : IP name. Note that this is not instance name, and it is IP name
 

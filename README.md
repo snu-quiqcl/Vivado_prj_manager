@@ -17,21 +17,21 @@ Below json file is example of configuration json file.
 }
 ```
 
-+ ```common_path``` is path common direcotry of which your verilog files exist. For example, common path of ```C:/A/verilog_file1.sv```, ```C:/A/verilog_file2.sv``` and ```C:/A/B/verilog_file3.sv``` is ```C:/A/```. You should write its relative path of verilog files when you make second json file, verilog json file.
++ ```common_path``` : Path common direcotry of which your verilog files exist. For example, common path of ```C:/A/verilog_file1.sv```, ```C:/A/verilog_file2.sv``` and ```C:/A/B/verilog_file3.sv``` is ```C:/A/```. You should write its relative path of verilog files when you make second json file, verilog json file
   
-+ ```target_path``` is path which you want to make vivado project. Vivado project will be created in ```target_path```, and if this path does not exist, it will be created automatically. 
++ ```target_path``` : Path which you want to make vivado project. Vivado project will be created in ```target_path```, and if this path does not exist, it will be created automatically
 
-+ ```vivado_path``` is path of ```vivado.bat``` which runs actual vivado TCL code and make vivado project. Note that almost of ```vivado.bat``` is located in ```Xilinx/Vivado/2020.2/bin```. 
++ ```vivado_path``` : Path of ```vivado.bat``` which runs actual vivado TCL code and make vivado project. Note that almost of ```vivado.bat``` is located in ```Xilinx/Vivado/2020.2/bin```
 
-+ ```board_path``` is path board files exist, and it is also located in ```Xilinx/Vivado/2020.2/data/boards/board_files``` mostly.
++ ```board_path``` : Path board files exist, and it is also located in ```Xilinx/Vivado/2020.2/data/boards/board_files``` mostly
 
-+  ```part_name``` is your xilinx chip part name.
++  ```part_name``` : Your xilinx chip part name
 
-+  ```board_name``` is your FPGA board name. If you don't know it's board name, you can make vivado manually, and check its TCL code.
++  ```board_name``` : Your FPGA board name. If you don't know it's board name, you can make vivado manually, and check its TCL code
 
-+  ```constraints``` is your FPGA constraint file path and its name.
++  ```constraints``` : Your FPGA constraint file path and its name
 
-+  ```version``` is version of you vivado.
++  ```version``` : Version of your vivado
 
 ## Verilog JSON file
 Below json file is example of verilog json file.
@@ -60,26 +60,36 @@ Below json file is example of verilog json file.
             "config" : {
                 "Fifo_Implementation" : "Independent_Clocks_Builtin_FIFO",
                 "Read_Clock_Frequency" : "125",
-                "Write_Clock_Frequency" : "125",
-                "Performance_Options" : "First_Word_Fall_Through",
-                "Input_Data_Width" : "128", 
-                "Input_Depth" : "512",
-                "Output_Data_Width" : "128", 
-                "Output_Depth" : "512",
-                "Underflow_Flag" : "true", 
-                "Overflow_Flag" : "true",
-                "Data_Count_Width" : "5",
-                "Write_Data_Count_Width" : "5",
-                "Read_Data_Count_Width" : "5", 
-                "Programmable_Full_Type" : "Single_Programmable_Full_Threshold_Constant",
-                "Full_Threshold_Assert_Value" : "504",
-                "Full_Threshold_Negate_Value" : "504",
-                "Empty_Threshold_Assert_Value" : "4",
-                "Empty_Threshold_Negate_Value" : "5"
+                ...
             }
         }
     }
 }
 ```
+###verilog section
+In this section, you should write your vivado project information.
++ ```name``` : Your vivado project name
 
-+ ```common_path``` 
++ ```top``` : Top verilog file in your vivado project
+
++ ```files``` : List of yout verilog files. Note that its path is relateive path to ```common_path``` which is specified in configuration json file
+
+###ip section
+In this section, you should write configuration of IPs which is used in you vivado project. It will make ```.xic``` file automatically and include this IP to your vivado project. In this example, ```fifo_generator_0``` is instance name(module_name) which you used in verilog codes. And below is your IP configurations.
++ ```name``` : IP name. Note that this is not instance name, and it is IP name
+
++ ```version``` : Version of IP
+
++ ```vendor``` : Vendor of IP. Note that xilinx provided IP has vendor of ```xilinx.com```
+
++ ```library``` : Its value is ```ip``` now, and there is no option now
+
++ ```tcl_options``` : TCL option which you will use. For instance, only ```name```, ```version```, ```vendor```, ```library```, ```module_name``` is used and ```config``` in ```fifo_generator_0``` ip section
+
++ ```config``` : Configuration of IP. You should specify each key and value manually.
+
+## Making Vivado Project
+You can make vivado project with below code. Vivado will run automatically and its state will be printed on the display.
+```
+python Verilog_Creator.py -c configuration.json -f verilog.json
+```

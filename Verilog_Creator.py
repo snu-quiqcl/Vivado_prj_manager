@@ -61,11 +61,12 @@ class TVM:
         )
     
     def SetBoard(self) -> None:
-        TVM.tcl_code += (
-            f'set boardpath {{{TVM.board_path}}}\n'
-            'set_param board.repoPaths [list $boardpath]\n'
-            f'set_property BOARD_PART {TVM.board_name} [current_project]\n'
-        )
+        if not TVM.board_name == None:
+            TVM.tcl_code += (
+                f'set boardpath {{{TVM.board_path}}}\n'
+                'set_param board.repoPaths [list $boardpath]\n'
+                f'set_property BOARD_PART {TVM.board_name} [current_project]\n'
+            )
     
 class IPMaker:
     def __init__(self, **kwargs):

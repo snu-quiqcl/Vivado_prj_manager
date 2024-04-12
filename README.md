@@ -27,7 +27,7 @@ Below json file is example of configuration json file.
 
 +  ```part_name``` : Your xilinx chip part name
 
-+  ```board_name``` : Your FPGA board name. If you don't know it's board name, you can make vivado manually, and check its TCL code
++  ```board_name``` : Your FPGA board name. If you don't know it's board name, you can make vivado manually, and check its TCL code. Or, if you have vivado project already, goto setting in vivado project and check it.
 
 +  ```constraints``` : Your FPGA constraint file path and its name
 
@@ -89,7 +89,7 @@ In this section, you should write configuration of IPs which is used in you viva
 
 + ```tcl_options``` : TCL option which you will use. For instance, only ```name```, ```version```, ```vendor```, ```library```, ```module_name``` is used and ```config``` in ```fifo_generator_0``` ip section
 
-+ ```config``` : Configuration of IP. You should specify each key and value manually.
++ ```config``` : Configuration of IP. You should specify each key and value manually. If you want to get configuration of your IP, enter ```report_property [get_ips "IP where you want to export configuration"]``` in vivado console.
 
 ## Making Vivado Project
 You can make vivado project with below code. Vivado will run automatically and its state will be printed on the display.

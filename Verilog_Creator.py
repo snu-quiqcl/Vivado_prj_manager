@@ -181,7 +181,8 @@ class VerilogMaker(TVM):
         self.ip : list(IPMaker) = []
         self.target_path : str = None
         self.tcl_path : str = None
-        self.gen_ip : str = True
+        self.gen_ip : str = 'True'
+        self.top_module_name : str = None
         
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -201,6 +202,11 @@ class VerilogMaker(TVM):
             f'set_property top_file {{ {self.target_path}/{self.top} }}'
             ' [current_fileset]\n'
         )
+        if self.top_module_name != None:
+            TVM.tcl_code += (
+                f'set_property top {self.top_module_name}'
+                ' [current_fileset]\n'
+            )
         
     def AddIP(self) -> None:
         for ip in self.ip:
@@ -241,9 +247,9 @@ class VerilogMaker(TVM):
         self.AddFiles()
         self.SetBoard()
         self.AddIP()
-        self.SetTop()
         self.AddConstraints()
-        if self.gen_ip == True:
+        self.SetTop()
+        if self.gen_ip == "True":
             self.GenerateCustomizedIp()
         with (
             open(os.path.join(self.target_path,self.name+'.tcl'), 'w') as file

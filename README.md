@@ -41,6 +41,8 @@ Below json file is example of verilog json file.
     "verilog" : {
         "name" : "TTL_out",
         "top": "TTL_out.sv",
+        "top_module_name" : "TTL_out"
+        "gen_ip" : "True",
         "files" : [
             "TTL_out/TTL_Controller.sv",
             "TTL_out/TTL_out.sv",
@@ -72,8 +74,12 @@ Below json file is example of verilog json file.
 In this section, you should write your vivado project information.
 + ```name``` : Your vivado project name
 
-+ ```top``` : Top verilog file in your vivado project
++ ```top``` : Top verilog file in your vivado project. Note that this is not different from top module name.
 
++ ```top_module_name``` : Top module name of verilog file in your vivado project. You should specify top module name in this option if your top module name is different from top file name. If not, top file will not be selected automatically.
+  
++ ```gen_ip``` : This is option whether you make customized IP or not. Some string parameter makes error when you make customized IP, so you have to disable this option when generation IP makes error.
+  
 + ```files``` : List of yout verilog files. Note that its path is relateive path to ```common_path``` which is specified in configuration json file
 
 ### ip section

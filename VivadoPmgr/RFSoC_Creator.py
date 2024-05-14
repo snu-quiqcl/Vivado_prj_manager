@@ -418,16 +418,7 @@ def CreateRFSoCMaker(json_file : str) -> RFSoCMaker:
     rm.OverrideParameter()
     return rm
 
-def main(args : argparse.Namespace) -> None:
-    # Use provided values or defaults
-    configuration = args.config if args.config else 'configuration.json'
-    soc_json = args.soc_json if args.soc_json else 'RFSoC.json'
-
-    SetGlobalNamespace(configuration)
-    RFSoC_Maker = CreateRFSoCMaker(soc_json)
-    RFSoC_Maker.MakeTCL()
-
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
             "Make SoC Block diagram with json files. You need configuration "
@@ -442,4 +433,11 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--config", help="Configuration file name")
     parser.add_argument("-f", "--soc_json", help="SoC JSON file name")
     args = parser.parse_args()
-    main(args)
+
+    configuration = args.config if args.config else 'configuration.json'
+    soc_json = args.soc_json if args.soc_json else 'RFSoC.json'
+
+    SetGlobalNamespace(configuration)
+    RFSoC_Maker = CreateRFSoCMaker(soc_json)
+    RFSoC_Maker.MakeTCL()
+

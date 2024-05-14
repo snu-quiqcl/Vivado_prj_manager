@@ -98,7 +98,23 @@ In this section, you should write configuration of IPs which is used in you viva
 + ```config``` : Configuration of IP. You should specify each key and value manually. If you want to get configuration of your IP, enter ```report_property [get_ips "IP where you want to export configuration"]``` in vivado console.
 
 ## Making Vivado Project
-You can make vivado project with below code. Vivado will run automatically and its state will be printed on the display.
+Download git file and go to direcotry ```Vivado_prj_manager```. You can install Vivado project manager with below command. Actual package name is VivadoPmgr.
 ```
-python Verilog_Creator.py -c configuration.json -f verilog.json
+pip install .
+```
+You can make vivado project with below command. Vivado will run automatically and its state will be printed on the display.
+```
+MakeVivadoProject -c configuration.json -f verilog.json
+```
+
+## Making RFSoC Project
+You can make rfsoc project and fully connected block diagram with below command. Vivado will run automatically and its state will be printed on the display.
+```
+MakeRFSoCProject -c configuration.json -f soc.json
+```
+
+## Making ZCU104 Project
+You can make zcu104 project and empty block diagram with below command. Vivado will run automatically and its state will be printed on the display.
+```
+MakeZCU104Project -c configuration.json -f soc.json
 ```

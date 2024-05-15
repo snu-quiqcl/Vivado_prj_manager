@@ -6,7 +6,7 @@ Created on Mon Feb 19 19:15:25 2024
 """
 import re
 import argparse
-from Verilog_Creator import *
+from VivadoPmgr.Verilog_Creator import *
 
 POSSIBLE_FIFO_DEPTH = [
     512, 1024, 2048, 4096, 8192, 

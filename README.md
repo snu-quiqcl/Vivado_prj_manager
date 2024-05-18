@@ -1,6 +1,11 @@
 # Vivado_prj_manager
 It is vivado project maker based on speicified json file. It requires two json files. In first json file, configuration json file, you should write your vivado environment and information about your FPGA board. For instance, path of vivado repository, and version of your vivado are required. In second json file, verilog json file, you should write your verilog code information. For instance, verilog code paths and IP configuration settings are required.
 
+## Installation
+Download git file and go to direcotry ```Vivado_prj_manager```. You can install Vivado project manager with below command. Actual package name is ```VivadoPmgr```.
+```
+pip install .
+```
 ## Configuration JSON file
 Below json file is example of configuration json file.
 
@@ -98,10 +103,6 @@ In this section, you should write configuration of IPs which is used in you viva
 + ```config``` : Configuration of IP. You should specify each key and value manually. If you want to get configuration of your IP, enter ```report_property [get_ips "IP where you want to export configuration"]``` in vivado console.
 
 ## Making Vivado Project
-Download git file and go to direcotry ```Vivado_prj_manager```. You can install Vivado project manager with below command. Actual package name is VivadoPmgr.
-```
-pip install .
-```
 You can make vivado project with below command. Vivado will run automatically and its state will be printed on the display.
 ```
 MakeVivadoProject -c configuration.json -f verilog.json

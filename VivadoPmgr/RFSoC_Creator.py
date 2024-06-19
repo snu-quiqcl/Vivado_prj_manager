@@ -220,8 +220,9 @@ class RFSoCMaker(TVM):
             ''.join(
                 [
                     f' [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]' 
-                     if hasattr(bd_cell,'axi') else '' for bd_cell 
-                     in self.bd_cell
+                     if (hasattr(bd_cell,'axi') and 
+                         ( not 'xilinx.com:user' in bd_cell.vlnv)) 
+                     else '' for bd_cell  in self.bd_cell
                  ]
             )
         )
@@ -229,7 +230,8 @@ class RFSoCMaker(TVM):
             ''.join(
                 [
                     (f' [get_bd_pins {self.axi_interconnect}/'
-                    'M{str(i).zfill(2)}_ARESETN]')
+                    f'M{str(i).zfill(2)}_ARESETN]')
+                    if not i in TVM.user_bdcell_w_axi else ''
                     for i in range(self.total_axi_number)
                 ]
             )
@@ -247,16 +249,18 @@ class RFSoCMaker(TVM):
             ''.join(
                 [
                     f' [get_bd_pins {bd_cell.module_name}/s_axi_aclk]' 
-                     if hasattr(bd_cell,'axi') else '' for bd_cell  
-                     in self.bd_cell
+                     if  (hasattr(bd_cell,'axi') and 
+                         (not 'xilinx.com:user' in bd_cell.vlnv)) 
+                     else '' for bd_cell in self.bd_cell
                  ]
             )
         )
         TVM.tcl_code += (
             ''.join(
                 [
-                    f' [get_bd_pins {self.axi_interconnect}'
-                    +'/M{str(i).zfill(2)}_ACLK]' 
+                    (f' [get_bd_pins {self.axi_interconnect}'
+                    f'/M{str(i).zfill(2)}_ACLK]')
+                    if not i in TVM.user_bdcell_w_axi else ''
                     for i in range(self.total_axi_number)
                 ]
             )
@@ -323,6 +327,24 @@ class RFSoCMaker(TVM):
                          for bd_cell in self.bd_cell]
                     )
                 )
+                # Connect s_axi_clk of Custom BD cell with RFDC dac_clk
+                TVM.tcl_code += (
+                    ''.join(
+                        [f' [get_bd_pins {bd_cell.module_name}/s_axi_aclk]' 
+                         if 'xilinx.com:user' in bd_cell.vlnv else '' 
+                         for bd_cell in self.bd_cell]
+                    )
+                )
+                TVM.tcl_code += (
+                    ''.join(
+                        [
+                            (f' [get_bd_pins {self.axi_interconnect}'
+                            f'/M{str(i).zfill(2)}_ACLK]')
+                            if i in TVM.user_bdcell_w_axi else ''
+                            for i in range(self.total_axi_number)
+                        ]
+                    )
+                )
                 TVM.tcl_code += (
                     ''.join(
                         [f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
@@ -331,13 +353,36 @@ class RFSoCMaker(TVM):
                     )
                 )
             TVM.tcl_code += '\n'
+            
             TVM.tcl_code += (
                 'connect_bd_net -net'
                 f' {self.timecontroller}_rtio_resetn'
                 f' [get_bd_pins {self.timecontroller}/rtio_resetn]'
                 f' [get_bd_pins {self.rfdc}/s0_axis_aresetn]'
-                f' [get_bd_pins {self.rfdc}/s1_axis_aresetn]\n'
+                f' [get_bd_pins {self.rfdc}/s1_axis_aresetn]'
             )
+            TVM.tcl_code += (
+                ''.join(
+                    [
+                        (f' [get_bd_pins {self.axi_interconnect}/'
+                        f'M{str(i).zfill(2)}_ARESETN]')
+                        if i in TVM.user_bdcell_w_axi else ''
+                        for i in range(self.total_axi_number)
+                    ]
+                )
+            )
+            TVM.tcl_code += (
+                ''.join(
+                    [
+                        f' [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]' 
+                         if ( hasattr(bd_cell,'axi') and 
+                             ('xilinx.com:user' in bd_cell.vlnv)) 
+                         else '' for bd_cell in self.bd_cell
+                     ]
+                )
+            )
+            TVM.tcl_code += '\n'
+            
         if self.clk_wiz != '':
             TVM.tcl_code += (
                 f'connect_bd_net -net {self.clk_wiz}_clk_out1'

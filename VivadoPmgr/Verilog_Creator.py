@@ -31,6 +31,7 @@ class TVM:
     axi_offset : int = 0
     address_code : str = ""
     total_axi_number : int = 0
+    user_bdcell_w_axi : list[int] = []
     
     def __init__(self):
         pass
@@ -171,6 +172,8 @@ class BDCellMaker:
                     f' {self.module_name}/s_axi/{reg}] -force\n'
                 )
                 TVM.axi_offset += range_
+            if 'xilinx.com:user' in self.vlnv:
+                TVM.user_bdcell_w_axi.append(TVM.axi_number)
             TVM.axi_number += 1
             
 class VerilogMaker(TVM):

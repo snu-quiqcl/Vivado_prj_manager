@@ -57,6 +57,7 @@ class RFSoCMaker(TVM):
         
         self.timecontroller : str = ""
         self.rfdc : str = ""
+        self.interruptcontroller : str = ""
         
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -394,7 +395,33 @@ class RFSoCMaker(TVM):
                 )
             )
             TVM.tcl_code += '\n'
-    
+            
+        if self.interruptcontroller != "":
+            bd_cell_index : int = 0
+            for bd_cell in self.bd_cell:
+                if (bd_cell.vlnv == 'xilinx.com:user:TTLx8_out'
+                    or bd_cell.vlnv == 'xilinx.com:user:DAC_Controller'
+                    or bd_cell.vlnv == 'xilinx.com:user:EdgeCounter'
+                    or bd_cell.vlnv == 'xilinx.com:user:TTL_out'
+                ):
+                    TVM.tcl_code += (
+                        f'connect_bd_net -net {self.interruptcontroller}'
+                        f'_force_auto_start_{str(bd_cell_index).zfill(2)}'
+                        f' [get_bd_pins {self.interruptcontroller}/'
+                        f'force_auto_start_{str(bd_cell_index).zfill(2)}]'
+                        f' [get_bd_pins {bd_cell.module_name}/force_auto_start]'
+                    )
+                    TVM.tcl_code += '\n'
+                    bd_cell_index = bd_cell_index + 1
+            TVM.tcl_code += (
+                f'connect_bd_net -net {self.interruptcontroller}'
+                '_PL_irq'
+                f' [get_bd_pins {self.interruptcontroller}/PL_irq]'
+                f' [get_bd_pins {self.CPU}/pl_ps_irq0]'
+            )
+            TVM.tcl_code += '\n'
+            
+        
     def StartGUI(self) -> None:
         """
         It makes vivado GUI run after creation of block diagram. Note that 
@@ -460,6 +487,9 @@ def CreateRFSoCMaker(json_file : str) -> RFSoCMaker:
                 setattr(rm,'rfdc',bd_cell_maker.module_name)
             if 'xilinx.com:ip:clk_wiz:6.0' in getattr(bd_cell_maker,'vlnv'):
                 setattr(rm,'clk_wiz',bd_cell_maker.module_name)
+            if ('xilinx.com:user:InterruptController' 
+                in getattr(bd_cell_maker,'vlnv')):
+                setattr(rm,"interruptcontroller",bd_cell_maker.module_name)
     rm.OverrideParameter()
     return rm
 

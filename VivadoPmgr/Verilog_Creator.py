@@ -172,7 +172,9 @@ class BDCellMaker:
                     f' {self.module_name}/s_axi/{reg}] -force\n'
                 )
                 TVM.axi_offset += range_
-            if 'xilinx.com:user' in self.vlnv:
+            if (('xilinx.com:user' in self.vlnv) and 
+                (self.vlnv != 'xilinx.com:user:TimeController')
+            ):
                 TVM.user_bdcell_w_axi.append(TVM.axi_number)
             TVM.axi_number += 1
             

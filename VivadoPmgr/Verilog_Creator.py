@@ -135,11 +135,18 @@ class BDCellMaker:
             TVM.tcl_code += f' ${self.module_name}\n'
             
         for victim, target in self.ports.items():
-            TVM.connection_code += (
-                f'connect_bd_net -net {self.module_name}_{victim} '
-                f'[get_bd_ports {target}] [get_bd_pins {self.module_name}'
-                f'/{victim}]\n'
-            )
+            if "/" in target:
+                TVM.connection_code += (
+                    f'connect_bd_net -net {self.module_name}_{victim} '
+                    f'[get_bd_pins {target}] [get_bd_pins {self.module_name}'
+                    f'/{victim}]\n'
+                )
+            else:
+                TVM.connection_code += (
+                    f'connect_bd_net -net {self.module_name}_{victim} '
+                    f'[get_bd_ports {target}] [get_bd_pins {self.module_name}'
+                    f'/{victim}]\n'
+                )
             
         for victim, target in self.interface.items():
             TVM.connection_code += (

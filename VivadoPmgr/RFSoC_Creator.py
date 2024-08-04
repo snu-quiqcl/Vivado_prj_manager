@@ -41,6 +41,7 @@ class RFSoCMaker(TVM):
         self.TTL_Controller_fifo_depth : str = None
         self.TTLx8_Controller_fifo_depth : str = None
         self.EdgeCounter_fifo_depth : str = None
+        self.Switch_Controller_fifo_depth : str = None
         self.json_path : list[str] = None
         self.bd_cell : list[BDCellMaker] = []
         self.verilog_maker : list[VerilogMaker] = []
@@ -113,12 +114,15 @@ class RFSoCMaker(TVM):
         attributes = dir(self)
         fifo_depths = [attr for attr in attributes if re.search(pattern, attr)]
         for fifo_depth in fifo_depths:
-            fifo_depth_value = int(getattr(self,fifo_depth))
-            i = 0
-            while POSSIBLE_FIFO_DEPTH[i] < fifo_depth_value:
-                i += 1
-                if i >= len(POSSIBLE_FIFO_DEPTH):
-                    raise Exception('rtob fifo depth is too big')
+            if (getattr(self,fifo_depth) == None):
+                pass
+            else:
+                fifo_depth_value = int(getattr(self,fifo_depth))
+                i = 0
+                while POSSIBLE_FIFO_DEPTH[i] < fifo_depth_value:
+                    i += 1
+                    if i >= len(POSSIBLE_FIFO_DEPTH):
+                        raise Exception('rtob fifo depth is too big')
                 setattr(self,fifo_depth,str(POSSIBLE_FIFO_DEPTH[i]))
     
     def MakeOutputPorts(self) -> None:
@@ -356,7 +360,7 @@ class RFSoCMaker(TVM):
                 TVM.tcl_code += (
                     ''.join(
                         [f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
-                        if bd_cell.vlnv == 'xilinx.com:user:DAC_Controller' 
+                        if (bd_cell.vlnv == 'xilinx.com:user:Switch_Controller')
                         else '' for bd_cell in self.bd_cell]
                     )
                 )

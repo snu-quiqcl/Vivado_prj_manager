@@ -10,6 +10,7 @@ import os
 import subprocess
 import shutil
 import argparse
+import logging
 
 # This is Verilog Mother
 class TVM:
@@ -104,9 +105,9 @@ class BDCellMaker:
         super().__init__()
         self.type : str = None
         self.vlnv : str = None
-        self.config : dict() = {}
-        self.ports : dict() = {}
-        self.interface : dict() = {}
+        self.config : dict = {}
+        self.ports : dict = {}
+        self.interface : dict = {}
         self.module_name : str = None
         
         for key, value in kwargs.items():
@@ -137,13 +138,15 @@ class BDCellMaker:
         for victim, target in self.ports.items():
             if "/" in target:
                 TVM.connection_code += (
-                    f'connect_bd_net -net {self.module_name}_{victim} '
+                    # f'connect_bd_net -net {self.module_name}_{victim} '
+                    f'connect_bd_net '
                     f'[get_bd_pins {target}] [get_bd_pins {self.module_name}'
                     f'/{victim}]\n'
                 )
             else:
                 TVM.connection_code += (
-                    f'connect_bd_net -net {self.module_name}_{victim} '
+                    # f'connect_bd_net -net {self.module_name}_{victim} '
+                    f'connect_bd_net '
                     f'[get_bd_ports {target}] [get_bd_pins {self.module_name}'
                     f'/{victim}]\n'
                 )
@@ -190,7 +193,7 @@ class VerilogMaker(TVM):
         super().__init__()
         self.name : str = None
         self.files : list = []
-        self.ip : list(IPMaker) = []
+        self.ip : list[IPMaker] = []
         self.target_path : str = None
         self.tcl_path : str = None
         self.gen_ip : str = 'True'
@@ -291,11 +294,11 @@ def EnsureDirectoryExists(directory_path) -> None:
     if not os.path.exists(directory_path):
         try:
             os.makedirs(directory_path)
-            print(f"Directory {directory_path} created.")
+            logging.warning(f"Directory {directory_path} created.")
         except OSError as error:
-            print(f"Error creating directory {directory_path}: {error}")
+            logging.warning(f"Error creating directory {directory_path}: {error}")
     else:
-        print(f"Directory {directory_path} already exists.")
+        logging.warning(f"Directory {directory_path} already exists.")
 
 def RunVivadoTCL(tcl_path) -> None:
     process = subprocess.Popen(
@@ -305,17 +308,29 @@ def RunVivadoTCL(tcl_path) -> None:
     )
     while process.poll() == None:
         out = process.stdout.readline()
-        print(out, end='')
+        logging.warning(out)
     stdout, stderr = process.communicate()
-    print(stderr if stderr else 'Vivado ended with no error')
+    logging.warning(stderr if stderr else 'Vivado ended with no error')
+    killProcess(process)
+
+def killProcess(process) -> None:
+    if process.poll() == None:
+        logging.warning("Process is still running...")
+        process.kill()
+        logging.warning("Process is killed...")
+    elif process.poll() == 0:
+        logging.warning("Process is normally finished...")
+    elif process.poll() == 1:
+        logging.error("Process is abnormally finished...")
+    return 
 
 def DeleteDump() -> None:
     if os.path.exists(os.path.join(os.path.dirname(__file__),'vivado.jou')):
         os.remove(os.path.join(os.path.dirname(__file__),'vivado.jou'))
-        print('vivado.jou is deletd')
+        logging.warning('vivado.jou is deletd')
     if os.path.exists(os.path.join(os.path.dirname(__file__),'vivado.log')):
         os.remove(os.path.join(os.path.dirname(__file__),'vivado.log'))
-        print('vivado.log is deletd')
+        logging.warning('vivado.log is deletd')
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(

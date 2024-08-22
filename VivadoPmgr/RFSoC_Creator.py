@@ -19,10 +19,10 @@ class RFSoCMaker(TVM):
         """
         
         project_name : block design name
-        DAC_Controller_fifo_depth : DDS module fifo depth
+        DDS_Controller_fifo_depth : DDS module fifo depth
         TTL_Controller_fifo_depth : TTL_Controller module fifo depth
         TTLx8_Controller_fifo_depth : high speed TTL output module fifo depth
-        EdgeCounter_fifo_depth : EdgeCounter output, input fifo depth
+        InputController_fifo_depth : InputController output, input fifo depth
         json_path : RFSoC json file path
         bd_cell : list of block design cell names
         verilog_maker : General verilog code creator
@@ -37,11 +37,11 @@ class RFSoCMaker(TVM):
         """
         super().__init__()
         self.project_name : str = None
-        self.DAC_Controller_fifo_depth : str = None
+        self.DDS_Controller_fifo_depth : str = None
         self.TTL_Controller_fifo_depth : str = None
         self.TTLx8_Controller_fifo_depth : str = None
-        self.EdgeCounter_fifo_depth : str = None
-        self.Switch_Controller_fifo_depth : str = None
+        self.InputController_fifo_depth : str = None
+        self.SwitchController_fifo_depth : str = None
         self.json_path : list[str] = None
         self.bd_cell : list[BDCellMaker] = []
         self.verilog_maker : list[VerilogMaker] = []
@@ -360,7 +360,7 @@ class RFSoCMaker(TVM):
                 TVM.tcl_code += (
                     ''.join(
                         [f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
-                        if (bd_cell.vlnv == 'xilinx.com:user:Switch_Controller')
+                        if (bd_cell.vlnv == 'xilinx.com:user:SwitchController')
                         else '' for bd_cell in self.bd_cell]
                     )
                 )
@@ -396,24 +396,12 @@ class RFSoCMaker(TVM):
             )
             TVM.tcl_code += '\n'
             
-        if self.clk_wiz != '':
-            TVM.tcl_code += (
-                f'connect_bd_net -net {self.clk_wiz}_clk_out1'
-                f' [get_bd_pins {self.clk_wiz}/clk_out1]'+
-                ''.join(
-                    [f' [get_bd_pins {bd_cell.module_name}/clk_x4]' 
-                    if bd_cell.vlnv == 'xilinx.com:user:TTLx8_Controller' else '' 
-                    for bd_cell in self.bd_cell]
-                )
-            )
-            TVM.tcl_code += '\n'
-            
         if self.interruptcontroller != "":
             bd_cell_index : int = 0
             for bd_cell in self.bd_cell:
                 if (bd_cell.vlnv == 'xilinx.com:user:TTLx8_Controller'
-                    or bd_cell.vlnv == 'xilinx.com:user:DAC_Controller'
-                    or bd_cell.vlnv == 'xilinx.com:user:EdgeCounter'
+                    or bd_cell.vlnv == 'xilinx.com:user:DDS_Controller'
+                    or bd_cell.vlnv == 'xilinx.com:user:InputController'
                     or bd_cell.vlnv == 'xilinx.com:user:TTL_Controller'
                 ):
                     TVM.tcl_code += (

@@ -46,6 +46,8 @@ class RFSoCMaker(TVM):
         self.bd_cell : list[BDCellMaker] = []
         self.verilog_maker : list[VerilogMaker] = []
         self.file : list[str] = []
+        self.implementation : int = 0
+        self.gui : bool = True
         
         self.axi_offset : str = None
         self.axi_interconnect : str = ""
@@ -72,7 +74,7 @@ class RFSoCMaker(TVM):
         self.target_path = os.path.join(
             TVM.target_path,self.project_name).replace("\\","/")
         self.tcl_path = os.path.join(
-            self.target_path,self.project_name+'.tcl')
+            self.target_path,self.project_name+".tcl")
         self.SetPossibleFifoDepth()
         EnsureDirectoryExists(self.target_path)
         TVM.axi_offset = int(self.axi_offset,16)
@@ -83,21 +85,21 @@ class RFSoCMaker(TVM):
         """
         for v in self.verilog_maker:
             for ip in v.ip:
-                if ip.name == 'fifo_generator':
-                    fifo_depth = getattr(self,v.name + '_fifo_depth')
-                    ip.config['Input_Depth'] = fifo_depth
-                    ip.config['Output_Depth'] = fifo_depth
-                    ip.config['Full_Threshold_Assert_Value'] = str(
+                if ip.name == "fifo_generator":
+                    fifo_depth = getattr(self,v.name + "_fifo_depth")
+                    ip.config["Input_Depth"] = fifo_depth
+                    ip.config["Output_Depth"] = fifo_depth
+                    ip.config["Full_Threshold_Assert_Value"] = str(
                         int(fifo_depth) - FIFO_FULL_BUFFER
                     )
-                    ip.config['Full_Threshold_Negate_Value'] = str(
+                    ip.config["Full_Threshold_Negate_Value"] = str(
                         int(fifo_depth) - FIFO_FULL_BUFFER
                     )
             v.MakeTCL()
             
         for bd_cell in self.bd_cell:
             if bd_cell.module_name == self.axi_interconnect:
-                bd_cell.config['NUM_MI'] = self.total_axi_number
+                bd_cell.config["NUM_MI"] = self.total_axi_number
         TVM.CPU = self.CPU
         TVM.axi_interconnect = self.axi_interconnect
         TVM.total_axi_number = self.total_axi_number
@@ -110,7 +112,7 @@ class RFSoCMaker(TVM):
             "{module name}_fifo_depth" : value of fifo_depth
         }
         """
-        pattern = r'\b\w+_fifo_depth\b'
+        pattern = r"\b\w+_fifo_depth\b"
         attributes = dir(self)
         fifo_depths = [attr for attr in attributes if re.search(pattern, attr)]
         for fifo_depth in fifo_depths:
@@ -122,7 +124,7 @@ class RFSoCMaker(TVM):
                 while POSSIBLE_FIFO_DEPTH[i] < fifo_depth_value:
                     i += 1
                     if i >= len(POSSIBLE_FIFO_DEPTH):
-                        raise Exception('rtob fifo depth is too big')
+                        raise Exception("rtob fifo depth is too big")
                 setattr(self,fifo_depth,str(POSSIBLE_FIFO_DEPTH[i]))
     
     def MakeOutputPorts(self) -> None:
@@ -133,7 +135,7 @@ class RFSoCMaker(TVM):
         }
         """
         for port in self.output_ports:
-            TVM.tcl_code += f'set {port} [ create_bd_port -dir O {port} ]\n'
+            TVM.tcl_code += f"set {port} [ create_bd_port -dir O {port} ]\n"
             
     def MakeInputPorts(self) -> None:
         """
@@ -143,7 +145,7 @@ class RFSoCMaker(TVM):
         }
         """
         for port in self.input_ports:
-            TVM.tcl_code += f'set {port} [ create_bd_port -dir I {port} ]\n'
+            TVM.tcl_code += f"set {port} [ create_bd_port -dir I {port} ]\n"
             
     def MakeClkPorts(self) -> None:
         """
@@ -157,33 +159,33 @@ class RFSoCMaker(TVM):
         }
         """
         for port, option in self.clk.items():
-            TVM.tcl_code += f'set {port} [ create_bd_port '
+            TVM.tcl_code += f"set {port} [ create_bd_port "
             for key, val in option.items():
-                TVM.tcl_code += f'-{key} {val} '
-            TVM.tcl_code += f' {port} ]\n'
+                TVM.tcl_code += f"-{key} {val} "
+            TVM.tcl_code += f" {port} ]\n"
     
     def SetPrjName(self) -> None:
         TVM.tcl_code += (
-            f'set project_name \"{self.project_name}\"\n'
-            f'set project_dir \"{self.target_path}\"\n'
+            f"set project_name \"{self.project_name}\"\n"
+            f"set project_dir \"{self.target_path}\"\n"
         )
     
     def SetIPRepo(self) -> None:
         if self.file:
             TVM.tcl_code += (
-                'set_property  ip_repo_paths {' +
-                ' '.join([f'{file}' for file in self.file]) + 
-                ' } [current_project]\nupdate_ip_catalog\n' 
+                "set_property  ip_repo_paths {" +
+                " ".join([f"{file}" for file in self.file]) + 
+                " } [current_project]\nupdate_ip_catalog\n" 
             )
 
     def SetBlockDiagram(self) -> None:
         TVM.tcl_code += (
-            f'create_bd_design \"{self.project_name}_blk\"\n'
-            f'current_bd_design \"{self.project_name}_blk\"\n'
-            'set parentObj [get_bd_cells /]\n'
-            'set parentObj [get_bd_cells \"\"]\n'
-            'set parentType [get_property TYPE $parentObj]\n'
-            'current_bd_instance $parentObj\n'
+            f"create_bd_design \"{self.project_name}_blk\"\n"
+            f"current_bd_design \"{self.project_name}_blk\"\n"
+            "set parentObj [get_bd_cells /]\n"
+            "set parentObj [get_bd_cells \"\"]\n"
+            "set parentType [get_property TYPE $parentObj]\n"
+            "current_bd_instance $parentObj\n"
         )
         
     def ConnectPorts(self) -> None:
@@ -221,71 +223,71 @@ class RFSoCMaker(TVM):
         
         """
         TVM.tcl_code += (
-            f'connect_bd_net -net {self.reset}_peripheral_aresetn'
-            f' [get_bd_pins {self.reset}/peripheral_aresetn]' +
-            ''.join(
+            f"connect_bd_net -net {self.reset}_peripheral_aresetn"
+            f" [get_bd_pins {self.reset}/peripheral_aresetn]" +
+            "".join(
                 [
-                    f' [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]' 
-                     if ( hasattr(bd_cell,'axi') and 
-                         (not 'xilinx.com:user' in bd_cell.vlnv) or
-                         (bd_cell.vlnv == 'xilinx.com:user:TimeController') or
-                         (bd_cell.vlnv == 'xilinx.com:user:InterruptController') 
+                    f" [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]" 
+                     if ( hasattr(bd_cell,"axi") and 
+                         (not "xilinx.com:user" in bd_cell.vlnv) or
+                         (bd_cell.vlnv == "xilinx.com:user:TimeController") or
+                         (bd_cell.vlnv == "xilinx.com:user:InterruptController") 
                      ) 
-                     else '' for bd_cell  in self.bd_cell
+                     else "" for bd_cell  in self.bd_cell
                  ]
             )
         )
         TVM.tcl_code += (
-            ''.join(
+            "".join(
                 [
-                    (f' [get_bd_pins {self.axi_interconnect}/'
-                    f'M{str(i).zfill(2)}_ARESETN]')
-                    if not i in TVM.user_bdcell_w_axi else ''
+                    (f" [get_bd_pins {self.axi_interconnect}/"
+                    f"M{str(i).zfill(2)}_ARESETN]")
+                    if not i in TVM.user_bdcell_w_axi else ""
                     for i in range(self.total_axi_number)
                 ]
             )
         )
         TVM.tcl_code += (
-            f' [get_bd_pins {self.axi_interconnect}/S00_ARESETN]'
-            f' [get_bd_pins {self.axi_interconnect}/ARESETN]'
-            f' [get_bd_pins {self.clk_wiz}/resetn]\n'
+            f" [get_bd_pins {self.axi_interconnect}/S00_ARESETN]"
+            f" [get_bd_pins {self.axi_interconnect}/ARESETN]"
+            f" [get_bd_pins {self.clk_wiz}/resetn]\n"
         )
         
         TVM.tcl_code += (
-            f'connect_bd_net -net {self.CPU}_s_axi_aclk'
-            f' [get_bd_pins {self.CPU}/maxihpm0_fpd_aclk]'
-            f' [get_bd_pins {self.CPU}/pl_clk0]' + 
-            ''.join(
+            f"connect_bd_net -net {self.CPU}_s_axi_aclk"
+            f" [get_bd_pins {self.CPU}/maxihpm0_fpd_aclk]"
+            f" [get_bd_pins {self.CPU}/pl_clk0]" + 
+            "".join(
                 [
-                    f' [get_bd_pins {bd_cell.module_name}/s_axi_aclk]' 
-                     if  (hasattr(bd_cell,'axi') and 
-                         (not 'xilinx.com:user' in bd_cell.vlnv) or
-                         (bd_cell.vlnv == 'xilinx.com:user:TimeController')) 
-                     else '' for bd_cell in self.bd_cell
+                    f" [get_bd_pins {bd_cell.module_name}/s_axi_aclk]" 
+                     if  (hasattr(bd_cell,"axi") and 
+                         (not "xilinx.com:user" in bd_cell.vlnv) or
+                         (bd_cell.vlnv == "xilinx.com:user:TimeController")) 
+                     else "" for bd_cell in self.bd_cell
                  ]
             )
         )
         TVM.tcl_code += (
-            ''.join(
+            "".join(
                 [
-                    (f' [get_bd_pins {self.axi_interconnect}'
-                    f'/M{str(i).zfill(2)}_ACLK]')
-                    if not i in TVM.user_bdcell_w_axi else ''
+                    (f" [get_bd_pins {self.axi_interconnect}"
+                    f"/M{str(i).zfill(2)}_ACLK]")
+                    if not i in TVM.user_bdcell_w_axi else ""
                     for i in range(self.total_axi_number)
                 ]
             )
         )
         TVM.tcl_code += (
-            f' [get_bd_pins {self.reset}/slowest_sync_clk]'
-            f' [get_bd_pins {self.axi_interconnect}/ACLK]'
-            f' [get_bd_pins {self.axi_interconnect}/S00_ACLK]\n'
-            f'connect_bd_net -net {self.reset}_ext_reset_in'
-            f' [get_bd_pins {self.CPU}/pl_resetn0]'
-            f' [get_bd_pins {self.reset}/ext_reset_in]\n'
-            f'connect_bd_intf_net -intf_net {self.CPU}'
-            f'_M_AXI_HPM0_FPD [get_bd_intf_pins '
-            f'{self.CPU}/M_AXI_HPM0_FPD]'
-            f' [get_bd_intf_pins {self.axi_interconnect}/S00_AXI]\n'
+            f" [get_bd_pins {self.reset}/slowest_sync_clk]"
+            f" [get_bd_pins {self.axi_interconnect}/ACLK]"
+            f" [get_bd_pins {self.axi_interconnect}/S00_ACLK]\n"
+            f"connect_bd_net -net {self.reset}_ext_reset_in"
+            f" [get_bd_pins {self.CPU}/pl_resetn0]"
+            f" [get_bd_pins {self.reset}/ext_reset_in]\n"
+            f"connect_bd_intf_net -intf_net {self.CPU}"
+            f"_M_AXI_HPM0_FPD [get_bd_intf_pins "
+            f"{self.CPU}/M_AXI_HPM0_FPD]"
+            f" [get_bd_intf_pins {self.axi_interconnect}/S00_AXI]\n"
         )
     
     def ConnectRTIOinterface(self) -> None:
@@ -308,118 +310,118 @@ class RFSoCMaker(TVM):
         """
         if self.bd_cell:
             TVM.tcl_code += ( 
-                f'connect_bd_net -net {self.timecontroller}_auto_start'+
-                ''.join(
-                    [f' [get_bd_pins {bd_cell.module_name}/auto_start]' 
-                    if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
+                f"connect_bd_net -net {self.timecontroller}_auto_start"+
+                "".join(
+                    [f" [get_bd_pins {bd_cell.module_name}/auto_start]" 
+                    if "xilinx.com:user" in bd_cell.vlnv else "" for bd_cell 
                     in self.bd_cell]) + 
-                '\n' 
+                "\n" 
             )
             TVM.tcl_code += ( 
-                f'connect_bd_net -net {self.timecontroller}_counter'+
-                ''.join(
-                    [f' [get_bd_pins {bd_cell.module_name}/counter]' 
-                    if 'xilinx.com:user' in bd_cell.vlnv else '' for bd_cell 
+                f"connect_bd_net -net {self.timecontroller}_counter"+
+                "".join(
+                    [f" [get_bd_pins {bd_cell.module_name}/counter]" 
+                    if "xilinx.com:user" in bd_cell.vlnv else "" for bd_cell 
                     in self.bd_cell]) + 
-                '\n' 
+                "\n" 
             )
-        if self.rfdc != '':
-            TVM.tcl_code += f'connect_bd_net -net {self.rfdc}_clk_dac0'
-            TVM.tcl_code += f' [get_bd_pins {self.rfdc}/clk_dac0]'
-            TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s0_axis_aclk]'
-            TVM.tcl_code += f' [get_bd_pins {self.rfdc}/s1_axis_aclk]'
-            TVM.tcl_code += f' [get_bd_pins {self.clk_wiz}/clk_in1]'
+        if self.rfdc != "":
+            TVM.tcl_code += f"connect_bd_net -net {self.rfdc}_clk_dac0"
+            TVM.tcl_code += f" [get_bd_pins {self.rfdc}/clk_dac0]"
+            TVM.tcl_code += f" [get_bd_pins {self.rfdc}/s0_axis_aclk]"
+            TVM.tcl_code += f" [get_bd_pins {self.rfdc}/s1_axis_aclk]"
+            TVM.tcl_code += f" [get_bd_pins {self.clk_wiz}/clk_in1]"
             if self.bd_cell:
                 TVM.tcl_code += (
-                    ''.join(
-                        [f' [get_bd_pins {bd_cell.module_name}/rtio_clk]' 
-                         if 'xilinx.com:user' in bd_cell.vlnv else '' 
+                    "".join(
+                        [f" [get_bd_pins {bd_cell.module_name}/rtio_clk]" 
+                         if "xilinx.com:user" in bd_cell.vlnv else "" 
                          for bd_cell in self.bd_cell]
                     )
                 )
                 # Connect s_axi_clk of Custom BD cell with RFDC dac_clk
                 TVM.tcl_code += (
-                    ''.join(
-                        [f' [get_bd_pins {bd_cell.module_name}/s_axi_aclk]' 
-                         if(('xilinx.com:user' in bd_cell.vlnv)  and
-                            (bd_cell.vlnv != 'xilinx.com:user:TimeController'))
-                         else '' 
+                    "".join(
+                        [f" [get_bd_pins {bd_cell.module_name}/s_axi_aclk]" 
+                         if(("xilinx.com:user" in bd_cell.vlnv)  and
+                            (bd_cell.vlnv != "xilinx.com:user:TimeController"))
+                         else "" 
                          for bd_cell in self.bd_cell]
                     )
                 )
                 TVM.tcl_code += (
-                    ''.join(
+                    "".join(
                         [
-                            (f' [get_bd_pins {self.axi_interconnect}'
-                            f'/M{str(i).zfill(2)}_ACLK]')
-                            if i in TVM.user_bdcell_w_axi else ''
+                            (f" [get_bd_pins {self.axi_interconnect}"
+                            f"/M{str(i).zfill(2)}_ACLK]")
+                            if i in TVM.user_bdcell_w_axi else ""
                             for i in range(self.total_axi_number)
                         ]
                     )
                 )
                 TVM.tcl_code += (
-                    ''.join(
-                        [f' [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]' 
-                        if (bd_cell.vlnv == 'xilinx.com:user:SwitchController')
-                        else '' for bd_cell in self.bd_cell]
+                    "".join(
+                        [f" [get_bd_pins {bd_cell.module_name}/m00_axis_aclk]" 
+                        if (bd_cell.vlnv == "xilinx.com:user:SwitchController")
+                        else "" for bd_cell in self.bd_cell]
                     )
                 )
-            TVM.tcl_code += '\n'
+            TVM.tcl_code += "\n"
             
             TVM.tcl_code += (
-                'connect_bd_net -net'
-                f' {self.timecontroller}_rtio_resetn'
-                f' [get_bd_pins {self.timecontroller}/rtio_resetn]'
-                f' [get_bd_pins {self.rfdc}/s0_axis_aresetn]'
-                f' [get_bd_pins {self.rfdc}/s1_axis_aresetn]'
+                "connect_bd_net -net"
+                f" {self.timecontroller}_rtio_resetn"
+                f" [get_bd_pins {self.timecontroller}/rtio_resetn]"
+                f" [get_bd_pins {self.rfdc}/s0_axis_aresetn]"
+                f" [get_bd_pins {self.rfdc}/s1_axis_aresetn]"
             )
             TVM.tcl_code += (
-                ''.join(
+                "".join(
                     [
-                        (f' [get_bd_pins {self.axi_interconnect}/'
-                        f'M{str(i).zfill(2)}_ARESETN]')
-                        if i in TVM.user_bdcell_w_axi else ''
+                        (f" [get_bd_pins {self.axi_interconnect}/"
+                        f"M{str(i).zfill(2)}_ARESETN]")
+                        if i in TVM.user_bdcell_w_axi else ""
                         for i in range(self.total_axi_number)
                     ]
                 )
             )
             TVM.tcl_code += (
-                ''.join(
+                "".join(
                     [
-                        f' [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]' 
-                         if ( hasattr(bd_cell,'axi') and 
-                             ('xilinx.com:user' in bd_cell.vlnv) and
-                             (bd_cell.vlnv != 'xilinx.com:user:TimeController')) 
-                         else '' for bd_cell in self.bd_cell
+                        f" [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]" 
+                         if ( hasattr(bd_cell,"axi") and 
+                             ("xilinx.com:user" in bd_cell.vlnv) and
+                             (bd_cell.vlnv != "xilinx.com:user:TimeController")) 
+                         else "" for bd_cell in self.bd_cell
                      ]
                 )
             )
-            TVM.tcl_code += '\n'
+            TVM.tcl_code += "\n"
             
         if self.interruptcontroller != "":
             bd_cell_index : int = 0
             for bd_cell in self.bd_cell:
-                if (bd_cell.vlnv == 'xilinx.com:user:TTLx8_Controller'
-                    or bd_cell.vlnv == 'xilinx.com:user:DDS_Controller'
-                    or bd_cell.vlnv == 'xilinx.com:user:InputController'
-                    or bd_cell.vlnv == 'xilinx.com:user:TTL_Controller'
+                if (bd_cell.vlnv == "xilinx.com:user:TTLx8_Controller"
+                    or bd_cell.vlnv == "xilinx.com:user:DDS_Controller"
+                    or bd_cell.vlnv == "xilinx.com:user:InputController"
+                    or bd_cell.vlnv == "xilinx.com:user:TTL_Controller"
                 ):
                     TVM.tcl_code += (
-                        f'connect_bd_net -net {self.interruptcontroller}'
-                        f'_force_auto_start_{str(bd_cell_index).zfill(2)}'
-                        f' [get_bd_pins {self.interruptcontroller}/'
-                        f'force_auto_start_{str(bd_cell_index).zfill(2)}]'
-                        f' [get_bd_pins {bd_cell.module_name}/force_auto_start]'
+                        f"connect_bd_net -net {self.interruptcontroller}"
+                        f"_force_auto_start_{str(bd_cell_index).zfill(2)}"
+                        f" [get_bd_pins {self.interruptcontroller}/"
+                        f"force_auto_start_{str(bd_cell_index).zfill(2)}]"
+                        f" [get_bd_pins {bd_cell.module_name}/force_auto_start]"
                     )
-                    TVM.tcl_code += '\n'
+                    TVM.tcl_code += "\n"
                     bd_cell_index = bd_cell_index + 1
             TVM.tcl_code += (
-                f'connect_bd_net -net {self.interruptcontroller}'
-                '_PL_irq'
-                f' [get_bd_pins {self.interruptcontroller}/PL_irq]'
-                f' [get_bd_pins {self.CPU}/pl_ps_irq0]'
+                f"connect_bd_net -net {self.interruptcontroller}"
+                "_PL_irq"
+                f" [get_bd_pins {self.interruptcontroller}/PL_irq]"
+                f" [get_bd_pins {self.CPU}/pl_ps_irq0]"
             )
-            TVM.tcl_code += '\n'
+            TVM.tcl_code += "\n"
             
         
     def StartGUI(self) -> None:
@@ -433,8 +435,18 @@ class RFSoCMaker(TVM):
         None
 
         """
-        TVM.tcl_code += 'start_gui\n'
+        if self.gui:
+            TVM.tcl_code += "start_gui\n"
     
+    def StartImplementation(self) -> None:
+        if self.implementation != 0:
+            TVM.tcl_code += (
+                "update_compile_order -fileset sources_1\n"
+                f"make_wrapper -files [get_files {self.target_path}/{self.project_name}/{self.project_name}.srcs/sources_1/bd/{self.project_name}_blk/{self.project_name}_blk.bd] -top\n"
+                f"add_files -norecurse {self.target_path}/{self.project_name}/{self.project_name}.gen/sources_1/bd/{self.project_name}_blk/hdl/{self.project_name}_blk_wrapper.v\n"
+                f"launch_runs impl_1 -to_step write_bitstream -jobs {self.implementation}\n"
+            )
+                
     def MakeTCL(self) -> None:
         self.SetPrjName()
         self.CreatePrj()
@@ -451,44 +463,45 @@ class RFSoCMaker(TVM):
         self.ConnectAXIinterface()
         self.ConnectRTIOinterface()
         self.SetAddress()
+        self.StartImplementation()
         self.StartGUI()
         with open(os.path.join(
-                self.target_path, self.project_name+'.tcl'), 'w') as file:
+                self.target_path, self.project_name+".tcl"), "w") as file:
             file.write(TVM.tcl_code)
         RunVivadoTCL(self.tcl_path)
         TVM.ClearTCLCode()
         DeleteDump()
     
 def CreateRFSoCMaker(json_file : str) -> RFSoCMaker:
-    with open(json_file, 'r') as file:
+    with open(json_file, "r") as file:
         data = json.load(file)
-    rm = RFSoCMaker(**data['block_diagram'])
-    for module_name, ip_data in data.get('bd_cell', {}).items():
+    rm = RFSoCMaker(**data["block_diagram"])
+    for module_name, ip_data in data.get("bd_cell", {}).items():
         bd_cell_maker = BDCellMaker(**ip_data)
         bd_cell_maker.module_name = module_name
         rm.bd_cell.append(bd_cell_maker)
         if hasattr(bd_cell_maker, "axi"):
             rm.total_axi_number += 1
-        if hasattr(bd_cell_maker,'vlnv'):
-            if ('xilinx.com:ip:zynq_ultra_ps_e' 
-                in getattr(bd_cell_maker,'vlnv')):
-                setattr(rm,'CPU',bd_cell_maker.module_name)
-            if ('xilinx.com:user:TimeController' 
-                in getattr(bd_cell_maker,'vlnv')):
-                setattr(rm,'timecontroller',bd_cell_maker.module_name)
-            if ('xilinx.com:ip:axi_interconnect' 
-                in getattr(bd_cell_maker,'vlnv')):
-                setattr(rm,'axi_interconnect',bd_cell_maker.module_name)
-            if ('xilinx.com:ip:proc_sys_reset'
-                in getattr(bd_cell_maker,'vlnv')):
-                setattr(rm,'reset',bd_cell_maker.module_name)
-            if ('xilinx.com:ip:usp_rf_data_converter'
-                in getattr(bd_cell_maker,'vlnv')):
-                setattr(rm,'rfdc',bd_cell_maker.module_name)
-            if 'xilinx.com:ip:clk_wiz:6.0' in getattr(bd_cell_maker,'vlnv'):
-                setattr(rm,'clk_wiz',bd_cell_maker.module_name)
-            if ('xilinx.com:user:InterruptController' 
-                in getattr(bd_cell_maker,'vlnv')):
+        if hasattr(bd_cell_maker,"vlnv"):
+            if ("xilinx.com:ip:zynq_ultra_ps_e" 
+                in getattr(bd_cell_maker,"vlnv")):
+                setattr(rm,"CPU",bd_cell_maker.module_name)
+            if ("xilinx.com:user:TimeController" 
+                in getattr(bd_cell_maker,"vlnv")):
+                setattr(rm,"timecontroller",bd_cell_maker.module_name)
+            if ("xilinx.com:ip:axi_interconnect" 
+                in getattr(bd_cell_maker,"vlnv")):
+                setattr(rm,"axi_interconnect",bd_cell_maker.module_name)
+            if ("xilinx.com:ip:proc_sys_reset"
+                in getattr(bd_cell_maker,"vlnv")):
+                setattr(rm,"reset",bd_cell_maker.module_name)
+            if ("xilinx.com:ip:usp_rf_data_converter"
+                in getattr(bd_cell_maker,"vlnv")):
+                setattr(rm,"rfdc",bd_cell_maker.module_name)
+            if "xilinx.com:ip:clk_wiz:6.0" in getattr(bd_cell_maker,"vlnv"):
+                setattr(rm,"clk_wiz",bd_cell_maker.module_name)
+            if ("xilinx.com:user:InterruptController" 
+                in getattr(bd_cell_maker,"vlnv")):
                 setattr(rm,"interruptcontroller",bd_cell_maker.module_name)
     rm.OverrideParameter()
     return rm
@@ -507,12 +520,19 @@ def main() -> None:
     )
     parser.add_argument("-c", "--config", help="Configuration file name")
     parser.add_argument("-f", "--soc_json", help="SoC JSON file name")
+    parser.add_argument("-i", "--implementation", type = int ,default=0, help="Implementation option")
+    parser.add_argument("-g", "--gui", type=lambda x: (str(x).lower() == 'true'), default=True, help="GUI open option")
     args = parser.parse_args()
 
-    configuration = args.config if args.config else 'configuration.json'
-    soc_json = args.soc_json if args.soc_json else 'RFSoC.json'
+    configuration : str = args.config if args.config else "configuration.json"
+    soc_json : str = args.soc_json if args.soc_json else "RFSoC.json"
+    implementation : int = args.implementation
+    gui : bool = args.gui
+    logging.warning(f"GUI Option : {gui}")
 
     SetGlobalNamespace(configuration)
     RFSoC_Maker = CreateRFSoCMaker(soc_json)
+    setattr(RFSoC_Maker,"implementation",implementation)
+    setattr(RFSoC_Maker,"gui",gui)
     RFSoC_Maker.MakeTCL()
 

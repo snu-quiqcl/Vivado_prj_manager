@@ -75,11 +75,11 @@ class IPMaker:
         super().__init__()
         self.version : str = None
         self.vendor : str = None
-        self.config : dict() = None
+        self.config : dict = None
         self.name : str = None
         self.module_name : str = None
         self.target_path : str = None
-        self.tcl_options : list(str) = []
+        self.tcl_options : list[str] = []
         
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -138,14 +138,12 @@ class BDCellMaker:
         for victim, target in self.ports.items():
             if "/" in target:
                 TVM.connection_code += (
-                    # f'connect_bd_net -net {self.module_name}_{victim} '
                     f'connect_bd_net '
                     f'[get_bd_pins {target}] [get_bd_pins {self.module_name}'
                     f'/{victim}]\n'
                 )
             else:
                 TVM.connection_code += (
-                    # f'connect_bd_net -net {self.module_name}_{victim} '
                     f'connect_bd_net '
                     f'[get_bd_ports {target}] [get_bd_pins {self.module_name}'
                     f'/{victim}]\n'
@@ -325,12 +323,16 @@ def killProcess(process) -> None:
     return 
 
 def DeleteDump() -> None:
-    if os.path.exists(os.path.join(os.path.dirname(__file__),'vivado.jou')):
-        os.remove(os.path.join(os.path.dirname(__file__),'vivado.jou'))
-        logging.warning('vivado.jou is deletd')
-    if os.path.exists(os.path.join(os.path.dirname(__file__),'vivado.log')):
-        os.remove(os.path.join(os.path.dirname(__file__),'vivado.log'))
-        logging.warning('vivado.log is deletd')
+    current_working_directory : str = os.getcwd()
+    if os.path.exists(os.path.join(current_working_directory,'vivado.jou')):
+        os.remove(os.path.join(current_working_directory,'vivado.jou'))
+        logging.warning('vivado.jou is deleted')
+    if os.path.exists(os.path.join(current_working_directory,'vivado.log')):
+        os.remove(os.path.join(current_working_directory,'vivado.log'))
+        logging.warning('vivado.log is deleted')
+    if os.path.exists(os.path.join(current_working_directory,'.Xil')):
+        shutil.rmtree(os.path.join(current_working_directory,'.Xil'))
+        logging.warning('.Xil is deleted')
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(

@@ -291,21 +291,22 @@ class RFSoCMaker(TVM):
             f" [get_bd_pins {self.CPU}/pl_clk0]" +
             "".join(
                 [
-                    f" [get_bd_pins {bd_cell.module_name}/s_axi_aclk]"
-                     if  (hasattr(bd_cell,"axi") and
-                         (not "xilinx.com:user" in bd_cell.vlnv) or
-                         (bd_cell.vlnv == "xilinx.com:user:TimeController"))
-                     else "" for bd_cell in self.bd_cell
-                 ]
+                    f" [get_bd_pins {bd_cell.module_name}/s_axi_aclk]" 
+                    if (
+                        hasattr(bd_cell,"axi") and
+                        (not "xilinx.com:user" in bd_cell.vlnv) or
+                        (bd_cell.vlnv == "xilinx.com:user:TimeController") or
+                        (bd_cell.vlnv == "xilinx.com:user:InterruptController")
+                    ) else "" for bd_cell in self.bd_cell
+                ]
             )
         )
         TVM.tcl_code += (
             "".join(
                 [
                     (f" [get_bd_pins {self.axi_interconnect}"
-                    f"/M{str(i).zfill(2)}_ACLK]")
-                    if not i in TVM.user_bdcell_w_axi else ""
-                    for i in range(self.total_axi_number)
+                    f"/M{str(i).zfill(2)}_ACLK]") if not i in TVM.user_bdcell_w_axi
+                    else "" for i in range(self.total_axi_number)
                 ]
             )
         )
@@ -366,19 +367,27 @@ class RFSoCMaker(TVM):
             if self.bd_cell:
                 TVM.tcl_code += (
                     "".join(
-                        [f" [get_bd_pins {bd_cell.module_name}/rtio_clk]"
-                         if "xilinx.com:user" in bd_cell.vlnv else ""
-                         for bd_cell in self.bd_cell]
+                        [
+                            f" [get_bd_pins {bd_cell.module_name}/rtio_clk]"
+                            if ("xilinx.com:user" in bd_cell.vlnv  and
+                                (bd_cell.vlnv != "xilinx.com:user:InterruptController")
+                            )
+                            else ""
+                            for bd_cell in self.bd_cell
+                        ]
                     )
                 )
                 # Connect s_axi_clk of Custom BD cell with RFDC dac_clk
                 TVM.tcl_code += (
                     "".join(
-                        [f" [get_bd_pins {bd_cell.module_name}/s_axi_aclk]"
-                         if(("xilinx.com:user" in bd_cell.vlnv)  and
-                            (bd_cell.vlnv != "xilinx.com:user:TimeController"))
-                         else ""
-                         for bd_cell in self.bd_cell]
+                        [
+                            f" [get_bd_pins {bd_cell.module_name}/s_axi_aclk]"
+                            if(("xilinx.com:user" in bd_cell.vlnv)  and
+                                (bd_cell.vlnv != "xilinx.com:user:TimeController") and
+                                (bd_cell.vlnv != "xilinx.com:user:InterruptController")
+                            )
+                            else "" for bd_cell in self.bd_cell
+                        ]
                     )
                 )
                 TVM.tcl_code += (
@@ -421,10 +430,12 @@ class RFSoCMaker(TVM):
                 "".join(
                     [
                         f" [get_bd_pins {bd_cell.module_name}/s_axi_aresetn]"
-                         if ( hasattr(bd_cell,"axi") and
+                        if ( hasattr(bd_cell,"axi") and
                              ("xilinx.com:user" in bd_cell.vlnv) and
-                             (bd_cell.vlnv != "xilinx.com:user:TimeController"))
-                         else "" for bd_cell in self.bd_cell
+                             (bd_cell.vlnv != "xilinx.com:user:TimeController") and
+                             (bd_cell.vlnv != "xilinx.com:user:InterruptController")
+                        )
+                        else "" for bd_cell in self.bd_cell
                      ]
                 )
             )
@@ -495,11 +506,13 @@ class RFSoCMaker(TVM):
                 f"{self.project_name}.gen/sources_1/bd/{self.project_name}_blk/"
                 f"hdl/{self.project_name}_blk_wrapper.v\n"
                 f"launch_runs impl_1 -to_step write_bitstream -jobs {self.implementation}\n"
+                "write_hw_platform -fixed -include_bit -force -file "
+                f"{self.target_path}/{self.project_name}/{self.project_name}.xsa\n"
             )
 
     def make_module_address_map(self) -> None:
         """
-        Make json file which contains module address map.
+        Make device_db json file which contains module address map.
         """
         module_addr_map: dict[str,int] = {}
         # User Module address map
@@ -524,7 +537,7 @@ class RFSoCMaker(TVM):
                 module_addr_map[bd_cell_maker.module_name] = make_module_map(
                     bd_cell_maker
                 )
-            module_address_map_json: str = os.path.join(os.getcwd(),"module_address_map.json")
+            module_address_map_json: str = os.path.join(os.getcwd(),"device_db.json")
         with open(module_address_map_json, "w", encoding="utf-8") as file:
             json.dump(module_addr_map, file, indent=4)
 
@@ -562,10 +575,28 @@ def make_module_map(bd_cell: BDCellMaker) -> dict[str,dict[str,str]]:
     """
     Make module map from given name, address and channel.
     """
-    return {
+    data = {
         "axi_addr": hex(bd_cell.axi_address),
-        "channel": bd_cell.channel
+        "arguments": {
+            "channel": bd_cell.channel
+        }
     }
+    if "xilinx.com:user:SwitchController" in getattr(bd_cell,"vlnv"):
+        data["module"] = "lolenc.bsp.src.module.SwitchController"
+        data["class"] = "SwitchController"
+    if "xilinx.com:user:DDS_Controller" in getattr(bd_cell,"vlnv"):
+        data["module"] = "lolenc.bsp.src.module.DDS_Controller"
+        data["class"] = "DDS_Controller"
+    if "xilinx.com:user:TTL_Controller" in getattr(bd_cell,"vlnv"):
+        data["module"] = "lolenc.bsp.src.module.TTL_Controller"
+        data["class"] = "TTL_Controller"
+    if "xilinx.com:user:TTLx8_Controller" in getattr(bd_cell,"vlnv"):
+        data["module"] = "lolenc.bsp.src.module.TTLx8_Controller"
+        data["class"] = "TTLx8_Controller"
+    if "xilinx.com:user:InputController" in getattr(bd_cell,"vlnv"):
+        data["module"] = "lolenc.bsp.src.module.InputController"
+        data["class"] = "InputController"
+    return data
 
 def create_rfsoc_maker(json_file: str) -> RFSoCMaker:
     """

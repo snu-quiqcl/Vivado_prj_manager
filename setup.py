@@ -5,7 +5,27 @@ Created on Tue May 14 17:19:44 2024
 @author: alexi
 """
 
-from setuptools import setup, find_packages
+import shutil
+import os
+from setuptools import setup, find_packages, Command
+
+class CleanCommand(Command):
+    """Custom clean command to tidy up the project root."""
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        shutil.rmtree("build", ignore_errors=True)
+        print("Removed build")
+        egg_info = [f for f in os.listdir(".") if f.endswith(".egg-info")]
+        for folder in egg_info:
+            shutil.rmtree(folder, ignore_errors=True)
+            print(f"Removed {folder}")
 
 setup(
     name='VivadoPmgr',
@@ -30,5 +50,8 @@ setup(
     classifiers=[
         'Programming Language :: Python :: 3',
         'Operating System :: Window',
-    ]
+    ],
+    cmdclass={
+        'clean': CleanCommand,
+    }
 )
